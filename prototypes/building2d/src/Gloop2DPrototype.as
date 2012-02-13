@@ -82,7 +82,8 @@ package
 			_level = parser.parseBitmap(_bmp);
 			
 			_light = new DirectionalLight(1, -1, 2);
-			_light.ambient = 0.5;
+			_light.ambient = 0.6;
+			_light.specular = 0.7;
 			ctr = _level.construct([_light], Settings.GRID_SIZE);
 			
 			_view.scene.addChild(ctr);

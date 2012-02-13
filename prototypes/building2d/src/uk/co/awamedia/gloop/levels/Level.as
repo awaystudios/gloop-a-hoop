@@ -49,11 +49,14 @@ package uk.co.awamedia.gloop.levels
 			var hoop : Hoop;
 			var mesh : Mesh;
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
+			var back_mat : ColorMaterial;
 			var wall_mat : ColorMaterial;
 			var hoop_mat : ColorMaterial;
 			
-			wall_mat = new ColorMaterial(0xffcc00);
+			wall_mat = new ColorMaterial(0x888888);
 			wall_mat.lightPicker = new StaticLightPicker(lights);
+			wall_mat.gloss = 0.2;
+			wall_mat.specular = 0.6;
 			
 			hoop_mat = new ColorMaterial(0xff0000);
 			hoop_mat.lightPicker = new StaticLightPicker(lights);
@@ -61,7 +64,7 @@ package uk.co.awamedia.gloop.levels
 			for each (r in _walls) {
 				var cube : CubeGeometry;
 				
-				cube = new CubeGeometry(r.width * gridSize, r.height * gridSize, 4 * gridSize);
+				cube = new CubeGeometry(r.width * gridSize, r.height * gridSize, 6 * gridSize);
 				mesh = new Mesh(cube, wall_mat);
 				mesh.x = r.x * gridSize + r.width * gridSize/2;
 				mesh.y = -r.y * gridSize - r.height * gridSize/2;
@@ -78,10 +81,14 @@ package uk.co.awamedia.gloop.levels
 				ctr.addChild(mesh);
 			}
 			
-			plane = new Mesh(new PlaneGeometry(_w * gridSize, _h * gridSize, 1, 1, false), new ColorMaterial(0xcccccc));
+			back_mat = new ColorMaterial(0xcccccc);
+			back_mat.gloss = 0.2;
+			back_mat.specular = 0.6;
+			
+			plane = new Mesh(new PlaneGeometry(_w * gridSize, _h * gridSize, 1, 1, false), back_mat);
 			plane.x = _w/2 * gridSize;
 			plane.y = -_h/2 * gridSize;
-			plane.z = gridSize*2;
+			plane.z = gridSize*3;
 			plane.material.lightPicker = new StaticLightPicker(lights);
 			ctr.addChild(plane);
 			
