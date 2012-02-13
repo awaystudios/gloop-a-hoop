@@ -11,6 +11,7 @@ package uk.co.awamedia.gloop.levels
 	
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	public class LevelBitmapParser
 	{
@@ -18,6 +19,9 @@ package uk.co.awamedia.gloop.levels
 		private var _spawn_point : Point;
 		
 		private var _light : DirectionalLight;
+		
+		private static const WALL : uint = 0xff000000;
+		private static const SPAWN : uint = 0xff00ff00;
 		
 		
 		public function LevelBitmapParser(gridSize : Number = 10)
@@ -42,14 +46,13 @@ package uk.co.awamedia.gloop.levels
 		{
 			var i : uint;
 			var len : uint;
-			var posx : Number;
-			var posy : Number;
+			var posx : uint;
+			var posy : uint;
 			var plane : Mesh;
 			var pixels : Vector.<uint>;
 			
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
 			var mat : ColorMaterial = new ColorMaterial(0xffcc00);
-			var cube : CubeGeometry = new CubeGeometry(_grid_size, _grid_size, _grid_size*4);
 			
 			_light = new DirectionalLight(1, -1, 1);
 			_light.ambient = 0;
@@ -68,25 +71,30 @@ package uk.co.awamedia.gloop.levels
 			for (i=0; i<len; i++) {
 				var px : uint;
 				
-				px = pixels[i] & 0xffffff;
-				if (px==0) {
+				px = pixels[i];
+				if (px==WALL) {
 					var mesh : Mesh;
+					var r : Rectangle;
+					var cube : CubeGeometry;
+					
+					r = findRect(pixels, bmp.width, bmp.height, posx, posy);
+					
+					cube = new CubeGeometry(r.width * _grid_size, r.height * _grid_size, 4 * _grid_size);
 					
 					mesh = new Mesh(cube, mat);
-					mesh.x = posx * _grid_size;
-					mesh.y = posy * _grid_size;
+					mesh.x = posx * _grid_size + r.width * _grid_size/2;
+					mesh.y = -posy * _grid_size - r.height * _grid_size/2;
 					ctr.addChild(mesh);
 				}
-				else if (px == 0x00ff00) {
-					_spawn_point = new Point(posx * _grid_size, posy * _grid_size);
+				else if (px == SPAWN) {
+					_spawn_point = new Point(posx * _grid_size, -posy * _grid_size);
 				}
 				
 				posx = (posx+1) % bmp.width;
 				if (posx==0)
-					posy--;
-			}
+					posy++}
 			
-			plane = new Mesh(new PlaneGeometry(bmp.width * _grid_size, bmp.height * _grid_size), new ColorMaterial(0xcccccc));
+			plane = new Mesh(new PlaneGeometry(bmp.width * _grid_size, bmp.height * _grid_size, 1, 1, false), new ColorMaterial(0xcccccc));
 			plane.x = bmp.width/2 * _grid_size;
 			plane.y = -bmp.height/2 * _grid_size;
 			plane.z = _grid_size*2;
@@ -94,6 +102,67 @@ package uk.co.awamedia.gloop.levels
 			ctr.addChild(plane);
 			
 			return ctr;
+		}
+		
+		
+		private function findRect(pixels : Vector.<uint>, bmpw : uint, bmph : uint, posx : uint, posy : uint) : Rectangle
+		{
+			var start : uint;
+			var len : uint;
+			var rect : Rectangle;
+			var maxw : uint;
+			var maxh : uint;
+			var w : uint;
+			var h : uint;
+			var inds : Vector.<uint>;
+			
+			rect = new Rectangle(posx, posy);
+			
+			start = posy*bmpw + posx;
+			len = pixels.length;
+			
+			w = 1;
+			h = 1;
+			maxw = bmpw - posx;
+			maxh = bmph - posy;
+			
+			// Go right as far as possible
+			while (w < maxw && pixels[ start + w ] == WALL) {
+				pixels[start+w] = 0; // Mark as processed
+				w++;
+			}
+			
+			inds = new Vector.<uint>(w, true);
+			
+			// Go down as far as possible, checking 
+			// the entire width for each step.
+			downward: while (h < maxh) {
+				var i : uint;
+				
+				for (i=0; i<w; i++) {
+					var idx : uint;
+					
+					idx = start + h*bmpw + i;
+					if (pixels[idx] != WALL)
+						break downward;
+					
+					inds[i] = idx;
+				}
+				
+				// Made it? Mark entire row as processed
+				for (i=0; i<w; i++) {
+					pixels[ inds[i] ] = 0;
+				}
+				
+				h++;
+			}
+			
+			rect.width = w;
+			rect.height = h;
+			
+			trace(rect);
+			
+			return rect;
 		}
 	}
 }
