@@ -21,13 +21,14 @@ package uk.co.awamedia.gloop.gameobjects {
 		{
 			super(null);
 			
-			radius = 2;
+			radius = 3;
 			rotation = 0;
 		}
 		
 		public function activate(gloop:Gloop):void {
 			_cooldown = 10;
-			gloop.speed.y += 3;
+			gloop.speed.x = Math.sin(rotation / 180 * Math.PI) * 1;
+			gloop.speed.y = Math.cos(rotation / 180 * Math.PI) * 1;
 		}
 		
 		public function get enabled():Boolean {

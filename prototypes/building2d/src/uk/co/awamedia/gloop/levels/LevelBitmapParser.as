@@ -63,6 +63,7 @@ package uk.co.awamedia.gloop.levels
 					hoop = new Hoop();
 					hoop.position.x = posx;
 					hoop.position.y = posy;
+					hoop.rotation = 135;
 					level._hoops.push(hoop);
 				}
 				
