@@ -42,6 +42,16 @@ package uk.co.awamedia.gloop.levels
 		}
 		
 		
+		public function update(timeDelta : Number = 1) : void
+		{
+			var i : uint;
+			
+			for (i=0; i<_hoops.length; i++) {
+				_hoops[i].update(timeDelta);
+			}
+		}
+		
+		
 		public function construct(lights : Array, gridSize : Number = 20) : ObjectContainer3D
 		{
 			var r : Rectangle;
@@ -78,6 +88,8 @@ package uk.co.awamedia.gloop.levels
 				mesh = new Mesh(cylinder, hoop_mat);
 				mesh.x = hoop.position.x * gridSize;
 				mesh.y = -hoop.position.y * gridSize;
+				
+				hoop.mesh = mesh;
 				ctr.addChild(mesh);
 			}
 			

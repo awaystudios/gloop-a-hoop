@@ -171,6 +171,8 @@ package
 				
 			}
 			
+			_level.update();
+			
 			_gloop_obj.rotationZ = Math.atan2(-_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;
  			_gloop_obj.scaleX = 1 + 0.2 * _gloop.speed.length;
 			_gloop_obj.scaleY = 1/_gloop_obj.scaleX;
