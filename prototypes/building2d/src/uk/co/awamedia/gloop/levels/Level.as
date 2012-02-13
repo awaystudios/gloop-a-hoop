@@ -6,6 +6,7 @@ package uk.co.awamedia.gloop.levels
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.CubeGeometry;
+	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.PlaneGeometry;
 	
 	import flash.geom.Point;
@@ -41,19 +42,35 @@ package uk.co.awamedia.gloop.levels
 		{
 			var r : Rectangle;
 			var plane : Mesh;
+			var hoop : Hoop;
+			var mesh : Mesh;
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
-			var mat : ColorMaterial = new ColorMaterial(0xffcc00);
+			var wall_mat : ColorMaterial;
+			var hoop_mat : ColorMaterial;
 			
-			mat.lightPicker = new StaticLightPicker(lights);
+			wall_mat = new ColorMaterial(0xffcc00);
+			wall_mat.lightPicker = new StaticLightPicker(lights);
+			
+			hoop_mat = new ColorMaterial(0xff0000);
+			hoop_mat.lightPicker = new StaticLightPicker(lights);
 					
 			for each (r in _walls) {
-				var mesh : Mesh;
 				var cube : CubeGeometry;
 				
 				cube = new CubeGeometry(r.width * gridSize, r.height * gridSize, 4 * gridSize);
-				mesh = new Mesh(cube, mat);
+				mesh = new Mesh(cube, wall_mat);
 				mesh.x = r.x * gridSize + r.width * gridSize/2;
 				mesh.y = -r.y * gridSize - r.height * gridSize/2;
+				ctr.addChild(mesh);
+			}
+			
+			for each (hoop in _hoops) {
+				var cylinder : CylinderGeometry;
+				
+				cylinder = new CylinderGeometry(gridSize, gridSize, 0.1*gridSize);
+				mesh = new Mesh(cylinder, hoop_mat);
+				mesh.x = hoop.position.x * gridSize;
+				mesh.y = -hoop.position.y * gridSize;
 				ctr.addChild(mesh);
 			}
 			

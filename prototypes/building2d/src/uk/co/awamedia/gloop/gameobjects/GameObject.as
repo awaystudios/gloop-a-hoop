@@ -18,6 +18,15 @@ package uk.co.awamedia.gloop.gameobjects {
 			position = new Point();
 		}
 		
+		public function get mesh() : Mesh
+		{
+			return _mesh;
+		}
+		public function set mesh(val : Mesh) : void
+		{
+			_mesh = val;
+		}
+		
 		public function update(timeDelta:Number = 1):void {			
 			position.x += speed.x;
 			position.y += speed.y;
