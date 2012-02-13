@@ -7,6 +7,7 @@ package
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
+	import uk.co.awamedia.gloop.Settings;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -71,7 +72,7 @@ package
 			
 			_bmp = Bitmap(new LevelBitmapAsset).bitmapData;
 			
-			_parser = new LevelBitmapParser();
+			_parser = new LevelBitmapParser(Settings.GRID_SIZE);
 			ctr = _parser.parseBitmap(_bmp);
 			
 			_view.scene.addChild(ctr);
@@ -82,62 +83,61 @@ package
 		{
 			_gloop_obj = new Mesh(new SphereGeometry(10), new ColorMaterial(0x00aa00));
 			_gloop_obj.mouseEnabled = true;
-			_gloop_obj.x = _parser.spawnPoint.x;
-			_gloop_obj.y = _parser.spawnPoint.y;
 			_gloop_obj.material.lightPicker = new StaticLightPicker([_parser.light]);
 			_gloop_obj.addEventListener(MouseEvent3D.MOUSE_DOWN, onGloopMouseDown);
 			_view.scene.addChild(_gloop_obj);
 			
 			_gloop = new Gloop(_gloop_obj);
+			_gloop.position.x = _parser.spawnPoint.x;
+			_gloop.position.y = _parser.spawnPoint.y;
+			
+			_gloop.update();
 			
 			_idle = true;
 		}
 		
 		
-		private function collision(gridx : Number, gridy : Number) : Boolean
+		private function testCollision(worldX : Number, worldY : Number) : Boolean
 		{
-			var px : uint;
+			var gridx:int = Math.round(worldX / Settings.GRID_SIZE);
+			var gridy:int = -Math.round(worldY / Settings.GRID_SIZE);
 			
 			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
 				return false;
 			
-			px = _bmp.getPixel(gridx, gridy);
-			return (px==0);
+			return _bmp.getPixel(gridx, gridy) == 0;
 		}
 		
+		private function testAndResolveCollision(offsetX:Number, offsetY:Number):Boolean {
+			if (testCollision(_gloop.position.x + offsetX, _gloop.position.y + offsetY)) {
+					
+				var direction:Point = _gloop.speed.clone();
+				direction.normalize(Settings.COLLISION_STEP);
+				var stepsBack:int = 1;
+				
+				while (testCollision(_gloop.position.x + offsetX - direction.x * stepsBack, _gloop.position.y + offsetY - direction.y * stepsBack)) {
+					stepsBack++;
+				}
+				
+				_gloop.position.x -= direction.x * stepsBack;
+				_gloop.position.y -= direction.y * stepsBack;
+					
+				return true;
+			}	
+			
+			return false;
+		}
 		
 		private function onEnterFrame(ev : Event) : void
 		{
-			var posx : Number;
-			var posy : Number;
-			var gridx : Number;
-			var gridy : Number;
-			
 			if (!_idle) {
-				if (_gloop.speed.y > -20)
-					_gloop.speed.y -= 0.1;
-				
-				posx = _gloop_obj.x + _gloop.speed.x;
-				posy = _gloop_obj.y + _gloop.speed.y;
-				
-				gridx = Math.round(posx/10);
-				gridy = -Math.round(posy/10);
-				if (collision(gridx, gridy)) {
-					var dirx : Number, diry : Number;
-					
-					dirx = diry = 1;
-					
-					if (collision(gridx+1, gridy) || collision(gridx-1, gridy))
-						diry = -0.8;
-					
-					if (collision(gridx, gridy+1) || collision(gridx, gridy-1))
-						dirx = -0.8;
-					
-					_gloop.speed.x *= dirx * 0.9;
-					_gloop.speed.y *= diry * 0.9;
-				}
 				
 				_gloop.update();
+				
+				if (testAndResolveCollision(-Settings.COLLISION_DETECTOR_DISTANCE, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision( Settings.COLLISION_DETECTOR_DISTANCE, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0, -Settings.COLLISION_DETECTOR_DISTANCE) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0,  Settings.COLLISION_DETECTOR_DISTANCE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
 			}
 				
 			_view.camera.x += 0.3 * (_gloop_obj.x - _view.camera.x);
@@ -163,8 +163,8 @@ package
 			_power.x = -(ev.stageX - _drag_start.x);
 			_power.y = ev.stageY - _drag_start.y;
 			
-			if (_power.length > 10)
-				_power.normalize(10);
+			if (_power.length > 15)
+				_power.normalize(15);
 		}
 		
 		
@@ -183,9 +183,10 @@ package
 		{
 			switch (ev.keyCode) {
 				case Keyboard.SPACE:
-					_gloop_obj.x = _parser.spawnPoint.x;
-					_gloop_obj.y = _parser.spawnPoint.y;
+					_gloop.position.x = _parser.spawnPoint.x;
+					_gloop.position.y = _parser.spawnPoint.y;
 					_gloop.speed.normalize(0);
+					_gloop.update();
 					_idle = true;
 					break;
 			}
