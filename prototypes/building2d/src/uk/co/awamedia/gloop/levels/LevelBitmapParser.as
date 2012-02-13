@@ -54,7 +54,7 @@ package uk.co.awamedia.gloop.levels
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
 			var mat : ColorMaterial = new ColorMaterial(0xffcc00);
 			
-			_light = new DirectionalLight(1, -1, 1);
+			_light = new DirectionalLight(1, -1, 2);
 			_light.ambient = 0;
 			ctr.addChild(_light);
 			
