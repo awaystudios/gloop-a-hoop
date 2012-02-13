@@ -138,6 +138,8 @@ package
 		
 		private function onEnterFrame(ev : Event) : void
 		{
+			var cam_tx : Number;
+			
 			if (!_idle) {
 				
 				_gloop.update();
@@ -148,8 +150,14 @@ package
 				if (testAndResolveCollision(0,  Settings.GLOOP_SIZE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;				
 				
 			}
+			
+			_gloop_obj.rotationZ = Math.atan2(_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;
+ 			_gloop_obj.scaleX = 1 + 0.02 * _gloop.speed.length;
+			_gloop_obj.scaleY = 1/_gloop_obj.scaleX;
+			_gloop_obj.scaleZ = 1/_gloop_obj.scaleX;
 				
-			_view.camera.x += 0.3 * (_gloop_obj.x - _view.camera.x);
+			cam_tx = _gloop_obj.x - _gloop.speed.x * 10;
+			_view.camera.x += 0.1 * (cam_tx - _view.camera.x);
 			_view.camera.y += 0.3 * ((_gloop_obj.y+200) - _view.camera.y);
 			_view.camera.lookAt(_gloop_obj.position);
 			
