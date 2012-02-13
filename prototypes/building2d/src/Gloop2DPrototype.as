@@ -103,7 +103,7 @@ package
 			var gridy:int = -Math.round(worldY / Settings.GRID_SIZE);
 			
 			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
-				return false;
+				return true;
 			
 			return _bmp.getPixel(gridx, gridy) == 0;
 		}
