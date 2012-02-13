@@ -25,13 +25,13 @@ package uk.co.awamedia.gloop.gameobjects
 			speed.x *= Settings.GLOOP_DRAG;
 			speed.y *= Settings.GLOOP_DRAG;
 			
-			speed.y -= Settings.GLOOP_GRAVITY;
+			speed.y += Settings.GLOOP_GRAVITY;
 			
 			position.x += speed.x;
 			position.y += speed.y;
 			
 			_mesh.x = position.x;
-			_mesh.y = position.y;
+			_mesh.y = -position.y;
 		}
 	}
 }

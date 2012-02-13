@@ -15,52 +15,25 @@ package uk.co.awamedia.gloop.levels
 
 	public class LevelBitmapParser
 	{
-		private var _grid_size : Number;
-		private var _spawn_point : Point;
-		
-		private var _light : DirectionalLight;
-		
 		private static const WALL : uint = 0xff000000;
 		private static const SPAWN : uint = 0xff00ff00;
 		
 		
-		public function LevelBitmapParser(gridSize : Number = 10)
+		public function LevelBitmapParser()
 		{
-			_grid_size = gridSize;
 		}
 		
 		
-		public function get light() : DirectionalLight
-		{
-			return _light;
-		}
-		
-		
-		public function get spawnPoint() : Point
-		{
-			return _spawn_point;
-		}
-		
-		
-		public function parseBitmap(bmp : BitmapData) : ObjectContainer3D
+		public function parseBitmap(bmp : BitmapData) : Level
 		{
 			var i : uint;
 			var len : uint;
 			var posx : uint;
 			var posy : uint;
-			var plane : Mesh;
 			var pixels : Vector.<uint>;
+			var level : Level;
 			
-			var ctr : ObjectContainer3D = new ObjectContainer3D();
-			var mat : ColorMaterial = new ColorMaterial(0xffcc00);
-			
-			_light = new DirectionalLight(1, -1, 2);
-			_light.ambient = 0;
-			ctr.addChild(_light);
-			
-			mat.lightPicker = new StaticLightPicker([_light]);
-			
-			// TODO: Optimize level output
+			level = new Level(bmp.width, bmp.height);
 			
 			pixels = bmp.getVector(bmp.rect);
 			len = pixels.length;
@@ -73,35 +46,21 @@ package uk.co.awamedia.gloop.levels
 				
 				px = pixels[i];
 				if (px==WALL) {
-					var mesh : Mesh;
 					var r : Rectangle;
-					var cube : CubeGeometry;
 					
 					r = findRect(pixels, bmp.width, bmp.height, posx, posy);
-					
-					cube = new CubeGeometry(r.width * _grid_size, r.height * _grid_size, 4 * _grid_size);
-					
-					mesh = new Mesh(cube, mat);
-					mesh.x = posx * _grid_size + r.width * _grid_size/2;
-					mesh.y = -posy * _grid_size - r.height * _grid_size/2;
-					ctr.addChild(mesh);
+					level._walls.push(r);
 				}
 				else if (px == SPAWN) {
-					_spawn_point = new Point(posx * _grid_size, -posy * _grid_size);
+					level._spawn_point = new Point(posx, posy);
 				}
 				
 				posx = (posx+1) % bmp.width;
 				if (posx==0)
-					posy++}
+					posy++
+			}
 			
-			plane = new Mesh(new PlaneGeometry(bmp.width * _grid_size, bmp.height * _grid_size, 1, 1, false), new ColorMaterial(0xcccccc));
-			plane.x = bmp.width/2 * _grid_size;
-			plane.y = -bmp.height/2 * _grid_size;
-			plane.z = _grid_size*2;
-			plane.material.lightPicker = new StaticLightPicker([_light]);
-			ctr.addChild(plane);
-			
-			return ctr;
+			return level;
 		}
 		
 		

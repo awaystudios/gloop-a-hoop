@@ -4,10 +4,10 @@ package
 	import away3d.containers.View3D;
 	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
+	import away3d.lights.DirectionalLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-	import uk.co.awamedia.gloop.Settings;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -18,18 +18,22 @@ package
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	
+	import uk.co.awamedia.gloop.Settings;
 	import uk.co.awamedia.gloop.gameobjects.Gloop;
+	import uk.co.awamedia.gloop.levels.Level;
 	import uk.co.awamedia.gloop.levels.LevelBitmapParser;
 	
 	[SWF(width="1024", height="768", frameRate="60")]
 	public class Gloop2DPrototype extends Sprite
 	{
+		private var _level : Level;
+		private var _light : DirectionalLight;
+		
 		private var _bmp : BitmapData;
 		private var _view : View3D;
 		private var _gloop : Gloop;
 		private var _gloop_obj : Mesh;
 		
-		private var _parser : LevelBitmapParser;
 		private var _drag_start : Point;
 		private var _power : Point;
 		
@@ -69,11 +73,16 @@ package
 		private function initLevel() : void
 		{
 			var ctr : ObjectContainer3D;
+			var parser : LevelBitmapParser;
 			
 			_bmp = Bitmap(new LevelBitmapAsset).bitmapData;
 			
-			_parser = new LevelBitmapParser(Settings.GRID_SIZE);
-			ctr = _parser.parseBitmap(_bmp);
+			parser = new LevelBitmapParser();
+			_level = parser.parseBitmap(_bmp);
+			
+			_light = new DirectionalLight(1, -1, 2);
+			_light.ambient = 0.5;
+			ctr = _level.construct([_light], Settings.GRID_SIZE);
 			
 			_view.scene.addChild(ctr);
 		}
@@ -83,13 +92,13 @@ package
 		{
 			_gloop_obj = new Mesh(new SphereGeometry(10), new ColorMaterial(0x00aa00));
 			_gloop_obj.mouseEnabled = true;
-			_gloop_obj.material.lightPicker = new StaticLightPicker([_parser.light]);
+			_gloop_obj.material.lightPicker = new StaticLightPicker([_light]);
 			_gloop_obj.addEventListener(MouseEvent3D.MOUSE_DOWN, onGloopMouseDown);
 			_view.scene.addChild(_gloop_obj);
 			
 			_gloop = new Gloop(_gloop_obj);
-			_gloop.position.x = _parser.spawnPoint.x;
-			_gloop.position.y = _parser.spawnPoint.y;
+			_gloop.position.x = _level.spawnPoint.x * Settings.GRID_SIZE;
+			_gloop.position.y = _level.spawnPoint.y * Settings.GRID_SIZE;
 			
 			_gloop.update();
 			
@@ -100,7 +109,7 @@ package
 		private function testCollision(worldX : Number, worldY : Number) : Boolean
 		{
 			var gridx:int = Math.round(worldX / Settings.GRID_SIZE);
-			var gridy:int = -Math.round(worldY / Settings.GRID_SIZE);
+			var gridy:int = Math.round(worldY / Settings.GRID_SIZE);
 			
 			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
 				return true;
@@ -142,7 +151,7 @@ package
 				if (testAndResolveCollision(0,  Settings.COLLISION_DETECTOR_DISTANCE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
 			}
 			
-			_gloop_obj.rotationZ = Math.atan2(_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;
+			_gloop_obj.rotationZ = Math.atan2(-_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;
  			_gloop_obj.scaleX = 1 + 0.02 * _gloop.speed.length;
 			_gloop_obj.scaleY = 1/_gloop_obj.scaleX;
 			_gloop_obj.scaleZ = 1/_gloop_obj.scaleX;
@@ -169,7 +178,7 @@ package
 		private function onStageMouseMove(ev : MouseEvent) : void
 		{
 			_power.x = -(ev.stageX - _drag_start.x);
-			_power.y = ev.stageY - _drag_start.y;
+			_power.y = -(ev.stageY - _drag_start.y);
 			
 			if (_power.length > 15)
 				_power.normalize(15);
@@ -191,8 +200,8 @@ package
 		{
 			switch (ev.keyCode) {
 				case Keyboard.SPACE:
-					_gloop.position.x = _parser.spawnPoint.x;
-					_gloop.position.y = _parser.spawnPoint.y;
+					_gloop.position.x = _level.spawnPoint.x * Settings.GRID_SIZE;
+					_gloop.position.y = _level.spawnPoint.y * Settings.GRID_SIZE;
 					_gloop.speed.normalize(0);
 					_gloop.update();
 					_idle = true;
