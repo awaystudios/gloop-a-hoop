@@ -10,6 +10,8 @@ package uk.co.awamedia.gloop.levels
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import uk.co.awamedia.gloop.gameobjects.Hoop;
 
 	public class Level
 	{
@@ -18,12 +20,14 @@ package uk.co.awamedia.gloop.levels
 		
 		internal var _spawn_point : Point;
 		internal var _walls : Vector.<Rectangle>;
+		internal var _hoops : Vector.<Hoop>;
 		
 		public function Level(w : uint, h : uint)
 		{
 			_w = w;
 			_h = h;
 			_walls = new Vector.<Rectangle>();
+			_hoops = new Vector.<Hoop>();
 		}
 		
 		

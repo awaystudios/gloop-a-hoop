@@ -12,11 +12,14 @@ package uk.co.awamedia.gloop.levels
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import uk.co.awamedia.gloop.gameobjects.Hoop;
 
 	public class LevelBitmapParser
 	{
 		private static const WALL : uint = 0xff000000;
 		private static const SPAWN : uint = 0xff00ff00;
+		private static const HOOP : uint = 0xffff0000;
 		
 		
 		public function LevelBitmapParser()
@@ -53,6 +56,14 @@ package uk.co.awamedia.gloop.levels
 				}
 				else if (px == SPAWN) {
 					level._spawn_point = new Point(posx, posy);
+				}
+				else if (px == HOOP) {
+					var hoop : Hoop;
+					
+					hoop = new Hoop();
+					hoop.position.x = posx;
+					hoop.position.y = posy;
+					level._hoops.push(hoop);
 				}
 				
 				posx = (posx+1) % bmp.width;
