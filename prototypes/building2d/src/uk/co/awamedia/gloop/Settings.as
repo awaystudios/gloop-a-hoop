@@ -10,7 +10,7 @@ package uk.co.awamedia.gloop {
 		public static const GLOOP_GRAVITY : Number = .098;
 		public static const GLOOP_DRAG : Number = .99;
 		static public const COLLISION_STEP:Number = GRID_SIZE / 4;
-		static public const COLLISION_DETECTOR_DISTANCE:Number = GRID_SIZE * .75;
+		static public const GLOOP_SIZE:Number = GRID_SIZE * .75;
 		
 	}
 
