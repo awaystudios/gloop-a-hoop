@@ -2,7 +2,10 @@ package uk.co.awamedia.gloop.levels
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
+	import away3d.lights.DirectionalLight;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
+	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.PlaneGeometry;
 	
@@ -14,9 +17,18 @@ package uk.co.awamedia.gloop.levels
 		private var _grid_size : Number;
 		private var _spawn_point : Point;
 		
+		private var _light : DirectionalLight;
+		
+		
 		public function LevelBitmapParser(gridSize : Number = 10)
 		{
 			_grid_size = gridSize;
+		}
+		
+		
+		public function get light() : DirectionalLight
+		{
+			return _light;
 		}
 		
 		
@@ -37,9 +49,15 @@ package uk.co.awamedia.gloop.levels
 			
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
 			var mat : ColorMaterial = new ColorMaterial(0xffcc00);
-			var cube : CubeGeometry = new CubeGeometry(_grid_size, _grid_size, _grid_size*2);
+			var cube : CubeGeometry = new CubeGeometry(_grid_size, _grid_size, _grid_size*4);
 			
-			// Optimize level output
+			_light = new DirectionalLight(1, -1, 1);
+			_light.ambient = 0;
+			ctr.addChild(_light);
+			
+			mat.lightPicker = new StaticLightPicker([_light]);
+			
+			// TODO: Optimize level output
 			
 			pixels = bmp.getVector(bmp.rect);
 			len = pixels.length;
@@ -71,8 +89,9 @@ package uk.co.awamedia.gloop.levels
 			plane = new Mesh(new PlaneGeometry(bmp.width * _grid_size, bmp.height * _grid_size), new ColorMaterial(0xcccccc));
 			plane.x = bmp.width/2 * _grid_size;
 			plane.y = -bmp.height/2 * _grid_size;
+			plane.z = _grid_size*2;
+			plane.material.lightPicker = new StaticLightPicker([_light]);
 			ctr.addChild(plane);
-			
 			
 			return ctr;
 		}

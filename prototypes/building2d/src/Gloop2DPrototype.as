@@ -5,6 +5,7 @@ package
 	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
 	
 	import flash.display.Bitmap;
@@ -27,7 +28,7 @@ package
 		private var _gloop : Gloop;
 		private var _gloop_obj : Mesh;
 		
-		private var _spawn_point : Point;
+		private var _parser : LevelBitmapParser;
 		private var _drag_start : Point;
 		private var _power : Point;
 		
@@ -47,8 +48,8 @@ package
 		private function init() : void
 		{
 			init3d();
-			initGloop();
 			initLevel();
+			initGloop();
 			
 			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKey);
 		}
@@ -67,16 +68,11 @@ package
 		private function initLevel() : void
 		{
 			var ctr : ObjectContainer3D;
-			var parser : LevelBitmapParser;
 			
 			_bmp = Bitmap(new LevelBitmapAsset).bitmapData;
 			
-			parser = new LevelBitmapParser();
-			ctr = parser.parseBitmap(_bmp);
-			
-			_spawn_point = parser.spawnPoint;
-			_gloop_obj.x = parser.spawnPoint.x;
-			_gloop_obj.y = parser.spawnPoint.y;
+			_parser = new LevelBitmapParser();
+			ctr = _parser.parseBitmap(_bmp);
 			
 			_view.scene.addChild(ctr);
 		}
@@ -86,6 +82,9 @@ package
 		{
 			_gloop_obj = new Mesh(new SphereGeometry(10), new ColorMaterial(0x00aa00));
 			_gloop_obj.mouseEnabled = true;
+			_gloop_obj.x = _parser.spawnPoint.x;
+			_gloop_obj.y = _parser.spawnPoint.y;
+			_gloop_obj.material.lightPicker = new StaticLightPicker([_parser.light]);
 			_gloop_obj.addEventListener(MouseEvent3D.MOUSE_DOWN, onGloopMouseDown);
 			_view.scene.addChild(_gloop_obj);
 			
@@ -142,7 +141,8 @@ package
 			}
 				
 			_view.camera.x += 0.3 * (_gloop_obj.x - _view.camera.x);
-			_view.camera.y += 0.3 * (_gloop_obj.y - _view.camera.y);
+			_view.camera.y += 0.3 * ((_gloop_obj.y+200) - _view.camera.y);
+			_view.camera.lookAt(_gloop_obj.position);
 			
 			_view.render();
 		}
@@ -183,8 +183,8 @@ package
 		{
 			switch (ev.keyCode) {
 				case Keyboard.SPACE:
-					_gloop_obj.x = _spawn_point.x;
-					_gloop_obj.y = _spawn_point.y;
+					_gloop_obj.x = _parser.spawnPoint.x;
+					_gloop_obj.y = _parser.spawnPoint.y;
 					_gloop.speed.normalize(0);
 					_idle = true;
 					break;
