@@ -12,6 +12,7 @@ package uk.co.awamedia.gloop.gameobjects {
 		public var speed : Point;
 		public var position : Point;
 		public var radius : Number = 10;
+		public var maxSpeed : Number = 5;
 		
 		public function GameObject(mesh:Mesh) {
 			_mesh = mesh;
@@ -28,7 +29,9 @@ package uk.co.awamedia.gloop.gameobjects {
 			_mesh = val;
 		}
 		
-		public function update(timeDelta:Number = 1):void {			
+		public function update(timeDelta:Number = 1):void {
+			if (speed.length > maxSpeed) speed.normalize(maxSpeed);
+			
 			position.x += speed.x;
 			position.y += speed.y;
 			
