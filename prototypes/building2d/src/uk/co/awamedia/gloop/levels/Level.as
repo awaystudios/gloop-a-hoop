@@ -37,6 +37,10 @@ package uk.co.awamedia.gloop.levels
 			return _spawn_point;
 		}
 		
+		public function get hoops():Vector.<Hoop> {
+			return _hoops;
+		}
+		
 		
 		public function construct(lights : Array, gridSize : Number = 20) : ObjectContainer3D
 		{
