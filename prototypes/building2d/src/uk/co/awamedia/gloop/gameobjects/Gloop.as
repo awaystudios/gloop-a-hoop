@@ -11,6 +11,7 @@ package uk.co.awamedia.gloop.gameobjects
 		public function Gloop(mesh : Mesh)
 		{
 			super(mesh);
+			radius = .75;
 		}
 		
 		override public function update(timeDelta:Number = 1):void {			

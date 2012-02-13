@@ -8,6 +8,7 @@ package
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
+	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -97,8 +98,8 @@ package
 			_view.scene.addChild(_gloop_obj);
 			
 			_gloop = new Gloop(_gloop_obj);
-			_gloop.position.x = _level.spawnPoint.x * Settings.GRID_SIZE;
-			_gloop.position.y = _level.spawnPoint.y * Settings.GRID_SIZE;
+			_gloop.position.x = _level.spawnPoint.x;
+			_gloop.position.y = _level.spawnPoint.y;
 			
 			_gloop.update();
 			
@@ -106,10 +107,10 @@ package
 		}
 		
 		
-		private function testCollision(worldX : Number, worldY : Number) : Boolean
+		private function testCollision(gameX : Number, gameY : Number) : Boolean
 		{
-			var gridx:int = Math.round(worldX / Settings.GRID_SIZE);
-			var gridy:int = Math.round(worldY / Settings.GRID_SIZE);
+			var gridx:int = Math.round(gameX);
+			var gridy:int = Math.round(gameY);
 			
 			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
 				return true;
@@ -140,7 +141,7 @@ package
 				_gloop.position.y -= direction.y * stepsBack;
 					
 				return true;
-			}	
+			}
 			
 			return false;
 		}
@@ -153,19 +154,28 @@ package
 				
 				_gloop.update();
 				
-				if (testAndResolveCollision(-Settings.GLOOP_SIZE, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision( Settings.GLOOP_SIZE, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0, -Settings.GLOOP_SIZE) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0,  Settings.GLOOP_SIZE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;				
+				if (testAndResolveCollision(-_gloop.radius, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision( _gloop.radius, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0, -_gloop.radius) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0,  _gloop.radius) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;				
+				
+				
+				for each(var hoop:Hoop in _level.hoops) {
+					if (!hoop.enabled) continue;
+					var distance:Number = Point.distance(hoop.position, _gloop.position);
+					if (distance < hoop.radius + _gloop.radius) {
+						hoop.activate(_gloop);
+					}
+				}
 				
 			}
 			
 			_gloop_obj.rotationZ = Math.atan2(-_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;
- 			_gloop_obj.scaleX = 1 + 0.02 * _gloop.speed.length;
+ 			_gloop_obj.scaleX = 1 + 0.2 * _gloop.speed.length;
 			_gloop_obj.scaleY = 1/_gloop_obj.scaleX;
 			_gloop_obj.scaleZ = 1/_gloop_obj.scaleX;
 				
-			cam_tx = _gloop_obj.x - _gloop.speed.x * 10;
+			cam_tx = _gloop_obj.x - _gloop.speed.x * 100;
 			_view.camera.x += 0.1 * (cam_tx - _view.camera.x);
 			_view.camera.y += 0.3 * ((_gloop_obj.y+200) - _view.camera.y);
 			_view.camera.lookAt(_gloop_obj.position);
@@ -189,8 +199,8 @@ package
 			_power.x = -(ev.stageX - _drag_start.x);
 			_power.y = -(ev.stageY - _drag_start.y);
 			
-			if (_power.length > 15)
-				_power.normalize(15);
+			if (_power.length > 1.5)
+				_power.normalize(1.5);
 		}
 		
 		
@@ -209,8 +219,8 @@ package
 		{
 			switch (ev.keyCode) {
 				case Keyboard.SPACE:
-					_gloop.position.x = _level.spawnPoint.x * Settings.GRID_SIZE;
-					_gloop.position.y = _level.spawnPoint.y * Settings.GRID_SIZE;
+					_gloop.position.x = _level.spawnPoint.x;
+					_gloop.position.y = _level.spawnPoint.y;
 					_gloop.speed.normalize(0);
 					_gloop.update();
 					_idle = true;

@@ -11,6 +11,7 @@ package uk.co.awamedia.gloop.gameobjects {
 		private var _mesh : Mesh;
 		public var speed : Point;
 		public var position : Point;
+		public var radius : Number = 10;
 		
 		public function GameObject(mesh:Mesh) {
 			_mesh = mesh;
@@ -31,8 +32,8 @@ package uk.co.awamedia.gloop.gameobjects {
 			position.x += speed.x;
 			position.y += speed.y;
 			
-			_mesh.x = position.x;
-			_mesh.y = -position.y;
+			_mesh.x = position.x * Settings.GRID_SIZE;
+			_mesh.y = -position.y * Settings.GRID_SIZE;
 		}
 		
 	}
