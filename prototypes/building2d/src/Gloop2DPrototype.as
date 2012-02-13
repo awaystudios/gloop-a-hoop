@@ -121,11 +121,19 @@ package
 			if (testCollision(_gloop.position.x + offsetX, _gloop.position.y + offsetY)) {
 					
 				var direction:Point = _gloop.speed.clone();
+				
+				// hack to only resolve in the offset direction. hacktastic!
+				if (offsetX != 0) direction.y = 0;
+				else if (offsetY != 0) direction.x = 0;
+				
 				direction.normalize(Settings.COLLISION_STEP);
 				var stepsBack:int = 1;
 				
 				while (testCollision(_gloop.position.x + offsetX - direction.x * stepsBack, _gloop.position.y + offsetY - direction.y * stepsBack)) {
 					stepsBack++;
+					
+					// something is messed up, bail!
+					if (stepsBack > 10) return true;
 				}
 				
 				_gloop.position.x -= direction.x * stepsBack;
@@ -145,10 +153,11 @@ package
 				
 				_gloop.update();
 				
-				if (testAndResolveCollision(-Settings.COLLISION_DETECTOR_DISTANCE, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision( Settings.COLLISION_DETECTOR_DISTANCE, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0, -Settings.COLLISION_DETECTOR_DISTANCE) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0,  Settings.COLLISION_DETECTOR_DISTANCE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(-Settings.GLOOP_SIZE, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision( Settings.GLOOP_SIZE, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0, -Settings.GLOOP_SIZE) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (testAndResolveCollision(0,  Settings.GLOOP_SIZE) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;				
+				
 			}
 			
 			_gloop_obj.rotationZ = Math.atan2(-_gloop.speed.y, _gloop.speed.x) * 180/Math.PI;

@@ -5,33 +5,21 @@ package uk.co.awamedia.gloop.gameobjects
 	
 	import flash.geom.Point;
 
-	public class Gloop
+	public class Gloop extends GameObject
 	{
-		private var _mesh : Mesh;
-		
-		public var speed : Point;
-		public var position : Point;
 		
 		public function Gloop(mesh : Mesh)
 		{
-			_mesh = mesh;
-			speed = new Point();
-			position = new Point();
+			super(mesh);
 		}
 		
-		
-		public function update() : void
-		{
+		override public function update(timeDelta:Number = 1):void {			
 			speed.x *= Settings.GLOOP_DRAG;
 			speed.y *= Settings.GLOOP_DRAG;
 			
 			speed.y += Settings.GLOOP_GRAVITY;
-			
-			position.x += speed.x;
-			position.y += speed.y;
-			
-			_mesh.x = position.x;
-			_mesh.y = -position.y;
+		
+			super.update(timeDelta);
 		}
 	}
 }
