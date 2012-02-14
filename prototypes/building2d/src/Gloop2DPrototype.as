@@ -208,7 +208,7 @@ package
 			if (_dragging == _gloop) {
 				_power.x = -(stage.mouseX - _drag_start.x);
 				_power.y = -(stage.mouseY - _drag_start.y);
-				if (_power.length > 1.5) _power.normalize(1.5);
+				if (_power.length > 1.0) _power.normalize(1.0);
 				
 			} else if (_dragging is Hoop) {
 				_dragging.position.x = ev.gridX;

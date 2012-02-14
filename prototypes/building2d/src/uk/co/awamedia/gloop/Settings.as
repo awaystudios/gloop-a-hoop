@@ -5,7 +5,7 @@ package uk.co.awamedia.gloop {
 	 */
 	public class Settings {
 		
-		public static const GRID_SIZE : int = 10;
+		public static const GRID_SIZE : int = 20;
 		public static const GLOOP_BOUNCE_FRICTION : Number = .95;
 		public static const GLOOP_GRAVITY : Number = .0098;
 		public static const GLOOP_DRAG : Number = .99;

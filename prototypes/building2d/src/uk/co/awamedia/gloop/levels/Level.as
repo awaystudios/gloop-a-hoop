@@ -97,7 +97,7 @@ package uk.co.awamedia.gloop.levels
 			for each (hoop in _hoops) {
 				var cylinder : CylinderGeometry;
 				
-				cylinder = new CylinderGeometry(gridSize * 3, gridSize * 3, 0.1*gridSize);
+				cylinder = new CylinderGeometry(hoop.radius * gridSize, hoop.radius * gridSize, 0.1*gridSize);
 				mesh = new Mesh(cylinder, hoop_mat);
 				mesh.x = hoop.position.x * gridSize;
 				mesh.y = -hoop.position.y * gridSize;
