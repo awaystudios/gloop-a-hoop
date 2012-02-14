@@ -9,14 +9,12 @@ package uk.co.awamedia.gloop.levels
 	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.PlaneGeometry;
 	
+	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import uk.co.awamedia.gloop.events.LevelInteractionEvent;
-	import flash.display.BitmapData;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	
 
@@ -29,6 +27,7 @@ package uk.co.awamedia.gloop.levels
 		private var _back_plane : Mesh;
 		private var _container:ObjectContainer3D;
 		private var _hoop_mat:ColorMaterial;
+		private var _hoop_top_mat:ColorMaterial;
 		
 		internal var _bmp : BitmapData;
 		
@@ -82,8 +81,11 @@ package uk.co.awamedia.gloop.levels
 			wall_mat.gloss = 0.2;
 			wall_mat.specular = 0.6;
 			
-			_hoop_mat = new ColorMaterial(0xff0000);
+			_hoop_mat = new ColorMaterial(0x00ff00);
 			_hoop_mat.lightPicker = new StaticLightPicker(lights);
+			
+			_hoop_top_mat = new ColorMaterial(0xff0000);
+			_hoop_top_mat.lightPicker = new StaticLightPicker(lights);
 					
 			for each (r in _walls) {
 				var cube : CubeGeometry;
@@ -147,12 +149,17 @@ package uk.co.awamedia.gloop.levels
 		}
 		
 		public function constructHoop(hoop:Hoop):void {
+			var top : Mesh;
 			var cylinder : CylinderGeometry;
 			
 			cylinder = new CylinderGeometry(hoop.radius * _grid_size, hoop.radius * _grid_size, 0.1 * _grid_size);
 			var mesh:Mesh = new Mesh(cylinder, _hoop_mat);
 			mesh.x = hoop.position.x * _grid_size;
 			mesh.y = -hoop.position.y * _grid_size;
+			
+			top = new Mesh(cylinder, _hoop_top_mat);
+			top.y = _grid_size*0.05;
+			mesh.addChild(top);
 				
 			hoop.mesh = mesh;
 			_container.addChild(mesh);
