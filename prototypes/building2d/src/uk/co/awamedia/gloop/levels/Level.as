@@ -2,22 +2,23 @@ package uk.co.awamedia.gloop.levels
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
-	import away3d.lights.DirectionalLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.PlaneGeometry;
-	
+	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
+	
 
 	public class Level
 	{
 		private var _w : uint;
 		private var _h : uint;
+		
+		internal var _bmp : BitmapData;
 		
 		internal var _spawn_point : Point;
 		internal var _walls : Vector.<Rectangle>;
@@ -105,6 +106,17 @@ package uk.co.awamedia.gloop.levels
 			ctr.addChild(plane);
 			
 			return ctr;
+		}
+		
+		public function testCollision(gameX : Number, gameY : Number) : Boolean
+		{
+			var gridx:int = Math.floor(gameX);
+			var gridy:int = Math.floor(gameY);
+			
+			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
+				return true;
+			
+			return _bmp.getPixel(gridx, gridy) == 0;
 		}
 	}
 }

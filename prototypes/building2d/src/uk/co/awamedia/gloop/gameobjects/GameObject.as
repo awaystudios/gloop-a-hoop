@@ -1,6 +1,7 @@
 package uk.co.awamedia.gloop.gameobjects {
 	import away3d.entities.Mesh;
 	import flash.geom.Point;
+	import uk.co.awamedia.gloop.levels.Level;
 	import uk.co.awamedia.gloop.Settings;
 	/**
 	 * ...
@@ -39,6 +40,34 @@ package uk.co.awamedia.gloop.gameobjects {
 				_mesh.x = position.x * Settings.GRID_SIZE;
 				_mesh.y = -position.y * Settings.GRID_SIZE;
 			}
+		}
+		
+		public function testAndResolveCollision(level:Level, offsetX:Number, offsetY:Number, lockToX:Boolean = false, lockToY:Boolean = false):Boolean {
+			if (level.testCollision(position.x + offsetX, position.y + offsetY)) {
+					
+				var direction:Point = speed.clone();
+				
+				// hack to only resolve in the offset direction. hacktastic!
+				if (lockToX != 0) direction.y = 0;
+				if (lockToY != 0) direction.x = 0;
+				
+				direction.normalize(Settings.COLLISION_STEP);
+				var stepsBack:int = 1;
+				
+				while (level.testCollision(position.x + offsetX - direction.x * stepsBack, position.y + offsetY - direction.y * stepsBack)) {
+					stepsBack++;
+					
+					// something is messed up, bail!
+					if (stepsBack > 10) return true;
+				}
+				
+				position.x -= direction.x * stepsBack;
+				position.y -= direction.y * stepsBack;
+					
+				return true;
+			}
+			
+			return false;
 		}
 		
 	}

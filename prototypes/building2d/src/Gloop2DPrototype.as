@@ -76,10 +76,8 @@ package
 			var ctr : ObjectContainer3D;
 			var parser : LevelBitmapParser;
 			
-			_bmp = Bitmap(new LevelBitmapAsset).bitmapData;
-			
 			parser = new LevelBitmapParser();
-			_level = parser.parseBitmap(_bmp);
+			_level = parser.parseBitmap(Bitmap(new LevelBitmapAsset).bitmapData);
 			
 			_light = new DirectionalLight(1, -1, 2);
 			_light.ambient = 0.6;
@@ -107,46 +105,6 @@ package
 			_idle = true;
 		}
 		
-		
-		private function testCollision(gameX : Number, gameY : Number) : Boolean
-		{
-			var gridx:int = Math.floor(gameX);
-			var gridy:int = Math.floor(gameY);
-			
-			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
-				return true;
-			
-			return _bmp.getPixel(gridx, gridy) == 0;
-		}
-		
-		private function testAndResolveCollision(offsetX:Number, offsetY:Number, lockToX:Boolean = false, lockToY:Boolean = false):Boolean {
-			if (testCollision(_gloop.position.x + offsetX, _gloop.position.y + offsetY)) {
-					
-				var direction:Point = _gloop.speed.clone();
-				
-				// hack to only resolve in the offset direction. hacktastic!
-				if (lockToX != 0) direction.y = 0;
-				if (lockToY != 0) direction.x = 0;
-				
-				direction.normalize(Settings.COLLISION_STEP);
-				var stepsBack:int = 1;
-				
-				while (testCollision(_gloop.position.x + offsetX - direction.x * stepsBack, _gloop.position.y + offsetY - direction.y * stepsBack)) {
-					stepsBack++;
-					
-					// something is messed up, bail!
-					if (stepsBack > 10) return true;
-				}
-				
-				_gloop.position.x -= direction.x * stepsBack;
-				_gloop.position.y -= direction.y * stepsBack;
-					
-				return true;
-			}
-			
-			return false;
-		}
-		
 		private function onEnterFrame(ev : Event) : void
 		{
 			var cam_tx : Number;
@@ -154,17 +112,7 @@ package
 			if (!_idle) {
 				
 				_gloop.update();
-				
-				if (_gloop.speed.x < 0 && testAndResolveCollision(-_gloop.radius, 0, true)) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.x > 0 && testAndResolveCollision( _gloop.radius, 0, true)) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.y < 0 && testAndResolveCollision(0, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.y > 0 && testAndResolveCollision(0,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				
-				if (_gloop.speed.y > 0 && testAndResolveCollision( _gloop.radius,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.y < 0 && testAndResolveCollision( _gloop.radius, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.y < 0 && testAndResolveCollision(-_gloop.radius, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (_gloop.speed.y > 0 && testAndResolveCollision(-_gloop.radius,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				
+				_gloop.collideWithLevel(_level);
 				
 				for each(var hoop:Hoop in _level.hoops) {
 					if (!hoop.enabled) continue;				
