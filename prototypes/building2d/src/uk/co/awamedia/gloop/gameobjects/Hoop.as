@@ -1,12 +1,13 @@
 package uk.co.awamedia.gloop.gameobjects {
 	import away3d.entities.Mesh;
-	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
+	import away3d.materials.ColorMaterial;
 	
-	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
-	import uk.co.awamedia.gloop.Settings;
 	import uk.co.awamedia.gloop.gameobjects.GameObject;
+	
+	
 
 	/**
 	 * ...
@@ -15,7 +16,8 @@ package uk.co.awamedia.gloop.gameobjects {
 	public class Hoop extends GameObject
 	{
 		private var _cooldown:Number = 0;
-		public var rotation : Number;
+		private var _rotation : Number;
+		private var _slope : Point;
 		
 		public function Hoop()
 		{
@@ -27,23 +29,13 @@ package uk.co.awamedia.gloop.gameobjects {
 		
 		public function activate(gloop:Gloop):void {
 			_cooldown = 10;
-			gloop.speed.x = Math.sin(rotation / 180 * Math.PI) * 1;
-			gloop.speed.y = Math.cos(rotation / 180 * Math.PI) * 1;
+			gloop.speed.x = _slope.y * 1;
+			gloop.speed.y = _slope.x * 1;
 		}
 		
 		public function get enabled():Boolean {
 			return _cooldown <= 0;
 		}
-		
-		
-		public override function set mesh(val:Mesh):void
-		{
-			super.mesh = val;
-			
-			_mesh.mouseEnabled = true;
-			_mesh.addEventListener(MouseEvent3D.CLICK, onMeshClick);
-		}
-		
 		
 		public override function update(timeDelta:Number=1):void
 		{
@@ -61,5 +53,31 @@ package uk.co.awamedia.gloop.gameobjects {
 		{
 			rotation += 45;
 		}
+		
+		public function setColor(color:uint):void {
+			ColorMaterial(_mesh.material).color = color;
+		}
+		
+		public override function set mesh(val:Mesh):void
+		{
+			super.mesh = val;
+			
+			_mesh.mouseEnabled = true;
+			_mesh.addEventListener(MouseEvent3D.CLICK, onMeshClick);
+		}
+		
+		public function get rotation():Number {
+			return _rotation;
+		}
+		
+		public function set rotation(value:Number):void {
+			_rotation = value;
+			_slope = Point.polar(1, rotation / 180 * Math.PI);
+		}
+		
+		public function get slope():Point {
+			return _slope;
+		}
+		
 	}
 }

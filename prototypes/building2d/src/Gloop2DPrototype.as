@@ -167,11 +167,8 @@ package
 				
 				
 				for each(var hoop:Hoop in _level.hoops) {
-					if (!hoop.enabled) continue;
-					var distance:Number = Point.distance(hoop.position, _gloop.position);
-					if (distance < hoop.radius + _gloop.radius) {
-						hoop.activate(_gloop);
-					}
+					if (!hoop.enabled) continue;				
+					if (testHoopCollision(hoop)) hoop.activate(_gloop);
 				}
 				
 			}
@@ -191,6 +188,32 @@ package
 			_view.render();
 		}
 		
+		
+		private function testHoopCollision(hoop:Hoop):Boolean {
+			var distance:Number = Point.distance(hoop.position, _gloop.position);
+			if (distance > hoop.radius + _gloop.radius) return false;
+			
+			// a vector representing the slant of the hoop
+			var hoop2:Point = new Point(hoop.position.x + hoop.slope.x, hoop.position.y - hoop.slope.y);
+			
+			// work out the normal for that vector (hacky)
+			var tmp:Point = hoop.position.subtract(hoop2);
+			tmp.normalize(1);
+			var b:Point = new Point(-tmp.y, tmp.x);
+			
+			// a vector representing the distance between the hoop and the gloop
+			var a	:Point = hoop.position.subtract(_gloop.position);
+			
+			// get the dot product between the normal for the hoop slant and the gloop/hoop distance
+			// positive/negative values tell us if we're coming in from the front or back
+			// we don't care too much about that now so we use Math.abs to get the real value
+			var dp:Number = Math.abs(a.x * b.x + a.y * b.y);
+			
+			// if the dotproduct is more than the gloops radius, we're not colliding
+			if (dp > _gloop.radius) return false;
+			
+			return true;
+		}
 		
 		private function onGloopMouseDown(ev : MouseEvent3D) : void
 		{
@@ -222,6 +245,20 @@ package
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
 		}
 		
+		private function nudge(x:Number, y:Number):void {
+			_gloop.position.x += x;
+			_gloop.position.y += y;
+			_gloop.speed.normalize(0);
+			_gloop.update();
+			
+			for each(var hoop:Hoop in _level.hoops) {
+				if (testHoopCollision(hoop)) {
+					hoop.setColor(0x000000);
+				} else {
+					hoop.setColor(0xff0000);
+				}
+			}
+		}
 		
 		private function onStageKey(ev : KeyboardEvent) : void
 		{
@@ -232,6 +269,18 @@ package
 					_gloop.speed.normalize(0);
 					_gloop.update();
 					_idle = true;
+					break;
+				case Keyboard.UP:
+					nudge(0, -1);
+					break;
+				case Keyboard.DOWN:
+					nudge(0, 1);
+					break;
+				case Keyboard.LEFT:
+					nudge(-1, 0);
+					break;
+				case Keyboard.RIGHT:
+					nudge(1, 0);
 					break;
 			}
 		}
