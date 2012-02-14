@@ -42,7 +42,19 @@ package uk.co.awamedia.gloop.gameobjects {
 			}
 		}
 		
-		public function testAndResolveCollision(level:Level, offsetX:Number, offsetY:Number, lockToX:Boolean = false, lockToY:Boolean = false):Boolean {
+		public function collideWithLevel(level:Level):void {
+			if (speed.x < 0 && testAndResolveCollision(level, -radius, 0, true)) speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.x > 0 && testAndResolveCollision(level,  radius, 0, true)) speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.y < 0 && testAndResolveCollision(level, 0, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.y > 0 && testAndResolveCollision(level, 0,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+			
+			if (speed.y > 0 && testAndResolveCollision(level,  radius,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.y < 0 && testAndResolveCollision(level,  radius, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.y < 0 && testAndResolveCollision(level, -radius, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+			if (speed.y > 0 && testAndResolveCollision(level, -radius,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;	
+		}
+		
+		protected function testAndResolveCollision(level:Level, offsetX:Number, offsetY:Number, lockToX:Boolean = false, lockToY:Boolean = false):Boolean {
 			if (level.testCollision(position.x + offsetX, position.y + offsetY)) {
 					
 				var direction:Point = speed.clone();

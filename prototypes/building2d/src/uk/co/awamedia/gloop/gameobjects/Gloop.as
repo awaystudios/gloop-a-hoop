@@ -23,17 +23,5 @@ package uk.co.awamedia.gloop.gameobjects
 		
 			super.update(timeDelta);
 		}
-		
-		public function collideWithLevel(level:Level):void {
-			if (speed.x < 0 && testAndResolveCollision(level, -radius, 0, true)) speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.x > 0 && testAndResolveCollision(level,  radius, 0, true)) speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.y < 0 && testAndResolveCollision(level, 0, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.y > 0 && testAndResolveCollision(level, 0,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-			
-			if (speed.y > 0 && testAndResolveCollision(level,  radius,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.y < 0 && testAndResolveCollision(level,  radius, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.y < 0 && testAndResolveCollision(level, -radius, -radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-			if (speed.y > 0 && testAndResolveCollision(level, -radius,  radius, false, true)) speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;	
-		}
 	}
 }
