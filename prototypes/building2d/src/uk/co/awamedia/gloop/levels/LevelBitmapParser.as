@@ -62,7 +62,6 @@ package uk.co.awamedia.gloop.levels
 					var hoop : Hoop;
 					
 					hoop = new Hoop();
-					hoop.radius = 1;
 					hoop.position.x = posx;
 					hoop.position.y = posy;
 					hoop.rotation = 135;

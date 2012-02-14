@@ -27,6 +27,8 @@ package uk.co.awamedia.gloop.levels
 		private var _grid_size : uint;
 		
 		private var _back_plane : Mesh;
+		private var _container:ObjectContainer3D;
+		private var _hoop_mat:ColorMaterial;
 		
 		internal var _bmp : BitmapData;
 		
@@ -52,8 +54,7 @@ package uk.co.awamedia.gloop.levels
 		public function get hoops():Vector.<Hoop> {
 			return _hoops;
 		}
-		
-		
+
 		public function update(timeDelta : Number = 1) : void
 		{
 			var i : uint;
@@ -66,13 +67,13 @@ package uk.co.awamedia.gloop.levels
 		
 		public function construct(lights : Array, gridSize : Number = 20) : ObjectContainer3D
 		{
+			_container = new ObjectContainer3D();
+			
 			var r : Rectangle;
 			var hoop : Hoop;
 			var mesh : Mesh;
-			var ctr : ObjectContainer3D = new ObjectContainer3D();
 			var back_mat : ColorMaterial;
 			var wall_mat : ColorMaterial;
-			var hoop_mat : ColorMaterial;
 			
 			_grid_size = gridSize;
 			
@@ -81,8 +82,8 @@ package uk.co.awamedia.gloop.levels
 			wall_mat.gloss = 0.2;
 			wall_mat.specular = 0.6;
 			
-			hoop_mat = new ColorMaterial(0xff0000);
-			hoop_mat.lightPicker = new StaticLightPicker(lights);
+			_hoop_mat = new ColorMaterial(0xff0000);
+			_hoop_mat.lightPicker = new StaticLightPicker(lights);
 					
 			for each (r in _walls) {
 				var cube : CubeGeometry;
@@ -91,19 +92,11 @@ package uk.co.awamedia.gloop.levels
 				mesh = new Mesh(cube, wall_mat);
 				mesh.x = r.x * gridSize + r.width * gridSize/2;
 				mesh.y = -r.y * gridSize - r.height * gridSize/2;
-				ctr.addChild(mesh);
+				_container.addChild(mesh);
 			}
 			
 			for each (hoop in _hoops) {
-				var cylinder : CylinderGeometry;
-				
-				cylinder = new CylinderGeometry(hoop.radius * gridSize, hoop.radius * gridSize, 0.1*gridSize);
-				mesh = new Mesh(cylinder, hoop_mat);
-				mesh.x = hoop.position.x * gridSize;
-				mesh.y = -hoop.position.y * gridSize;
-				
-				hoop.mesh = mesh;
-				ctr.addChild(mesh);
+				constructHoop(hoop);
 			}
 			
 			back_mat = new ColorMaterial(0xcccccc);
@@ -115,14 +108,14 @@ package uk.co.awamedia.gloop.levels
 			_back_plane.y = -_h/2 * gridSize;
 			_back_plane.z = gridSize*3;
 			_back_plane.material.lightPicker = new StaticLightPicker(lights);
-			ctr.addChild(_back_plane);
+			_container.addChild(_back_plane);
 			
 			_back_plane.mouseEnabled = true;
 			_back_plane.addEventListener(MouseEvent3D.MOUSE_DOWN, onPlaneMouseDown);
 			_back_plane.addEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
 			_back_plane.addEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
 			
-			return ctr;
+			return _container;
 		}
 		
 		
@@ -153,6 +146,18 @@ package uk.co.awamedia.gloop.levels
 			dispatchInteractionEvent(LevelInteractionEvent.MOVE, ev.localX, ev.localY);
 		}
 		
+		public function constructHoop(hoop:Hoop):void {
+			var cylinder : CylinderGeometry;
+			
+			cylinder = new CylinderGeometry(hoop.radius * _grid_size, hoop.radius * _grid_size, 0.1 * _grid_size);
+			var mesh:Mesh = new Mesh(cylinder, _hoop_mat);
+			mesh.x = hoop.position.x * _grid_size;
+			mesh.y = -hoop.position.y * _grid_size;
+				
+			hoop.mesh = mesh;
+			_container.addChild(mesh);
+		}
+		
 		
 		public function testCollision(gameX : Number, gameY : Number) : Boolean
 		{
@@ -164,5 +169,15 @@ package uk.co.awamedia.gloop.levels
 			
 			return _bmp.getPixel(gridx, gridy) == 0;
 		}
+		
+				
+		public function get width():uint {
+			return _w;
+		}
+		
+		public function get heigth():uint {
+			return _h;
+		}
+		
 	}
 }

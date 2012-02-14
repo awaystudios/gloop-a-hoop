@@ -23,7 +23,7 @@ package uk.co.awamedia.gloop.gameobjects {
 		{
 			super(null);
 			
-			radius = 3;
+			radius = 2;
 			rotation = 0;
 		}
 		

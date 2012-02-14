@@ -47,6 +47,7 @@ package
 		private var _drag_hoop_start : Point;
 		
 		private var _mouse_down_time : Number;
+		private var _game_grid_pos : Point;
 		
 		[Embed("/../assets/level.png")]
 		private var LevelBitmapAsset : Class;
@@ -54,7 +55,6 @@ package
 		public function Gloop2DPrototype()
 		{
 			super();
-			
 			init();
 		}
 		
@@ -69,9 +69,11 @@ package
 			
 			_level.addEventListener(LevelInteractionEvent.DOWN, onLevelInteractionDown);
 			_level.addEventListener(LevelInteractionEvent.MOVE, onLevelInteractionMove);
-			_level.addEventListener(LevelInteractionEvent.RELEASE, onLevelInteractionUp);
 			
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
+			_game_grid_pos = new Point;
 		}
 		
 		
@@ -217,9 +219,12 @@ package
 				_dragging.update(0);
 			}
 			
+			_game_grid_pos.x = ev.gridX;
+			_game_grid_pos.y = ev.gridY;
+			
 		}
 		
-		private function onLevelInteractionUp(ev : LevelInteractionEvent) : void
+		private function onMouseUp(ev : MouseEvent) : void
 		{
 			if (_dragging == _gloop) {
 				_idle = false;
@@ -253,17 +258,21 @@ package
 			}
 		}
 		
+		private function reset():void {
+			_gloop.position.x = _level.spawnPoint.x;
+			_gloop.position.y = _level.spawnPoint.y;
+			_gloop.speed.normalize(0);
+			_gloop.update();
+			_idle = true;	
+		}
+		
 		private function onStageKey(ev : KeyboardEvent) : void
 		{
 			switch (ev.keyCode) {
 				case Keyboard.SPACE:
-					_gloop.position.x = _level.spawnPoint.x;
-					_gloop.position.y = _level.spawnPoint.y;
-					_gloop.speed.normalize(0);
-					_gloop.update();
-					_idle = true;
+					reset();
 					break;
-				case Keyboard.UP:
+				/*case Keyboard.UP:
 					nudge(0, -1);
 					break;
 				case Keyboard.DOWN:
@@ -274,9 +283,25 @@ package
 					break;
 				case Keyboard.RIGHT:
 					nudge(1, 0);
+					break;*/
+				case Keyboard.Q:
+					_level.spawnPoint.x = _game_grid_pos.x;
+					_level.spawnPoint.y = _game_grid_pos.y;
+					reset();
 					break;
+					
+				case Keyboard.W:
+					var hoop:Hoop = new Hoop();
+					hoop.position.x = Math.round(_level.width / 2);
+					hoop.position.y = Math.round(_level.heigth / 2);
+					_level.hoops.push(hoop);
+					_level.constructHoop(hoop);
+					break;
+					
 			}
 		}
+		
+		
 		
 		private function onMouseDown(e:MouseEvent):void {
 			_drag_start = new Point(stage.mouseX, stage.mouseY);
