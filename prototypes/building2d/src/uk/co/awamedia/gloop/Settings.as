@@ -11,6 +11,14 @@ package uk.co.awamedia.gloop {
 		public static var GLOOP_DRAG : Number = .99;
 		static public var COLLISION_STEP:Number = .25;
 		static public var HOOP_CLICK_RADIUS:Number = 4;
+		static public var MAX_SHOT_POWER:Number = 1;
+		static public var HOOP_CLICK_TIME_THRESHOLD:int = 150;
+		static public var GLOOP_RADIUS:Number = .75;
+		static public var HOOP_RADIUS:Number = 2;
+		static public var HOOP_COOLDOWN_DURATION:int = 10;
+		static public var HOOP_BOOST_POWER:Number = 1;
+		static public var GLOOP_MAX_SPEED:Number = 5;
+		static public var HOOP_DEFAULT_ROTATION:int = 135;
 		
 	}
 

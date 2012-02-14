@@ -2,6 +2,7 @@ package uk.co.awamedia.gloop.gameobjects {
 	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
 	import away3d.materials.ColorMaterial;
+	import uk.co.awamedia.gloop.Settings;
 	
 	import flash.geom.Point;
 	
@@ -23,14 +24,14 @@ package uk.co.awamedia.gloop.gameobjects {
 		{
 			super(null);
 			
-			radius = 2;
+			radius = Settings.HOOP_RADIUS;
 			rotation = 0;
 		}
 		
 		public function activate(gloop:Gloop):void {
-			_cooldown = 10;
-			gloop.speed.x = _slope.y * 1;
-			gloop.speed.y = _slope.x * 1;
+			_cooldown = Settings.HOOP_COOLDOWN_DURATION;
+			gloop.speed.x = _slope.y * Settings.HOOP_BOOST_POWER;
+			gloop.speed.y = _slope.x * Settings.HOOP_BOOST_POWER;
 		}
 		
 		public function get enabled():Boolean {

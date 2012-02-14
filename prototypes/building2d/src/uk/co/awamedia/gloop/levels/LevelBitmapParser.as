@@ -8,6 +8,7 @@ package uk.co.awamedia.gloop.levels
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.PlaneGeometry;
+	import uk.co.awamedia.gloop.Settings;
 	
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -64,7 +65,7 @@ package uk.co.awamedia.gloop.levels
 					hoop = new Hoop();
 					hoop.position.x = posx;
 					hoop.position.y = posy;
-					hoop.rotation = 135;
+					hoop.rotation = Settings.HOOP_DEFAULT_ROTATION;
 					level._hoops.push(hoop);
 				}
 				
@@ -132,7 +133,7 @@ package uk.co.awamedia.gloop.levels
 			rect.width = w;
 			rect.height = h;
 			
-			trace(rect);
+			//trace(rect);
 			
 			return rect;
 		}

@@ -230,7 +230,7 @@ package
 			if (_dragging == _gloop) {
 				_power.x = -(stage.mouseX - _drag_start.x);
 				_power.y = -(stage.mouseY - _drag_start.y);
-				if (_power.length > 1.0) _power.normalize(1.0);
+				if (_power.length > Settings.MAX_SHOT_POWER) _power.normalize(Settings.MAX_SHOT_POWER);
 				
 			} else if (_dragging is Hoop) {
 				_dragging.position.x = ev.gridX;
@@ -253,7 +253,7 @@ package
 				_gloop.speed.y = _power.y;
 			} else if (_dragging is Hoop) {
 				
-				if (getTimer() - _mouse_down_time < 200) {
+				if (getTimer() - _mouse_down_time < Settings.HOOP_CLICK_TIME_THRESHOLD) {
 					_dragging.position.x = _drag_hoop_start.x;
 					_dragging.position.y = _drag_hoop_start.y;
 					Hoop(_dragging).rotation += 45;
