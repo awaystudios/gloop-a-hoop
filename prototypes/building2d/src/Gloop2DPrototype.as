@@ -8,21 +8,23 @@ package
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-	import flash.utils.getTimer;
-	import uk.co.awamedia.gloop.gameobjects.GameObject;
-	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.net.URLRequest;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	
 	import uk.co.awamedia.gloop.Settings;
 	import uk.co.awamedia.gloop.events.LevelInteractionEvent;
+	import uk.co.awamedia.gloop.gameobjects.GameObject;
 	import uk.co.awamedia.gloop.gameobjects.Gloop;
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	import uk.co.awamedia.gloop.levels.Level;
@@ -51,12 +53,20 @@ package
 		private var _mouse_down_time : Number;
 		private var _game_grid_pos : Point;
 		
-		[Embed("/../assets/level.png")]
-		private var LevelBitmapAsset : Class;
-		
 		public function Gloop2DPrototype()
 		{
 			super();
+			
+			var loader : Loader;
+			loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLevelComplete);
+			loader.load(new URLRequest('level.png'));
+		}
+		
+		
+		private function onLevelComplete(ev : Event) : void
+		{
+			_bmp = Bitmap(LoaderInfo(ev.currentTarget).content).bitmapData;
 			init();
 		}
 		
@@ -95,7 +105,7 @@ package
 			var parser : LevelBitmapParser;
 			
 			parser = new LevelBitmapParser();
-			_level = parser.parseBitmap(Bitmap(new LevelBitmapAsset).bitmapData);
+			_level = parser.parseBitmap(_bmp);
 
 			
 			_light = new DirectionalLight(1, -1, 2);
