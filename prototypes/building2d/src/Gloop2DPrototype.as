@@ -110,8 +110,8 @@ package
 		
 		private function testCollision(gameX : Number, gameY : Number) : Boolean
 		{
-			var gridx:int = Math.round(gameX);
-			var gridy:int = Math.round(gameY);
+			var gridx:int = Math.floor(gameX);
+			var gridy:int = Math.floor(gameY);
 			
 			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
 				return true;
@@ -119,14 +119,14 @@ package
 			return _bmp.getPixel(gridx, gridy) == 0;
 		}
 		
-		private function testAndResolveCollision(offsetX:Number, offsetY:Number):Boolean {
+		private function testAndResolveCollision(offsetX:Number, offsetY:Number, lockToX:Boolean = false, lockToY:Boolean = false):Boolean {
 			if (testCollision(_gloop.position.x + offsetX, _gloop.position.y + offsetY)) {
 					
 				var direction:Point = _gloop.speed.clone();
 				
 				// hack to only resolve in the offset direction. hacktastic!
-				if (offsetX != 0) direction.y = 0;
-				else if (offsetY != 0) direction.x = 0;
+				if (lockToX != 0) direction.y = 0;
+				if (lockToY != 0) direction.x = 0;
 				
 				direction.normalize(Settings.COLLISION_STEP);
 				var stepsBack:int = 1;
@@ -155,10 +155,15 @@ package
 				
 				_gloop.update();
 				
-				if (testAndResolveCollision(-_gloop.radius, 0) && _gloop.speed.x < 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision( _gloop.radius, 0) && _gloop.speed.x > 0) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0, -_gloop.radius) && _gloop.speed.y < 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
-				if (testAndResolveCollision(0,  _gloop.radius) && _gloop.speed.y > 0) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;				
+				if (_gloop.speed.x < 0 && testAndResolveCollision(-_gloop.radius, 0, true)) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.x > 0 && testAndResolveCollision( _gloop.radius, 0, true)) _gloop.speed.x *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.y < 0 && testAndResolveCollision(0, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.y > 0 && testAndResolveCollision(0,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				
+				if (_gloop.speed.y > 0 && testAndResolveCollision( _gloop.radius,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.y < 0 && testAndResolveCollision( _gloop.radius, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.y < 0 && testAndResolveCollision(-_gloop.radius, -_gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
+				if (_gloop.speed.y > 0 && testAndResolveCollision(-_gloop.radius,  _gloop.radius, false, true)) _gloop.speed.y *= -Settings.GLOOP_BOUNCE_FRICTION;
 				
 				
 				for each(var hoop:Hoop in _level.hoops) {
