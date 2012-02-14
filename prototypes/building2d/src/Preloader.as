@@ -2,12 +2,9 @@ package {
 	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
-	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getDefinitionByName;
@@ -18,6 +15,9 @@ package {
 	 * ...
 	 * @author Martin Jonasson (m@grapefrukt.com)
 	 */
+	
+	 [SWF(width = "1024", height = "768", frameRate = "60")]
+	 
 	public class Preloader extends MovieClip {
 		
 		private var _settings:SettingsLoader;
@@ -25,8 +25,6 @@ package {
 		private var _txt:TextField;
 		
 		public function Preloader(){
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			
 			_settings = new SettingsLoader(Settings);
 			_settings.addEventListener(ErrorEvent.ERROR, handleSettingError);
 			
