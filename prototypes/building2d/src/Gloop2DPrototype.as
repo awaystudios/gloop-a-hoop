@@ -185,20 +185,20 @@ package
 			
 		}
 		
-		private function onLevelInteractionDown(e:LevelInteractionEvent) : void 
+		private function onLevelInteractionDown(ev:LevelInteractionEvent) : void 
 		{
 			if (_dragging) return;
 			if (!_idle) return;
 			
-			var mousePos:Point = new Point(mouseX, mouseY);
+			var mousePos:Point = new Point(ev.gridX, ev.gridY);
 			
 			for each(var hoop:Hoop in _level.hoops) {
-				//if (Point.distance(hoop.position, mousePos) < Settings.HOOP_CLICK_RADIUS) {
+				if (Point.distance(hoop.position, mousePos) < Settings.HOOP_CLICK_RADIUS) {
 					_drag_hoop_start = hoop.position.clone();
 					_dragging = hoop;
 					
 					break;
-				//}
+				}
 			}
 			
 		}
