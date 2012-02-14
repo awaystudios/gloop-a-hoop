@@ -66,9 +66,12 @@ package
 			initGloop();
 			
 			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKey);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
+			
+			_level.addEventListener(LevelInteractionEvent.DOWN, onLevelInteractionDown);
+			_level.addEventListener(LevelInteractionEvent.MOVE, onLevelInteractionMove);
+			_level.addEventListener(LevelInteractionEvent.RELEASE, onLevelInteractionUp);
+			
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
 		
@@ -89,9 +92,7 @@ package
 			
 			parser = new LevelBitmapParser();
 			_level = parser.parseBitmap(Bitmap(new LevelBitmapAsset).bitmapData);
-			_level.addEventListener(LevelInteractionEvent.DOWN, onLevelInteractionEvent);
-			_level.addEventListener(LevelInteractionEvent.MOVE, onLevelInteractionEvent);
-			_level.addEventListener(LevelInteractionEvent.RELEASE, onLevelInteractionEvent);
+
 			
 			_light = new DirectionalLight(1, -1, 2);
 			_light.ambient = 0.6;
@@ -184,12 +185,9 @@ package
 			
 		}
 		
-		private function onStageMouseDown(e:MouseEvent) : void 
+		private function onLevelInteractionDown(e:LevelInteractionEvent) : void 
 		{
-			_drag_start = new Point(stage.mouseX, stage.mouseY);
-			_mouse_down_time = getTimer();
-			
-			if (e.target == _gloop) return;
+			if (_dragging) return;
 			if (!_idle) return;
 			
 			var mousePos:Point = new Point(mouseX, mouseY);
@@ -205,24 +203,23 @@ package
 			
 		}
 		
-		private function onStageMouseMove(ev : MouseEvent) : void
+		private function onLevelInteractionMove(ev : LevelInteractionEvent) : void
 		{
 			if (_dragging == _gloop) {
-				_power.x = -(ev.stageX - _drag_start.x);
-				_power.y = -(ev.stageY - _drag_start.y);
+				_power.x = -(stage.mouseX - _drag_start.x);
+				_power.y = -(stage.mouseY - _drag_start.y);
+				if (_power.length > 1.5) _power.normalize(1.5);
 				
-				if (_power.length > 1.5)
-					_power.normalize(1.5);
 			} else if (_dragging is Hoop) {
-				_dragging.position.x = Math.round(_drag_hoop_start.x + (ev.stageX - _drag_start.x) / 10);
-				_dragging.position.y = Math.round(_drag_hoop_start.y + (ev.stageY - _drag_start.y) / 10);
+				_dragging.position.x = ev.gridX;
+				_dragging.position.y = ev.gridY;
 				_dragging.collideWithLevel(_level);
 				_dragging.update(0);
 			}
 			
 		}
 		
-		private function onStageMouseUp(ev : MouseEvent) : void
+		private function onLevelInteractionUp(ev : LevelInteractionEvent) : void
 		{
 			if (_dragging == _gloop) {
 				_idle = false;
@@ -281,10 +278,9 @@ package
 			}
 		}
 		
-		
-		private function onLevelInteractionEvent(ev : LevelInteractionEvent) : void
-		{
-			trace(ev.type, ev.gridX, ev.gridY);
+		private function onMouseDown(e:MouseEvent):void {
+			_drag_start = new Point(stage.mouseX, stage.mouseY);
+			_mouse_down_time = getTimer();
 		}
 	}
 }
