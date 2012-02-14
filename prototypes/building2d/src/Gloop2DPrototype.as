@@ -2,7 +2,6 @@ package
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.View3D;
-	import away3d.core.render.PositionRenderer;
 	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
 	import away3d.lights.DirectionalLight;
@@ -23,7 +22,9 @@ package
 	import flash.ui.Keyboard;
 	
 	import uk.co.awamedia.gloop.Settings;
+	import uk.co.awamedia.gloop.events.LevelInteractionEvent;
 	import uk.co.awamedia.gloop.gameobjects.Gloop;
+	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	import uk.co.awamedia.gloop.levels.Level;
 	import uk.co.awamedia.gloop.levels.LevelBitmapParser;
 	
@@ -88,6 +89,9 @@ package
 			
 			parser = new LevelBitmapParser();
 			_level = parser.parseBitmap(Bitmap(new LevelBitmapAsset).bitmapData);
+			_level.addEventListener(LevelInteractionEvent.DOWN, onLevelInteractionEvent);
+			_level.addEventListener(LevelInteractionEvent.MOVE, onLevelInteractionEvent);
+			_level.addEventListener(LevelInteractionEvent.RELEASE, onLevelInteractionEvent);
 			
 			_light = new DirectionalLight(1, -1, 2);
 			_light.ambient = 0.6;
@@ -275,6 +279,12 @@ package
 					nudge(1, 0);
 					break;
 			}
+		}
+		
+		
+		private function onLevelInteractionEvent(ev : LevelInteractionEvent) : void
+		{
+			trace(ev.type, ev.gridX, ev.gridY);
 		}
 	}
 }
