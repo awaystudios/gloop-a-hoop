@@ -193,16 +193,24 @@ package
 			if (!_idle) return;
 			
 			var mousePos:Point = new Point(ev.gridX, ev.gridY);
+			var distance:Number = 0;
+			var nearestDistance:Number = Number.MAX_VALUE;
+			var nearestHoop:Hoop = null;
+				
 			
 			for each(var hoop:Hoop in _level.hoops) {
-				if (Point.distance(hoop.position, mousePos) < Settings.HOOP_CLICK_RADIUS) {
-					_drag_hoop_start = hoop.position.clone();
-					_dragging = hoop;
-					
-					break;
+				distance = Point.distance(hoop.position, mousePos);
+				if (distance < nearestDistance) {
+					nearestDistance = distance;
+					nearestHoop = hoop;
 				}
 			}
 			
+			if (nearestHoop && nearestDistance < Settings.HOOP_CLICK_RADIUS) {
+				_drag_hoop_start = nearestHoop.position.clone();
+				_dragging = nearestHoop;
+			}
+		
 		}
 		
 		private function onLevelInteractionMove(ev : LevelInteractionEvent) : void
