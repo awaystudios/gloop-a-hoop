@@ -5,12 +5,12 @@ package uk.co.awamedia.gloop {
 	 */
 	public class Settings {
 		
-		public static const GRID_SIZE : int = 20;
-		public static const GLOOP_BOUNCE_FRICTION : Number = .95;
-		public static const GLOOP_GRAVITY : Number = .0098;
-		public static const GLOOP_DRAG : Number = .99;
-		static public const COLLISION_STEP:Number = .25;
-		static public const HOOP_CLICK_RADIUS:Number = 4;
+		public static var GRID_SIZE : int = 20;
+		public static var GLOOP_BOUNCE_FRICTION : Number = .95;
+		public static var GLOOP_GRAVITY : Number = .0098;
+		public static var GLOOP_DRAG : Number = .99;
+		static public var COLLISION_STEP:Number = .25;
+		static public var HOOP_CLICK_RADIUS:Number = 4;
 		
 	}
 

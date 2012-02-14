@@ -28,7 +28,9 @@ package
 	import uk.co.awamedia.gloop.levels.Level;
 	import uk.co.awamedia.gloop.levels.LevelBitmapParser;
 	
-	[SWF(width="1024", height="768", frameRate="60")]
+	[SWF(width = "1024", height = "768", frameRate = "60")]
+	[Frame(factoryClass = "Preloader")]
+	
 	public class Gloop2DPrototype extends Sprite
 	{
 		private var _level : Level;
