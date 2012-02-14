@@ -23,7 +23,7 @@ package uk.co.awamedia.gloop {
 		
 		public function SettingsLoader(targetClass:Class) {
 			_targetClass = targetClass;
-			_loader = new URLLoader(new URLRequest("settings.xml"));
+			_loader = new URLLoader(new URLRequest("settings.xml?" + Math.random()));
 			_loader.addEventListener(Event.COMPLETE, handleLoadComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecurityError);

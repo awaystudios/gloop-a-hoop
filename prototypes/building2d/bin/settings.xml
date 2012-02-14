@@ -4,14 +4,15 @@
 	<setting id="GLOOP_BOUNCE_FRICTION">0.95</setting>
 	<setting id="GLOOP_DRAG">0.99</setting>
 	<setting id="GLOOP_GRAVITY">0.0098</setting>
-	<setting id="GLOOP_MAX_SPEED">5</setting>
+	<setting id="GLOOP_MAX_SPEED">4</setting>
 	<setting id="GLOOP_RADIUS">0.75</setting>
 	<setting id="GRID_SIZE">20</setting>
-	<setting id="HOOP_BOOST_POWER">1</setting>
+	<setting id="HOOP_BOOST_POWER">.75</setting>
 	<setting id="HOOP_CLICK_RADIUS">4</setting>
 	<setting id="HOOP_CLICK_TIME_THRESHOLD">150</setting>
 	<setting id="HOOP_COOLDOWN_DURATION">10</setting>
 	<setting id="HOOP_DEFAULT_ROTATION">135</setting>
 	<setting id="HOOP_RADIUS">2</setting>
-	<setting id="MAX_SHOT_POWER">1</setting>
+	<setting id="MAX_SHOT_POWER">.75</setting>
+	<setting id="SHOT_POWER_SCALE">.01</setting>
 </data>

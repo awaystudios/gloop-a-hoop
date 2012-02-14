@@ -19,6 +19,7 @@ package uk.co.awamedia.gloop {
 		static public var HOOP_BOOST_POWER:Number = 1;
 		static public var GLOOP_MAX_SPEED:Number = 5;
 		static public var HOOP_DEFAULT_ROTATION:int = 135;
+		static public var SHOT_POWER_SCALE:Number = .01;
 		
 	}
 

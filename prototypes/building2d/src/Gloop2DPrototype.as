@@ -228,8 +228,8 @@ package
 		private function onLevelInteractionMove(ev : LevelInteractionEvent) : void
 		{
 			if (_dragging == _gloop) {
-				_power.x = -(stage.mouseX - _drag_start.x);
-				_power.y = -(stage.mouseY - _drag_start.y);
+				_power.x = -(stage.mouseX - _drag_start.x) * Settings.SHOT_POWER_SCALE;
+				_power.y = -(stage.mouseY - _drag_start.y) * Settings.SHOT_POWER_SCALE;
 				if (_power.length > Settings.MAX_SHOT_POWER) _power.normalize(Settings.MAX_SHOT_POWER);
 				
 			} else if (_dragging is Hoop) {
