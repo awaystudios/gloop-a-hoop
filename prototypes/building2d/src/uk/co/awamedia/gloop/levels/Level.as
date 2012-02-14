@@ -2,26 +2,32 @@ package uk.co.awamedia.gloop.levels
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
-	import away3d.lights.DirectionalLight;
+	import away3d.events.MouseEvent3D;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.PlaneGeometry;
 	
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import uk.co.awamedia.gloop.events.LevelInteractionEvent;
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
 
-	public class Level
+	public class Level extends EventDispatcher
 	{
 		private var _w : uint;
 		private var _h : uint;
+		private var _grid_size : uint;
+		
+		private var _back_plane : Mesh;
 		
 		internal var _spawn_point : Point;
 		internal var _walls : Vector.<Rectangle>;
 		internal var _hoops : Vector.<Hoop>;
+		
 		
 		public function Level(w : uint, h : uint)
 		{
@@ -55,13 +61,14 @@ package uk.co.awamedia.gloop.levels
 		public function construct(lights : Array, gridSize : Number = 20) : ObjectContainer3D
 		{
 			var r : Rectangle;
-			var plane : Mesh;
 			var hoop : Hoop;
 			var mesh : Mesh;
 			var ctr : ObjectContainer3D = new ObjectContainer3D();
 			var back_mat : ColorMaterial;
 			var wall_mat : ColorMaterial;
 			var hoop_mat : ColorMaterial;
+			
+			_grid_size = gridSize;
 			
 			wall_mat = new ColorMaterial(0x888888);
 			wall_mat.lightPicker = new StaticLightPicker(lights);
@@ -97,14 +104,51 @@ package uk.co.awamedia.gloop.levels
 			back_mat.gloss = 0.2;
 			back_mat.specular = 0.6;
 			
-			plane = new Mesh(new PlaneGeometry(_w * gridSize, _h * gridSize, 1, 1, false), back_mat);
-			plane.x = _w/2 * gridSize;
-			plane.y = -_h/2 * gridSize;
-			plane.z = gridSize*3;
-			plane.material.lightPicker = new StaticLightPicker(lights);
-			ctr.addChild(plane);
+			_back_plane = new Mesh(new PlaneGeometry(_w * gridSize, _h * gridSize, 1, 1, false), back_mat);
+			_back_plane.x = _w/2 * gridSize;
+			_back_plane.y = -_h/2 * gridSize;
+			_back_plane.z = gridSize*3;
+			_back_plane.material.lightPicker = new StaticLightPicker(lights);
+			ctr.addChild(_back_plane);
+			
+			_back_plane.mouseEnabled = true;
+			_back_plane.addEventListener(MouseEvent3D.MOUSE_DOWN, onPlaneMouseDown);
 			
 			return ctr;
+		}
+		
+		
+		private function dispatchInteractionEvent(type : String, sceneX : Number, sceneY : Number) : void
+		{
+			var grid_x : int, grid_y : int;
+			
+			grid_x = (sceneX + (_w * _grid_size)/2)/_grid_size;
+			grid_y = (sceneY + (_h * _grid_size)/2)/_grid_size;
+			dispatchEvent(new LevelInteractionEvent(type, grid_x, grid_y));
+		}
+		
+		
+		private function onPlaneMouseDown(ev : MouseEvent3D) : void
+		{
+			_back_plane.addEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
+			_back_plane.addEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
+			
+			dispatchInteractionEvent(LevelInteractionEvent.DOWN, ev.localX, ev.localY);
+		}
+		
+		
+		private function onPlaneMouseUp(ev : MouseEvent3D) : void
+		{
+			_back_plane.removeEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
+			_back_plane.removeEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
+			
+			dispatchInteractionEvent(LevelInteractionEvent.RELEASE, ev.localX, ev.localY);
+		}
+		
+		
+		private function onPlaneMouseMove(ev : MouseEvent3D) : void
+		{
+			dispatchInteractionEvent(LevelInteractionEvent.DRAG, ev.localX, ev.localY);
 		}
 	}
 }
