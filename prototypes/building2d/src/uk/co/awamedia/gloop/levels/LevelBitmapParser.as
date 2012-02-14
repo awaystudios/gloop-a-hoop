@@ -37,6 +37,7 @@ package uk.co.awamedia.gloop.levels
 			var level : Level;
 			
 			level = new Level(bmp.width, bmp.height);
+			level._bmp = bmp;
 			
 			pixels = bmp.getVector(bmp.rect);
 			len = pixels.length;

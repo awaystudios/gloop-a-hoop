@@ -8,7 +8,7 @@ package uk.co.awamedia.gloop.events
 		private var _grid_y : uint;
 		
 		public static const RELEASE : String = 'interactionEventRelease';
-		public static const DRAG : String = 'interactionEventDrag';
+		public static const MOVE : String = 'interactionEventMove';
 		public static const DOWN : String = 'interactionEventTap';
 		
 		

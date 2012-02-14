@@ -14,7 +14,11 @@ package uk.co.awamedia.gloop.levels
 	import flash.geom.Rectangle;
 	
 	import uk.co.awamedia.gloop.events.LevelInteractionEvent;
+	import flash.display.BitmapData;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
+	
 
 	public class Level extends EventDispatcher
 	{
@@ -23,6 +27,8 @@ package uk.co.awamedia.gloop.levels
 		private var _grid_size : uint;
 		
 		private var _back_plane : Mesh;
+		
+		internal var _bmp : BitmapData;
 		
 		internal var _spawn_point : Point;
 		internal var _walls : Vector.<Rectangle>;
@@ -113,6 +119,8 @@ package uk.co.awamedia.gloop.levels
 			
 			_back_plane.mouseEnabled = true;
 			_back_plane.addEventListener(MouseEvent3D.MOUSE_DOWN, onPlaneMouseDown);
+			_back_plane.addEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
+			_back_plane.addEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
 			
 			return ctr;
 		}
@@ -130,25 +138,31 @@ package uk.co.awamedia.gloop.levels
 		
 		private function onPlaneMouseDown(ev : MouseEvent3D) : void
 		{
-			_back_plane.addEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
-			_back_plane.addEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
-			
 			dispatchInteractionEvent(LevelInteractionEvent.DOWN, ev.localX, ev.localY);
 		}
 		
 		
 		private function onPlaneMouseUp(ev : MouseEvent3D) : void
 		{
-			_back_plane.removeEventListener(MouseEvent3D.MOUSE_UP, onPlaneMouseUp);
-			_back_plane.removeEventListener(MouseEvent3D.MOUSE_MOVE, onPlaneMouseMove);
-			
 			dispatchInteractionEvent(LevelInteractionEvent.RELEASE, ev.localX, ev.localY);
 		}
 		
 		
 		private function onPlaneMouseMove(ev : MouseEvent3D) : void
 		{
-			dispatchInteractionEvent(LevelInteractionEvent.DRAG, ev.localX, ev.localY);
+			dispatchInteractionEvent(LevelInteractionEvent.MOVE, ev.localX, ev.localY);
+		}
+		
+		
+		public function testCollision(gameX : Number, gameY : Number) : Boolean
+		{
+			var gridx:int = Math.floor(gameX);
+			var gridy:int = Math.floor(gameY);
+			
+			if (gridx >= _bmp.width || gridx < 0 || gridy < 0 || gridy > _bmp.height-1)
+				return true;
+			
+			return _bmp.getPixel(gridx, gridy) == 0;
 		}
 	}
 }
