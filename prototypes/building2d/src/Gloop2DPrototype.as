@@ -2,12 +2,15 @@ package
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.View3D;
+	import away3d.core.render.PositionRenderer;
 	import away3d.entities.Mesh;
 	import away3d.events.MouseEvent3D;
 	import away3d.lights.DirectionalLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
+	import flash.utils.getTimer;
+	import uk.co.awamedia.gloop.gameobjects.GameObject;
 	import uk.co.awamedia.gloop.gameobjects.Hoop;
 	
 	import flash.display.Bitmap;
@@ -39,6 +42,10 @@ package
 		private var _power : Point;
 		
 		private var _idle : Boolean;
+		private var _dragging : GameObject;
+		private var _drag_hoop_start : Point;
+		
+		private var _mouse_down_time : Number;
 		
 		[Embed("/../assets/level.png")]
 		private var LevelBitmapAsset : Class;
@@ -58,6 +65,9 @@ package
 			initGloop();
 			
 			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKey);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		}
 		
 		
@@ -165,32 +175,66 @@ package
 		
 		private function onGloopMouseDown(ev : MouseEvent3D) : void
 		{
+			_dragging = _gloop;
 			_power = new Point();
-			_drag_start = new Point(stage.mouseX, stage.mouseY);
 			
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		}
 		
+		private function onStageMouseDown(e:MouseEvent) : void 
+		{
+			_drag_start = new Point(stage.mouseX, stage.mouseY);
+			_mouse_down_time = getTimer();
+			
+			if (e.target == _gloop) return;
+			if (!_idle) return;
+			
+			var mousePos:Point = new Point(mouseX, mouseY);
+			
+			for each(var hoop:Hoop in _level.hoops) {
+				//if (Point.distance(hoop.position, mousePos) < Settings.HOOP_CLICK_RADIUS) {
+					_drag_hoop_start = hoop.position.clone();
+					_dragging = hoop;
+					
+					break;
+				//}
+			}
+			
+		}
 		
 		private function onStageMouseMove(ev : MouseEvent) : void
 		{
-			_power.x = -(ev.stageX - _drag_start.x);
-			_power.y = -(ev.stageY - _drag_start.y);
+			if (_dragging == _gloop) {
+				_power.x = -(ev.stageX - _drag_start.x);
+				_power.y = -(ev.stageY - _drag_start.y);
+				
+				if (_power.length > 1.5)
+					_power.normalize(1.5);
+			} else if (_dragging is Hoop) {
+				_dragging.position.x = Math.round(_drag_hoop_start.x + (ev.stageX - _drag_start.x) / 10);
+				_dragging.position.y = Math.round(_drag_hoop_start.y + (ev.stageY - _drag_start.y) / 10);
+				_dragging.collideWithLevel(_level);
+				_dragging.update(0);
+			}
 			
-			if (_power.length > 1.5)
-				_power.normalize(1.5);
 		}
-		
 		
 		private function onStageMouseUp(ev : MouseEvent) : void
 		{
-			_idle = false;
-			_gloop.speed.x = _power.x;
-			_gloop.speed.y = _power.y;
-			
-			stage.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+			if (_dragging == _gloop) {
+				_idle = false;
+				_dragging = null;
+				_gloop.speed.x = _power.x;
+				_gloop.speed.y = _power.y;
+			} else if (_dragging is Hoop) {
+				
+				if (getTimer() - _mouse_down_time < 200) {
+					_dragging.position.x = _drag_hoop_start.x;
+					_dragging.position.y = _drag_hoop_start.y;
+					Hoop(_dragging).rotation += 45;
+				} 
+				
+				_dragging = null;
+			}
 		}
 		
 		private function nudge(x:Number, y:Number):void {

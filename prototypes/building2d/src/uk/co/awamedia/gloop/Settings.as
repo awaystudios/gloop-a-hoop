@@ -10,6 +10,7 @@ package uk.co.awamedia.gloop {
 		public static const GLOOP_GRAVITY : Number = .0098;
 		public static const GLOOP_DRAG : Number = .99;
 		static public const COLLISION_STEP:Number = .25;
+		static public const HOOP_CLICK_RADIUS:Number = 10;
 		
 	}
 

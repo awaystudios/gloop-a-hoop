@@ -49,21 +49,8 @@ package uk.co.awamedia.gloop.gameobjects {
 		}
 		
 		
-		private function onMeshClick(ev : MouseEvent3D) : void
-		{
-			rotation += 45;
-		}
-		
 		public function setColor(color:uint):void {
 			ColorMaterial(_mesh.material).color = color;
-		}
-		
-		public override function set mesh(val:Mesh):void
-		{
-			super.mesh = val;
-			
-			_mesh.mouseEnabled = true;
-			_mesh.addEventListener(MouseEvent3D.CLICK, onMeshClick);
 		}
 		
 		public function get rotation():Number {
