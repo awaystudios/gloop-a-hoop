@@ -12,7 +12,7 @@ package uk.co.awamedia.gloop.events
 		public static const DOWN : String = 'interactionEventTap';
 		
 		
-		public function LevelInteractionEvent(type:String, gridX : uint, gridY : uint)
+		public function LevelInteractionEvent(type:String, gridX : Number, gridY : Number)
 		{
 			super(type);
 			
