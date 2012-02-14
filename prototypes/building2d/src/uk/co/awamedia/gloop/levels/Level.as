@@ -131,7 +131,7 @@ package uk.co.awamedia.gloop.levels
 			var grid_x : int, grid_y : int;
 			
 			grid_x = (sceneX + (_w * _grid_size)/2)/_grid_size;
-			grid_y = (sceneY + (_h * _grid_size)/2)/_grid_size;
+			grid_y = _h - (sceneY + (_h * _grid_size)/2)/_grid_size;
 			dispatchEvent(new LevelInteractionEvent(type, grid_x, grid_y));
 		}
 		
