@@ -9,38 +9,78 @@ package
 	import com.away3d.gloop.level.LevelParser;
 	
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
+	import flash.events.KeyboardEvent;
+	import flash.net.URLRequest;
+	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 	
+	import wck.WCK;
+	
+	[SWF(frameRate="60")]
 	public class Main extends Sprite
 	{
-		[Embed("/../assets/levels/test/testlevel.awd", mimeType="application/octet-stream")]
-		private var TestLevelAWDAsset : Class;
+		private var _doc : WCK;
+		private var _level : Level;
 		
 		public function Main()
 		{
-			var loader : Loader3D;
-			
 			Loader3D.enableParser(AWD2Parser);
 			
-			loader = new Loader3D();
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKeyUp);
+			
+			_doc = new WCK();
+			_doc.x = stage.stageWidth/2;
+			_doc.y = stage.stageHeight/2;
+			addChild(_doc);
+			
+			loadLevel();
+		}
+		
+		
+		private function loadLevel() : void
+		{
+			if (_level) {
+				_level.dispose();
+				_level.world.parent.removeChild(_level.world);
+			}
+			
+			var loader : Loader3D;
+			loader = new Loader3D(false);
 			loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
-			loader.loadData(TestLevelAWDAsset);
+			loader.load(new URLRequest("../assets/levels/test/testlevel.awd"));
 		}
 		
 		
 		private function onResourceComplete(ev : LoaderEvent) : void
 		{
 			var gloop : Gloop;
-			var level : Level;
 			var loader : Loader3D;
 			var parser : LevelParser;
 			
 			loader = Loader3D(ev.currentTarget);
 			
-			parser = new LevelParser();
-			level = parser.parseContainer(loader);
+			parser = new LevelParser(60);
+			_level = parser.parseContainer(loader);
 			
-			trace(level.spawnPoint);
+			gloop = new Gloop();
+			gloop.physics.x = _level.spawnPoint.x;
+			gloop.physics.y = _level.spawnPoint.y;
+			_level.add(gloop);
+			
+			_doc.addChild(_level.world);
+			
+			trace(_level.spawnPoint);
+		}
+		
+		
+		private function onStageKeyUp(ev : KeyboardEvent) : void
+		{
+			if (ev.keyCode == Keyboard.R) {
+				loadLevel();
+			}
 		}
 	}
 }

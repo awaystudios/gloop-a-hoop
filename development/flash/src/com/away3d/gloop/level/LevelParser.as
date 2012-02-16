@@ -3,6 +3,7 @@ package com.away3d.gloop.level
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
 	
+	import com.away3d.gloop.gameobjects.Hoop;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
@@ -28,8 +29,8 @@ package com.away3d.gloop.level
 			
 			it = new SceneGraphIterator(ctr);
 			while (obj = it.next()) {
-				if (obj.extra && obj.extra.hasOwnProperty('gloop_type')) {
-					switch (obj.extra['gloop_type']) {
+				if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
+					switch (obj.extra['gah_type']) {
 						case 'wall':
 							parseWall(level, obj);
 							break;
@@ -66,25 +67,28 @@ package com.away3d.gloop.level
 			min = mesh.bounds.min;
 			dim = mesh.bounds.max.subtract(min);
 			
-			wall = new Wall(min.x, min.y, dim.x, dim.y)
-			wall.physics.x = obj.x;
-			wall.physics.y = obj.y;
-			wall.physics.rotation
+			wall = new Wall(min.x*_scale, -min.y*_scale, dim.x*_scale, -dim.y*_scale);
+			wall.physics.x = obj.x * _scale;
+			wall.physics.y = -obj.y * _scale;
+			wall.physics.rotation = -obj.rotationZ;
 			
-			level.world.addChild(wall.physics);
+			level.add(wall);
 		}
 		
 		
 		private function parseSpawnPoint(level : Level, obj : ObjectContainer3D) : void
 		{
 			level.spawnPoint.x = obj.x * _scale;
-			level.spawnPoint.y = obj.y * _scale;
+			level.spawnPoint.y = -obj.y * _scale;
 		}
 		
 		
 		private function parseHoop(level : Level, obj : ObjectContainer3D) : void
 		{
+			var hoop : Hoop;
 			
+			hoop = new Hoop(obj.x * _scale, -obj.y * _scale);
+			level.add(hoop);
 		}
 	}
 }
