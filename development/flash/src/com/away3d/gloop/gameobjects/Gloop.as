@@ -9,6 +9,7 @@ package com.away3d.gloop.gameobjects
 			_physics = new GloopPhysicsComponent();
 			_physics.angularDamping = 1;
 			_physics.friction = 1;
+			_physics.restitution = .75;
 		}
 	}
 }
