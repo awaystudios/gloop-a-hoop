@@ -10,7 +10,7 @@ package com.away3d.gloop.gameobjects {
 			_physics = new WallPhysicsComponent(offsetX, offsetY, width, height);
 			_physics.x = worldX;
 			_physics.y = worldY;
-			_physics.type = 'Static';
+			_physics.setAsStatic();
 		}
 		
 	}
@@ -34,11 +34,11 @@ class WallPhysicsComponent extends PhysicsComponent {
 		_width = width;
 		_height = height;
 		graphics.beginFill(0x642BA4);
-		graphics.drawRect(_offsetX - _width / 2, _offsetY - _height / 2, _width, _height);
+		graphics.drawRect(_offsetX, _offsetY, _width, _height);
 	}
 	
 	public override function shapes():void {
-		box(_width, _height, new V2(_offsetX, _offsetY));
+		box(_width, _height, new V2(_width/2  +_offsetX, _height/2 + _offsetY));
 	}
 	
 }
