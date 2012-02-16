@@ -55,9 +55,9 @@ package com.away3d.gloop.level
 		{
 			var obj : DefaultGameObject;
 			
-			while (obj = _objects.pop) {
+			while (obj = _objects.pop()) {
 				if (obj.mesh && obj.mesh.mesh && obj.mesh.mesh.parent)
-					obj.mesh.mesh.parent.removeChild(obj);
+					obj.mesh.mesh.parent.removeChild(obj.mesh.mesh);
 				
 				if (obj.physics && obj.physics.parent)
 					obj.physics.parent.removeChild(obj.physics);
