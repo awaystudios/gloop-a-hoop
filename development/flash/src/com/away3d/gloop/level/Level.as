@@ -23,5 +23,11 @@ package com.away3d.gloop.level
 		{
 			return _scene;
 		}
+		
+		
+		public function get world() : World
+		{
+			return _world;
+		}
 	}
 }
