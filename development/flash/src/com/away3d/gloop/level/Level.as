@@ -24,7 +24,7 @@ package com.away3d.gloop.level
 		public function add(object:DefaultGameObject):DefaultGameObject {
 			_objects.push(object);
 			if (object.physics) world.addChild(object.physics);
-			if (object.mesh) scene.addChild(object.mesh);
+			if (object.mesh) scene.addChild(object.mesh.mesh);
 			return object;
 		}
 		
