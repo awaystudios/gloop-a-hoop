@@ -41,4 +41,9 @@ class WallPhysicsComponent extends PhysicsComponent {
 		box(_width, _height, new V2(_width/2  +_offsetX, _height/2 + _offsetY));
 	}
 	
+	override public function create():void {
+		super.create();
+		setCollisionGroup(LEVEL);
+	}
+	
 }

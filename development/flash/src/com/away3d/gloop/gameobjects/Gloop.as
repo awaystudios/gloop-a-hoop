@@ -31,4 +31,9 @@ class GloopPhysicsComponent extends PhysicsComponent {
 	public override function shapes():void {
 		circle(RADIUS);
 	}
+	
+	override public function create():void {
+		super.create();
+		setCollisionGroup(GLOOP);
+	}
 }

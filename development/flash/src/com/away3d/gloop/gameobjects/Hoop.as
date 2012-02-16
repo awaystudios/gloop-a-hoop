@@ -16,30 +16,31 @@ package com.away3d.gloop.gameobjects
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.rotation = rotation;
-			_physics.setAsStatic();
-			_physics.isSensor = true;
+			
+			_physics.fixedRotation = true;
+			_physics.applyGravity = false;
+			_physics.linearDamping = 100;
+			
+			//_physics.isSensor = true;
 			_physics.reportBeginContact = true;
-			_physics.reportEndContact = true;
+			
+			_physics.allowDragging = true;
+			
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
-			_physics.addEventListener(ContactEvent.END_CONTACT, handleEndContact);
 		}
 		
 		private function handleBeginContact(e : ContactEvent) : void
 		{
-			var pc:PhysicsComponent = e.relatedObject as PhysicsComponent;
-			pc.linearVelocityY = -3;
+			//var pc:PhysicsComponent = e.relatedObject as PhysicsComponent;
+			//pc.linearVelocityY = -3;
 		}
-		
-		private function handleEndContact(e : ContactEvent) : void
-		{
-			trace(e);
-		}
-	
+
 	}
 
 }
 
+import Box2DAS.Dynamics.b2Filter;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
 class HoopPhysicsComponent extends PhysicsComponent
@@ -59,5 +60,12 @@ class HoopPhysicsComponent extends PhysicsComponent
 	public override function shapes() : void
 	{
 		circle(RADIUS);
+		circle(RADIUS / 2);
+	}
+	
+	override public function create():void {
+		super.create();
+		b2fixtures[0].SetSensor(true);
+		setCollisionGroup(HOOP, b2fixtures[1]);
 	}
 }
