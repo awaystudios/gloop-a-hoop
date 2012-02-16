@@ -1,74 +1,46 @@
 package
 {
-	import Box2DAS.Common.V2;
-	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import away3d.events.LoaderEvent;
+	import away3d.loaders.Loader3D;
+	import away3d.loaders.parsers.AWD2Parser;
+	
 	import com.away3d.gloop.gameobjects.Gloop;
-	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.level.Level;
+	import com.away3d.gloop.level.LevelParser;
+	
 	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.geom.Rectangle;
-	import wck.WCK;
-	import wck.World;
+	import flash.utils.ByteArray;
 	
 	public class Main extends Sprite
 	{
-		
-		private var _level:Level;
+		[Embed("/../assets/levels/test/testlevel.awd", mimeType="application/octet-stream")]
+		private var TestLevelAWDAsset : Class;
 		
 		public function Main()
 		{
-			var document:WCK = new WCK;
-			addChild(document);
+			var loader : Loader3D;
 			
-			_level = new Level;
+			Loader3D.enableParser(AWD2Parser);
 			
-			var wall:Wall;
+			loader = new Loader3D();
+			loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
+			loader.loadData(TestLevelAWDAsset);
+		}
+		
+		
+		private function onResourceComplete(ev : LoaderEvent) : void
+		{
+			var gloop : Gloop;
+			var level : Level;
+			var loader : Loader3D;
+			var parser : LevelParser;
 			
-			var worldW:Number = 768;
-			var worldH:Number = 1024;
-			var thickness:Number = 100;
+			loader = Loader3D(ev.currentTarget);
 			
-			wall = new Wall(worldW/2, 0, worldW, thickness);
-			_level.world.addChild(wall.physics);
+			parser = new LevelParser();
+			level = parser.parseContainer(loader);
 			
-			wall = new Wall(worldW/2, worldH, worldW, thickness);
-			_level.world.addChild(wall.physics);
-			
-			wall = new Wall(0, worldH/2, thickness, worldH);
-			_level.world.addChild(wall.physics);
-			
-			wall = new Wall(worldW, worldH/2, thickness, worldH);
-			_level.world.addChild(wall.physics);
-			
-			
-			document.addChild(_level.world);
-			
-			var gloops:Vector.<DefaultGameObject> = new Vector.<DefaultGameObject>;
-			
-			for (var i:int = 0; i < 10; i++) {
-				var gloop:Gloop = new Gloop;
-				_level.world.addChild(gloop.physics);
-				gloops.push(gloop);
-			}		
-			
-			var reset:Function = function():void {
-				for each (gloop in gloops) {
-					gloop.physics.x = worldW / 2;
-					gloop.physics.y = worldH / 2;
-					gloop.physics.rotation = 0;
-					gloop.physics.b2body.SetAngularVelocity(0);
-					gloop.physics.b2body.SetLinearVelocity(new V2(0, 0));
-					gloop.physics.body.syncTransform();
-				}	
-			}
-			
-			reset();
-
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:Event):void {
-				reset();
-			});
+			trace(level.spawnPoint);
 		}
 	}
 }
