@@ -3,6 +3,7 @@ package com.away3d.gloop.level
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
 	
+	import com.away3d.gloop.gameobjects.Hoop;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
@@ -84,7 +85,10 @@ package com.away3d.gloop.level
 		
 		private function parseHoop(level : Level, obj : ObjectContainer3D) : void
 		{
-			trace('hoop at', obj.x*_scale, obj.y*_scale);
+			var hoop : Hoop;
+			
+			hoop = new Hoop(obj.x * _scale, -obj.y * _scale);
+			level.add(hoop);
 		}
 	}
 }
