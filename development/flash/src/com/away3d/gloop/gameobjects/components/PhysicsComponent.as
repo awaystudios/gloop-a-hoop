@@ -9,5 +9,10 @@ package com.away3d.gloop.gameobjects.components
 		{
 			
 		}
+		
+		public function setAsStatic():void {
+			type = 'Static';
+		}
+		
 	}
 }
