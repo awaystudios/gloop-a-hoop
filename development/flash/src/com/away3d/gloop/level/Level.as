@@ -23,6 +23,7 @@ package com.away3d.gloop.level
 			_world = new World();
 			_world.gravityY = 1;
 			_spawn_point = new Point();
+			_objects = new Vector.<DefaultGameObject>();
 		}
 		
 		
