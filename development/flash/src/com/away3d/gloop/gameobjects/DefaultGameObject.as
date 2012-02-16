@@ -22,5 +22,9 @@ package com.away3d.gloop.gameobjects
 		public function get physics():PhysicsComponent {
 			return _physics;
 		}
+		
+		public function get mesh():MeshComponent {
+			return _mesh;
+		}
 	}
 }
