@@ -28,8 +28,8 @@ package com.away3d.gloop.level
 			
 			it = new SceneGraphIterator(ctr);
 			while (obj = it.next()) {
-				if (obj.extra && obj.extra.hasOwnProperty('gloop_type')) {
-					switch (obj.extra['gloop_type']) {
+				if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
+					switch (obj.extra['gah_type']) {
 						case 'wall':
 							parseWall(level, obj);
 							break;
@@ -84,7 +84,7 @@ package com.away3d.gloop.level
 		
 		private function parseHoop(level : Level, obj : ObjectContainer3D) : void
 		{
-			
+			trace('hoop at', obj.x*_scale, obj.y*_scale);
 		}
 	}
 }

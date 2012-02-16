@@ -1,8 +1,8 @@
 package com.away3d.gloop.level
 {
 	import away3d.containers.Scene3D;
-	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	
+	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.GameObject;
 	
 	import flash.geom.Point;
@@ -32,13 +32,6 @@ package com.away3d.gloop.level
 			return _spawn_point;
 		}
 		
-		public function add(object:DefaultGameObject):DefaultGameObject {
-			_objects.push(object);
-			if (object.physics) world.addChild(object.physics);
-			if (object.mesh) scene.addChild(object.mesh.mesh);
-			return object;
-		}
-		
 		public function get scene() : Scene3D
 		{
 			return _scene;
@@ -47,6 +40,30 @@ package com.away3d.gloop.level
 		public function get world() : World
 		{
 			return _world;
+		}
+		
+		
+		public function add(object:DefaultGameObject):DefaultGameObject {
+			_objects.push(object);
+			if (object.physics) world.addChild(object.physics);
+			if (object.mesh) scene.addChild(object.mesh.mesh);
+			return object;
+		}
+		
+		
+		public function dispose() : void
+		{
+			var obj : DefaultGameObject;
+			
+			while (obj = _objects.pop) {
+				if (obj.mesh && obj.mesh.mesh && obj.mesh.mesh.parent)
+					obj.mesh.mesh.parent.removeChild(obj);
+				
+				if (obj.physics && obj.physics.parent)
+					obj.physics.parent.removeChild(obj.physics);
+				
+				obj.dispose();
+			}
 		}
 	}
 }
