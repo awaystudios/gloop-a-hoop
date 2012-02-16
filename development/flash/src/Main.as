@@ -11,6 +11,9 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.KeyboardEvent;
+	import flash.net.URLRequest;
+	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 	
 	import wck.WCK;
@@ -18,20 +21,28 @@ package
 	[SWF(frameRate="60")]
 	public class Main extends Sprite
 	{
-		[Embed("/../assets/levels/test/testlevel.awd", mimeType="application/octet-stream")]
-		private var TestLevelAWDAsset : Class;
+		private var _level : Level;
 		
 		public function Main()
 		{
-			var loader : Loader3D;
-			
 			Loader3D.enableParser(AWD2Parser);
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKeyUp);
 			
-			loader = new Loader3D();
+			loadLevel();
+		}
+		
+		
+		private function loadLevel() : void
+		{
+			if (_level)
+				_level.dispose();
+			
+			var loader : Loader3D;
+			loader = new Loader3D(false);
 			loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
-			loader.loadData(TestLevelAWDAsset);
+			loader.load(new URLRequest("../assets/levels/test/testlevel.awd"));
 		}
 		
 		
@@ -39,28 +50,35 @@ package
 		{
 			var doc : WCK;
 			var gloop : Gloop;
-			var level : Level;
 			var loader : Loader3D;
 			var parser : LevelParser;
 			
 			loader = Loader3D(ev.currentTarget);
 			
 			parser = new LevelParser(30);
-			level = parser.parseContainer(loader);
+			_level = parser.parseContainer(loader);
 			
 			gloop = new Gloop();
-			gloop.physics.x = level.spawnPoint.x;
-			gloop.physics.y = level.spawnPoint.y;
-			level.add(gloop);
+			gloop.physics.x = _level.spawnPoint.x;
+			gloop.physics.y = _level.spawnPoint.y;
+			_level.add(gloop);
 			
 			doc = new WCK();
 			doc.x = stage.stageWidth/2;
 			doc.y = stage.stageHeight/2;
 			addChild(doc);
 			
-			doc.addChild(level.world);
+			doc.addChild(_level.world);
 			
-			trace(level.spawnPoint);
+			trace(_level.spawnPoint);
+		}
+		
+		
+		private function onStageKeyUp(ev : KeyboardEvent) : void
+		{
+			if (ev.keyCode == Keyboard.R) {
+				loadLevel();
+			}
 		}
 	}
 }
