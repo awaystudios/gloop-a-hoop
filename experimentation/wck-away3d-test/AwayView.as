@@ -3,6 +3,8 @@ package
 
 	import away3d.primitives.SphereGeometry;
 
+	import flash.geom.Point;
+
 	import flash.geom.Rectangle;
 
 	import shapes.Box;
@@ -62,7 +64,7 @@ package
 			addChild( _view );
 			// camera
 			_view.camera.lens.far = 1000000;
-			_view.camera.position = new Vector3D( 0, 300, -700 );
+			_view.camera.position = new Vector3D( 0, 0, -700 );
 			//			_view.camera.lookAt( new Vector3D( 0, 500, 1000 ) );
 			// camera controller
 			_cameraController = new OrbitCameraController( _view.camera, stage );
@@ -107,8 +109,9 @@ package
 			for( var i:uint, len:uint = _bodies.length; i < len; ++i ) {
 				body = _bodies[ i ];
 				skin = _skins[ body ];
-				skin.x = body.x;
-				skin.y = -body.y;
+				var pos:Point = localToGlobal( new Point( body.x, body.y ) );
+				skin.x = pos.x;
+				skin.y = -pos.y;
 				skin.rotationZ = -body.rotation;
 			}
 		}

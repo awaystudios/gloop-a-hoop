@@ -44,7 +44,7 @@ package
 				case Keyboard.SPACE:
 				{
 					_showingPhysics = !_showingPhysics;
-					_physicsView.visible = _showingPhysics;
+					_physicsView.alpha = _showingPhysics ? 1 : 0.01;
 //					_awayView.visible = !_showingPhysics;
 					break;
 				}
@@ -84,7 +84,7 @@ package
 			_connector = null;
 			// init level
 			_physicsView = new Level0();
-			_physicsView.visible = _showingPhysics;
+			_physicsView.alpha = _showingPhysics ? 1 : 0.01;
 			_physicsView.x = stage.stageWidth / 2;
 			_physicsView.y = stage.stageHeight / 2;
 			addChild( _physicsView );
