@@ -11,19 +11,19 @@ package com.away3d.gloop.level
 		private var _scene : Scene3D;
 		private var _world : World;
 		
-		private var _hoops : Vector.<GameObject>;
+		private var _objects : Vector.<GameObject>;
 		
 		public function Level()
 		{
 			_scene = new Scene3D();
+			_world = new World();
+			_world.gravityY = 1;
 		}
-		
 		
 		public function get scene() : Scene3D
 		{
 			return _scene;
 		}
-		
 		
 		public function get world() : World
 		{
