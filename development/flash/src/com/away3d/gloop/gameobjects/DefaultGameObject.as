@@ -15,8 +15,10 @@ package com.away3d.gloop.gameobjects
 		
 		public override function update(dt:Number):void
 		{
-			_mesh.mesh.x = _physics.x;
-			_mesh.mesh.y = _physics.y;
+			if (_mesh && _physics) {
+				_mesh.mesh.x = _physics.x;
+				_mesh.mesh.y = -_physics.y;
+			}
 		}
 		
 		public function get physics():PhysicsComponent {

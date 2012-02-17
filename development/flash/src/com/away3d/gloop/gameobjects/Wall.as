@@ -1,4 +1,8 @@
 package com.away3d.gloop.gameobjects {
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CubeGeometry;
+
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com

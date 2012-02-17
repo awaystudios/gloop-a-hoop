@@ -2,6 +2,7 @@ package com.away3d.gloop.level
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
 	
 	import com.away3d.gloop.gameobjects.Hoop;
 	import com.away3d.gloop.gameobjects.Wall;
@@ -29,26 +30,39 @@ package com.away3d.gloop.level
 			
 			it = new SceneGraphIterator(ctr);
 			while (obj = it.next()) {
-				if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
-					switch (obj.extra['gah_type']) {
-						case 'wall':
-							parseWall(level, obj);
-							break;
+				if (obj != ctr) {
+					if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
+						switch (obj.extra['gah_type']) {
+							case 'wall':
+								parseWall(level, obj);
+								break;
+							
+							case 'spawn':
+								parseSpawnPoint(level, obj);
+								break;
+							
+							case 'hoop':
+								parseHoop(level, obj);
+								break;
+						}
 						
-						case 'spawn':
-							parseSpawnPoint(level, obj);
-							break;
-						
-						case 'hoop':
-							parseHoop(level, obj);
-							break;
+						// Non-visual object or placeholder
+						if (obj.parent)
+							obj.parent.removeChild(obj);
 					}
-				}
-				else {
-					// Visual object, add if
-					// if already parented
-					if (!obj.parent)
-						level.scene.addChild(obj);
+					else {
+						var mesh : Mesh
+						
+						mesh = obj as Mesh;
+						if (mesh) {
+							mesh.geometry.scale(_scale);
+							mesh.material = new ColorMaterial(Math.random() * 0xffffff);
+						}
+						
+						// Visual object, add if not already parented
+						if (!obj.parent || obj.parent==ctr)
+							level.scene.addChild(obj);
+					}
 				}
 			}
 			

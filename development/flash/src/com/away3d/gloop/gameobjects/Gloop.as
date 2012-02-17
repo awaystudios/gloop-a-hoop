@@ -1,6 +1,12 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.SphereGeometry;
+	
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+
 	public class Gloop extends DefaultGameObject
 	{
 		public function Gloop()
@@ -10,6 +16,9 @@ package com.away3d.gloop.gameobjects
 			_physics.angularDamping = 1;
 			_physics.friction = 1;
 			_physics.restitution = .75;
+			
+			_mesh = new MeshComponent();
+			_mesh.mesh = new Mesh(new SphereGeometry(), new ColorMaterial(0x00ff00));
 		}
 	}
 }

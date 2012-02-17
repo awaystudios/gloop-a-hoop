@@ -51,6 +51,16 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function update() : void
+		{
+			var i : uint;
+			
+			for (i=0; i<_objects.length; i++) {
+				_objects[i].update(1);
+			}
+		}
+		
+		
 		public function dispose() : void
 		{
 			var obj : DefaultGameObject;
