@@ -14,13 +14,14 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.geom.Vector3D;
 	import flash.net.URLRequest;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 	
 	import wck.WCK;
 	
-	[SWF(frameRate="60")]
+	[SWF(width="768", height="1024", frameRate="60")]
 	public class Main extends Sprite
 	{
 		private var _doc : WCK;
@@ -31,15 +32,19 @@ package
 		{
 			Loader3D.enableParser(AWD2Parser);
 			
+			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKeyUp);
 			
 			_doc = new WCK();
-			_doc.x = stage.stageWidth/2;
-			_doc.y = stage.stageHeight/2;
+			_doc.x = 80;
+			_doc.y = 80;
+			_doc.scaleX = 0.2;
+			_doc.scaleY = 0.2;
 			addChild(_doc);
 			
 			_view = new View3D();
+			_view.antiAlias = 4;
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
@@ -96,6 +101,9 @@ package
 			if (_level)
 				_level.update();
 			
+			_view.camera.x = stage.mouseX - stage.stageWidth/2;
+			_view.camera.y = stage.mouseY - stage.stageHeight/2;
+			_view.camera.lookAt(new Vector3D());
 			_view.render();
 		}
 	}

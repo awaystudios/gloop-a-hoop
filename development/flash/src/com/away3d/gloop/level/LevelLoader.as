@@ -129,6 +129,9 @@ package com.away3d.gloop.level
 			else {
 				var mesh : Mesh
 				
+				obj.x *= _scale;
+				obj.y *= _scale;
+				
 				mesh = obj as Mesh;
 				if (mesh) {
 					mesh.material = new ColorMaterial(Math.random() * 0xffffff);
