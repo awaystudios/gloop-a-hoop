@@ -50,7 +50,7 @@ package
 			var loader : Loader3D;
 			loader = new Loader3D(false);
 			loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
-			loader.load(new URLRequest("../assets/levels/test/testlevel.awd"));
+			loader.load(new URLRequest("assets/levels/testlevel.awd"));
 		}
 		
 		
