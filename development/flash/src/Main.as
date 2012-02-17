@@ -7,7 +7,7 @@ package
 	
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.level.Level;
-	import com.away3d.gloop.level.LevelParser;
+	import com.away3d.gloop.level.LevelLoader;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -54,23 +54,22 @@ package
 				_level.world.parent.removeChild(_level.world);
 			}
 			
-			var loader : Loader3D;
-			loader = new Loader3D(false);
-			loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
+			
+			var loader : LevelLoader;
+			
+			loader = new LevelLoader(50);
+			loader.addEventListener(Event.COMPLETE, onLevelComplete);
 			loader.load(new URLRequest("assets/levels/testlevel.awd"));
 		}
 		
 		
-		private function onResourceComplete(ev : LoaderEvent) : void
+		private function onLevelComplete(ev : Event) : void
 		{
 			var gloop : Gloop;
-			var loader : Loader3D;
-			var parser : LevelParser;
+			var loader : LevelLoader;
 			
-			loader = Loader3D(ev.currentTarget);
-			
-			parser = new LevelParser(60);
-			_level = parser.parseContainer(loader);
+			loader = LevelLoader(ev.currentTarget);
+			_level = loader.loadedLevel;
 			
 			gloop = new Gloop();
 			gloop.physics.x = _level.spawnPoint.x;
