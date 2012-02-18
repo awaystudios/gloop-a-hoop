@@ -13,6 +13,7 @@ package
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -68,18 +69,20 @@ package
 			_stack = new ScreenStack(this);
 			_stack.addScreen(Screens.LOADING, new LoadingScreen());
 			_stack.addScreen(Screens.GAME, new GameScreen(_db));
+			_stack.addScreen(Screens.LEVELS, new LevelSelectScreen(_db));
 		}
 		
 		
 		private function onDbComplete(ev : Event) : void
 		{
-			// TODO: Implement UI to let user do this
-			_db.select(_db.levels[0]);
+			_stack.gotoScreen(Screens.LEVELS);
 		}
 		
 		
 		private function onDbSelect(ev : Event) : void
 		{
+			_stack.gotoScreen(Screens.LOADING);
+			
 			_db.selectedProxy.addEventListener(Event.COMPLETE, onLevelComplete);
 			_db.selectedProxy.load();
 		}
