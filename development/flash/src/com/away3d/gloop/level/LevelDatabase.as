@@ -1,8 +1,71 @@
 package com.away3d.gloop.level
 {
-	public class LevelDatabase
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+
+	public class LevelDatabase extends EventDispatcher
 	{
-		// TODO: Implement proper level database.
-		public var selectedLevel : Level;
+		private var _levels : Vector.<LevelProxy>;
+		private var _selected : LevelProxy;
+		
+		
+		public function LevelDatabase()
+		{
+			_levels = new Vector.<LevelProxy>();
+		}
+		
+		
+		public function get levels() : Vector.<LevelProxy>
+		{
+			return _levels;
+		}
+		
+		
+		public function get selectedProxy() : LevelProxy
+		{
+			return _selected;
+		}
+		
+		
+		public function select(proxy : LevelProxy) : void
+		{
+			_selected = proxy;
+			dispatchEvent(new Event(Event.SELECT));
+		}
+		
+		
+		public function loadXml(url : String) : void
+		{
+			var xml_loader : URLLoader;
+			
+			xml_loader = new URLLoader();
+			xml_loader.addEventListener(Event.COMPLETE, onXmlLoaderComplete);
+			xml_loader.load(new URLRequest(url));
+		}
+		
+		
+		private function onXmlLoaderComplete(ev : Event) : void
+		{
+			var xml : XML;
+			var level_xml : XML;
+			var xml_loader : URLLoader;
+			
+			xml_loader = URLLoader(ev.currentTarget);
+			xml_loader.removeEventListener(Event.COMPLETE, onXmlLoaderComplete);
+			xml = new XML(xml_loader.data);
+			
+			for each (level_xml in xml.level) {
+				var level : LevelProxy;
+				
+				level = new LevelProxy();
+				level.parseXml(level_xml);
+				
+				_levels.push(level);
+			}
+			
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
 	}
 }

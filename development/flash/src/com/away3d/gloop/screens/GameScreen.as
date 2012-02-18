@@ -45,7 +45,7 @@ package com.away3d.gloop.screens
 		{
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
-			_level = _db.selectedLevel;
+			_level = _db.selectedProxy.level;
 			_doc.addChild(_level.world);
 			_view.scene = _level.scene;
 		}

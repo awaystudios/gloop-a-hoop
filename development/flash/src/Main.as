@@ -36,7 +36,6 @@ package
 		public function Main()
 		{
 			init();
-			loadLevel();
 		}
 		
 		
@@ -48,9 +47,19 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener(KeyboardEvent.KEY_UP, onStageKeyUp);
 			
-			_db = new LevelDatabase();
-			
+			initDb();
 			initStack();
+			
+			_stack.gotoScreen(Screens.LOADING);
+		}
+		
+		
+		private function initDb() : void
+		{
+			_db = new LevelDatabase();
+			_db.addEventListener(Event.COMPLETE, onDbComplete);
+			_db.addEventListener(Event.SELECT, onDbSelect);
+			_db.loadXml('assets/levels.xml');
 		}
 		
 		
@@ -62,20 +71,17 @@ package
 		}
 		
 		
-		private function loadLevel() : void
+		private function onDbComplete(ev : Event) : void
 		{
-			if (_db.selectedLevel) {
-				_db.selectedLevel.dispose();
-				_db.selectedLevel.world.parent.removeChild(_db.selectedLevel.world);
-			}
-			
-			var loader : LevelLoader;
-			
-			_stack.gotoScreen(Screens.LOADING);
-			
-			loader = new LevelLoader(50);
-			loader.addEventListener(Event.COMPLETE, onLevelComplete);
-			loader.load(new URLRequest("assets/levels/testlevel.awd"));
+			// TODO: Implement UI to let user do this
+			_db.select(_db.levels[0]);
+		}
+		
+		
+		private function onDbSelect(ev : Event) : void
+		{
+			_db.selectedProxy.addEventListener(Event.COMPLETE, onLevelComplete);
+			_db.selectedProxy.load();
 		}
 		
 		
@@ -84,13 +90,10 @@ package
 			var gloop : Gloop;
 			var loader : LevelLoader;
 			
-			loader = LevelLoader(ev.currentTarget);
-			_db.selectedLevel = loader.loadedLevel;
-			
 			gloop = new Gloop();
-			gloop.physics.x = _db.selectedLevel.spawnPoint.x;
-			gloop.physics.y = _db.selectedLevel.spawnPoint.y;
-			_db.selectedLevel.add(gloop);
+			gloop.physics.x = _db.selectedProxy.level.spawnPoint.x;
+			gloop.physics.y = _db.selectedProxy.level.spawnPoint.y;
+			_db.selectedProxy.level.add(gloop);
 			
 			_stack.gotoScreen(Screens.GAME);
 		}
@@ -99,7 +102,8 @@ package
 		private function onStageKeyUp(ev : KeyboardEvent) : void
 		{
 			if (ev.keyCode == Keyboard.R) {
-				loadLevel();
+				_stack.gotoScreen(Screens.LOADING);
+				_db.selectedProxy.load(true);
 			}
 		}
 	}
