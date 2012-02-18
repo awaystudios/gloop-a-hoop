@@ -223,7 +223,9 @@ package away3d.core.managers
 			if (_stage3D.context3D) {
 				_context3D = _stage3D.context3D;
 				_context3D.enableErrorChecking = Debug.active;
-				_context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
+				if (_backBufferWidth && _backBufferHeight)
+					_context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
+				
 				dispatchEvent(new Stage3DEvent(Stage3DEvent.CONTEXT3D_CREATED));
 			}
 			else {
