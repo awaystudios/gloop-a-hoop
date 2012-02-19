@@ -21,6 +21,7 @@ package
 			_meshCollider = new MeshCollider();
 		}
 
+		// TODO: implement projective zOffset, clip decals on edges, use circular random position instead of square, improve performance
 		public function evaluate( meshes:Vector.<Mesh> ):void {
 
 			_meshCollider.updateTarget( meshes );
