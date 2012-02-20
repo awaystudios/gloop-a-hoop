@@ -7,7 +7,7 @@ package com.away3d.gloop.gameobjects
 	{
 		protected var _mesh : MeshComponent;
 		protected var _physics : PhysicsComponent;
-		
+			
 		public function DefaultGameObject()
 		{
 			super();
@@ -27,6 +27,14 @@ package com.away3d.gloop.gameobjects
 		
 		public function get mesh():MeshComponent {
 			return _mesh;
+		}
+		
+		public function get debugColor1():uint {
+			return 0xff0000;
+		}
+		
+		public function get debugColor2():uint {
+			return 0x00ff00;
 		}
 	}
 }
