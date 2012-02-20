@@ -1,6 +1,9 @@
 package com.away3d.gloop.gameobjects.components
 {
 	
+	import Box2DAS.Common.M22;
+	import Box2DAS.Common.V2;
+	import Box2DAS.Common.XF;
 	import Box2DAS.Dynamics.b2Fixture;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import wck.BodyShape;
@@ -24,6 +27,19 @@ package com.away3d.gloop.gameobjects.components
 				type = 'Static';
 			} else {
 				type = 'Dynamic';
+			}
+		}
+		
+		/**
+		 * Draws the object as seen by Box2D, useful for debugging, might be inaccurate if used after initialization phase
+		 */
+		public function drawBox2D():void {
+			graphics.clear();
+			graphics.beginFill(_gameObject.debugColor1, .1);
+			graphics.lineStyle(2, _gameObject.debugColor2, 1);
+			var xf:XF = new XF;
+			for each(var fixture:b2Fixture in b2fixtures) {
+				fixture.Draw(graphics, this.b2body.GetTransform(), 60);
 			}
 		}
 		

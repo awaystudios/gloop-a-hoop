@@ -17,6 +17,10 @@ package com.away3d.gloop.gameobjects {
 			_physics.setStatic(true);
 		}
 		
+		override public function get debugColor1():uint {
+			return 0x642BA4;
+		}
+		
 	}
 
 }
@@ -39,7 +43,7 @@ class WallPhysicsComponent extends PhysicsComponent {
 		_offsetY = offsetY;
 		_width = width;
 		_height = height;
-		graphics.beginFill(0x642BA4);
+		graphics.beginFill(gameObject.debugColor1);
 		graphics.drawRect(_offsetX, _offsetY, _width, _height);
 	}
 	

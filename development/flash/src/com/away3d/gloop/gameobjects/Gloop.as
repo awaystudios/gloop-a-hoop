@@ -20,6 +20,14 @@ package com.away3d.gloop.gameobjects
 			_mesh = new MeshComponent();
 			_mesh.mesh = new Mesh(new SphereGeometry(), new ColorMaterial(0x00ff00));
 		}
+		
+		override public function get debugColor1():uint {
+			return 0x84c806;
+		}
+		
+		override public function get debugColor2():uint {
+			return 0x7da628;
+		}
 	}
 }
 
@@ -32,9 +40,9 @@ class GloopPhysicsComponent extends PhysicsComponent {
 	
 	public function GloopPhysicsComponent(gameObject:DefaultGameObject) {
 		super(gameObject);
-		graphics.beginFill(0x84C806);
+		graphics.beginFill(gameObject.debugColor1);
 		graphics.drawCircle(0, 0, RADIUS);
-		graphics.beginFill(0x7DA628);
+		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
 		
 	}

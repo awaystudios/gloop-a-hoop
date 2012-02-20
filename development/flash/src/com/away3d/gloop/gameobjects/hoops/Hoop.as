@@ -52,6 +52,14 @@ package com.away3d.gloop.gameobjects.hoops
 		public function get resolveGloopCollisions():Boolean {
 			return _resolveGloopCollisions;
 		}
+		
+		override public function get debugColor1():uint {
+			return 0x947d3a;
+		}
+		
+		override public function get debugColor2():uint {
+			return 0xcebc84;
+		}
 
 	}
 
@@ -70,9 +78,9 @@ class HoopPhysicsComponent extends PhysicsComponent
 	public function HoopPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);
-		graphics.beginFill(0x947D3A);
+		graphics.beginFill(gameObject.debugColor1);
 		graphics.drawCircle(0, 0, RADIUS);
-		graphics.beginFill(0xCEBC84);
+		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
 	
 	}
