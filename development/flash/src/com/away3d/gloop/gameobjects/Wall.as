@@ -14,7 +14,7 @@ package com.away3d.gloop.gameobjects {
 			_physics = new WallPhysicsComponent(this, offsetX, offsetY, width, height);
 			_physics.x = worldX;
 			_physics.y = worldY;
-			_physics.setAsStatic();
+			_physics.setStatic(true);
 		}
 		
 	}

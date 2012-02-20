@@ -19,8 +19,12 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject = gameObject;
 		}
 		
-		public function setAsStatic():void {
-			type = 'Static';
+		public function setStatic(static:Boolean = true):void {
+			if ( static ) {
+				type = 'Static';
+			} else {
+				type = 'Dynamic';
+			}
 		}
 		
 		/**
@@ -50,6 +54,10 @@ package com.away3d.gloop.gameobjects.components
 		
 		public function get gameObject():DefaultGameObject {
 			return _gameObject;
+		}
+		
+		public function get isStatic():Boolean {
+			return type == 'Static';
 		}
 		
 	}
