@@ -14,6 +14,8 @@ package com.away3d.gloop.gameobjects.hoops
 	public class Hoop extends DefaultGameObject
 	{
 		
+		protected var _resolveGloopCollisions:Boolean = false;
+		
 		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
 			_physics = new HoopPhysicsComponent(this);
@@ -29,6 +31,7 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.allowDragging = true;
 			
+			_physics.setStatic();
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
 		}
@@ -45,6 +48,10 @@ package com.away3d.gloop.gameobjects.hoops
 		protected function onCollidingWithGloopStart(gloop:Gloop):void {
 			
 		}
+		
+		public function get resolveGloopCollisions():Boolean {
+			return _resolveGloopCollisions;
+		}
 
 	}
 
@@ -53,6 +60,7 @@ package com.away3d.gloop.gameobjects.hoops
 import Box2DAS.Dynamics.b2Filter;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.hoops.Hoop;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
@@ -80,7 +88,11 @@ class HoopPhysicsComponent extends PhysicsComponent
 	
 	override public function create():void {
 		super.create();
-		b2fixtures[0].SetSensor(true);
+		
+		if (Hoop(gameObject).resolveGloopCollisions == false) {
+			b2fixtures[0].SetSensor(true);
+		}
+		
 		setCollisionGroup(HOOP_SENSOR, b2fixtures[0]);
 		setCollisionGroup(HOOP, b2fixtures[1]);
 	}
