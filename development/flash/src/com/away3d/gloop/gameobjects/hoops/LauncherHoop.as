@@ -51,6 +51,14 @@ package com.away3d.gloop.gameobjects.hoops
 			_gloop.physics.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
 			_gloop.physics.b2body.SetTransform( _physics.b2body.GetPosition().clone(), 0); // position gloop on top of launcher
 		}
+		
+		override public function get debugColor1():uint {
+			return 0x5F9E30;
+		}
+		
+		override public function get debugColor2():uint {
+			return 0x436F22;
+		}
 	
 	}
 
