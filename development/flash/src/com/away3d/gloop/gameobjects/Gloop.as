@@ -12,7 +12,7 @@ package com.away3d.gloop.gameobjects
 		public function Gloop()
 		{
 			super();
-			_physics = new GloopPhysicsComponent();
+			_physics = new GloopPhysicsComponent(this);
 			_physics.angularDamping = 1;
 			_physics.friction = 1;
 			_physics.restitution = .75;
@@ -24,12 +24,14 @@ package com.away3d.gloop.gameobjects
 }
 
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
 
 class GloopPhysicsComponent extends PhysicsComponent {
 	
 	private static const RADIUS:Number = 30;
 	
-	public function GloopPhysicsComponent() {
+	public function GloopPhysicsComponent(gameObject:DefaultGameObject) {
+		super(gameObject);
 		graphics.beginFill(0x84C806);
 		graphics.drawCircle(0, 0, RADIUS);
 		graphics.beginFill(0x7DA628);

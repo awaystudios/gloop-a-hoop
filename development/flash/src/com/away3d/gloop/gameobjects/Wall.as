@@ -11,7 +11,7 @@ package com.away3d.gloop.gameobjects {
 		
 		public function Wall(offsetX:Number, offsetY:Number, width:Number, height:Number, worldX:Number = 0, worldY:Number = 0) {
 			super();
-			_physics = new WallPhysicsComponent(offsetX, offsetY, width, height);
+			_physics = new WallPhysicsComponent(this, offsetX, offsetY, width, height);
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.setAsStatic();
@@ -24,6 +24,7 @@ package com.away3d.gloop.gameobjects {
 
 import Box2DAS.Common.V2;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
 
 class WallPhysicsComponent extends PhysicsComponent {
 	
@@ -32,7 +33,8 @@ class WallPhysicsComponent extends PhysicsComponent {
 	private var _offsetX:Number;
 	private var _offsetY:Number;
 	
-	public function WallPhysicsComponent(offsetX:Number, offsetY:Number, width:Number, height:Number) {
+	public function WallPhysicsComponent(gameObject:DefaultGameObject, offsetX:Number, offsetY:Number, width:Number, height:Number) {
+		super(gameObject);
 		_offsetX = offsetX;
 		_offsetY = offsetY;
 		_width = width;

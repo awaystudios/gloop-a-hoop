@@ -9,7 +9,7 @@ package com.away3d.gloop.level
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
 	
-	import com.away3d.gloop.gameobjects.Hoop;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
