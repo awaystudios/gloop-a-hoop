@@ -81,14 +81,18 @@ class HoopPhysicsComponent extends PhysicsComponent
 		graphics.beginFill(gameObject.debugColor1);
 		graphics.drawCircle(0, 0, RADIUS);
 		graphics.beginFill(gameObject.debugColor2);
-		graphics.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
-	
+		graphics.drawRect( -RADIUS, -RADIUS / 6, RADIUS * 2, RADIUS / 3);
+		
+		graphics.beginFill(gameObject.debugColor2);
+		graphics.moveTo( 0, -RADIUS / 2);
+		graphics.lineTo( -RADIUS / 2, 0);
+		graphics.lineTo( RADIUS / 2, 0);
 	}
 	
 	public override function shapes() : void
 	{
 		// used for gloop collision
-		circle(RADIUS / 2);
+		box(RADIUS * 2, RADIUS / 3);
 		
 		// used for collision with the world
 		circle(RADIUS);
