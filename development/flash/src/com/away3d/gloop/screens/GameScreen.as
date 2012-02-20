@@ -1,22 +1,21 @@
 package com.away3d.gloop.screens
 {
 
-	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.View3D;
-	import away3d.core.base.Object3D;
 	import away3d.entities.Mesh;
 	import away3d.lights.PointLight;
+	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
+	import away3d.primitives.SphereGeometry;
 
-	import com.away3d.gloop.camera.XYCameraController;
-
-	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.camera.FreeFlyCameraController;
-
+	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
+	import com.away3d.gloop.mouse.MouseManager;
 	import com.away3d.gloop.utils.HierarchyTool;
 
+	import flash.display.Sprite;
 	import flash.events.Event;
 
 	import wck.WCK;
@@ -31,7 +30,9 @@ package com.away3d.gloop.screens
 		private var _cameraPointLight:PointLight;
 		private var _sceneLightPicker:StaticLightPicker;
 		private var _cameraController:ICameraController;
-
+		private var _mouseManager:MouseManager;
+		private var _mouse3dTracer:Mesh; // TODO: remove
+		private var _mouse2dTracer:Sprite; // TODO: remove
 
 		public function GameScreen( db:LevelDatabase ) {
 			super();
@@ -63,10 +64,15 @@ package com.away3d.gloop.screens
 
 		private function stageInitHandler( evt:Event ):void {
 			removeEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
+
 //			_cameraController = new XYCameraController();
 			_cameraController = new FreeFlyCameraController();
 			_cameraController.camera = _view.camera;
-			_cameraController.stage = stage;
+			_cameraController.context = stage;
+
+			_mouseManager = new MouseManager();
+			_mouseManager.view = _view;
+			addChild( _mouseManager ); // TODO: remove mouse manager sprite-ness ( used for tracing atm )
 		}
 
 		public override function activate():void {
@@ -75,6 +81,16 @@ package com.away3d.gloop.screens
 			_level = _db.selectedProxy.level;
 			_doc.addChild( _level.world );
 			_view.scene = _level.scene;
+			_mouseManager.level = _level;
+
+			_mouse3dTracer = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFF0000 ) );
+			_level.scene.addChild( _mouse3dTracer );
+
+			_mouse2dTracer = new Sprite(); // TODO: remove tracer
+			_mouse2dTracer.graphics.beginFill(0xFF0000);
+			_mouse2dTracer.graphics.drawCircle(0, 0, 10);
+			_mouse2dTracer.graphics.endFill();
+			_level.world.addChild( _mouse2dTracer );
 
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
@@ -90,6 +106,11 @@ package com.away3d.gloop.screens
 		private function onEnterFrame( ev:Event ):void {
 			if( _level )
 				_level.update();
+
+			_mouseManager.update();
+			_mouse3dTracer.position = _mouseManager.intersection; // TODO: remove tracers
+			_mouse2dTracer.x = _mouse3dTracer.position.x;
+			_mouse2dTracer.y = -_mouse3dTracer.position.y;
 
 			_cameraController.update();
 

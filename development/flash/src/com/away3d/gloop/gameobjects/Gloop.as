@@ -16,6 +16,7 @@ package com.away3d.gloop.gameobjects
 			_physics.angularDamping = 1;
 			_physics.friction = 1;
 			_physics.restitution = .75;
+			_physics.allowDragging = true;
 			
 			_mesh = new MeshComponent();
 			_mesh.mesh = new Mesh(new SphereGeometry(), new ColorMaterial(0x00ff00));
@@ -44,7 +45,7 @@ class GloopPhysicsComponent extends PhysicsComponent {
 		graphics.drawCircle(0, 0, RADIUS);
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
-		
+
 	}
 	
 	public override function shapes():void {

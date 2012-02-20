@@ -1,7 +1,7 @@
 package com.away3d.gloop.camera
 {
 
-	import flash.display.Stage;
+	import flash.display.DisplayObject;
 
 	public class XYCameraController extends CameraControllerBase implements ICameraController
 	{
@@ -9,16 +9,16 @@ package com.away3d.gloop.camera
 			super();
 		}
 
-		override public function set stage( value:Stage ):void {
-			super.stage = value;
+		override public function set context( value:DisplayObject ):void {
+			super.context = value;
 		}
 
 		override public function dispose():void {
 		}
 
 		override public function update():void {
-			_camera.x = _stage.mouseX - _stage.stageWidth / 2;
-			_camera.y = _stage.mouseY - _stage.stageHeight / 2;
+			_camera.x = context.mouseX - context.width / 2;
+			_camera.y = context.mouseY - context.height / 2;
 		}
 	}
 }

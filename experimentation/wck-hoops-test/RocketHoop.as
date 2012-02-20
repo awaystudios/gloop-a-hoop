@@ -4,6 +4,8 @@ package
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 
+	import flash.geom.Transform;
+
 	import shapes.Box;
 
 	import wck.BodyShape;
@@ -16,7 +18,10 @@ package
 		public var impulseSpeed:Number = 15;
 
 		public override function create():void {
-			type = "Static";
+			type = "Dynamic";
+			linearDamping = 999999;
+			angularDamping = 999999;
+			density = 9999;
 			reportBeginContact = true;
 			reportEndContact = true;
 			listenWhileVisible( this, ContactEvent.BEGIN_CONTACT, handleContact );

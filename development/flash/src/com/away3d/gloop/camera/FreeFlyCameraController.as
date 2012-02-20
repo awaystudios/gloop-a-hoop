@@ -10,12 +10,11 @@ package com.away3d.gloop.camera
 
 	public class FreeFlyCameraController extends MouseKeyboardCameraController implements ICameraController
 	{
-		private var _lastMousePosition:Point;
 		private var _cameraDummy:ObjectContainer3D;
 
 		public var linearEase:Number = 0.25;
 		public var angularEase:Number = 0.25;
-		public var keyboardMoveSpeed:Number = 50;
+		public var keyboardMoveSpeed:Number = 20;
 		public var mouseDragFactor:Number = 0.05;
 
 		public function FreeFlyCameraController() {
@@ -30,9 +29,9 @@ package com.away3d.gloop.camera
 		}
 
 		override public function update():void {
-			if( mouseIsDown() ) {
-				var mouseX:Number = _stage.mouseX - _stage.stageWidth / 2;
-				var mouseY:Number = _stage.mouseY - _stage.stageHeight / 2;
+			if( keyIsDown( Keyboard.SHIFT ) && mouseIsDown() ) {
+				var mouseX:Number = context.mouseX - context.width / 2;
+				var mouseY:Number = context.mouseY - context.height / 2;
 				rotateY( ( mouseX - _lastMousePosition.x ) * mouseDragFactor );
 				rotateX( ( mouseY - _lastMousePosition.y ) * mouseDragFactor );
 				_lastMousePosition.x = mouseX;
