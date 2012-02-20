@@ -36,12 +36,14 @@ package
 		
 		public function Main()
 		{
-			init();
+			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
 		}
 		
 		
-		private function init() : void
+		private function init( event:Event ) : void
 		{
+			removeEventListener( Event.ADDED_TO_STAGE, init );
+
 			Loader3D.enableParser(AWD2Parser);
 			
 			stage.align = StageAlign.TOP_LEFT;
