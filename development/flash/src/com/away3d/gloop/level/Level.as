@@ -21,6 +21,9 @@ package com.away3d.gloop.level
 		{
 			_scene = new Scene3D();
 			_world = new World();
+			_world.timeStep = 0.05;
+			_world.velocityIterations = 5;
+			_world.positionIterations = 5;
 			_world.gravityY = 1;
 			_spawn_point = new Point();
 			_objects = new Vector.<DefaultGameObject>();
