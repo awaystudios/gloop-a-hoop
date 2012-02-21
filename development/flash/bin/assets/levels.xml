@@ -1,6 +1,8 @@
 <levels>
-    <level awd="assets/levels/testlevel.awd"/>
-    <level awd="assets/levels/testlevel.awd"/>
-    <level awd="assets/levels/testlevel.awd"/>
-    <level awd="assets/levels/testlevel.awd"/>
+    <level awd="assets/levels/testlevel.awd">
+        <inventory>
+            <hoop variant="trampoline"/>
+            <hoop variant="rocket"/>
+        </inventory>
+    </level>
 </levels>

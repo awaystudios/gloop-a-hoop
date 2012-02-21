@@ -9,8 +9,12 @@ package com.away3d.gloop.level
 		private var _awd_url : String;
 		private var _level : Level;
 		
+		private var _inventory : Vector.<LevelInventoryItem>;
+		
+		
 		public function LevelProxy()
 		{
+			_inventory = new Vector.<LevelInventoryItem>();
 		}
 		
 		
@@ -22,7 +26,16 @@ package com.away3d.gloop.level
 		
 		public function parseXml(xml : XML) : void
 		{
+			var item_xml : XML;
+			
 			_awd_url = xml.@awd.toString();
+			
+			for each (item_xml in xml.inventory.children()) {
+				var item : LevelInventoryItem;
+				
+				item = new LevelInventoryItem(item_xml.name(), item_xml.@variant.toString());
+				_inventory.push(item);
+			}
 		}
 		
 		
