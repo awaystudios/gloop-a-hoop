@@ -1,13 +1,18 @@
 package com.away3d.gloop.input {
-	import away3d.containers.View3D;
 	import Box2DAS.Common.V2;
+	
+	import away3d.containers.View3D;
+	
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.gameobjects.Wall;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.level.Level;
+	
 	import flash.events.MouseEvent;
+	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
+
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
@@ -18,12 +23,48 @@ package com.away3d.gloop.input {
 		private var _mouseDownTime:Number = 0;
 		private var _targetHoop:Hoop;
 		
+		private var _prevViewMouseX : Number;
+		private var _prevViewMouseY : Number;
+		
+		private var _panX : Number;
+		private var _panY : Number;
+		private var _zoom : Number;
+		
+		private var _panning : Boolean;
+		
+		
 		private static const CLICK_TIME:uint = 250;
 		private static const CLICK_DISTANCE_THRESHOLD:uint = 500;
 		
 		public function InputManager(view:View3D, level:Level) {
 			super(view);
 			_level = level;
+			
+			_view.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+		}
+		
+		
+		public function get panX() : Number
+		{
+			return _panX;
+		}
+		
+		
+		public function get panY() : Number
+		{
+			return _panY;
+		}
+		
+		
+		public function get zoom() : Number
+		{
+			return _zoom;
+		}
+		
+		
+		private function onPinch(e : TransformGestureEvent) : void
+		{
+			_zoom /= (e.scaleX + e.scaleY) * 0.5;
 		}
 		
 		override protected function onViewMouseDown(e:MouseEvent):void {
@@ -31,13 +72,29 @@ package com.away3d.gloop.input {
 			_mouseDownTime = getTimer();
 			super.update(); // force update of mouse position to get the proper target
 			_targetHoop = getNearestHoop(mouseX, mouseY);
-			if (_targetHoop) _targetHoop.onDragStart(mouseX, mouseY);
+			if (_targetHoop) {
+				_targetHoop.onDragStart(mouseX, mouseY);
+			}
+			else {
+				_panning = true;
+			}
+			
+			_prevViewMouseX = _view.mouseX;
+			_prevViewMouseY = _view.mouseY;
 		}
 		
 		override public function update():void {
 			if (!_mouseDown) return; // if there's no touch, there's no sense in updating
 			super.update();
 			if (_targetHoop) _targetHoop.onDragUpdate(mouseX, mouseY);
+			
+			if (_panning) {
+				_panX += (_view.mouseX - _prevViewMouseX);
+				_panY += (_view.mouseY - _prevViewMouseY);
+			}
+			
+			_prevViewMouseX = _view.mouseX;
+			_prevViewMouseY = _view.mouseY;
 		}
 		
 		override protected function onViewMouseUp(e:MouseEvent):void {
