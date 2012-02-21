@@ -33,30 +33,11 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.applyGravity = false;
 			_physics.linearDamping = 100;
 			
-			_physics.reportBeginContact = true;
-			
-			_physics.allowDragging = true;
-			
 			_physics.setStatic();
-			
-			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
 			
 			_mesh = new MeshComponent();
 			_mesh.mesh = new Mesh(new CylinderGeometry(50, 50, 5), new ColorMaterial(0xffcc00));
 			_mesh.mesh.rotationZ = rotation;
-		}
-		
-		private function handleBeginContact(e : ContactEvent) : void
-		{			
-			var otherPhysics:PhysicsComponent = e.other.m_userData as PhysicsComponent;
-			if (!otherPhysics) return;
-			var gloop:Gloop = otherPhysics.gameObject as Gloop;
-			if (!gloop) return;
-			onCollidingWithGloopStart(gloop);
-		}
-		
-		protected function onCollidingWithGloopStart(gloop:Gloop):void {
-			
 		}
 		
 		public function get resolveGloopCollisions():Boolean {
@@ -114,7 +95,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 			b2fixtures[0].SetSensor(true);
 		}
 		
-		setCollisionGroup(HOOP_SENSOR, b2fixtures[0]);
+		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
 		setCollisionGroup(HOOP, b2fixtures[1]);
 	}
 }

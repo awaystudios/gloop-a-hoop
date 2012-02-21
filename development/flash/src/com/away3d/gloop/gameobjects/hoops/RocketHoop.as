@@ -9,10 +9,9 @@ package com.away3d.gloop.gameobjects.hoops {
 		
 		public function RocketHoop(worldX:Number=0, worldY:Number=0, rotation:Number=0) {
 			super(worldX, worldY, rotation);
-			
 		}
 		
-		override protected function onCollidingWithGloopStart(gloop:Gloop):void {
+		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
 			
 			gloop.physics.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
