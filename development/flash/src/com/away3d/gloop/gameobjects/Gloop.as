@@ -75,7 +75,7 @@ package com.away3d.gloop.gameobjects
 			// splat intensity ( num splats ) depends on body speed
 			var linearVelocity:V2 = _physics.b2body.GetLinearVelocity();
 			var speed:Number = linearVelocity.length();
-			_decalSplatter.numRays = 1 + Math.floor( speed * 20 );
+			_decalSplatter.numRays = 1 + Math.floor( speed * 5 );
 			// perform splat
 			if( speed > 1 ) {
 				_decalSplatter.evaluate();
