@@ -24,7 +24,7 @@ package com.away3d.gloop.level
 		
 		private var _mode:Boolean = EDIT_MODE;
 		
-		private var _gridSize:uint = 20;
+		public static const GRID_SIZE:uint = 20;
 		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
@@ -67,10 +67,6 @@ package com.away3d.gloop.level
 		
 		public function get objects():Vector.<DefaultGameObject> {
 			return _all_objects;
-		}
-		
-		public function get gridSize():uint {
-			return _gridSize;
 		}
 		
 		public function add(object:DefaultGameObject):DefaultGameObject {
