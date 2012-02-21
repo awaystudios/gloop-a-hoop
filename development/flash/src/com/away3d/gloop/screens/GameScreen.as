@@ -12,7 +12,7 @@ package com.away3d.gloop.screens
 	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
-	import com.away3d.gloop.mouse.MouseManager;
+	import com.away3d.gloop.input.MouseManager;
 	import com.away3d.gloop.utils.HierarchyTool;
 
 	import flash.display.Sprite;
@@ -71,8 +71,6 @@ package com.away3d.gloop.screens
 			_cameraController.context = stage;
 
 			_mouseManager = new MouseManager();
-			_mouseManager.view = _view;
-			addChild( _mouseManager ); // TODO: remove mouse manager sprite-ness ( used for tracing atm )
 		}
 
 		public override function activate():void {
@@ -81,7 +79,8 @@ package com.away3d.gloop.screens
 			_level = _db.selectedProxy.level;
 			_doc.addChild( _level.world );
 			_view.scene = _level.scene;
-			_mouseManager.level = _level;
+			
+			_mouseManager.view = _view;
 
 			_mouse3dTracer = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFF0000 ) );
 			_level.scene.addChild( _mouse3dTracer );
