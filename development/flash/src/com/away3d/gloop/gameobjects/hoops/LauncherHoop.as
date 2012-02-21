@@ -21,7 +21,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_rotatable = false;
 		}
 		
-		override protected function onCollidingWithGloopStart(gloop : Gloop) : void
+		public override function onCollidingWithGloopStart(gloop : Gloop) : void
 		{
 			super.onCollidingWithGloopStart(gloop);
 			_gloop = gloop; // catch the gloop
