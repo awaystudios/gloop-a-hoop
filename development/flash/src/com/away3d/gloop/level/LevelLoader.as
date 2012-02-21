@@ -9,8 +9,9 @@ package com.away3d.gloop.level
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
 	
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
 	import flash.events.Event;
@@ -105,6 +106,15 @@ package com.away3d.gloop.level
 		}
 		
 		
+		private function parseStar(obj : ObjectContainer3D) : void
+		{
+			var star : Star;
+			
+			star = new Star(obj.x * _scale, -obj.y * _scale);
+			_level.add(star);
+		}
+		
+		
 		private function parseSceneGraphObject(obj : ObjectContainer3D) : void
 		{
 			if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
@@ -119,6 +129,10 @@ package com.away3d.gloop.level
 					
 					case 'hoop':
 						parseHoop(obj);
+						break;
+					
+					case 'star':
+						parseStar(obj);
 						break;
 				}
 				
