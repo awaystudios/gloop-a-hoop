@@ -3,6 +3,8 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
+	import Box2DAS.Common.V2;
+	import com.away3d.gloop.level.Level;
 	
 	import Box2DAS.Dynamics.ContactEvent;
 	
@@ -40,6 +42,36 @@ package com.away3d.gloop.gameobjects.hoops
 			_mesh = new MeshComponent();
 			_mesh.mesh = new Mesh(new CylinderGeometry(50, 50, 5), new ColorMaterial(0xffcc00));
 			_mesh.mesh.rotationZ = rotation;
+		}
+		
+		public function onClick(mouseX:Number, mouseY:Number):void {
+			if (rotatable) {
+				var pos:V2 = _physics.b2body.GetPosition();
+				var angle:Number = _physics.b2body.GetAngle();
+				_physics.b2body.SetTransform(pos, angle + 45 / 180 * Math.PI);
+				_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+			}
+		}
+		
+		public function onDragStart(mouseX:Number, mouseY:Number):void {
+			
+		}
+		
+		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			var pos:V2 = new V2(Math.round(mouseX / Level.GRID_SIZE) * Level.GRID_SIZE, Math.round(mouseY / Level.GRID_SIZE) * Level.GRID_SIZE);
+				
+			// transform point into physics coord space
+			pos.x /= 60;
+			pos.y /= 60;
+			
+			var angle:Number = _physics.b2body.GetAngle();
+			
+			_physics.b2body.SetTransform(pos, angle);
+			_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+		}
+		
+		public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			
 		}
 		
 		public function get resolveGloopCollisions():Boolean {

@@ -50,9 +50,5 @@ package com.away3d.gloop.gameobjects
 		public function get debugColor2():uint {
 			return 0x00ff00;
 		}
-		
-		public function get interactive():Boolean {
-			return _interactive;
-		}
 	}
 }
