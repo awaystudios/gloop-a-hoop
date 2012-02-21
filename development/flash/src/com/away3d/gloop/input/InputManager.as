@@ -47,7 +47,7 @@ package com.away3d.gloop.input {
 			// deal with click if duration was short enough
 			if (_targetHoop && clickDuration < CLICK_TIME) _targetHoop.onClick(mouseX, mouseY);
 			// end dragging
-			if (_targetHoop) _targetHoop.onDragStart(mouseX, mouseY);
+			if (_targetHoop) _targetHoop.onDragEnd(mouseX, mouseY);
 			
 			_targetHoop = null;
 		}
