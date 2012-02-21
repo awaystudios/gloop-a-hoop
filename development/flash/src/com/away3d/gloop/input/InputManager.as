@@ -18,16 +18,29 @@ package com.away3d.gloop.input {
 		private var _mouseUpTime:Number = 0;
 		private var _target:DefaultGameObject;
 		
+		private var _dragTargetStart:Point;
+		private var _dragStartOffset:Point;
+		
 		private static const CLICK_TIME:uint = 250;
+		private static const CLICK_DISTANCE_THRESHOLD:uint = 500;
 		
 		public function InputManager(view:View3D, level:Level) {
 			super(view);
+			_dragTargetStart = new Point;
+			_dragStartOffset = new Point;
 			_level = level;
+		}
+		
+		override public function update():void {
+			if (!_mouseDown) return; // if there's no touch, there's no sense in updating
+			super.update();
+			if (_target) drag(_target);
 		}
 		
 		override protected function onViewMouseDown(e:MouseEvent):void {
 			super.onViewMouseDown(e);
 			_mouseDownTime = getTimer();
+			super.update(); // force update of mouse position to get the proper target
 			pickTarget();
 		}
 		
@@ -35,23 +48,15 @@ package com.away3d.gloop.input {
 			super.onViewMouseUp(e);
 			_mouseUpTime = getTimer();
 			var clickDuration:Number = _mouseUpTime - _mouseDownTime;
-			if (clickDuration < CLICK_TIME) {
-				
-				var hoop:Hoop = _target as Hoop;
-				if (hoop) {
-					var pos:V2 = hoop.physics.b2body.GetPosition();
-					var angle:Number = hoop.physics.b2body.GetAngle();
-					hoop.physics.b2body.SetTransform(pos, angle + 45 / 180 * Math.PI);
-					hoop.physics.updateBodyMatrix(null);
-				}
-				
+			if (_target && clickDuration < CLICK_TIME) {
+				click(_target);
 			}
 		}
 		
 		private function pickTarget():void {
 			var nearest:DefaultGameObject;
 			var dist:Number = 0;
-			var nearestDist:Number = Number.MAX_VALUE;
+			var nearestDist:Number = CLICK_DISTANCE_THRESHOLD;
 			var mousePos:Point = new Point(mouseX, mouseY);
 			var objectPos:Point = new Point;
 			
@@ -69,6 +74,31 @@ package com.away3d.gloop.input {
 			}
 			
 			_target = nearest;
+		}
+		
+		private function click(target:DefaultGameObject):void {
+			var hoop:Hoop = target as Hoop;
+			if (hoop && hoop.rotatable) {
+				var pos:V2 = hoop.physics.b2body.GetPosition();
+				var angle:Number = hoop.physics.b2body.GetAngle();
+				hoop.physics.b2body.SetTransform(pos, angle + 45 / 180 * Math.PI);
+				hoop.physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+			}
+		}
+		
+		private function drag(target:DefaultGameObject):void {
+			var hoop:Hoop = target as Hoop;
+			if (hoop && hoop.draggable) {
+				var pos:V2 = new V2(Math.round(mouseX / _level.gridSize) * _level.gridSize, Math.round(mouseY / _level.gridSize) * _level.gridSize);
+				
+				// transform point into physics coord space
+				pos.x /= 60;
+				pos.y /= 60;
+				
+				var angle:Number = hoop.physics.b2body.GetAngle();
+				hoop.physics.b2body.SetTransform(pos, angle);
+				hoop.physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+			}
 		}
 		
 	}
