@@ -30,17 +30,19 @@ package com.away3d.gloop.input {
 		private var _panY : Number;
 		private var _zoom : Number;
 		
+		private var _zooming : Boolean;
 		private var _panning : Boolean;
 		
 		
 		private static const CLICK_TIME:uint = 250;
-		private static const CLICK_DISTANCE_THRESHOLD:uint = 500;
+		private static const CLICK_DISTANCE_THRESHOLD:uint = 50;
 		
 		public function InputManager(view:View3D, level:Level) {
 			super(view);
 			_level = level;
 			
-			_view.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		
@@ -62,9 +64,47 @@ package com.away3d.gloop.input {
 		}
 		
 		
+		public function reset() : void
+		{
+			_zoom = 1;
+			_panX = 0;
+			_panY = 0;
+		}
+		
+		
+		
+		override public function update():void {
+			if (!_mouseDown) 
+				return; // if there's no touch, there's no sense in updating
+			
+			super.update();
+			
+			if (_targetHoop) 
+				_targetHoop.onDragUpdate(mouseX, mouseY);
+			
+			if (_panning && !_zooming) {
+				_panX -= (_view.mouseX - _prevViewMouseX);
+				_panY += (_view.mouseY - _prevViewMouseY);
+			}
+			
+			_prevViewMouseX = _view.mouseX;
+			_prevViewMouseY = _view.mouseY;
+		}
+		
+		
+		
+		
 		private function onPinch(e : TransformGestureEvent) : void
 		{
-			_zoom /= (e.scaleX + e.scaleY) * 0.5;
+			if (!_targetHoop) {
+				_zooming = true;
+				_zoom *= (e.scaleX + e.scaleY) * 0.5;
+			} 
+		}
+		
+		private function onMouseWheel(e : MouseEvent) : void
+		{
+			_zoom /= 1 - e.delta * 0.01;
 		}
 		
 		override protected function onViewMouseDown(e:MouseEvent):void {
@@ -83,19 +123,6 @@ package com.away3d.gloop.input {
 			_prevViewMouseY = _view.mouseY;
 		}
 		
-		override public function update():void {
-			if (!_mouseDown) return; // if there's no touch, there's no sense in updating
-			super.update();
-			if (_targetHoop) _targetHoop.onDragUpdate(mouseX, mouseY);
-			
-			if (_panning) {
-				_panX += (_view.mouseX - _prevViewMouseX);
-				_panY += (_view.mouseY - _prevViewMouseY);
-			}
-			
-			_prevViewMouseX = _view.mouseX;
-			_prevViewMouseY = _view.mouseY;
-		}
 		
 		override protected function onViewMouseUp(e:MouseEvent):void {
 			super.onViewMouseUp(e);
@@ -107,6 +134,8 @@ package com.away3d.gloop.input {
 			if (_targetHoop) _targetHoop.onDragStart(mouseX, mouseY);
 			
 			_targetHoop = null;
+			_panning = false;
+			_zooming = false;
 		}
 		
 		/**

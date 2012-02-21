@@ -1,23 +1,24 @@
 package com.away3d.gloop.screens
 {
 
+	import away3d.cameras.lenses.PerspectiveLens;
 	import away3d.containers.View3D;
 	import away3d.entities.Mesh;
 	import away3d.lights.PointLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-
+	
 	import com.away3d.gloop.camera.FreeFlyCameraController;
 	import com.away3d.gloop.camera.ICameraController;
+	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
-	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.utils.HierarchyTool;
-
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
-
+	
 	import wck.WCK;
 
 	public class GameScreen extends ScreenBase
@@ -51,6 +52,7 @@ package com.away3d.gloop.screens
 
 			_view = new View3D();
 			_view.antiAlias = 4;
+			_view.camera.rotationX = 20;
 			addChild( _view );
 
 			_cameraPointLight = new PointLight();
@@ -77,6 +79,7 @@ package com.away3d.gloop.screens
 			_view.scene = _level.scene;
 			
 			_inputManager = new InputManager(_view, _level);
+			_inputManager.reset();
 
 			_mouse3dTracer = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFF0000 ) );
 			_level.scene.addChild( _mouse3dTracer );
@@ -86,7 +89,7 @@ package com.away3d.gloop.screens
 			_mouse2dTracer.graphics.drawCircle(0, 0, 10);
 			_mouse2dTracer.graphics.endFill();
 			_level.world.addChild( _mouse2dTracer );
-
+			
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
 			}
@@ -97,18 +100,23 @@ package com.away3d.gloop.screens
 		}
 
 		private function onEnterFrame( ev:Event ):void {
+			var tz : Number;
+			
 			if( _level )
 				_level.update();
-
+			
 			_inputManager.update();
+			
+			tz = -1000 + _inputManager.zoom * 100;
+			_view.camera.z += (tz - _view.camera.z) * 0.2;
+			_view.camera.x += (_inputManager.panX - _view.camera.x) * 0.2;
+			_view.camera.y += (_inputManager.panY - _view.camera.y) * 0.2;
 			
 			// TODO: remove tracers
 			_mouse3dTracer.x = _inputManager.mouseX; 
 			_mouse3dTracer.y = -_inputManager.mouseY; 
 			_mouse2dTracer.x = _inputManager.mouseX;
 			_mouse2dTracer.y = _inputManager.mouseY;
-
-			_cameraController.update();
 
 			_cameraPointLight.position = _view.camera.position;
 
