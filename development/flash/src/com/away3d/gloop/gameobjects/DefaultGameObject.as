@@ -27,6 +27,14 @@ package com.away3d.gloop.gameobjects
 			
 		}
 		
+		public function onCollidingWithGloopStart(gloop:Gloop):void {
+			
+		}
+		
+		public function onCollidingWithGloopEnd(gloop:Gloop):void {
+			
+		}
+		
 		public function get physics():PhysicsComponent {
 			return _physics;
 		}
