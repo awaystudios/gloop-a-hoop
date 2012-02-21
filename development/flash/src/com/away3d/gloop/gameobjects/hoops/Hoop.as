@@ -1,11 +1,9 @@
 package com.away3d.gloop.gameobjects.hoops
 {
-	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
-	import wck.BodyShape;
 	
 	/**
 	 * ...
@@ -18,6 +16,8 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
+			_interactive = true;
+			
 			_physics = new HoopPhysicsComponent(this);
 			_physics.x = worldX;
 			_physics.y = worldY;
@@ -65,7 +65,6 @@ package com.away3d.gloop.gameobjects.hoops
 
 }
 
-import Box2DAS.Dynamics.b2Filter;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.hoops.Hoop;
