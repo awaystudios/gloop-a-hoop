@@ -11,11 +11,11 @@ package com.away3d.gloop.input
 		 * */
 	public class MouseManager
 	{
-		private var _view:View3D;
 		private var _planeNormal:Vector3D;
 		private var _planeD:Number;
 		private var _intersection:Vector3D;
 		
+		protected var _view:View3D;
 		protected var _mouseDown:Boolean = false;
 
 		private const PLANE_POSITION:Vector3D = new Vector3D( 0, 0, -50 );
