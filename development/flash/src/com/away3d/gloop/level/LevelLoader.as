@@ -11,9 +11,11 @@ package com.away3d.gloop.level
 	
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.Fan;
+	import com.away3d.gloop.gameobjects.GameObjectType;
 	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.hoops.HoopType;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
@@ -106,11 +108,11 @@ package com.away3d.gloop.level
 			var hoop : Hoop;
 			
 			switch (obj.extra['gah_hoop']) {
-				case 'trampoline':
+				case HoopType.TRAMPOLINE:
 					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale);
 					break;
 				
-				case 'rocket':
+				case HoopType.ROCKET:
 					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale);
 					break;
 			}
@@ -154,27 +156,27 @@ package com.away3d.gloop.level
 		{
 			if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
 				switch (obj.extra['gah_type']) {
-					case 'wall':
+					case GameObjectType.WALL:
 						parseWall(obj);
 						break;
 					
-					case 'spawn':
+					case GameObjectType.SPAWN:
 						parseSpawnPoint(obj);
 						break;
 					
-					case 'hoop':
+					case GameObjectType.HOOP:
 						parseHoop(obj);
 						break;
 					
-					case 'star':
+					case GameObjectType.STAR:
 						parseStar(obj);
 						break;
 					
-					case 'button':
+					case GameObjectType.BUTTON:
 						parseButton(obj);
 						break;
 					
-					case 'fan':
+					case GameObjectType.FAN:
 						parseFan(obj);
 						break;
 				}
