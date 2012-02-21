@@ -1,14 +1,11 @@
 package
 {
 
-	import away3d.containers.View3D;
 	import away3d.entities.Mesh;
-	import away3d.events.LoaderEvent;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
 
 	import com.away3d.gloop.gameobjects.Gloop;
-	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
 	import com.away3d.gloop.screens.GameScreen;
@@ -23,12 +20,7 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.geom.Vector3D;
-	import flash.net.URLRequest;
 	import flash.ui.Keyboard;
-	import flash.utils.ByteArray;
-
-	import wck.WCK;
 
 	[SWF(width="768", height="1024", frameRate="60")]
 	public class Main extends Sprite
