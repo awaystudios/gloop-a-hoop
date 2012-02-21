@@ -8,6 +8,7 @@ package com.away3d.gloop.level
 	import away3d.library.assets.AssetType;
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
+	import com.away3d.gloop.gameobjects.hoops.LauncherHoop;
 	
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.Fan;
@@ -100,6 +101,9 @@ package com.away3d.gloop.level
 		{
 			_level.spawnPoint.x = obj.x * _scale;
 			_level.spawnPoint.y = -obj.y * _scale;
+			
+			var hoop:LauncherHoop = new LauncherHoop(obj.x * _scale, -obj.y * _scale);
+			_level.add(hoop);
 		}
 		
 		
