@@ -7,7 +7,8 @@ package com.away3d.gloop.gameobjects
 	{
 		protected var _mesh : MeshComponent;
 		protected var _physics : PhysicsComponent;
-			
+		protected var _interactive : Boolean = false;
+		
 		public function DefaultGameObject()
 		{
 			super();
@@ -19,6 +20,10 @@ package com.away3d.gloop.gameobjects
 				_mesh.mesh.x = _physics.x;
 				_mesh.mesh.y = -_physics.y;
 			}
+		}
+		
+		public function setMode(value:Boolean):void {
+			
 		}
 		
 		public function get physics():PhysicsComponent {
@@ -35,6 +40,10 @@ package com.away3d.gloop.gameobjects
 		
 		public function get debugColor2():uint {
 			return 0x00ff00;
+		}
+		
+		public function get interactive():Boolean {
+			return _interactive;
 		}
 	}
 }
