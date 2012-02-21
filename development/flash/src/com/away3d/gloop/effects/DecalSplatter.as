@@ -3,7 +3,6 @@ package com.away3d.gloop.effects
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
 
 	import flash.geom.Vector3D;
 
@@ -21,10 +20,23 @@ package com.away3d.gloop.effects
 		public var maxDistance:Number = 50;
 		public var minScale:Number = 1;
 		public var maxScale:Number = 1;
+		public var shrinkFactor:Number = 0.99;
 
+		private var _maxDecals:uint;
+		private var _decals:Vector.<Mesh>;
+		private var _currentDecalIndex:uint;
 		private var _meshCollider:MeshCollider;
 
-		public function DecalSplatter() {
+		public function shrinkDecals():void {
+			for( var i:uint, len:uint = _decals.length; i < len; ++i ) {
+				var decal:Mesh = _decals[ i ];
+				decal.scale( shrinkFactor );
+			}
+		}
+
+		public function DecalSplatter( maxDecals:uint = 10 ) {
+			_maxDecals = maxDecals;
+			_decals = new Vector.<Mesh>();
 			_meshCollider = new MeshCollider();
 			sourcePosition = new Vector3D();
 			splatDirection = new Vector3D( 0, 1, 0 );
@@ -67,13 +79,28 @@ package com.away3d.gloop.effects
 
 		private function placeDecalAt( position:Vector3D, normal:Vector3D, scale:Number = 1 ):void {
 			var scene:Scene3D = _meshCollider.collidingMesh.scene;
-			var randDecalIndex:uint = Math.floor( Math.random() * decals.length );
-			var decal:Mesh = decals[ randDecalIndex ].clone() as Mesh;
+			var decal:Mesh = getNextDecal();
 			decal.scale( scale );
 			decal.position = position;
 			var offsetPosition:Vector3D = position.add( normal );
 			decal.lookAt( offsetPosition, new Vector3D( rand( -1, 1 ), rand( -1, 1 ), rand( -1, 1 ) ) );
 			scene.addChild( decal );
+		}
+
+		private function getNextDecal():Mesh {
+			var decal:Mesh;
+			if( _decals.length - 1 < _currentDecalIndex ) {
+				var randDecalIndex:uint = Math.floor( Math.random() * decals.length );
+				decal = decals[ randDecalIndex ].clone() as Mesh;
+			}
+			else {
+				decal = _decals[ _currentDecalIndex ];
+				decal.scaleX = decal.scaleY = decal.scaleZ = 1;
+			}
+			_decals.push( decal );
+			_currentDecalIndex++;
+			if( _currentDecalIndex > _maxDecals ) _currentDecalIndex = 0;
+			return decal;
 		}
 
 		private function rand( min:Number, max:Number ):Number {

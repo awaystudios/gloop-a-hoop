@@ -19,6 +19,11 @@ package com.away3d.gloop.gameobjects
 	{
 		private var _decalSplatter:DecalSplatter;
 
+		private const DECAL_SPEED_FACTOR:Number = 2;
+		private const DECAL_MIN_SPEED:Number = 1;
+		private const MAX_DECALS_PER_HIT:Number = 20;
+		private const MAX_DECALS_TOTAL:Number = 30;
+
 		public function Gloop() {
 
 			super();
@@ -34,14 +39,15 @@ package com.away3d.gloop.gameobjects
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
 			_mesh.mesh = new Mesh( new SphereGeometry(), colorMaterial );
 
-			_decalSplatter = new DecalSplatter();
-			_decalSplatter.apertureX = 1;
-			_decalSplatter.apertureY = 1;
+			_decalSplatter = new DecalSplatter( MAX_DECALS_TOTAL );
+			_decalSplatter.apertureX = 0.5;
+			_decalSplatter.apertureY = 0.5;
 			_decalSplatter.apertureZ = 0.5;
-			_decalSplatter.minScale = 0.2;
-			_decalSplatter.maxScale = 2;
-			_decalSplatter.maxDistance = 100;
+			_decalSplatter.minScale = 0.5;
+			_decalSplatter.maxScale = 3;
+			_decalSplatter.maxDistance = 75;
 			_decalSplatter.zOffset = -1;
+			_decalSplatter.shrinkFactor = 0.995;
 			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), /*new ColorMaterial( 0x00FF00 )*/colorMaterial );
 //			sphereDecal.scaleZ = 0.5;
 			_decalSplatter.decals = Vector.<Mesh>( [
@@ -51,6 +57,11 @@ package com.away3d.gloop.gameobjects
 
 		public function set splattables( value:Vector.<Mesh> ):void {
 			_decalSplatter.targets = value;
+		}
+
+		override public function update( dt:Number ):void {
+			super.update( dt );
+			_decalSplatter.shrinkDecals();
 		}
 
 		private function handleBeginContact( e:ContactEvent ):void {
@@ -71,9 +82,9 @@ package com.away3d.gloop.gameobjects
 			// splat intensity ( num splats ) depends on body speed
 			var linearVelocity:V2 = _physics.b2body.GetLinearVelocity();
 			var speed:Number = linearVelocity.length();
-			_decalSplatter.numRays = 1 + Math.min( Math.floor( 3 * speed ), 20 );
+			_decalSplatter.numRays = 1 + Math.min( Math.floor( DECAL_SPEED_FACTOR * speed ), MAX_DECALS_PER_HIT );
 			// perform splat
-			if( speed > 1 ) {
+			if( speed > DECAL_MIN_SPEED ) {
 				_decalSplatter.evaluate();
 			}
 		}
