@@ -10,7 +10,6 @@ package com.away3d.gloop.gameobjects
 	import away3d.primitives.SphereGeometry;
 
 	import com.away3d.gloop.effects.DecalSplatter;
-	import com.away3d.gloop.effects.decals.SplatDecal;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
@@ -18,29 +17,11 @@ package com.away3d.gloop.gameobjects
 
 	public class Gloop extends DefaultGameObject
 	{
-		[Embed(source="../../../../../assets/images/green-splat.png")]
-		private var SplatImage1:Class;
-
-		[Embed(source="../../../../../assets/images/green-splat-1.png")]
-		private var SplatImage2:Class;
-
 		private var _decalSplatter:DecalSplatter;
 
 		public function Gloop() {
 
 			super();
-
-			_decalSplatter = new DecalSplatter();
-			_decalSplatter.apertureX = 0.5;
-			_decalSplatter.apertureY = 0.5;
-			_decalSplatter.apertureZ = 0.25;
-			_decalSplatter.minScale = 0.5;
-			_decalSplatter.maxScale = 1;
-			_decalSplatter.maxDistance = 60;
-			_decalSplatter.decals = Vector.<Mesh>( [
-				new SplatDecal( new SplatImage1().bitmapData ),
-				new SplatDecal( new SplatImage2().bitmapData )
-			] );
 
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = 1;
@@ -50,7 +31,19 @@ package com.away3d.gloop.gameobjects
 			_physics.addEventListener( ContactEvent.BEGIN_CONTACT, handleBeginContact );
 
 			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh( new SphereGeometry(), new ColorMaterial( 0x00ff00 ) );
+			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
+			_mesh.mesh = new Mesh( new SphereGeometry(), colorMaterial );
+
+			_decalSplatter = new DecalSplatter();
+			_decalSplatter.apertureX = 1;
+			_decalSplatter.apertureY = 1;
+			_decalSplatter.apertureZ = 0.25;
+			_decalSplatter.minScale = 0.25;
+			_decalSplatter.maxScale = 2;
+			_decalSplatter.maxDistance = 100;
+			_decalSplatter.decals = Vector.<Mesh>( [
+				new Mesh( new SphereGeometry( 5 ), colorMaterial )
+			] );
 		}
 
 		public function set splattables( value:Vector.<Mesh> ):void {
