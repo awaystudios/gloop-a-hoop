@@ -18,6 +18,8 @@ package com.away3d.gloop.gameobjects.hoops
 	public class Hoop extends DefaultGameObject
 	{
 		
+		protected var _rotatable:Boolean = true;
+		protected var _draggable:Boolean = true;
 		protected var _resolveGloopCollisions:Boolean = false;
 		
 		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
@@ -50,6 +52,14 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		override public function get debugColor2():uint {
 			return 0xcebc84;
+		}
+		
+		public function get rotatable():Boolean {
+			return _rotatable;
+		}
+		
+		public function get draggable():Boolean {
+			return _draggable;
 		}
 
 	}

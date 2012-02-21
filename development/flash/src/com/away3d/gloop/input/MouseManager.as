@@ -31,7 +31,6 @@ package com.away3d.gloop.input
 		}
 
 		public function update():void {
-			//if (!_mouseDown) return;	// if there's no touch, there's no sense in updating
 			evaluateMouseRayIntersection();
 		}
 
