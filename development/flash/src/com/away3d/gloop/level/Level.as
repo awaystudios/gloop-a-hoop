@@ -43,7 +43,7 @@ package com.away3d.gloop.level
 		
 		public function setMode(value:Boolean):void {
 			_mode = value;
-			for each(var object:DefaultGameObject in _objects) {
+			for each(var object:DefaultGameObject in _all_objects) {
 				object.setMode(value);
 			}
 		}
@@ -64,7 +64,7 @@ package com.away3d.gloop.level
 		}		
 		
 		public function get objects():Vector.<DefaultGameObject> {
-			return _objects;
+			return _all_objects;
 		}
 		
 		public function add(object:DefaultGameObject):DefaultGameObject {
