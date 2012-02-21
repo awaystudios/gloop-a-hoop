@@ -29,7 +29,7 @@ package com.away3d.gloop.camera
 		}
 
 		override public function update():void {
-			if( keyIsDown( Keyboard.SHIFT ) && mouseIsDown() ) {
+			if( mouseIsDown() ) {
 				var mouseX:Number = context.mouseX - context.width / 2;
 				var mouseY:Number = context.mouseY - context.height / 2;
 				rotateY( ( mouseX - _lastMousePosition.x ) * mouseDragFactor );
@@ -42,8 +42,8 @@ package com.away3d.gloop.camera
 			if( keyIsDown( Keyboard.S ) || keyIsDown( Keyboard.DOWN ) ) moveZ( -keyboardMoveSpeed );
 			if( keyIsDown( Keyboard.D ) || keyIsDown( Keyboard.RIGHT ) ) moveX( keyboardMoveSpeed );
 			if( keyIsDown( Keyboard.A ) || keyIsDown( Keyboard.LEFT ) ) moveX( -keyboardMoveSpeed );
-			if( keyIsDown( Keyboard.Z ) ) moveY( keyboardMoveSpeed );
-			if( keyIsDown( Keyboard.X ) ) moveY( -keyboardMoveSpeed );
+			if( keyIsDown( Keyboard.Z ) ) moveY( -keyboardMoveSpeed );
+			if( keyIsDown( Keyboard.X ) ) moveY( keyboardMoveSpeed );
 			// ease position
 			var dx:Number = _cameraDummy.x - _camera.x;
 			var dy:Number = _cameraDummy.y - _camera.y;

@@ -58,6 +58,8 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			if (!draggable) return;
+			
 			var pos:V2 = new V2(Math.round(mouseX / Level.GRID_SIZE) * Level.GRID_SIZE, Math.round(mouseY / Level.GRID_SIZE) * Level.GRID_SIZE);
 				
 			// transform point into physics coord space

@@ -30,7 +30,6 @@ package com.away3d.gloop.screens
 		private var _view:View3D;
 		private var _cameraPointLight:PointLight;
 		private var _sceneLightPicker:StaticLightPicker;
-		private var _cameraController:ICameraController;
 		private var _inputManager:InputManager;
 		private var _mouse3dTracer:Mesh; // TODO: remove
 		private var _mouse2dTracer:Sprite; // TODO: remove
@@ -60,15 +59,6 @@ package com.away3d.gloop.screens
 			_cameraPointLight.ambient = 0.4;
 
 			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
-
-			addEventListener( Event.ADDED_TO_STAGE, stageInitHandler, false, 0, true );
-		}
-
-		private function stageInitHandler( evt:Event ):void {
-			removeEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
-			_cameraController = new FreeFlyCameraController();
-			_cameraController.camera = _view.camera;
-			_cameraController.context = stage;
 		}
 
 		public override function activate():void {
@@ -113,8 +103,8 @@ package com.away3d.gloop.screens
 			_view.camera.y += (_inputManager.panY - _view.camera.y) * 0.2;
 			
 			// TODO: remove tracers
-			_mouse3dTracer.x = _inputManager.mouseX; 
-			_mouse3dTracer.y = -_inputManager.mouseY; 
+			_mouse3dTracer.x = _inputManager.mouseX;
+			_mouse3dTracer.y = -_inputManager.mouseY;
 			_mouse2dTracer.x = _inputManager.mouseX;
 			_mouse2dTracer.y = _inputManager.mouseY;
 

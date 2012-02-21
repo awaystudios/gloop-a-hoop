@@ -23,7 +23,6 @@ package com.away3d.gloop.effects
 			var meshes:Vector.<Mesh> = _target as Vector.<Mesh>;
 
 			var t:Number;
-			var mesh:Mesh;
 			var rp:Vector3D, rd:Vector3D;
 			var collisionVO:MeshCollisionVO;
 			var cameraIsInEntityBounds:Boolean;
@@ -31,7 +30,7 @@ package com.away3d.gloop.effects
 
 			// sweep meshes and collect entities whose bounds are hit by ray
 			for( var i:uint, len:uint = meshes.length; i < len; ++i ) {
-				mesh = meshes[ i ];
+				var mesh:Mesh = meshes[ i ];
 				if( mesh.visible ) {
 					// convert ray to object space
 					rp = mesh.inverseSceneTransform.transformVector( _rayPosition );
@@ -41,7 +40,7 @@ package com.away3d.gloop.effects
 					cameraIsInEntityBounds = false;
 					if( t == -1 ) { // if there is no collision, check if the ray starts inside the bounding volume
 						cameraIsInEntityBounds = mesh.bounds.containsPoint( rp );
-						if( cameraIsInEntityBounds ) t = 0;
+						if( cameraIsInEntityBounds ) t = 999;
 					}
 					if( t >= 0 ) { // collision exists for this renderable's entity bounds
 						// store collision VO
@@ -64,8 +63,6 @@ package com.away3d.gloop.effects
 			// sort collision vos, closest to furthest
 			collisionVOs = collisionVOs.sort( onSmallestT );
 
-			var subMesh:SubMesh;
-
 			// find nearest collision and perform triangle collision tests where necessary
 			_nearestCollisionVO = new MeshCollisionVO();
 			_nearestCollisionVO.finalCollisionT = Number.MAX_VALUE;
@@ -78,22 +75,29 @@ package com.away3d.gloop.effects
 						|| collisionVO.boundsCollisionT < _nearestCollisionVO.finalCollisionT
 						|| ( collisionVO.boundsCollisionT > _nearestCollisionVO.boundsCollisionT && collisionVO.boundsCollisionT < _nearestCollisionVO.boundsCollisionFarT ) ) { // bounds intersection test
 					_triangleCollider.updateRay( collisionVO.localRayPosition, collisionVO.localRayDirection );
-					subMesh = mesh.subMeshes[ 0 ];
-					_triangleCollider.breakOnFirstTriangleHit = false;
+					var subMesh:SubMesh = collisionVO.mesh.subMeshes[ 0 ];
+					_triangleCollider.breakOnFirstTriangleHit = true;
 					_triangleCollider.updateTarget( subMesh );
 					if( _triangleCollider.evaluate() ) { // triangle collision exists?
 						collisionVO.finalCollisionT = _triangleCollider.collisionT;
 						collisionVO.collisionUV = _triangleCollider.collisionUV.clone();
 						collisionVO.collisionNormal = _triangleCollider.collisionNormal.clone();
-						if( collisionVO.finalCollisionT < _nearestCollisionVO.finalCollisionT ) _nearestCollisionVO = collisionVO;
+						if( collisionVO.finalCollisionT < _nearestCollisionVO.finalCollisionT ) {
+							_nearestCollisionVO = collisionVO;
+						}
 					}
 				}
 			}
 
+			_collisionExists = _nearestCollisionVO.finalCollisionT != Number.MAX_VALUE;
+
 			// use nearest collision found
-			_t = _nearestCollisionVO.finalCollisionT;
-			_collidingRenderable = _nearestCollisionVO.mesh.subMeshes[ 0 ];
-			return _collisionExists = _nearestCollisionVO.finalCollisionT != Number.MAX_VALUE;
+			if( _collisionExists ) {
+				_t = _nearestCollisionVO.finalCollisionT;
+				_collidingRenderable = _nearestCollisionVO.mesh.subMeshes[ 0 ];
+			}
+
+			return _collisionExists;
 		}
 
 		private function onSmallestT( a:MeshCollisionVO, b:MeshCollisionVO ):Number {
@@ -114,7 +118,6 @@ package com.away3d.gloop.effects
 		override public function get collisionPoint():Vector3D {
 			if( !_collisionExists )
 				return null;
-
 			var point:Vector3D = new Vector3D();
 			point.x = _nearestCollisionVO.localRayPosition.x + _nearestCollisionVO.finalCollisionT * _nearestCollisionVO.localRayDirection.x;
 			point.y = _nearestCollisionVO.localRayPosition.y + _nearestCollisionVO.finalCollisionT * _nearestCollisionVO.localRayDirection.y;

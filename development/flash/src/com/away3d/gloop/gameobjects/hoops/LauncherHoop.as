@@ -2,6 +2,7 @@ package com.away3d.gloop.gameobjects.hoops
 {
 	import Box2DAS.Common.V2;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import flash.geom.Point;
 	
 	/**
 	 * ...
@@ -12,13 +13,13 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private var _gloop : Gloop;
 		
-		private var _power : Number = 1;
-		private var _angle : Number = 0;
+		private var _aim : Point;
 		
 		public function LauncherHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
 			super(worldX, worldY, rotation);
 			_rotatable = false;
+			_aim = new Point;
 		}
 		
 		public override function onCollidingWithGloopStart(gloop : Gloop) : void
@@ -27,15 +28,21 @@ package com.away3d.gloop.gameobjects.hoops
 			_gloop = gloop; // catch the gloop
 		}
 		
-		/**
-		 * Aims the launcher
-		 * @param	power	(0.0-1.0) 	A normalized value of the power used to fire
-		 * @param	angle	(0-360)		The angle to fire at in degrees
-		 */
-		public function aim(power : Number, angle : Number) : void
-		{
-			_power = power;
-			_angle = angle;
+		override public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			if (!_gloop) return super.onDragUpdate(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
+			
+			var hoopPos:V2 = _physics.b2body.GetPosition();			
+			_aim.x = hoopPos.x * 60 - mouseX;
+			_aim.y = hoopPos.y * 60 - mouseY;
+			
+			_physics.b2body.SetTransform(hoopPos, -Math.atan2(_aim.x, _aim.y));
+			_physics.updateBodyMatrix(null);
+		}
+		
+		override public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			if (!_gloop) return super.onDragEnd(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
+			if (_aim.length < 15) return;
+			fire();
 		}
 		
 		public function fire() : void
@@ -43,7 +50,9 @@ package com.away3d.gloop.gameobjects.hoops
 			if (!_gloop)
 				return; // can't fire if not holding the gloop
 			
-			var impulse : V2 = _physics.b2body.GetWorldVector(new V2(0, -_power * 15));
+			var power:Number = (_aim.length - 15) / 10;
+				
+			var impulse : V2 = _physics.b2body.GetWorldVector(new V2(0, -power));
 			_gloop.physics.b2body.ApplyImpulse(impulse, _physics.b2body.GetWorldCenter());
 			
 			_gloop = null; // release the gloop

@@ -9,6 +9,7 @@ package away3d.core.raycast.colliders
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
+	import flash.utils.getTimer;
 
 	public class TriangleCollider extends ColliderBase
 	{
@@ -18,7 +19,7 @@ package away3d.core.raycast.colliders
 		private var _rayTriangleKernel:Shader;
 		private var _indexBufferDims:Point;
 		private var _kernelOutputBuffer:Vector.<Number>;
-		private var _lastRenderableUploaded:SubMesh;
+		private var _lastSubMeshUploaded:SubMesh;
 		private var _collisionUV:Point;
 		private var _collisionNormal:Vector3D;
 		private var _collisionTriangleIndex:uint;
@@ -51,9 +52,11 @@ package away3d.core.raycast.colliders
 			// if working on a clone, no need to resend data to pb
 			// TODO: next line avoids re-upload if its the same renderable, but not if its 2 renderables referring to the same geometry or source
 			// TODO: perhaps implement a geom id?
-			if( _lastRenderableUploaded && _lastRenderableUploaded === subMesh ) return;
+			if( _lastSubMeshUploaded && _lastSubMeshUploaded === subMesh ) {
+				return;
+			}
 
-//        var time:uint = getTimer();
+//			var time:uint = getTimer();
 
 			// send vertices to pb
 			var vertices:Vector.<Number> = subMesh.vertexData.concat(); // TODO: need concat? if not could affect rendering by introducing null triangles, or uncontrolled index buffer growth
@@ -68,10 +71,10 @@ package away3d.core.raycast.colliders
 			_rayTriangleKernel.data.indexBuffer.width = _indexBufferDims.x;
 			_rayTriangleKernel.data.indexBuffer.height = _indexBufferDims.y;
 			_rayTriangleKernel.data.indexBuffer.input = indices;
-			_lastRenderableUploaded = subMesh;
+			_lastSubMeshUploaded = subMesh;
 
-//        time = getTimer() - time;
-//        trace( "tri-test - upload time: " + time + ", with a mesh of " + indices.length / 3 + " triangles." );
+//			time = getTimer() - time;
+//			trace( "tri-test - upload time: " + time + ", with a mesh of " + indices.length / 3 + " triangles." );
 		}
 
 		private function executeKernel():void {
