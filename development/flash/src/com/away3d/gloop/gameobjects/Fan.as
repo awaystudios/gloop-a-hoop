@@ -22,13 +22,13 @@ package com.away3d.gloop.gameobjects
 		
 		public function toggleOn() : void
 		{
-			
+			trace(this, 'toggle on!');
 		}
 		
 		
 		public function toggleOff() : void
 		{
-			
+			trace(this, 'toggle off!');
 		}
 	}
 }
