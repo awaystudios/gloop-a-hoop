@@ -12,7 +12,7 @@ package com.away3d.gloop.screens
 	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
-	import com.away3d.gloop.input.MouseManager;
+	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.utils.HierarchyTool;
 
 	import flash.display.Sprite;
@@ -30,7 +30,7 @@ package com.away3d.gloop.screens
 		private var _cameraPointLight:PointLight;
 		private var _sceneLightPicker:StaticLightPicker;
 		private var _cameraController:ICameraController;
-		private var _mouseManager:MouseManager;
+		private var _inputManager:InputManager;
 		private var _mouse3dTracer:Mesh; // TODO: remove
 		private var _mouse2dTracer:Sprite; // TODO: remove
 
@@ -64,13 +64,9 @@ package com.away3d.gloop.screens
 
 		private function stageInitHandler( evt:Event ):void {
 			removeEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
-
-//			_cameraController = new XYCameraController();
 			_cameraController = new FreeFlyCameraController();
 			_cameraController.camera = _view.camera;
 			_cameraController.context = stage;
-
-			_mouseManager = new MouseManager();
 		}
 
 		public override function activate():void {
@@ -80,7 +76,7 @@ package com.away3d.gloop.screens
 			_doc.addChild( _level.world );
 			_view.scene = _level.scene;
 			
-			_mouseManager.view = _view;
+			_inputManager = new InputManager(_view, _level);
 
 			_mouse3dTracer = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFF0000 ) );
 			_level.scene.addChild( _mouse3dTracer );
@@ -96,20 +92,21 @@ package com.away3d.gloop.screens
 			}
 		}
 
-
 		public override function deactivate():void {
 			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
-
 
 		private function onEnterFrame( ev:Event ):void {
 			if( _level )
 				_level.update();
 
-			_mouseManager.update();
-			_mouse3dTracer.position = _mouseManager.intersection; // TODO: remove tracers
-			_mouse2dTracer.x = _mouse3dTracer.position.x;
-			_mouse2dTracer.y = -_mouse3dTracer.position.y;
+			_inputManager.update();
+			
+			// TODO: remove tracers
+			_mouse3dTracer.x = _inputManager.mouseX; 
+			_mouse3dTracer.y = -_inputManager.mouseY; 
+			_mouse2dTracer.x = _inputManager.mouseX;
+			_mouse2dTracer.y = _inputManager.mouseY;
 
 			_cameraController.update();
 

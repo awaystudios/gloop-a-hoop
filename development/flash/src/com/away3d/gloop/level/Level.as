@@ -22,6 +22,11 @@ package com.away3d.gloop.level
 		private var _buttons : Vector.<Button>;
 		private var _btn_controllables : Vector.<IButtonControllable>;
 		
+		private var _mode:Boolean = EDIT_MODE;
+		
+		public static const EDIT_MODE:Boolean = false;
+		public static const PLAY_MODE:Boolean = true;
+		
 		public function Level()
 		{
 			_scene = new Scene3D();
@@ -36,6 +41,12 @@ package com.away3d.gloop.level
 			_buttons = new Vector.<Button>();
 		}
 		
+		public function setMode(value:Boolean):void {
+			_mode = value;
+			for each(var object:DefaultGameObject in _all_objects) {
+				object.setMode(value);
+			}
+		}
 		
 		public function get spawnPoint() : Point
 		{
@@ -50,8 +61,11 @@ package com.away3d.gloop.level
 		public function get world() : World
 		{
 			return _world;
-		}
+		}		
 		
+		public function get objects():Vector.<DefaultGameObject> {
+			return _all_objects;
+		}
 		
 		public function add(object:DefaultGameObject):DefaultGameObject {
 			_all_objects.push(object);
