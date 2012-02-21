@@ -18,7 +18,7 @@ package com.away3d.gloop.input {
 		private var _mouseUpTime:Number = 0;
 		private var _target:DefaultGameObject;
 		
-		private static const CLICK_TIME:uint = 150;
+		private static const CLICK_TIME:uint = 250;
 		
 		public function InputManager(view:View3D, level:Level) {
 			super(view);
@@ -41,7 +41,8 @@ package com.away3d.gloop.input {
 				if (hoop) {
 					var pos:V2 = hoop.physics.b2body.GetPosition();
 					var angle:Number = hoop.physics.b2body.GetAngle();
-					hoop.physics.b2body.SetTransform(pos, angle + 45);
+					hoop.physics.b2body.SetTransform(pos, angle + 45 / 180 * Math.PI);
+					hoop.physics.updateBodyMatrix(null);
 				}
 				
 			}
@@ -58,8 +59,6 @@ package com.away3d.gloop.input {
 				if (!go.interactive) continue;
 				objectPos.x = go.physics.x;
 				objectPos.y = go.physics.y;
-				
-				trace(mousePos, objectPos);
 				
 				dist = Point.distance(mousePos, objectPos);
 				
