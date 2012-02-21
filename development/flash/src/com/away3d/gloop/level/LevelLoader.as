@@ -9,8 +9,13 @@ package com.away3d.gloop.level
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
 	
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.Button;
+	import com.away3d.gloop.gameobjects.Fan;
+	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
+	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
 	import flash.events.Event;
@@ -100,8 +105,48 @@ package com.away3d.gloop.level
 		{
 			var hoop : Hoop;
 			
-			hoop = new Hoop(obj.x * _scale, -obj.y * _scale);
+			switch (obj.extra['gah_hoop']) {
+				case 'trampoline':
+					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale);
+					break;
+				
+				case 'rocket':
+					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale);
+					break;
+			}
+			
 			_level.add(hoop);
+		}
+		
+		
+		private function parseStar(obj : ObjectContainer3D) : void
+		{
+			var star : Star;
+			
+			star = new Star(obj.x * _scale, -obj.y * _scale);
+			_level.add(star);
+		}
+		
+		
+		private function parseButton(obj : ObjectContainer3D) : void
+		{
+			var btn : Button;
+			var grp : uint;
+			
+			grp = parseInt(obj.extra['gah_btn_grp']);
+			btn = new Button(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, grp);
+			_level.add(btn);
+		}
+		
+		
+		private function parseFan(obj : ObjectContainer3D) : void
+		{
+			var fan : Fan;
+			var grp : uint;
+			
+			grp = parseInt(obj.extra['gah_btn_grp']);
+			fan = new Fan(obj.x * _scale, obj.y * _scale, -obj.rotationZ, grp);
+			_level.add(fan);
 		}
 		
 		
@@ -119,6 +164,18 @@ package com.away3d.gloop.level
 					
 					case 'hoop':
 						parseHoop(obj);
+						break;
+					
+					case 'star':
+						parseStar(obj);
+						break;
+					
+					case 'button':
+						parseButton(obj);
+						break;
+					
+					case 'fan':
+						parseFan(obj);
 						break;
 				}
 				
@@ -161,6 +218,8 @@ package com.away3d.gloop.level
 		
 		private function onResourceComplete(ev : LoaderEvent) : void
 		{
+			_level.setup();
+			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 	}

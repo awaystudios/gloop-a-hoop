@@ -2,8 +2,10 @@ package com.away3d.gloop.level
 {
 	import away3d.containers.Scene3D;
 	
+	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.GameObject;
+	import com.away3d.gloop.gameobjects.IButtonControllable;
 	
 	import flash.geom.Point;
 	
@@ -15,7 +17,10 @@ package com.away3d.gloop.level
 		private var _world : World;
 		
 		private var _spawn_point :Point;
-		private var _objects : Vector.<DefaultGameObject>;
+		private var _all_objects : Vector.<DefaultGameObject>;
+		
+		private var _buttons : Vector.<Button>;
+		private var _btn_controllables : Vector.<IButtonControllable>;
 		
 		private var _mode:Boolean = EDIT_MODE;
 		
@@ -31,7 +36,9 @@ package com.away3d.gloop.level
 			_world.positionIterations = 5;
 			_world.gravityY = 1;
 			_spawn_point = new Point();
-			_objects = new Vector.<DefaultGameObject>();
+			_all_objects = new Vector.<DefaultGameObject>();
+			_btn_controllables = new Vector.<IButtonControllable>();
+			_buttons = new Vector.<Button>();
 		}
 		
 		public function setMode(value:Boolean):void {
@@ -61,10 +68,33 @@ package com.away3d.gloop.level
 		}
 		
 		public function add(object:DefaultGameObject):DefaultGameObject {
-			_objects.push(object);
+			_all_objects.push(object);
 			if (object.physics) world.addChild(object.physics);
 			if (object.mesh) scene.addChild(object.mesh.mesh);
+			
+			if (object is Button) {
+				_buttons.push(Button(object));
+			}
+			else if (object is IButtonControllable) {
+				_btn_controllables.push(IButtonControllable(object));
+			}
+			
 			return object;
+		}
+		
+		
+		public function setup() : void
+		{
+			var btn : Button;
+			
+			for each (btn in _buttons) {
+				var i : uint;
+				
+				for (i=0; i<_btn_controllables.length; i++) {
+					if (_btn_controllables[i].buttonGroup == btn.buttonGroup)
+						btn.addControllable(_btn_controllables[i]);
+				}
+			}
 		}
 		
 		
@@ -72,8 +102,8 @@ package com.away3d.gloop.level
 		{
 			var i : uint;
 			
-			for (i=0; i<_objects.length; i++) {
-				_objects[i].update(1);
+			for (i=0; i<_all_objects.length; i++) {
+				_all_objects[i].update(1);
 			}
 		}
 		
@@ -82,7 +112,7 @@ package com.away3d.gloop.level
 		{
 			var obj : DefaultGameObject;
 			
-			while (obj = _objects.pop()) {
+			while (obj = _all_objects.pop()) {
 				if (obj.mesh && obj.mesh.mesh && obj.mesh.mesh.parent)
 					obj.mesh.mesh.parent.removeChild(obj.mesh.mesh);
 				

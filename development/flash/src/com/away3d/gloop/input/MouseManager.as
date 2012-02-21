@@ -3,19 +3,12 @@ package com.away3d.gloop.input
 
 	import away3d.containers.View3D;
 
-	import com.away3d.gloop.level.Level;
-
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
-
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
-
 	import flash.geom.Vector3D;
 
 	/*
-	 * Translates 3D view mouse interactions to 2D physics view mouse interactions.
-	 * */
+		 * Translates 3D view mouse interactions to 2D physics view mouse interactions.
+		 * */
 	public class MouseManager
 	{
 		private var _view:View3D;
