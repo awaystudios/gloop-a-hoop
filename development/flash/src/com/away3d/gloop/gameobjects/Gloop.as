@@ -37,12 +37,15 @@ package com.away3d.gloop.gameobjects
 			_decalSplatter = new DecalSplatter();
 			_decalSplatter.apertureX = 1;
 			_decalSplatter.apertureY = 1;
-			_decalSplatter.apertureZ = 0.25;
-			_decalSplatter.minScale = 0.25;
+			_decalSplatter.apertureZ = 0.5;
+			_decalSplatter.minScale = 0.2;
 			_decalSplatter.maxScale = 2;
 			_decalSplatter.maxDistance = 100;
+			_decalSplatter.zOffset = -1;
+			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), /*new ColorMaterial( 0x00FF00 )*/colorMaterial );
+//			sphereDecal.scaleZ = 0.5;
 			_decalSplatter.decals = Vector.<Mesh>( [
-				new Mesh( new SphereGeometry( 5 ), colorMaterial )
+				sphereDecal
 			] );
 		}
 
@@ -68,7 +71,7 @@ package com.away3d.gloop.gameobjects
 			// splat intensity ( num splats ) depends on body speed
 			var linearVelocity:V2 = _physics.b2body.GetLinearVelocity();
 			var speed:Number = linearVelocity.length();
-			_decalSplatter.numRays = 1 + Math.floor( speed * 5 );
+			_decalSplatter.numRays = 1 + Math.min( Math.floor( 3 * speed ), 20 );
 			// perform splat
 			if( speed > 1 ) {
 				_decalSplatter.evaluate();
