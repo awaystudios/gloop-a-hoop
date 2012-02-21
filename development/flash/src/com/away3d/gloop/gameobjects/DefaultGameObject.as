@@ -19,6 +19,7 @@ package com.away3d.gloop.gameobjects
 			if (_mesh && _physics) {
 				_mesh.mesh.x = _physics.x;
 				_mesh.mesh.y = -_physics.y;
+				_mesh.mesh.rotationZ = physics.rotation;
 			}
 		}
 		

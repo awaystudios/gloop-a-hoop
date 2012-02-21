@@ -1,6 +1,12 @@
 package com.away3d.gloop.gameobjects.hoops
 {
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CylinderGeometry;
+	
 	import Box2DAS.Dynamics.ContactEvent;
+	
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
@@ -34,6 +40,10 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.setStatic();
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
+			
+			_mesh = new MeshComponent();
+			_mesh.mesh = new Mesh(new CylinderGeometry(50, 50, 5), new ColorMaterial(0xffcc00));
+			_mesh.mesh.rotationZ = rotation;
 		}
 		
 		private function handleBeginContact(e : ContactEvent) : void
