@@ -151,7 +151,7 @@ package com.away3d.gloop.level
 			var grp : uint;
 			
 			grp = parseInt(obj.extra['gah_btn_grp']);
-			fan = new Fan(obj.x * _scale, obj.y * _scale, -obj.rotationZ, grp);
+			fan = new Fan(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, grp);
 			_level.add(fan);
 		}
 		
