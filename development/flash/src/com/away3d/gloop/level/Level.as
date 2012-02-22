@@ -125,5 +125,14 @@ package com.away3d.gloop.level
 				obj.dispose();
 			}
 		}
+		
+		/**
+		 * Resets the level to its "pre-play" state, player edits are maintaned, but any toggled items are reset, launchers reloaded and so on
+		 */
+		public function reset():void {
+			for each(var object:DefaultGameObject in _all_objects) {
+				object.reset();
+			}
+		}
 	}
 }

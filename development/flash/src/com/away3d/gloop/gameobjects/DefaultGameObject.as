@@ -27,6 +27,10 @@ package com.away3d.gloop.gameobjects
 			
 		}
 		
+		public function reset():void {
+			
+		}
+		
 		public function onCollidingWithGloopStart(gloop:Gloop):void {
 			
 		}

@@ -19,6 +19,12 @@ package com.away3d.gloop.gameobjects
 			_controllables = new Vector.<IButtonControllable>();
 		}
 		
+		override public function reset():void 
+		{
+			super.reset();
+			toggleOff();
+		}
+		
 		
 		public function get buttonGroup() : uint
 		{

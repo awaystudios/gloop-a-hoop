@@ -100,6 +100,7 @@ package
 			gloop.splat.splattables = splattables;
 
 			_db.selectedProxy.level.add( gloop );
+			_db.selectedProxy.level.reset();
 
 			_stack.gotoScreen( Screens.GAME );
 		}
@@ -111,6 +112,7 @@ package
 				_db.selectedProxy.load( true );
 			}
 			
+			// reload settings and restart level
 			if ( ev.keyCode == Keyboard.F1) {
 				_settings.reload();
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -119,7 +121,10 @@ package
 					_db.selectedProxy.load( true );
 				});
 			}
+			
+			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.level.reset();
+			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
+			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
 		}
-		
 	}
 }

@@ -14,6 +14,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private var _gloop : Gloop;		
 		private var _aim : Point;
+		private var _fired : Boolean = false;
 
 		public function LauncherHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
@@ -22,9 +23,15 @@ package com.away3d.gloop.gameobjects.hoops
 			_aim = new Point;
 		}
 		
+		override public function reset():void {
+			super.reset();
+			_fired = false;
+		}
+		
 		public override function onCollidingWithGloopStart(gloop : Gloop) : void
 		{
 			super.onCollidingWithGloopStart(gloop);
+			if (_fired) return;	// don't catch the gloop if we've fired once already
 			_gloop = gloop; // catch the gloop
 		}
 		
@@ -57,6 +64,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_gloop.physics.b2body.ApplyImpulse(impulse, _physics.b2body.GetWorldCenter());
 			
 			_gloop = null; // release the gloop
+			_fired = true;
 		}
 		
 		override public function update(dt : Number) : void

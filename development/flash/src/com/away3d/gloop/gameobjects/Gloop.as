@@ -4,6 +4,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.SphereGeometry;
+	import Box2DAS.Common.V2;
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
@@ -18,8 +19,8 @@ package com.away3d.gloop.gameobjects
 		public function Gloop(spawnX:Number, spawnY:Number) {
 			super();
 
-			_spawnY = spawnY;
 			_spawnX = spawnX;
+			_spawnY = spawnY;
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
@@ -30,6 +31,18 @@ package com.away3d.gloop.gameobjects
 			_mesh = new MeshComponent();
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
 			_mesh.mesh = new Mesh( new SphereGeometry(Settings.GLOOP_RADIUS), colorMaterial );
+		}
+		
+		override public function reset():void {
+			super.reset();
+			
+			_physics.x = _spawnX, 
+			_physics.y = _spawnY;
+			if (_physics.b2body) {
+				_physics.syncTransform();
+				_physics.b2body.SetAngularVelocity(0);
+				_physics.b2body.SetLinearVelocity(new V2(0, 0));
+			}
 		}
 
 		override public function update( dt:Number ):void {
