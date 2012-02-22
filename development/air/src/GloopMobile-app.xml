@@ -108,7 +108,7 @@
         <renderMode>direct</renderMode>
 	    <autoOrients>false</autoOrients>
         <fullScreen>true</fullScreen>
-        <aspectRatio>portrait</aspectRatio>
+        <aspectRatio>landscape</aspectRatio>
         <depthAndStencil>true</depthAndStencil>
         <visible>true</visible>
     </initialWindow>
