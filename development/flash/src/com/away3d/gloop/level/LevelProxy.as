@@ -6,8 +6,11 @@ package com.away3d.gloop.level
 
 	public class LevelProxy extends EventDispatcher
 	{
+		private var _id : int;
 		private var _awd_url : String;
 		private var _level : Level;
+		
+		private var _completed : Boolean;
 		
 		private var _inventory : Vector.<LevelInventoryItem>;
 		
@@ -24,10 +27,17 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get completed() : Boolean
+		{
+			return _completed;
+		}
+		
+		
 		public function parseXml(xml : XML) : void
 		{
 			var item_xml : XML;
 			
+			_id = parseInt(xml.@id.toString());
 			_awd_url = xml.@awd.toString();
 			
 			for each (item_xml in xml.inventory.children()) {
@@ -36,6 +46,18 @@ package com.away3d.gloop.level
 				item = new LevelInventoryItem(item_xml.name(), item_xml.@variant.toString());
 				_inventory.push(item);
 			}
+		}
+		
+		
+		public function getStateXml() : XML
+		{
+			var xml : XML;
+			
+			xml = new XML('<level/>');
+			xml.@id = _id.toString();
+			xml.@completed = _completed.toString();
+			
+			return xml;
 		}
 		
 		

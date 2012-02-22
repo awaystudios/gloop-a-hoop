@@ -36,6 +36,23 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function getStateXml() : XML
+		{
+			var i : uint;
+			var xml : XML;
+			
+			xml = new XML('<state/>');
+			
+			for (i=0; i<_levels.length; i++) {
+				if (_levels[i].completed) {
+					xml.appendChild(_levels[i].getStateXml());
+				}
+			}
+			
+			return xml;
+		}
+		
+		
 		public function loadXml(url : String) : void
 		{
 			var xml_loader : URLLoader;

@@ -4,9 +4,8 @@ package
 	import away3d.entities.Mesh;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
+	
 	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.utils.SettingsLoader;
-
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
@@ -16,7 +15,8 @@ package
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.utils.HierarchyTool;
-
+	import com.away3d.gloop.utils.SettingsLoader;
+	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -24,7 +24,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
-	[SWF(width="768", height="1024", frameRate="60")]
+	[SWF(width="1024", height="768", frameRate="60")]
 	public class Main extends Sprite
 	{
 		private var _db:LevelDatabase;
@@ -70,6 +70,14 @@ package
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
 		}
+		
+		
+		protected function saveState(xml : XML) : void
+		{
+			// To be overridden in AIR version and 
+			// saved to device storage
+			trace(xml.toXMLString());
+		}
 
 
 		private function onDbComplete( ev:Event ):void {
@@ -103,6 +111,8 @@ package
 			_db.selectedProxy.level.add( gloop );
 
 			_stack.gotoScreen( Screens.GAME );
+			
+			saveState( _db.getStateXml() );
 		}
 
 
