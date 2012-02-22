@@ -85,7 +85,7 @@ package com.away3d.gloop.level
 				loader.load(new URLRequest(_awd_url));
 			}
 			else {
-				dispatchEvent(new Event(Event.COMPLETE));
+				dispatchEvent(new GameEvent(GameEvent.LEVEL_LOAD));
 			}
 		}
 		
@@ -100,7 +100,7 @@ package com.away3d.gloop.level
 			_level.addEventListener(GameEvent.LEVEL_LOSE, onLevelGameEvent);
 			_level.addEventListener(GameEvent.LEVEL_WIN, onLevelGameEvent);
 			
-			dispatchEvent(new Event(Event.COMPLETE));
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOAD));
 		}
 		
 		

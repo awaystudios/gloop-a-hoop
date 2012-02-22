@@ -37,7 +37,7 @@ package com.away3d.gloop.level
 			_selected.addEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
 			_selected.addEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
 			
-			dispatchEvent(new Event(Event.SELECT));
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_SELECT));
 		}
 		
 		

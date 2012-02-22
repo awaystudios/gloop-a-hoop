@@ -61,7 +61,7 @@ package
 		private function initDb():void {
 			_db = new LevelDatabase();
 			_db.addEventListener( Event.COMPLETE, onDbComplete );
-			_db.addEventListener( Event.SELECT, onDbSelect );
+			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbSelect );
 			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
 			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
 			_db.loadXml( 'assets/levels.xml' );
@@ -93,7 +93,7 @@ package
 		private function onDbSelect( ev:Event ):void {
 			_stack.gotoScreen( Screens.LOADING );
 
-			_db.selectedProxy.addEventListener( Event.COMPLETE, onLevelComplete );
+			_db.selectedProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
 			_db.selectedProxy.load();
 		}
 		
@@ -110,9 +110,11 @@ package
 		}
 
 
-		private function onLevelComplete( ev:Event ):void {
+		private function onSelectedLevelLoad( ev:Event ):void {
 			var gloop:Gloop;
 			var loader:LevelLoader;
+			
+			_db.selectedProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 			
 			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y);
 			
