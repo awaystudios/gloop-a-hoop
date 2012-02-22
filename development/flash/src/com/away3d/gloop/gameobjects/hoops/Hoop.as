@@ -24,6 +24,7 @@ package com.away3d.gloop.gameobjects.hoops
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
 		protected var _resolveGloopCollisions:Boolean = false;
+		protected var _lastValidPosition:V2;
 		
 		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
@@ -42,7 +43,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
-			if (rotatable) {
+			if (inEditMode && rotatable) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
 				_physics.b2body.SetTransform(pos, angle + Settings.HOOP_ROTATION_STEP / 180 * Math.PI);
@@ -51,11 +52,12 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
-			
+			if (!inEditMode) return;
+			_lastValidPosition = _physics.b2body.GetPosition();
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
-			if (!draggable) return;
+			if (!inEditMode || !draggable) return;
 			
 			var pos:V2 = new V2(Math.round(mouseX / Level.GRID_SIZE) * Level.GRID_SIZE, Math.round(mouseY / Level.GRID_SIZE) * Level.GRID_SIZE);
 				

@@ -1,6 +1,7 @@
 package com.away3d.gloop.level
 {
 	import away3d.containers.Scene3D;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.Settings;
 	
 	import com.away3d.gloop.gameobjects.Button;
@@ -45,6 +46,7 @@ package com.away3d.gloop.level
 		}
 		
 		public function setMode(value:Boolean):void {
+			trace("Level, set mode: " + (value ? "play" : "edit"));
 			_mode = value;
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.setMode(value);
@@ -81,6 +83,9 @@ package com.away3d.gloop.level
 			else if (object is IButtonControllable) {
 				_btn_controllables.push(IButtonControllable(object));
 			}
+			
+			object.addEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
+			object.addEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
 			
 			return object;
 		}
@@ -133,6 +138,14 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.reset();
 			}
+		}
+		
+		private function onLauncherCatchGloop(e:GameObjectEvent):void {
+			setMode(Level.EDIT_MODE);
+		}
+		
+		private function onLauncherFireGloop(e:GameObjectEvent):void {
+			setMode(Level.PLAY_MODE);
 		}
 	}
 }
