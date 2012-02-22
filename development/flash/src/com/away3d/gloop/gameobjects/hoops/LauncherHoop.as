@@ -36,6 +36,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		override public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			if (_fired) return; // if hoop has fired, disable movement
 			if (!_gloop) return super.onDragUpdate(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
 			
 			var hoopPos:V2 = _physics.b2body.GetPosition();			
