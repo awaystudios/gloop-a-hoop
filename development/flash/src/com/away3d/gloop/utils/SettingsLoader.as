@@ -1,0 +1,100 @@
+package com.away3d.gloop.utils {
+	import flash.events.ErrorEvent;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.utils.describeType;
+	/**
+	 * ...
+	 * @author Martin Jonasson (m@grapefrukt.com)
+	 */
+		
+	[Event(name = "complete", type = "flash.events.Event")]
+	[Event(name = "error", type = "flash.events.ErrorEvent")]
+	
+	public class SettingsLoader extends EventDispatcher {
+		
+		private var _loader		:URLLoader;
+		private var _data		:String = "";
+		private var _targetClass:Class;
+		private static const REGEX:RegExp = /^(?<!#)(\w+)\s+:\s+(.*?)\s*(#.*)?$/gm;
+		
+		public function SettingsLoader(targetClass:Class) {
+			_targetClass = targetClass;
+			_loader = new URLLoader();
+			_loader.addEventListener(Event.COMPLETE, handleLoadComplete);
+			_loader.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
+			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecurityError);
+			reload();
+		}
+		
+		public function reload():void {
+			_loader.load(new URLRequest("assets/settings.dat?" + Math.random()));
+		}
+		
+		private function handleSecurityError(e:SecurityErrorEvent):void {
+			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, "security error loading settings: " + e.text));
+		}
+		
+		private function handleIOError(e:IOErrorEvent):void {
+			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, "io error loading settings: " + e.text));
+		}
+
+		private function handleLoadComplete(e:Event):void {			
+			_data = _loader.data;
+			
+			var result:*;
+			while (result = REGEX.exec(_data)) {
+				_targetClass[result[1]] = result[2];
+			}
+			
+			trace("Settings loaded");
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+		
+		public function get isComplete():Boolean {
+			return _data != "";
+		}
+				
+		public function dump():void {
+			var typeXML:XML = describeType(_targetClass);
+			
+			var varlist:Array = [];
+			var maxlen:int = 0;
+			var data:Object;
+			
+			for each (var variable:XML in typeXML.variable) {
+				data = { };
+				
+				for each (var comment:XML in variable.metadata.(@name == "comment")) {
+					data.comment = comment.arg.@value;
+				}
+				
+				data.name = variable.@name.toString();
+				data.value = _targetClass[variable.@name];
+				
+				if (data.name.length > maxlen) maxlen = data.name.length;
+				
+				varlist.push(data);
+			}
+			
+			varlist.sortOn("name");
+			
+			
+			
+			for each (data in varlist) {
+				var spaces:String = "";
+				for (var i:int = 0; i <= maxlen - data.name.length; i++) spaces += " ";
+				
+				var output:String = data.name + " :" + spaces + data.value;
+				if (data.comment) output += "    # " + data.comment;
+				trace(output);
+			}
+		}
+		
+	}
+
+}

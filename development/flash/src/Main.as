@@ -4,6 +4,8 @@ package
 	import away3d.entities.Mesh;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
+	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.utils.SettingsLoader;
 
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.level.LevelDatabase;
@@ -26,8 +28,8 @@ package
 	public class Main extends Sprite
 	{
 		private var _db:LevelDatabase;
-
 		private var _stack:ScreenStack;
+		private var _settings:SettingsLoader;
 
 		public function Main() {
 			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
@@ -43,13 +45,17 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
 
+			initSettings();
 			initDb();
 			initStack();
 
 			_stack.gotoScreen( Screens.LOADING );
 		}
-
-
+		
+		private function initSettings():void {
+			_settings = new SettingsLoader(Settings);
+		}
+		
 		private function initDb():void {
 			_db = new LevelDatabase();
 			_db.addEventListener( Event.COMPLETE, onDbComplete );
@@ -105,6 +111,16 @@ package
 				_stack.gotoScreen( Screens.LOADING );
 				_db.selectedProxy.load( true );
 			}
+			
+			if ( ev.keyCode == Keyboard.F1) {
+				_settings.reload();
+				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
+					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
+					_stack.gotoScreen( Screens.LOADING );
+					_db.selectedProxy.load( true );
+				});
+			}
 		}
+		
 	}
 }
