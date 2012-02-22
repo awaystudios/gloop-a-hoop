@@ -7,7 +7,6 @@ package com.away3d.gloop.gameobjects
 	{
 		protected var _mesh : MeshComponent;
 		protected var _physics : PhysicsComponent;
-		protected var _interactive : Boolean = false;
 		
 		public function DefaultGameObject()
 		{

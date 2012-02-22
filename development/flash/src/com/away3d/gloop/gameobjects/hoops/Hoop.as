@@ -27,8 +27,6 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
-			_interactive = true;
-			
 			_physics = new HoopPhysicsComponent(this);
 			_physics.x = worldX;
 			_physics.y = worldY;
@@ -36,13 +34,11 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
-			_physics.linearDamping = Settings.HOOP_LINEAR_DAMPING;
 			
 			_physics.setStatic();
 			
 			_mesh = new MeshComponent();
 			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.HOOP_RADIUS, Settings.HOOP_RADIUS, 5), new ColorMaterial(0xffcc00));
-			_mesh.mesh.rotationZ = rotation;
 		}
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
