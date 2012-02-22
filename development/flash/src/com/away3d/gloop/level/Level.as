@@ -152,6 +152,7 @@ package com.away3d.gloop.level
 		private function lose() : void
 		{
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+			reset();
 		}
 		
 		private function onLauncherCatchGloop(e:GameObjectEvent):void {
