@@ -14,29 +14,26 @@ package com.away3d.gloop.input
 		private var _planeNormal:Vector3D;
 		private var _planeD:Number;
 		private var _intersection:Vector3D;
-		
+
 		protected var _view:View3D;
 		protected var _mouseDown:Boolean = false;
 
-		private const PLANE_POSITION:Vector3D = new Vector3D( 0, 0, -50 );
+		public const PLANE_POSITION:Vector3D = new Vector3D( 0, 0, 0 );
 
 		public function MouseManager(view:View3D) {
 			_view = view;
 			_view.addEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
 			_view.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
-			
+
 			_planeNormal = new Vector3D( 0, 0, -1 );
 			_planeD = -_planeNormal.dotProduct( PLANE_POSITION );
 			_intersection = new Vector3D();
 		}
 
 		public function update():void {
-			evaluateMouseRayIntersection();
-		}
-
-		private function evaluateMouseRayIntersection():void {
+			// evaluate mouse ray intersection with virtual plane
 			// cast a ray from the camera
-			var rayPosition:Vector3D = _view.camera.position;
+			var rayPosition:Vector3D = _view.camera.scenePosition;
 			var rayDirection:Vector3D = _view.unproject( _view.mouseX, _view.mouseY );
 			// evaluate plane intersection
 			var planeNormalDotRayPosition:Number = _planeNormal.dotProduct( rayPosition );
@@ -46,25 +43,21 @@ package com.away3d.gloop.input
 			_intersection.y = rayPosition.y + t * rayDirection.y;
 			_intersection.z = rayPosition.z + t * rayDirection.z;
 		}
-		
+
 		protected function onViewMouseDown(e:MouseEvent):void {
 			_mouseDown = true;
 		}
-		
+
 		protected function onViewMouseUp(e:MouseEvent):void {
 			_mouseDown = false;
 		}
-		
+
 		public function get mouseX():Number{
 			return _intersection.x;
 		}
-		
+
 		public function get mouseY():Number{
 			return -_intersection.y;
-		}
-			
-		public function get mouseDown():Boolean {
-			return _mouseDown;
 		}
 	}
 }
