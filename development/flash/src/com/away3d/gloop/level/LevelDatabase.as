@@ -41,15 +41,31 @@ package com.away3d.gloop.level
 			var i : uint;
 			var xml : XML;
 			
-			xml = new XML('<state/>');
+			xml = new XML('<state><levels/></state>');
 			
 			for (i=0; i<_levels.length; i++) {
 				if (_levels[i].completed) {
-					xml.appendChild(_levels[i].getStateXml());
+					xml.levels.appendChild(_levels[i].getStateXml());
 				}
 			}
 			
 			return xml;
+		}
+		
+		
+		public function setStateFromXml(xml : XML) : void
+		{
+			var level_xml : XML;
+			
+			for each (level_xml in xml.levels.level) {
+				var id : int;
+				var level : LevelProxy;
+				
+				id = parseInt(level_xml.@id.toString());
+				level = getLevelById(id);
+				if (level)
+					level.setStateFromXml(level_xml);
+			}
 		}
 		
 		
@@ -60,6 +76,19 @@ package com.away3d.gloop.level
 			xml_loader = new URLLoader();
 			xml_loader.addEventListener(Event.COMPLETE, onXmlLoaderComplete);
 			xml_loader.load(new URLRequest(url));
+		}
+		
+		
+		private function getLevelById(id : int) : LevelProxy
+		{
+			var i : uint;
+			
+			for (i=0; i<_levels.length; i++) {
+				if (_levels[i].id == id)
+					return _levels[i];
+			}
+			
+			return null;
 		}
 		
 		

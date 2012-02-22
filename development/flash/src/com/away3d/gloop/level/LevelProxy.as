@@ -27,6 +27,12 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get id() : int
+		{
+			return _id;
+		}
+		
+		
 		public function get completed() : Boolean
 		{
 			return _completed;
@@ -58,6 +64,12 @@ package com.away3d.gloop.level
 			xml.@completed = _completed.toString();
 			
 			return xml;
+		}
+		
+		
+		public function setStateFromXml(xml : XML) : void
+		{
+			_completed = (xml.@completed.toString() == 'true');
 		}
 		
 		
