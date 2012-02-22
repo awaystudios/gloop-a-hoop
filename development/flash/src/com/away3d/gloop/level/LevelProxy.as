@@ -1,5 +1,7 @@
 package com.away3d.gloop.level
 {
+	import com.away3d.gloop.events.GameEvent;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.URLRequest;
@@ -93,9 +95,18 @@ package com.away3d.gloop.level
 			
 			loader = LevelLoader(ev.currentTarget);
 			loader.removeEventListener(Event.COMPLETE, onLevelComplete);
+			
 			_level = loader.loadedLevel;
+			_level.addEventListener(GameEvent.LEVEL_LOSE, onLevelGameEvent);
+			_level.addEventListener(GameEvent.LEVEL_WIN, onLevelGameEvent);
 			
 			dispatchEvent(new Event(Event.COMPLETE));
+		}
+		
+		
+		private function onLevelGameEvent(ev : GameEvent) : void
+		{
+			dispatchEvent(ev.clone());
 		}
 	}
 }

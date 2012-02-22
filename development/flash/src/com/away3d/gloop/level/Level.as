@@ -1,19 +1,21 @@
 package com.away3d.gloop.level
 {
 	import away3d.containers.Scene3D;
-	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.Settings;
 	
+	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.GameObject;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	
 	import wck.World;
 
-	public class Level
+	public class Level extends EventDispatcher
 	{
 		private var _scene : Scene3D;
 		private var _world : World;
@@ -138,6 +140,18 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.reset();
 			}
+		}
+		
+		
+		private function win() : void
+		{
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+		}
+		
+		
+		private function lose() : void
+		{
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
 		}
 		
 		private function onLauncherCatchGloop(e:GameObjectEvent):void {
