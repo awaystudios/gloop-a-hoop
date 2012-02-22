@@ -4,7 +4,7 @@ package
 	import away3d.entities.Mesh;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
-	
+	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.level.LevelDatabase;
@@ -96,19 +96,18 @@ package
 		private function onLevelComplete( ev:Event ):void {
 			var gloop:Gloop;
 			var loader:LevelLoader;
-
-			gloop = new Gloop();
-			gloop.physics.x = _db.selectedProxy.level.spawnPoint.x;
-			gloop.physics.y = _db.selectedProxy.level.spawnPoint.y;
-
+			
+			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y);
+			
 			// TODO: this is a temporary provision of meshes for gloop to splat on
 			var splattables:Vector.<Mesh> = new Vector.<Mesh>()
 			for( var i:uint, len:uint = _db.selectedProxy.level.scene.numChildren; i < len; ++i ) {
 				splattables = splattables.concat( HierarchyTool.getAllMeshesInHierarchy( _db.selectedProxy.level.scene.getChildAt( i ) ) );
 			}
-			gloop.splattables = splattables;
+			gloop.splat.splattables = splattables;
 
 			_db.selectedProxy.level.add( gloop );
+			_db.selectedProxy.level.reset();
 
 			_stack.gotoScreen( Screens.GAME );
 			
@@ -122,6 +121,7 @@ package
 				_db.selectedProxy.load( true );
 			}
 			
+			// reload settings and restart level
 			if ( ev.keyCode == Keyboard.F1) {
 				_settings.reload();
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -130,7 +130,10 @@ package
 					_db.selectedProxy.load( true );
 				});
 			}
+			
+			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.level.reset();
+			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
+			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
 		}
-		
 	}
 }

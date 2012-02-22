@@ -5,6 +5,9 @@ package com.away3d.gloop.gameobjects
 	
 	public class Star extends DefaultGameObject
 	{
+		
+		private var _touched:Boolean = false;
+		
 		public function Star(worldX:Number = 0, worldY:Number = 0)
 		{
 			_physics = new StarPhysicsComponent(this);
@@ -14,8 +17,15 @@ package com.away3d.gloop.gameobjects
 			_physics.isSensor = true;
 		}
 		
+		override public function reset():void {
+			super.reset();
+			_touched = false;
+		}
+		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
+			if (_touched) return;
+			_touched = true;
 			trace("star!");
 		}
 	}
