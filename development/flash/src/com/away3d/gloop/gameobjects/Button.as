@@ -1,8 +1,13 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CylinderGeometry;
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.Settings;
 	
-	public class Button extends Hoop
+	public class Button extends DefaultGameObject
 	{
 		private var _pressed : Boolean;
 		private var _btnGroup : uint;
@@ -10,9 +15,20 @@ package com.away3d.gloop.gameobjects
 		private var _controllables : Vector.<IButtonControllable>;
 		
 		
-		public function Button(worldX:Number=0, worldY:Number=0, rotation:Number=0, btnGroup : uint = 0)
+		public function Button(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup : uint = 0)
 		{
-			super(worldX, worldY, rotation);
+			_physics = new ButtonPhysicsComponent(this);
+			_physics.x = worldX;
+			_physics.y = worldY;
+			_physics.rotation = rotation;
+			
+			_physics.fixedRotation = true;
+			_physics.applyGravity = false;
+			
+			_physics.setStatic();
+			
+			_mesh = new MeshComponent();
+			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.BUTTON_RADIUS, Settings.BUTTON_RADIUS, 5), new ColorMaterial(debugColor1));
 			
 			_btnGroup = btnGroup;
 			
@@ -69,5 +85,42 @@ package com.away3d.gloop.gameobjects
 				_controllables[i].toggleOff();
 			}
 		}
+		
+		override public function get debugColor1():uint {
+			return 0xde6a14;
+		}
+	}
+}
+
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.hoops.Hoop;
+import com.away3d.gloop.Settings;
+
+class ButtonPhysicsComponent extends PhysicsComponent
+{
+	
+	public function ButtonPhysicsComponent(gameObject:DefaultGameObject)
+	{
+		super(gameObject);
+		
+		graphics.beginFill(gameObject.debugColor1);
+		graphics.drawRect( -Settings.BUTTON_RADIUS, -Settings.BUTTON_RADIUS / 6, Settings.BUTTON_RADIUS * 2, Settings.BUTTON_RADIUS / 3);
+		
+		graphics.beginFill(gameObject.debugColor1);
+		graphics.moveTo( 0, -Settings.BUTTON_RADIUS / 2);
+		graphics.lineTo( -Settings.BUTTON_RADIUS / 2, 0);
+		graphics.lineTo( Settings.BUTTON_RADIUS / 2, 0);
+	}
+	
+	public override function shapes() : void
+	{
+		// used for gloop collision
+		box(Settings.BUTTON_RADIUS * 2, Settings.BUTTON_RADIUS / 3);
+	}
+	
+	override public function create():void {
+		super.create();
+		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
 	}
 }

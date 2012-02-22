@@ -19,8 +19,9 @@ package com.away3d.gloop
 		static public var GLOOP_MAX_DECALS_TOTAL : Number = 30;
 		
 		static public var HOOP_RADIUS : Number = 60;
-		static public var HOOP_LINEAR_DAMPING : Number = 100;
 		static public var HOOP_ROTATION_STEP : Number = 45;
+		
+		static public var BUTTON_RADIUS : Number = 60;
 		
 		static public var LAUNCHER_POWER_MIN : Number = 15;
 		static public var LAUNCHER_POWER_MAX : Number = 200;
