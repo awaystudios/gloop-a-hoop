@@ -17,14 +17,20 @@ package com.away3d.gloop
 		static public var GLOOP_DECAL_MIN_SPEED : Number = 1;
 		static public var GLOOP_MAX_DECALS_PER_HIT : Number = 20;
 		static public var GLOOP_MAX_DECALS_TOTAL : Number = 30;
+		static public var GLOOP_LOST_MOMENTUM_THRESHOLD : Number = .01;
+		[comment("values closer to one makes the average move faster")]
+		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
 		
 		static public var HOOP_RADIUS : Number = 60;
 		static public var HOOP_ROTATION_STEP : Number = 45;
 		
 		static public var BUTTON_RADIUS : Number = 60;
 		
-		static public var LAUNCHER_POWER_MIN : Number = 15;
+		[comment("dragging a distance shorter than this cancels the launch")]
+		static public var LAUNCHER_POWER_MIN : Number = 30;
+		[comment("the drag distance is capped to this value, dragging longer won't make a difference")]
 		static public var LAUNCHER_POWER_MAX : Number = 200;
+		[comment("the value remaining is scaled by this multiplier before being applied to gloop")]
 		static public var LAUNCHER_POWER_SCALE : Number = 10;
 		
 		static public var ROCKET_POWER : Number = 15;

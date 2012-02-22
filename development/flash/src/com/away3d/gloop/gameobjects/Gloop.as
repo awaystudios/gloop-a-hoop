@@ -2,6 +2,7 @@ package com.away3d.gloop.gameobjects
 {
 
 	import Box2DAS.Common.V2;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
@@ -21,6 +22,8 @@ package com.away3d.gloop.gameobjects
 		private var _splat:SplatComponent;
 		private var _spawnX:Number;
 		private var _spawnY:Number;
+		
+		private var _avgSpeed:Number = 0;
 		
 		public function Gloop(spawnX:Number, spawnY:Number) {
 			super();
@@ -76,6 +79,18 @@ package com.away3d.gloop.gameobjects
 		override public function update( dt:Number ):void {
 			super.update( dt );
 			_splat.update( dt );
+			
+			if (!inEditMode) {
+				_avgSpeed -= (_avgSpeed - _physics.linearVelocity.length()) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
+				
+				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
+					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
+				}
+			}
+		}
+		
+		public function onLaunch():void {
+			_avgSpeed = 10;
 		}
 
 		override public function get debugColor1():uint {
