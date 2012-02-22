@@ -16,6 +16,7 @@ package com.away3d.gloop.screens
 		{
 			if (!_initialized) {
 				initScreen();
+				_initialized = true;
 			}
 		}
 		
