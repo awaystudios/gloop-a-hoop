@@ -4,6 +4,7 @@ package
 	import away3d.entities.Mesh;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
+	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.utils.SettingsLoader;
 
@@ -88,17 +89,15 @@ package
 		private function onLevelComplete( ev:Event ):void {
 			var gloop:Gloop;
 			var loader:LevelLoader;
-
-			gloop = new Gloop();
-			gloop.physics.x = _db.selectedProxy.level.spawnPoint.x;
-			gloop.physics.y = _db.selectedProxy.level.spawnPoint.y;
-
+			
+			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y);
+			
 			// TODO: this is a temporary provision of meshes for gloop to splat on
 			var splattables:Vector.<Mesh> = new Vector.<Mesh>()
 			for( var i:uint, len:uint = _db.selectedProxy.level.scene.numChildren; i < len; ++i ) {
 				splattables = splattables.concat( HierarchyTool.getAllMeshesInHierarchy( _db.selectedProxy.level.scene.getChildAt( i ) ) );
 			}
-			gloop.splattables = splattables;
+			gloop.splat.splattables = splattables;
 
 			_db.selectedProxy.level.add( gloop );
 
