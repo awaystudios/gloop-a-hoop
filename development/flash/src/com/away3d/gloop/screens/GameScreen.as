@@ -97,10 +97,10 @@ package com.away3d.gloop.screens
 			
 			_inputManager.update();
 			
-			tz = -1000 + _inputManager.zoom * 100;
-			_view.camera.z += (tz - _view.camera.z) * 0.2;
-			_view.camera.x += (_inputManager.panX - _view.camera.x) * 0.2;
-			_view.camera.y += (_inputManager.panY - _view.camera.y) * 0.2;
+			tz = -1000 + _inputManager.zoom * 200;
+			_view.camera.z += (tz - _view.camera.z) * 0.4;
+			_view.camera.x += (_inputManager.panX - _view.camera.x) * 0.4;
+			_view.camera.y += (_inputManager.panY - _view.camera.y) * 0.4;
 			
 			// TODO: remove tracers
 			_mouse3dTracer.x = _inputManager.mouseX;
