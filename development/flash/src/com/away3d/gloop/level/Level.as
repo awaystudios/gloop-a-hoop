@@ -160,7 +160,7 @@ package com.away3d.gloop.level
 		
 		private function lose() : void
 		{
-			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOSE));
 			reset();
 		}
 		
