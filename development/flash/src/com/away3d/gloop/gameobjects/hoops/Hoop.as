@@ -1,18 +1,18 @@
 package com.away3d.gloop.gameobjects.hoops
 {
+	import Box2DAS.Common.V2;
+	import Box2DAS.Dynamics.ContactEvent;
+	
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
-	import Box2DAS.Common.V2;
-	import com.away3d.gloop.level.Level;
+	
 	import com.away3d.gloop.Settings;
-	
-	import Box2DAS.Dynamics.ContactEvent;
-	
-	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+	import com.away3d.gloop.level.Level;
 	
 	/**
 	 * ...
@@ -73,6 +73,24 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			
+		}
+		
+		public override function onCollidingWithGloopStart(gloop:Gloop):void
+		{
+			super.onCollidingWithGloopStart(gloop);
+			
+			_mesh.mesh.scaleX = 1.1;
+			_mesh.mesh.scaleY = 1.1;
+			_mesh.mesh.scaleZ = 1.1;
+		}
+		
+		public override function update(dt:Number):void
+		{
+			super.update(dt);
+			
+			_mesh.mesh.scaleX += (1 - _mesh.mesh.scaleX) * 0.2;
+			_mesh.mesh.scaleY = _mesh.mesh.scaleX;
+			_mesh.mesh.scaleZ = _mesh.mesh.scaleX;
 		}
 		
 		public function get resolveGloopCollisions():Boolean {
