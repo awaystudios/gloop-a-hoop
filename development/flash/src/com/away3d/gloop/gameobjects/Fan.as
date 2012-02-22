@@ -7,12 +7,18 @@ package com.away3d.gloop.gameobjects
 	import away3d.primitives.CylinderGeometry;
 
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Expo;
+	import com.greensock.easing.Strong;
 
 	public class Fan extends DefaultGameObject implements IButtonControllable
 	{
 		private var _btnGroup:uint;
 		private var _movableMesh:Mesh;
 		private var _isOn:Boolean;
+		private var _activeFanStrength:Object = { t:0 };
+
+		private const FAN_ON_OFF_TIME:Number = 1.5;
 
 		public function Fan( worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup:uint = 0 ) {
 
@@ -40,14 +46,12 @@ package com.away3d.gloop.gameobjects
 			_movableMesh = new Mesh( new CubeGeometry( 5, 5, 100 ), fanMaterial );
 			_movableMesh.y = 10;
 			_mesh.mesh.addChild( _movableMesh );
-
-			toggleOn(); // TODO: remove. should be off by default
 		}
 
 		override public function update( dt:Number ):void {
 			super.update( dt );
-			if( _isOn ) { // TODO: implement on/off inertia
-				_movableMesh.rotationY += 25;
+			if( _isOn ) {
+				_movableMesh.rotationY += 25 * _activeFanStrength.t; // TODO: implement on/off inertia to physics as well?
 			}
 		}
 
@@ -57,16 +61,22 @@ package com.away3d.gloop.gameobjects
 
 
 		public function toggleOn():void {
+			trace( "on" );
 			_isOn = true;
+			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:1, ease:Strong.easeIn } );
 			FanPhysicsComponent( _physics ).isOn = _isOn;
-			trace( this, 'toggle on!' );
 		}
 
 
 		public function toggleOff():void {
-			_isOn = false;
+			trace( "offing..." );
+			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:0, onComplete:onToggleOffComplete } );
 			FanPhysicsComponent( _physics ).isOn = _isOn;
-			trace( this, 'toggle off!' );
+		}
+
+		private function onToggleOffComplete():void {
+			_isOn = false;
+			trace( "off" );
 		}
 	}
 }

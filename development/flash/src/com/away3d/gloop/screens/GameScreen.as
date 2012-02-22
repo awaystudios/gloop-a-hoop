@@ -105,6 +105,7 @@ package com.away3d.gloop.screens
 			// TODO: remove tracers
 			_mouse3dTracer.x = _inputManager.mouseX;
 			_mouse3dTracer.y = -_inputManager.mouseY;
+			_mouse3dTracer.z = -_inputManager.PLANE_POSITION.z;
 			_mouse2dTracer.x = _inputManager.mouseX;
 			_mouse2dTracer.y = _inputManager.mouseY;
 
