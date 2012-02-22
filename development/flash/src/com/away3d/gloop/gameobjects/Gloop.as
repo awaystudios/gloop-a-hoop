@@ -1,17 +1,23 @@
 package com.away3d.gloop.gameobjects
 {
 
-	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.SphereGeometry;
 	import Box2DAS.Common.V2;
 	
+	import away3d.core.base.Geometry;
+	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.SphereGeometry;
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
-	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 
 	public class Gloop extends DefaultGameObject
 	{
+		private var _anim : VertexAnimationComponent;
+		
 		private var _splat:SplatComponent;
 		private var _spawnX:Number;
 		private var _spawnY:Number;
@@ -21,6 +27,14 @@ package com.away3d.gloop.gameobjects
 
 			_spawnX = spawnX;
 			_spawnY = spawnY;
+			
+			init();
+		}
+		
+		private function init() : void
+		{
+			var geom : Geometry;
+			
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
@@ -30,7 +44,19 @@ package com.away3d.gloop.gameobjects
 			
 			_mesh = new MeshComponent();
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
-			_mesh.mesh = new Mesh( new SphereGeometry(Settings.GLOOP_RADIUS), colorMaterial );
+			//_mesh.mesh = new Mesh( new SphereGeometry(Settings.GLOOP_RADIUS), colorMaterial );
+			
+			geom = Geometry(AssetLibrary.getAsset('GloopFlyFrame0Geom'));
+			_mesh.mesh = new Mesh(geom, colorMaterial);
+			
+			_anim = new VertexAnimationComponent(_mesh.mesh);
+			_anim.addSequence('fly', [
+				Geometry(AssetLibrary.getAsset('GloopFlyFrame0Geom')),
+				Geometry(AssetLibrary.getAsset('GloopFlyFrame1Geom')),
+				Geometry(AssetLibrary.getAsset('GloopFlyFrame2Geom')),
+				Geometry(AssetLibrary.getAsset('GloopFlyFrame3Geom')),
+				Geometry(AssetLibrary.getAsset('GloopFlyFrame4Geom'))
+			]);
 		}
 		
 		override public function reset():void {
@@ -43,6 +69,8 @@ package com.away3d.gloop.gameobjects
 				_physics.b2body.SetAngularVelocity(0);
 				_physics.b2body.SetLinearVelocity(new V2(0, 0));
 			}
+			
+			_anim.play('fly');
 		}
 
 		override public function update( dt:Number ):void {

@@ -2,6 +2,7 @@ package
 {
 
 	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
 	
@@ -32,6 +33,9 @@ package
 		private var _db:LevelDatabase;
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
+		
+		[Embed('/../assets/gloop/flying/flying.awd', mimeType='application/octet-stream')]
+		private var FlyingAWDAsset : Class;
 
 		public function Main() {
 			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
@@ -50,6 +54,8 @@ package
 			initSettings();
 			initDb();
 			initStack();
+			
+			AssetLibrary.loadData(FlyingAWDAsset);
 
 			_stack.gotoScreen( Screens.LOADING );
 		}
