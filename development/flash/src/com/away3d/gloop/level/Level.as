@@ -1,6 +1,7 @@
 package com.away3d.gloop.level
 {
 	import away3d.containers.Scene3D;
+	import com.away3d.gloop.Settings;
 	
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
@@ -33,10 +34,10 @@ package com.away3d.gloop.level
 		{
 			_scene = new Scene3D();
 			_world = new World();
-			_world.timeStep = 0.05;
-			_world.velocityIterations = 5;
-			_world.positionIterations = 5;
-			_world.gravityY = 1;
+			_world.timeStep = Settings.PHYSICS_TIME_STEP;
+			_world.velocityIterations = Settings.PHYSICS_VELOCITY_ITERATIONS;
+			_world.positionIterations = Settings.PHYSICS_POSITION_ITERATIONS;
+			_world.gravityY = Settings.PHYSICS_GRAVITY_Y;
 			_spawn_point = new Point();
 			_all_objects = new Vector.<DefaultGameObject>();
 			_btn_controllables = new Vector.<IButtonControllable>();

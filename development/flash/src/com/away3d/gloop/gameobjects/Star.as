@@ -23,22 +23,21 @@ package com.away3d.gloop.gameobjects
 
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.Settings;
 
 class StarPhysicsComponent extends PhysicsComponent
 {
-	
-	private static const RADIUS : Number = 30;
 	
 	public function StarPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawCircle(0, 0, RADIUS);
+		graphics.drawCircle(0, 0, Settings.STAR_RADIUS);
 	}
 	
 	public override function shapes() : void
 	{
-		circle(RADIUS);
+		circle(Settings.STAR_RADIUS);
 	}
 	
 	override public function create():void {

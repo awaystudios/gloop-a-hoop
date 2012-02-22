@@ -5,6 +5,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.primitives.CylinderGeometry;
 	import Box2DAS.Common.V2;
 	import com.away3d.gloop.level.Level;
+	import com.away3d.gloop.Settings;
 	
 	import Box2DAS.Dynamics.ContactEvent;
 	
@@ -35,12 +36,12 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
-			_physics.linearDamping = 100;
+			_physics.linearDamping = Settings.HOOP_LINEAR_DAMPING;
 			
 			_physics.setStatic();
 			
 			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh(new CylinderGeometry(50, 50, 5), new ColorMaterial(0xffcc00));
+			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.HOOP_RADIUS, Settings.HOOP_RADIUS, 5), new ColorMaterial(0xffcc00));
 			_mesh.mesh.rotationZ = rotation;
 		}
 		
@@ -48,7 +49,7 @@ package com.away3d.gloop.gameobjects.hoops
 			if (rotatable) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
-				_physics.b2body.SetTransform(pos, angle + 45 / 180 * Math.PI);
+				_physics.b2body.SetTransform(pos, angle + Settings.HOOP_ROTATION_STEP / 180 * Math.PI);
 				_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
 			}
 		}
@@ -63,8 +64,8 @@ package com.away3d.gloop.gameobjects.hoops
 			var pos:V2 = new V2(Math.round(mouseX / Level.GRID_SIZE) * Level.GRID_SIZE, Math.round(mouseY / Level.GRID_SIZE) * Level.GRID_SIZE);
 				
 			// transform point into physics coord space
-			pos.x /= 60;
-			pos.y /= 60;
+			pos.x /= Settings.PHYSICS_SCALE;
+			pos.y /= Settings.PHYSICS_SCALE;
 			
 			var angle:Number = _physics.b2body.GetAngle();
 			
@@ -103,33 +104,32 @@ package com.away3d.gloop.gameobjects.hoops
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.hoops.Hoop;
+import com.away3d.gloop.Settings;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
-	
-	private static const RADIUS : Number = 60;
 	
 	public function HoopPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawCircle(0, 0, RADIUS);
+		graphics.drawCircle(0, 0, Settings.HOOP_RADIUS);
 		graphics.beginFill(gameObject.debugColor2);
-		graphics.drawRect( -RADIUS, -RADIUS / 6, RADIUS * 2, RADIUS / 3);
+		graphics.drawRect( -Settings.HOOP_RADIUS, -Settings.HOOP_RADIUS / 6, Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
 		
 		graphics.beginFill(gameObject.debugColor2);
-		graphics.moveTo( 0, -RADIUS / 2);
-		graphics.lineTo( -RADIUS / 2, 0);
-		graphics.lineTo( RADIUS / 2, 0);
+		graphics.moveTo( 0, -Settings.HOOP_RADIUS / 2);
+		graphics.lineTo( -Settings.HOOP_RADIUS / 2, 0);
+		graphics.lineTo( Settings.HOOP_RADIUS / 2, 0);
 	}
 	
 	public override function shapes() : void
 	{
 		// used for gloop collision
-		box(RADIUS * 2, RADIUS / 3);
+		box(Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
 		
 		// used for collision with the world
-		circle(RADIUS);
+		circle(Settings.HOOP_RADIUS);
 	}
 	
 	override public function create():void {

@@ -4,6 +4,7 @@ package com.away3d.gloop.gameobjects
 	import Box2DAS.Collision.b2WorldManifold;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
+	import com.away3d.gloop.Settings;
 
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
@@ -18,28 +19,22 @@ package com.away3d.gloop.gameobjects
 	public class Gloop extends DefaultGameObject
 	{
 		private var _decalSplatter:DecalSplatter;
-
-		private const DECAL_SPEED_FACTOR:Number = 2;
-		private const DECAL_MIN_SPEED:Number = 1;
-		private const MAX_DECALS_PER_HIT:Number = 20;
-		private const MAX_DECALS_TOTAL:Number = 30;
-
+		
 		public function Gloop() {
-
 			super();
 
 			_physics = new GloopPhysicsComponent( this );
-			_physics.angularDamping = 1;
-			_physics.friction = 1;
-			_physics.restitution = .75;
+			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
+			_physics.friction = Settings.GLOOP_FRICTION;
+			_physics.restitution = Settings.GLOOP_RESTITUTION;
 			_physics.reportBeginContact = true;
 			_physics.addEventListener( ContactEvent.BEGIN_CONTACT, handleBeginContact );
 
 			_mesh = new MeshComponent();
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
-			_mesh.mesh = new Mesh( new SphereGeometry(), colorMaterial );
+			_mesh.mesh = new Mesh( new SphereGeometry(Settings.GLOOP_RADIUS), colorMaterial );
 
-			_decalSplatter = new DecalSplatter( MAX_DECALS_TOTAL );
+			_decalSplatter = new DecalSplatter( Settings.GLOOP_MAX_DECALS_TOTAL );
 			_decalSplatter.apertureX = 0.5;
 			_decalSplatter.apertureY = 0.5;
 			_decalSplatter.apertureZ = 0.5;
@@ -48,8 +43,7 @@ package com.away3d.gloop.gameobjects
 			_decalSplatter.maxDistance = 75;
 			_decalSplatter.zOffset = -1;
 			_decalSplatter.shrinkFactor = 0.995;
-			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), /*new ColorMaterial( 0x00FF00 )*/colorMaterial );
-//			sphereDecal.scaleZ = 0.5;
+			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), colorMaterial );
 			_decalSplatter.decals = Vector.<Mesh>( [
 				sphereDecal
 			] );
@@ -82,9 +76,9 @@ package com.away3d.gloop.gameobjects
 			// splat intensity ( num splats ) depends on body speed
 			var linearVelocity:V2 = _physics.b2body.GetLinearVelocity();
 			var speed:Number = linearVelocity.length();
-			_decalSplatter.numRays = 1 + Math.min( Math.floor( DECAL_SPEED_FACTOR * speed ), MAX_DECALS_PER_HIT );
+			_decalSplatter.numRays = 1 + Math.min( Math.floor( Settings.GLOOP_DECAL_SPEED_FACTOR * speed ), Settings.GLOOP_MAX_DECALS_PER_HIT );
 			// perform splat
-			if( speed > DECAL_MIN_SPEED ) {
+			if( speed > Settings.GLOOP_DECAL_MIN_SPEED ) {
 				_decalSplatter.evaluate();
 			}
 		}
@@ -101,23 +95,22 @@ package com.away3d.gloop.gameobjects
 
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.Settings;
 
 class GloopPhysicsComponent extends PhysicsComponent
 {
 
-	private static const RADIUS:Number = 30;
-
 	public function GloopPhysicsComponent( gameObject:DefaultGameObject ) {
 		super( gameObject );
 		graphics.beginFill( gameObject.debugColor1 );
-		graphics.drawCircle( 0, 0, RADIUS );
+		graphics.drawCircle( 0, 0, Settings.GLOOP_RADIUS );
 		graphics.beginFill( gameObject.debugColor2 );
-		graphics.drawRect( -RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS );
+		graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
 
 	}
 
 	public override function shapes():void {
-		circle( RADIUS );
+		circle( Settings.GLOOP_RADIUS );
 	}
 
 	override public function create():void {

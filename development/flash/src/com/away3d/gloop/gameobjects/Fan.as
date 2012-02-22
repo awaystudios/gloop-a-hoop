@@ -74,6 +74,7 @@ package com.away3d.gloop.gameobjects
 import Box2DAS.Common.V2;
 import Box2DAS.Dynamics.ContactEvent;
 import Box2DAS.Dynamics.b2Fixture;
+import com.away3d.gloop.Settings;
 
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
@@ -84,14 +85,7 @@ import wck.BodyShape;
 
 class FanPhysicsComponent extends PhysicsComponent
 {
-	private const BODY_WIDTH:Number = 60;
-	private const BODY_HEIGHT:Number = 5;
-
-	private const AREA_WIDTH:Number = 60;
-	private const AREA_HEIGHT:Number = 100;
-
-	private const FAN_STRENGTH:Number = 0.25;
-
+	
 	private var _bodyFixture:b2Fixture;
 	private var _areaFixture:b2Fixture;
 	private var _bodyInFanArea:BodyShape; // TODO: allow more than 1?
@@ -106,10 +100,10 @@ class FanPhysicsComponent extends PhysicsComponent
 		addEventListener( ContactEvent.END_CONTACT, handleEndContact );
 
 		graphics.beginFill( gameObject.debugColor1 );
-		graphics.drawRect( -BODY_WIDTH / 2, -BODY_HEIGHT / 2, BODY_WIDTH, BODY_HEIGHT );
+		graphics.drawRect( -Settings.FAN_BODY_WIDTH / 2, -Settings.FAN_BODY_HEIGHT / 2, Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT );
 
 		graphics.beginFill( gameObject.debugColor2 );
-		graphics.drawRect( -AREA_WIDTH / 2, -BODY_HEIGHT - AREA_HEIGHT, AREA_WIDTH, AREA_HEIGHT );
+		graphics.drawRect( -Settings.FAN_AREA_WIDTH / 2, -Settings.FAN_BODY_HEIGHT - Settings.FAN_AREA_HEIGHT, Settings.FAN_AREA_WIDTH, Settings.FAN_AREA_HEIGHT );
 	}
 
 	public function handleBeginContact( e:ContactEvent ):void {
@@ -146,15 +140,15 @@ class FanPhysicsComponent extends PhysicsComponent
 
 	private function enterframeHandler( event:Event ):void {
 		var distanceToFan:Number = _bodyInFanArea.b2body.GetWorldCenter().subtract( b2body.GetWorldCenter() ).length();
-		var impulse:V2 = b2body.GetWorldVector( new V2( 0, -FAN_STRENGTH * ( 1 / distanceToFan + 1 ) ) );
+		var impulse:V2 = b2body.GetWorldVector( new V2( 0, -Settings.FAN_POWER * ( 1 / distanceToFan + 1 ) ) );
 		_bodyInFanArea.b2body.ApplyImpulse( impulse, _bodyInFanArea.b2body.GetWorldCenter() ); // apply up impulse
 	}
 
 	public override function shapes():void {
 		// defines fan body fixture
-		_bodyFixture = box( BODY_WIDTH, BODY_HEIGHT );
+		_bodyFixture = box( Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT );
 		// defines fan area fixture
-		_areaFixture = box( AREA_WIDTH, AREA_HEIGHT, new V2( 0, -BODY_HEIGHT - AREA_HEIGHT + BODY_HEIGHT / 2 ) );
+		_areaFixture = box( Settings.FAN_AREA_WIDTH, Settings.FAN_AREA_HEIGHT, new V2( 0, -Settings.FAN_BODY_HEIGHT - Settings.FAN_AREA_HEIGHT + Settings.FAN_BODY_HEIGHT / 2 ) );
 		_areaFixture.SetSensor( true );
 	}
 

@@ -2,6 +2,7 @@ package com.away3d.gloop.gameobjects.hoops
 {
 	import Box2DAS.Common.V2;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.Settings;
 	import flash.geom.Point;
 	
 	/**
@@ -11,10 +12,9 @@ package com.away3d.gloop.gameobjects.hoops
 	public class LauncherHoop extends Hoop
 	{
 		
-		private var _gloop : Gloop;
-		
+		private var _gloop : Gloop;		
 		private var _aim : Point;
-		
+
 		public function LauncherHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
 			super(worldX, worldY, rotation);
@@ -32,8 +32,8 @@ package com.away3d.gloop.gameobjects.hoops
 			if (!_gloop) return super.onDragUpdate(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
 			
 			var hoopPos:V2 = _physics.b2body.GetPosition();			
-			_aim.x = hoopPos.x * 60 - mouseX;
-			_aim.y = hoopPos.y * 60 - mouseY;
+			_aim.x = hoopPos.x * Settings.PHYSICS_SCALE - mouseX;
+			_aim.y = hoopPos.y * Settings.PHYSICS_SCALE - mouseY;
 			
 			_physics.b2body.SetTransform(hoopPos, -Math.atan2(_aim.x, _aim.y));
 			_physics.updateBodyMatrix(null);
@@ -41,7 +41,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		override public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			if (!_gloop) return super.onDragEnd(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
-			if (_aim.length < 15) return;
+			if (_aim.length < Settings.LAUNCHER_POWER_MIN) return;
 			fire();
 		}
 		
@@ -50,7 +50,8 @@ package com.away3d.gloop.gameobjects.hoops
 			if (!_gloop)
 				return; // can't fire if not holding the gloop
 			
-			var power:Number = (_aim.length - 15) / 10;
+			var power:Number = Math.min(_aim.length, Settings.LAUNCHER_POWER_MAX);
+			power = (power - Settings.LAUNCHER_POWER_MIN) / Settings.LAUNCHER_POWER_SCALE;
 				
 			var impulse : V2 = _physics.b2body.GetWorldVector(new V2(0, -power));
 			_gloop.physics.b2body.ApplyImpulse(impulse, _physics.b2body.GetWorldCenter());
