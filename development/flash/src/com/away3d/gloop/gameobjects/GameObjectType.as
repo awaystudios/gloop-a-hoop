@@ -8,5 +8,6 @@ package com.away3d.gloop.gameobjects
 		public static const STAR : String = 'star';
 		public static const BUTTON : String = 'button';
 		public static const FAN : String = 'fan';
+		public static const TARGET : String = 'target';
 	}
 }

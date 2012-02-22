@@ -8,15 +8,16 @@ package com.away3d.gloop.level
 	import away3d.library.assets.AssetType;
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
-	import com.away3d.gloop.gameobjects.hoops.LauncherHoop;
 	
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.Fan;
 	import com.away3d.gloop.gameobjects.GameObjectType;
+	import com.away3d.gloop.gameobjects.GoalWall;
 	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.gameobjects.hoops.HoopType;
+	import com.away3d.gloop.gameobjects.hoops.LauncherHoop;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	import com.away3d.gloop.level.utils.SceneGraphIterator;
@@ -156,9 +157,36 @@ package com.away3d.gloop.level
 		}
 		
 		
+		private function parseTarget(obj : ObjectContainer3D) : void
+		{
+			var target : GoalWall;
+			var min : Vector3D;
+			var dim : Vector3D;
+			var mesh : Mesh;
+			
+			mesh = Mesh(obj);
+			min = mesh.bounds.min;
+			dim = mesh.bounds.max.subtract(min);
+			
+			target = new GoalWall(min.x, -min.y, dim.x, -dim.y);
+			target.physics.x = obj.x * _scale;
+			target.physics.y = -obj.y * _scale;
+			target.physics.rotation = -obj.rotationZ;
+			
+			_level.add(target);
+		}
+		
+		
+		
 		private function parseSceneGraphObject(obj : ObjectContainer3D) : void
 		{
+			var visual : Boolean;
+			
 			if (obj.extra && obj.extra.hasOwnProperty('gah_type')) {
+				// Assume non-visual object, might be overrided
+				// by concrete types in switch below.
+				visual = false;
+				
 				switch (obj.extra['gah_type']) {
 					case GameObjectType.WALL:
 						parseWall(obj);
@@ -183,6 +211,12 @@ package com.away3d.gloop.level
 					case GameObjectType.FAN:
 						parseFan(obj);
 						break;
+					
+					case GameObjectType.TARGET:
+						// Targets are visual as well
+						visual = true;
+						parseTarget(obj);
+						break;
 				}
 				
 				// Non-visual object or placeholder
@@ -190,6 +224,11 @@ package com.away3d.gloop.level
 					obj.parent.removeChild(obj);
 			}
 			else {
+				// Definitely visual
+				visual = true;
+			}
+			
+			if (visual) {
 				var mesh : Mesh
 				
 				obj.x *= _scale;
