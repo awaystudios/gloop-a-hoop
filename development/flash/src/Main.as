@@ -4,9 +4,11 @@ package
 	import away3d.entities.Mesh;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
-	import com.away3d.gloop.level.Level;
+	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
 	import com.away3d.gloop.screens.GameScreen;
@@ -60,6 +62,8 @@ package
 			_db = new LevelDatabase();
 			_db.addEventListener( Event.COMPLETE, onDbComplete );
 			_db.addEventListener( Event.SELECT, onDbSelect );
+			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
+			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
 			_db.loadXml( 'assets/levels.xml' );
 		}
 
@@ -78,7 +82,8 @@ package
 			// saved to device storage
 			trace(xml.toXMLString());
 		}
-
+		
+		
 
 		private function onDbComplete( ev:Event ):void {
 			_stack.gotoScreen( Screens.LEVELS );
@@ -90,6 +95,18 @@ package
 
 			_db.selectedProxy.addEventListener( Event.COMPLETE, onLevelComplete );
 			_db.selectedProxy.load();
+		}
+		
+		
+		private function onDbLevelWin(ev : Event) : void
+		{
+			saveState( _db.getStateXml() );
+		}
+		
+		
+		private function onDbLevelLose(ev : Event) : void
+		{
+			saveState( _db.getStateXml() );
 		}
 
 
@@ -110,8 +127,6 @@ package
 			_db.selectedProxy.level.reset();
 
 			_stack.gotoScreen( Screens.GAME );
-			
-			saveState( _db.getStateXml() );
 		}
 
 

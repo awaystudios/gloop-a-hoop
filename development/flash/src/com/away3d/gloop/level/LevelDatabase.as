@@ -1,5 +1,7 @@
 package com.away3d.gloop.level
 {
+	import com.away3d.gloop.events.GameEvent;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.URLLoader;
@@ -32,6 +34,9 @@ package com.away3d.gloop.level
 		public function select(proxy : LevelProxy) : void
 		{
 			_selected = proxy;
+			_selected.addEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
+			_selected.addEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
+			
 			dispatchEvent(new Event(Event.SELECT));
 		}
 		
@@ -79,6 +84,15 @@ package com.away3d.gloop.level
 		}
 		
 		
+		private function deselectCurrent() : void
+		{
+			if (_selected) {
+				_selected.removeEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
+				_selected.removeEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
+			}
+		}
+		
+		
 		private function getLevelById(id : int) : LevelProxy
 		{
 			var i : uint;
@@ -89,6 +103,12 @@ package com.away3d.gloop.level
 			}
 			
 			return null;
+		}
+		
+		
+		private function onSelectedGameEvent(ev : GameEvent) : void
+		{
+			dispatchEvent(ev.clone());
 		}
 		
 		
