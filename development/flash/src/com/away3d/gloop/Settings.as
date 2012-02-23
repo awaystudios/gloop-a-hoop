@@ -57,8 +57,8 @@ package com.away3d.gloop
 		static public var PHYSICS_POSITION_ITERATIONS : Number = 5;
 		static public var PHYSICS_GRAVITY_Y : Number = 1;
 		
-		static public var SHOW_COLLISION_WALLS : Boolean = true;
-		static public var SHOW_COSMETIC_MESHES : Boolean = false;
+		static public var SHOW_COLLISION_WALLS : Boolean = false;
+		static public var SHOW_COSMETIC_MESHES : Boolean = true;
 	}
 
 }
