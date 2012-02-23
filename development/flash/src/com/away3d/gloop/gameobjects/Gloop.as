@@ -40,8 +40,9 @@ package com.away3d.gloop.gameobjects
 
 		private var _bounceVelocity:Vector3D = new Vector3D();
 		private var _bouncePosition:Vector3D = new Vector3D();
-		
+
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
+
 			super();
 
 			_spawnX = spawnX;
@@ -136,7 +137,7 @@ package com.away3d.gloop.gameobjects
 
 			if (!inEditMode) {
 				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
-				
+
 				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
 				}

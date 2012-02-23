@@ -19,9 +19,9 @@ package com.away3d.gloop
 		static public var GLOOP_MAX_DECALS_PER_HIT : Number = 20;
 		static public var GLOOP_MAX_DECALS_TOTAL : Number = 30;
 		static public var GLOOP_LOST_MOMENTUM_THRESHOLD : Number = .01;
+
 		[comment("values closer to one makes the average move faster")]
 		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
-
 		static public var HOOP_RADIUS : Number = 60;
 		static public var HOOP_ROTATION_STEP : Number = 45;
 
