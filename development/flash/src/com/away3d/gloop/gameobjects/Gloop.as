@@ -12,6 +12,7 @@ package com.away3d.gloop.gameobjects
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
@@ -25,6 +26,7 @@ package com.away3d.gloop.gameobjects
 		private var _anim:VertexAnimationComponent;
 
 		private var _splat:SplatComponent;
+		private var _trace:PathTraceComponent;
 		private var _spawnX:Number;
 		private var _spawnY:Number;
 
@@ -86,6 +88,8 @@ package com.away3d.gloop.gameobjects
 			_meshComponent.mesh = new Mesh( geom, mat );
 			_meshComponent.mesh.subMeshes[0].scaleU = 0.5;
 			_meshComponent.mesh.subMeshes[0].scaleV = 0.5;
+
+			_trace = new PathTraceComponent( _physics );
 			
 			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
@@ -136,6 +140,7 @@ package com.away3d.gloop.gameobjects
 
 			super.update( dt );
 			_splat.update( dt );
+			_trace.update( dt );
 			
 			var velocity:V2 = _physics.linearVelocity;
 			var speed:Number = velocity.length();
@@ -145,6 +150,7 @@ package com.away3d.gloop.gameobjects
 
 				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
+					_trace.deleteLastPath();
 				}
 			}
 						
@@ -184,10 +190,12 @@ package com.away3d.gloop.gameobjects
 			_avgSpeed = 10;
 			bounceAndFaceDirection(.1);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_FIRED, this));
+			_trace.startNewPath();
 		}
 
 		public function onHitGoalWall():void {
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
+			_trace.deleteAllPaths();
 		}
 
 		override public function get debugColor1():uint {

@@ -39,7 +39,6 @@ package com.away3d.gloop.screens
 		private var _inputManager:InputManager;
 		private var _gloopIsFlying:Boolean;
 		private var _fireOffset:Vector3D;
-		private var _targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
 		public function GameScreen( db:LevelDatabase ) {
 			super( false );
@@ -132,47 +131,49 @@ package com.away3d.gloop.screens
 			if( _level )
 				_level.update();
 
+			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
+
 			// evaluate target camera position
 			if( _gloopIsFlying ) {
 				_fireOffset.scaleBy( 0.9 );
-				_targetPosition.x = _gloop.physics.x + _fireOffset.x;
-				_targetPosition.y = -_gloop.physics.y + _fireOffset.y;
-				_view.camera.lookAt( new Vector3D( _targetPosition.x, _targetPosition.y, 0 ) );
+				targetPosition.x = _gloop.physics.x + _fireOffset.x;
+				targetPosition.y = -_gloop.physics.y + _fireOffset.y;
+				_view.camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 			}
 			else {
 				_inputManager.update();
-				_targetPosition.x = _inputManager.panX;
-				_targetPosition.y = _inputManager.panY;
+				targetPosition.x = _inputManager.panX;
+				targetPosition.y = _inputManager.panY;
 			}
-			_targetPosition.z = _inputManager.zoom;
+			targetPosition.z = _inputManager.zoom;
 
 			// contain target position
-			if( _targetPosition.x > _level.dimensionsMax.x ) {
-				_targetPosition.x = _level.dimensionsMax.x;
+			if( targetPosition.x > _level.dimensionsMax.x ) {
+				targetPosition.x = _level.dimensionsMax.x;
 				_inputManager.panX = _level.dimensionsMax.x;
-			} else if( _targetPosition.x < _level.dimensionsMin.x ) {
-				_targetPosition.x = _level.dimensionsMin.x;
+			} else if( targetPosition.x < _level.dimensionsMin.x ) {
+				targetPosition.x = _level.dimensionsMin.x;
 				_inputManager.panX = _level.dimensionsMin.x;
 			}
-			if( _targetPosition.y > _level.dimensionsMax.y ) {
-				_targetPosition.y = _level.dimensionsMax.y;
+			if( targetPosition.y > _level.dimensionsMax.y ) {
+				targetPosition.y = _level.dimensionsMax.y;
 				_inputManager.panY = _level.dimensionsMax.y;
-			} else if( _targetPosition.y < _level.dimensionsMin.y ) {
-				_targetPosition.y = _level.dimensionsMin.y;
+			} else if( targetPosition.y < _level.dimensionsMin.y ) {
+				targetPosition.y = _level.dimensionsMin.y;
 				_inputManager.panY = _level.dimensionsMin.y;
 			}
-			if( _targetPosition.z > _level.dimensionsMax.z ) {
-				_targetPosition.z = _level.dimensionsMax.z;
+			if( targetPosition.z > _level.dimensionsMax.z ) {
+				targetPosition.z = _level.dimensionsMax.z;
 				_inputManager.zoom = _level.dimensionsMax.z;
-			} else if( _targetPosition.z < _level.dimensionsMin.z ) {
-				_targetPosition.z = _level.dimensionsMin.z;
+			} else if( targetPosition.z < _level.dimensionsMin.z ) {
+				targetPosition.z = _level.dimensionsMin.z;
 				_inputManager.zoom = _level.dimensionsMin.z;
 			}
 
 			// ease camera towards target position
-			_view.camera.x += (_targetPosition.x - _view.camera.x) * 0.4;
-			_view.camera.y += (_targetPosition.y - _view.camera.y) * 0.4;
-			_view.camera.z += ( ( _targetPosition.z * 200 - 1000 ) - _view.camera.z) * 0.4;
+			_view.camera.x += (targetPosition.x - _view.camera.x) * 0.4;
+			_view.camera.y += (targetPosition.y - _view.camera.y) * 0.4;
+			_view.camera.z += ( ( targetPosition.z * 200 - 1000 ) - _view.camera.z) * 0.4;
 
 			_cameraPointLight.position = _view.camera.position;
 

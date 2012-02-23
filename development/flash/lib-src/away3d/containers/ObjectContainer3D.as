@@ -170,7 +170,6 @@ package away3d.containers
 			dispatchEvent(_scenetransformchanged);
 		}
 		
-		/*
 		// TODO: not used
 		private function notifySceneChange():void
 		{
@@ -192,8 +191,8 @@ package away3d.containers
 			
 			dispatchEvent(_scenechanged);
 		}
-		*/
-				
+		private var _scenechanged:Object3DEvent;
+
 		protected function updateMouseChildren() : void
 		{
 			if (_parent) {
@@ -471,6 +470,8 @@ package away3d.containers
 				_scene.dispatchEvent(new Scene3DEvent(Scene3DEvent.ADDED_TO_SCENE, this));
 			else if(_oldScene)
 				_oldScene.dispatchEvent(new Scene3DEvent(Scene3DEvent.REMOVED_FROM_SCENE, this));
+
+			notifySceneChange();
 		}
 		
 		/**
