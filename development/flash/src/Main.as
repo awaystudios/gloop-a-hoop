@@ -162,7 +162,7 @@ package
 				});
 			}
 			
-			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.level.reset();
+			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.reset();
 			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
 		}

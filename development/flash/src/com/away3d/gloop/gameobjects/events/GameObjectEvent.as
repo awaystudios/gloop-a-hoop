@@ -14,6 +14,8 @@ package com.away3d.gloop.gameobjects.events {
 		public static const GLOOP_HIT_GOAL_WALL	:String = "gameobjectevent_gloop_hit_goal_wall";
 		public static const GLOOP_LOST_MOMENTUM	:String = "gameobjectevent_gloop_lost_momentum";
 		
+		public static const GLOOP_COLLECT_STAR  :String = "gameobjectevent_gloop_collect_star";
+		
 		private var _gameObject:DefaultGameObject;
 		
 		public function GameObjectEvent(type:String, gameObject:DefaultGameObject) { 

@@ -93,6 +93,7 @@ package com.away3d.gloop.level
 			object.addEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
 			object.addEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
 			object.addEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
+			object.addEventListener(GameObjectEvent.GLOOP_COLLECT_STAR, onGloopCollectStar);
 
 			return object;
 		}
@@ -179,6 +180,10 @@ package com.away3d.gloop.level
 		
 		private function onGloopLostMomentum(e:GameObjectEvent):void {
 			lose();
+		}
+		
+		private function onGloopCollectStar(e:GameObjectEvent):void {
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_STAR_COLLECT));
 		}
 	}
 }
