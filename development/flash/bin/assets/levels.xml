@@ -2,6 +2,12 @@
     <level id="1" awd="assets/levels/001.awd">
     </level>
 
+    <level id="2" awd="assets/levels/002.awd">
+    </level>
+
+    <level id="3" awd="assets/levels/003.awd">
+    </level>
+
     <level id="999" awd="assets/levels/testlevel.awd">
         <inventory>
             <hoop variant="trampoline"/>
