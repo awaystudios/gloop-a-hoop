@@ -68,7 +68,7 @@ package com.away3d.gloop.input {
 		{
 			_zoom = 1;
 			_panX = 0;
-			_panY = 0;
+			_panY = 300;
 		}
 		
 		

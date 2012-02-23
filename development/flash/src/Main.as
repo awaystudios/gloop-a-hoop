@@ -1,6 +1,7 @@
 package
 {
 
+	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.loaders.Loader3D;
@@ -57,6 +58,8 @@ package
 			initStack();
 			
 			AssetLibrary.loadData(FlyingAWDAsset);
+			
+			parent.addChild(new AwayStats());
 
 			_stack.gotoScreen( Screens.LOADING );
 		}

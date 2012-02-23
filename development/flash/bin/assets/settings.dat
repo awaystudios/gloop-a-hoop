@@ -7,8 +7,9 @@ FAN_POWER                     0.25
 GLOOP_ANGULAR_DAMPING         1
 GLOOP_DECAL_MIN_SPEED         0.1
 GLOOP_DECAL_SPEED_FACTOR      2
-GLOOP_FRICTION                1
+GLOOP_FRICTION                .5
 GLOOP_LOST_MOMENTUM_THRESHOLD 0.01
+GLOOP_LINEAR_DAMPING          .1
 GLOOP_MAX_DECALS_PER_HIT      20
 GLOOP_MAX_DECALS_TOTAL        30
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
@@ -16,10 +17,10 @@ GLOOP_RADIUS                  30
 GLOOP_RESTITUTION             0.75
 HOOP_RADIUS                   60
 HOOP_ROTATION_STEP            45
-LAUNCHER_POWER_MAX            200    # the drag distance is capped to this value, dragging longer won't make a difference
+LAUNCHER_POWER_MAX            60    # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_POWER_MIN            30    # dragging a distance shorter than this cancels the launch
-LAUNCHER_POWER_SCALE          10    # the value remaining is scaled by this multiplier before being applied to gloop
-PHYSICS_GRAVITY_Y             1
+LAUNCHER_POWER_SCALE          -.15    # the value remaining is scaled by this multiplier before being applied to gloop
+PHYSICS_GRAVITY_Y             2
 PHYSICS_POSITION_ITERATIONS   5
 PHYSICS_SCALE                 60
 PHYSICS_TIME_STEP             0.05

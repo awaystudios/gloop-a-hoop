@@ -138,13 +138,15 @@ package com.away3d.gloop.level
 		public function dispose() : void
 		{
 			var obj : DefaultGameObject;
-
+			
 			while (obj = _all_objects.pop()) {
 				if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent)
 					obj.meshComponent.mesh.parent.removeChild(obj.meshComponent.mesh);
 
-				if (obj.physics && obj.physics.parent)
+				if (obj.physics && obj.physics.parent){
 					obj.physics.parent.removeChild(obj.physics);
+					obj.physics.destroy();
+				}
 
 				obj.removeEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
 				obj.removeEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
@@ -152,7 +154,7 @@ package com.away3d.gloop.level
 				obj.removeEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
 					
 				obj.dispose();
-			}
+			}			
 		}
 
 		/**

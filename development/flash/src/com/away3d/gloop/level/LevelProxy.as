@@ -83,14 +83,22 @@ package com.away3d.gloop.level
 		
 		public function load(forceReload : Boolean = false) : void
 		{
-			if (!_level || forceReload) {
+			if (!_level || forceReload) 
+			{
+				if(_level)
+				{
+					_level.dispose();
+					_level = null;
+				}
+				
 				var loader : LevelLoader;
 				
 				loader = new LevelLoader(50);
 				loader.addEventListener(Event.COMPLETE, onLevelComplete);
 				loader.load(new URLRequest(_awd_url));
 			}
-			else {
+			else 
+			{
 				dispatchEvent(new GameEvent(GameEvent.LEVEL_LOAD));
 			}
 		}

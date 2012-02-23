@@ -61,7 +61,7 @@ package com.away3d.gloop.gameobjects.hoops
 				return; // can't fire if not holding the gloop
 			
 			var power:Number = Math.min(_aim.length, Settings.LAUNCHER_POWER_MAX);
-			power = (power - Settings.LAUNCHER_POWER_MIN) / Settings.LAUNCHER_POWER_SCALE;
+			power = (power - Settings.LAUNCHER_POWER_MIN) * Settings.LAUNCHER_POWER_SCALE;
 				
 			var impulse : V2 = _physics.b2body.GetWorldVector(new V2(0, -power));
 			_gloop.physics.b2body.ApplyImpulse(impulse, _physics.b2body.GetWorldCenter());
