@@ -1,13 +1,18 @@
 package com.away3d.gloop.gameobjects.components
 {
-	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.SphereGeometry;
 	import Box2DAS.Collision.b2WorldManifold;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-	import com.away3d.gloop.effects.DecalSplatter;
+	import Box2DAS.Dynamics.Contacts.b2Contact;
+	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
+	
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.SphereGeometry;
+	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.effects.DecalSplatter;
+	
 	import flash.geom.Vector3D;
 	
 	/**
@@ -19,6 +24,10 @@ package com.away3d.gloop.gameobjects.components
 		
 		private var _decalSplatter : DecalSplatter;
 		private var _physics : PhysicsComponent;
+		
+		private var _inContact : Boolean;
+		private var _cooldown : int;
+		
 		
 		public function SplatComponent(physics : PhysicsComponent)
 		{
@@ -38,11 +47,51 @@ package com.away3d.gloop.gameobjects.components
 			_decalSplatter.decals = Vector.<Mesh>( [sphereDecal] ); // TODO: implement Sprite3D's as decals
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
+			_physics.addEventListener(ContactEvent.END_CONTACT, handleEndContact);
 		}
 		
 		public function update(dt : Number) : void
 		{
 			_decalSplatter.shrinkDecals(); // TODO: respect time delta
+			
+			if (_inContact) {
+				if (_cooldown <= 0) {
+					var contacts:b2ContactEdge = _physics.b2body.GetContactList();
+					
+					if (contacts) {
+						var wm : b2WorldManifold;
+						var c : b2Contact;
+						var p : V2;
+						
+						wm = new b2WorldManifold();
+						c = contacts.contact;
+						
+						while (c) {
+							if (c.IsTouching()) {
+								c.GetWorldManifold(wm);
+								if (wm.points.length) {
+									p = wm.points[0];
+									break;
+								}
+							}
+							c = c.GetNext();
+						}
+						
+						if (p) {
+							splatter(wm.points[0]);
+							_cooldown = Settings.GLOOP_SPLAT_COOLDOWN;
+						}
+					}
+				}
+			}
+			
+			_cooldown -= dt;
+		}
+		
+		
+		public function reset() : void
+		{
+			_inContact = false;
 		}
 		
 		public function set splattables(value : Vector.<Mesh>) : void
@@ -58,8 +107,15 @@ package com.away3d.gloop.gameobjects.components
 			var wm : b2WorldManifold = e.getWorldManifold();
 			if (wm.points.length > 0)
 			{
-				splatter(e.point);
+				_inContact = true;
 			}
+			
+			_cooldown = 0;
+		}
+		
+		private function handleEndContact(e : ContactEvent) : void
+		{
+			_inContact = false;
 		}
 		
 		private function splatter(collisionPoint : V2) : void

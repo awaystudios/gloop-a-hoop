@@ -133,8 +133,10 @@ package com.away3d.gloop.gameobjects
 
 			_bounceVelocity = new Vector3D();
 			_bouncePosition = new Vector3D();
+			
+			_splat.reset();
 
-			_anim.play( 'fly' );
+			//_anim.play( 'fly' );
 		}
 
 		private var _bounceIsStrongerOnX:Boolean;
