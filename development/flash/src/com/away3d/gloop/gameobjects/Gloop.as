@@ -137,24 +137,32 @@ package com.away3d.gloop.gameobjects
 			_anim.play( 'fly' );
 		}
 
+		private var _bounceIsStrongerOnX:Boolean;
 		private function contactPostSolveHandler( event:ContactEvent ):void {
 			var collisionStrength:Number = event.impulses.normalImpulse1;
 			var collisionNormal:Vector3D = new Vector3D( event.normal.x, event.normal.y, 0 );
 			collisionNormal = _innerMesh.sceneTransform.deltaTransformVector( collisionNormal );
 			collisionNormal.normalize(); // TODO: need normalize?
 			var force:Number = collisionStrength * BOUNCINESS_IMPACT_DISPLACEMENT;
-			_bouncePosition.x += force * Math.abs( collisionNormal.x ); // use force to alter spring position
-			_bouncePosition.y += force * Math.abs( collisionNormal.y );
+			var absX:Number = Math.abs( collisionNormal.x );
+			var absY:Number = Math.abs( collisionNormal.y );
+			_bounceIsStrongerOnX = absX > absY;
+			if( _bounceIsStrongerOnX ) {
+				_bouncePosition.x += force * Math.abs( collisionNormal.x ); // use force to alter spring position
+			}
+			else {
+				_bouncePosition.y += force * Math.abs( collisionNormal.y );
+			}
 		}
 
 		// TODO: move all bounce code out of here!
-		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.1;
+		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.2;
 		private const BOUNCINESS_SPRING_FORCE:Number = 0.25;
-		private const BOUNCINESS_DAMPENING:Number = 0.9;
-		private const BOUNCINESS_EFFECT_ON_SCALE_X:Number = 0.5;
-		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 1;
-		private const ALIGNMENT_VELOCITY_FACTOR:Number = 0.2;
-		private const ALIGNMENT_RESTORE_FACTOR:Number = 0.005;
+		private const BOUNCINESS_DAMPENING:Number = 0.8;
+		private const BOUNCINESS_EFFECT_ON_SCALE_X:Number = 0.33;
+		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 0.33;
+//		private const ALIGNMENT_VELOCITY_FACTOR:Number = 0.2;
+//		private const ALIGNMENT_RESTORE_FACTOR:Number = 0.01;
 
 		override public function update( dt:Number ):void {
 
@@ -173,11 +181,14 @@ package com.away3d.gloop.gameobjects
 			}
 
 			// update inner mesh orientation depending on velocity
-			if( speed > 0 ) {
+			/*if( speed > 0 ) {
 				var flyTorque:Number = velocity.x;
 				_physics.b2body.ApplyTorque( flyTorque * ALIGNMENT_VELOCITY_FACTOR ); // align towards horizontal trajectory
 			}
-			_physics.b2body.ApplyTorque( _meshComponent.mesh.rotationZ * ALIGNMENT_RESTORE_FACTOR ); // tend to point upwards
+			_physics.b2body.ApplyTorque( _meshComponent.mesh.rotationZ * ALIGNMENT_RESTORE_FACTOR ); // tend to point upwards*/
+			_innerMesh.rotationX = -_meshComponent.mesh.rotationX; // force inner mesh look up
+			_innerMesh.rotationY = -_meshComponent.mesh.rotationY;
+			_innerMesh.rotationZ = -_meshComponent.mesh.rotationZ;
 
 			// bounce
 			var distance:Number = _bouncePosition.length; // apply spring acceleration
@@ -190,8 +201,18 @@ package com.away3d.gloop.gameobjects
 			_bounceVelocity.y *= BOUNCINESS_DAMPENING;
 			_bouncePosition.x += _bounceVelocity.x; // update position
 			_bouncePosition.y += _bounceVelocity.y;
-			_innerMesh.scaleX = 1 - _bouncePosition.x * BOUNCINESS_EFFECT_ON_SCALE_X; // apply scale
-			_innerMesh.scaleY = 1 - _bouncePosition.y * BOUNCINESS_EFFECT_ON_SCALE_Y;
+			var scx:Number = _bouncePosition.x * BOUNCINESS_EFFECT_ON_SCALE_X;
+			var scy:Number = _bouncePosition.y * BOUNCINESS_EFFECT_ON_SCALE_Y;
+			if( _bounceIsStrongerOnX ) {
+				_innerMesh.scaleX = 1 - scx;
+				_innerMesh.scaleY = 1 + scx;
+			}
+			else {
+				_innerMesh.scaleX = 1 + scy;
+				_innerMesh.scaleY = 1 - scy;
+			}
+//			_innerMesh.scaleX = 1 - _bouncePosition.x * BOUNCINESS_EFFECT_ON_SCALE_X; // apply scale
+//			_innerMesh.scaleY = 1 - _bouncePosition.y * BOUNCINESS_EFFECT_ON_SCALE_Y;
 
 			// TODO: remove tracer
 			if( _tracer.stage ) {
@@ -242,6 +263,5 @@ class GloopPhysicsComponent extends PhysicsComponent
 	override public function create():void {
 		super.create();
 		setCollisionGroup( GLOOP );
-		friction = 0.01;
 	}
 }
