@@ -237,7 +237,9 @@ package com.away3d.gloop.level
 				mesh = obj as Mesh;
 				if (mesh) {
 					mesh.material = new ColorMaterial(Math.random() * 0xffffff);
+					_level.splattableMeshes.push(mesh);
 				}
+				
 				
 				// Visual object, add if not already parented
 				if (!obj.parent)

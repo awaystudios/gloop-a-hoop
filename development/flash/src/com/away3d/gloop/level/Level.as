@@ -1,6 +1,9 @@
 package com.away3d.gloop.level
 {
+	import Box2DAS.Collision.AABB;
+	
 	import away3d.containers.Scene3D;
+	import away3d.entities.Mesh;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -26,6 +29,8 @@ package com.away3d.gloop.level
 		private var _buttons : Vector.<Button>;
 		private var _btn_controllables : Vector.<IButtonControllable>;
 		
+		private var _splattables : Vector.<Mesh>;
+		
 		private var _mode:Boolean = EDIT_MODE;
 		
 		public static const GRID_SIZE:uint = 20;
@@ -46,6 +51,7 @@ package com.away3d.gloop.level
 			_all_objects = new Vector.<DefaultGameObject>();
 			_btn_controllables = new Vector.<IButtonControllable>();
 			_buttons = new Vector.<Button>();
+			_splattables = new Vector.<Mesh>;
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -72,6 +78,11 @@ package com.away3d.gloop.level
 		{
 			return _world;
 		}		
+		
+		public function get splattableMeshes() : Vector.<Mesh>
+		{
+			return _splattables;
+		}
 		
 		public function get objects():Vector.<DefaultGameObject> {
 			return _all_objects;

@@ -76,11 +76,16 @@ package
 
 
 		private function initStack():void {
-			_stack = new ScreenStack( this );
+			var w : Number, h : Number;
+			
+			w = stage.stageWidth;
+			h = stage.stageHeight;
+			
+			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
-			_stack.addScreen( Screens.WIN, new WinScreen() );
+			_stack.addScreen( Screens.WIN, new WinScreen(_stack) );
 		}
 		
 		
@@ -129,23 +134,7 @@ package
 
 
 		private function onSelectedLevelLoad( ev:Event ):void {
-			var gloop:Gloop;
-			var loader:LevelLoader;
-			
 			_db.selectedProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-			
-			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y, this);
-			
-			// TODO: this is a temporary provision of meshes for gloop to splat on
-			var splattables:Vector.<Mesh> = new Vector.<Mesh>()
-			for( var i:uint, len:uint = _db.selectedProxy.level.scene.numChildren; i < len; ++i ) {
-				splattables = splattables.concat( HierarchyTool.getAllMeshesInHierarchy( _db.selectedProxy.level.scene.getChildAt( i ) ) );
-			}
-			gloop.splat.splattables = splattables;
-
-			_db.selectedProxy.level.add( gloop );
-			_db.selectedProxy.level.reset();
-
 			_stack.gotoScreen( Screens.GAME );
 		}
 

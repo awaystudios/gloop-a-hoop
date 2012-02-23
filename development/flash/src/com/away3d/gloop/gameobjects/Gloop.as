@@ -119,6 +119,13 @@ package com.away3d.gloop.gameobjects
 
 		}
 		
+		
+		public function setSpawn(x : Number, y : Number) : void
+		{
+			_spawnX = x;
+			_spawnY = y;
+		}
+		
 
 		override public function reset():void {
 			super.reset();
