@@ -76,6 +76,7 @@ package com.away3d.gloop.gameobjects
 
 		private function onToggleOffComplete():void {
 			_isOn = false;
+			FanPhysicsComponent( _physics ).isOn = _isOn;
 		}
 	}
 }
