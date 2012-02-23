@@ -3,7 +3,6 @@ package com.away3d.gloop.gameobjects.hoops
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
-	import flash.geom.ColorTransform;
 	
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
@@ -15,6 +14,8 @@ package com.away3d.gloop.gameobjects.hoops
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.level.Level;
+	
+	import flash.geom.ColorTransform;
 	
 	/**
 	 * ...
@@ -68,8 +69,8 @@ package com.away3d.gloop.gameobjects.hoops
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
 			
-			var pos:V2 = new V2(Math.round(mouseX / Level.GRID_SIZE) * Level.GRID_SIZE, Math.round(mouseY / Level.GRID_SIZE) * Level.GRID_SIZE);
-				
+			var pos:V2 = new V2(Math.round(mouseX / Settings.GRID_SIZE) * Settings.GRID_SIZE, Math.round(mouseY / Settings.GRID_SIZE) * Settings.GRID_SIZE);
+			
 			// transform point into physics coord space
 			pos.x /= Settings.PHYSICS_SCALE;
 			pos.y /= Settings.PHYSICS_SCALE;

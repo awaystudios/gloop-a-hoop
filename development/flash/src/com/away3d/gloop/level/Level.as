@@ -33,8 +33,6 @@ package com.away3d.gloop.level
 		
 		private var _mode:Boolean = EDIT_MODE;
 		
-		public static const GRID_SIZE:uint = 20;
-		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
 		

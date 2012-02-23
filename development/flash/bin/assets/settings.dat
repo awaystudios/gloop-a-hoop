@@ -15,7 +15,6 @@ GLOOP_MAX_DECALS_TOTAL        30
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
 GLOOP_RADIUS                  30
 GLOOP_RESTITUTION             0.75
-HOOP_RADIUS                   60
 HOOP_ROTATION_STEP            45
 LAUNCHER_POWER_MAX            60    # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_POWER_MIN            30    # dragging a distance shorter than this cancels the launch

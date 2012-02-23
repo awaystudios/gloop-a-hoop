@@ -1,5 +1,6 @@
 package com.away3d.gloop.level
 {
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	
 	import flash.events.Event;
@@ -93,7 +94,7 @@ package com.away3d.gloop.level
 				
 				var loader : LevelLoader;
 				
-				loader = new LevelLoader(50);
+				loader = new LevelLoader(Settings.GRID_SIZE);
 				loader.addEventListener(Event.COMPLETE, onLevelComplete);
 				loader.load(new URLRequest(_awd_url));
 			}
