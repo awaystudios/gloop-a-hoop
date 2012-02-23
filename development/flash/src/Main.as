@@ -59,7 +59,9 @@ package
 			
 			AssetLibrary.loadData(FlyingAWDAsset);
 			
-			parent.addChild(new AwayStats());
+			var s:AwayStats = new AwayStats();
+			s.x = stage.stageWidth - s.width;
+			parent.addChild(s);
 
 			_stack.gotoScreen( Screens.LOADING );
 		}
