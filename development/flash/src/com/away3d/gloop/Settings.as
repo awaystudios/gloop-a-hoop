@@ -13,6 +13,7 @@ package com.away3d.gloop
 		static public var GLOOP_ANGULAR_DAMPING : Number = 0;
 		static public var GLOOP_FRICTION : Number = 1;
 		static public var GLOOP_RESTITUTION : Number = .75;
+		static public var GLOOP_LINEAR_DAMPING : Number = .1;
 
 		static public var GLOOP_DECAL_SPEED_FACTOR : Number = 2;
 		static public var GLOOP_DECAL_MIN_SPEED : Number = 0.5;
