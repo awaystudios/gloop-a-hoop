@@ -3,6 +3,7 @@ package com.away3d.gloop.gameobjects {
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
 	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	
 	import flash.geom.Matrix3D;
