@@ -149,6 +149,7 @@ package
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
 			if( ev.keyCode == Keyboard.R ) {
 				_stack.gotoScreen( Screens.LOADING );
+				_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 				_db.selectedProxy.load( true );
 			}
 			
@@ -158,6 +159,7 @@ package
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
 					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
 					_stack.gotoScreen( Screens.LOADING );
+					_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 					_db.selectedProxy.load( true );
 				});
 			}
