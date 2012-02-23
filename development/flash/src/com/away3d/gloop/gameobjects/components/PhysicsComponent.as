@@ -78,15 +78,17 @@ package com.away3d.gloop.gameobjects.components
 		
 		}
 		
-		private function onBeginContact(e : ContactEvent) : void
+		protected function onBeginContact(e : ContactEvent) : void
 		{
 			var gloop:Gloop = getGloop(e.other);
+			if (!gloop) return;
 			_gameObject.onCollidingWithGloopStart(gloop);
 		}
 		
-		private function onEndContact(e : ContactEvent ) : void
+		protected function onEndContact(e : ContactEvent ) : void
 		{
 			var gloop:Gloop = getGloop(e.other);
+			if (!gloop) return;
 			_gameObject.onCollidingWithGloopEnd(gloop);
 		}
 		
