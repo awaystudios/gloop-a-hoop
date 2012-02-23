@@ -9,8 +9,8 @@ package com.away3d.gloop
 	public class Settings
 	{
 
-		static public var GLOOP_RADIUS : Number = 30;
-		static public var GLOOP_ANGULAR_DAMPING : Number = 1;
+		static public var GLOOP_RADIUS : Number = 25;
+		static public var GLOOP_ANGULAR_DAMPING : Number = 0;
 		static public var GLOOP_FRICTION : Number = 1;
 		static public var GLOOP_RESTITUTION : Number = .75;
 
