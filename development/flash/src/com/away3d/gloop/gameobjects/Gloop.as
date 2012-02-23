@@ -4,15 +4,10 @@ package com.away3d.gloop.gameobjects
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 	
-	import away3d.containers.ObjectContainer3D;
 	import away3d.core.base.Geometry;
-	import away3d.core.base.Object3D;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
-	import away3d.materials.ColorMaterial;
 	import away3d.materials.TextureMaterial;
-	import away3d.primitives.CylinderGeometry;
-	import away3d.primitives.SphereGeometry;
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
@@ -24,6 +19,7 @@ package com.away3d.gloop.gameobjects
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Vector3D;
+	import flash.utils.setInterval;
 
 	public class Gloop extends DefaultGameObject
 	{
@@ -91,14 +87,23 @@ package com.away3d.gloop.gameobjects
 			spec_tex = new BitmapTexture(Bitmap(new GloopSpecularPNGAsset).bitmapData);
 			
 			mat = new TextureMaterial(diff_tex);
+			mat.animateUVs = true;
 			mat.specularMap = spec_tex;
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
 			_innerMesh = new Mesh( geom, mat );
+			_innerMesh.subMeshes[0].scaleU = 0.5;
+			_innerMesh.subMeshes[0].scaleV = 0.5;
 
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh();
 			_meshComponent.mesh.addChild( _innerMesh );
+			
+			// TODO: Replace with nicer texture animations.
+			mat.repeat = true;
+			setInterval(function() : void {
+				_innerMesh.subMeshes[0].offsetU += 0.5;
+			}, 300);
 		}
 		
 		private function initAnim():void
@@ -213,9 +218,9 @@ package com.away3d.gloop.gameobjects
 	}
 }
 
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.Settings;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
 class GloopPhysicsComponent extends PhysicsComponent
 {
