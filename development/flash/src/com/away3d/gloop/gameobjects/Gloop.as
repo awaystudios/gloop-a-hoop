@@ -148,13 +148,13 @@ package com.away3d.gloop.gameobjects
 		}
 
 		// TODO: move all bounce code out of here!
-		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.1;
+		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.2;
 		private const BOUNCINESS_SPRING_FORCE:Number = 0.25;
-		private const BOUNCINESS_DAMPENING:Number = 0.9;
+		private const BOUNCINESS_DAMPENING:Number = 0.75;
 		private const BOUNCINESS_EFFECT_ON_SCALE_X:Number = 0.5;
-		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 1;
+		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 0.5;
 		private const ALIGNMENT_VELOCITY_FACTOR:Number = 0.2;
-		private const ALIGNMENT_RESTORE_FACTOR:Number = 0.005;
+		private const ALIGNMENT_RESTORE_FACTOR:Number = 0.01;
 
 		override public function update( dt:Number ):void {
 
@@ -242,6 +242,5 @@ class GloopPhysicsComponent extends PhysicsComponent
 	override public function create():void {
 		super.create();
 		setCollisionGroup( GLOOP );
-		friction = 0.01;
 	}
 }
