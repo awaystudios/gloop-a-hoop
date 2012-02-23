@@ -63,7 +63,7 @@ package com.away3d.gloop.gameobjects.components
 			switch (group)
 			{
 				case HOOP: 
-					fixture.SetFilterData({categoryBits: HOOP, maskBits: LEVEL, groupIndex: 0});
+					fixture.SetFilterData({categoryBits: HOOP, maskBits: LEVEL | HOOP, groupIndex: 0});
 					break;
 				case GLOOP_SENSOR: 
 					fixture.SetFilterData({categoryBits: GLOOP_SENSOR, maskBits: GLOOP, groupIndex: 0});
