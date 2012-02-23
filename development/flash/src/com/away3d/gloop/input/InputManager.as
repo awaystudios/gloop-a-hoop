@@ -98,13 +98,13 @@ package com.away3d.gloop.input {
 		{
 			if (!_targetHoop) {
 				_zooming = true;
-				_zoom *= (e.scaleX + e.scaleY) * 0.5;
+				_zoom += ((e.scaleX + e.scaleY) * 0.5) - 1;
 			} 
 		}
 		
 		private function onMouseWheel(e : MouseEvent) : void
 		{
-			_zoom /= 1 - e.delta * 0.01;
+			_zoom += e.delta * 0.01;
 		}
 		
 		override protected function onViewMouseDown(e:MouseEvent):void {

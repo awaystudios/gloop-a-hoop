@@ -52,10 +52,10 @@ package com.away3d.gloop.gameobjects.hoops
 		override public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			if (!_gloop) return super.onDragEnd(mouseX, mouseY); // if there's no gloop, run the regular drag code and bail
 			if (_aim.length < Settings.LAUNCHER_POWER_MIN) return;
-			fire();
+			launch();
 		}
 		
-		public function fire() : void
+		public function launch() : void
 		{
 			if (!_gloop)
 				return; // can't fire if not holding the gloop
@@ -65,6 +65,8 @@ package com.away3d.gloop.gameobjects.hoops
 				
 			var impulse : V2 = _physics.b2body.GetWorldVector(new V2(0, -power));
 			_gloop.physics.b2body.ApplyImpulse(impulse, _physics.b2body.GetWorldCenter());
+			
+			_gloop.onLaunch();
 			
 			_gloop = null; // release the gloop
 			_fired = true;

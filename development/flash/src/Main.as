@@ -82,6 +82,12 @@ package
 		}
 		
 		
+		protected function loadState(db : LevelDatabase) : void
+		{
+			// To be overridden in AIR version.
+		}
+		
+		
 		protected function saveState(xml : XML) : void
 		{
 			// To be overridden in AIR version and 
@@ -92,6 +98,8 @@ package
 		
 
 		private function onDbComplete( ev:Event ):void {
+			loadState(_db);
+			
 			_stack.gotoScreen( Screens.LEVELS );
 		}
 

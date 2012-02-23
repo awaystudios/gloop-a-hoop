@@ -40,6 +40,7 @@ package com.away3d.gloop.level
 			_world.timeStep = Settings.PHYSICS_TIME_STEP;
 			_world.velocityIterations = Settings.PHYSICS_VELOCITY_ITERATIONS;
 			_world.positionIterations = Settings.PHYSICS_POSITION_ITERATIONS;
+			trace( "grav: " + Settings.PHYSICS_GRAVITY_Y );
 			_world.gravityY = Settings.PHYSICS_GRAVITY_Y;
 			_spawn_point = new Point();
 			_all_objects = new Vector.<DefaultGameObject>();
@@ -48,6 +49,8 @@ package com.away3d.gloop.level
 		}
 		
 		public function setMode(value:Boolean):void {
+			if (value == _mode) return;
+			
 			trace("Level, set mode: " + (value ? "play" : "edit"));
 			_mode = value;
 			for each(var object:DefaultGameObject in _all_objects) {
@@ -88,7 +91,8 @@ package com.away3d.gloop.level
 
 			object.addEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
 			object.addEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
-
+			object.addEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
+			object.addEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
 			return object;
 		}
 
@@ -129,6 +133,11 @@ package com.away3d.gloop.level
 				if (obj.physics && obj.physics.parent)
 					obj.physics.parent.removeChild(obj.physics);
 
+				obj.removeEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
+				obj.removeEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
+				obj.removeEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
+				obj.removeEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
+					
 				obj.dispose();
 			}
 		}
@@ -151,7 +160,8 @@ package com.away3d.gloop.level
 
 		private function lose() : void
 		{
-			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOSE));
+			reset();
 		}
 		
 		private function onLauncherCatchGloop(e:GameObjectEvent):void {
@@ -160,6 +170,14 @@ package com.away3d.gloop.level
 		
 		private function onLauncherFireGloop(e:GameObjectEvent):void {
 			setMode(Level.PLAY_MODE);
+		}
+		
+		private function onHitGoalWall(e:GameObjectEvent):void {
+			win();
+		}
+		
+		private function onGloopLostMomentum(e:GameObjectEvent):void {
+			lose();
 		}
 	}
 }

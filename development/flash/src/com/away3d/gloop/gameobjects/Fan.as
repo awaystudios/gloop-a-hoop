@@ -61,7 +61,7 @@ package com.away3d.gloop.gameobjects
 
 
 		public function toggleOn():void {
-			trace( "on" );
+			if( _isOn ) return;
 			_isOn = true;
 			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:1, ease:Strong.easeIn } );
 			FanPhysicsComponent( _physics ).isOn = _isOn;
@@ -69,14 +69,13 @@ package com.away3d.gloop.gameobjects
 
 
 		public function toggleOff():void {
-			trace( "offing..." );
+			if( !_isOn ) return;
 			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:0, onComplete:onToggleOffComplete } );
 			FanPhysicsComponent( _physics ).isOn = _isOn;
 		}
 
 		private function onToggleOffComplete():void {
 			_isOn = false;
-			trace( "off" );
 		}
 	}
 }

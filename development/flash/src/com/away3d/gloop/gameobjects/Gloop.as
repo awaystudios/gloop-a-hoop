@@ -2,6 +2,8 @@ package com.away3d.gloop.gameobjects
 {
 
 	import Box2DAS.Common.V2;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	
 	import Box2DAS.Dynamics.ContactEvent;
 
 	import away3d.containers.ObjectContainer3D;
@@ -27,13 +29,18 @@ package com.away3d.gloop.gameobjects
 	{
 		private var _anim:VertexAnimationComponent;
 
+		private var _innerMesh:Mesh;
+		private var _tracer:Sprite;
+
 		private var _splat:SplatComponent;
 		private var _spawnX:Number;
 		private var _spawnY:Number;
 
-		private var _innerMesh:Mesh;
-		private var _tracer:Sprite;
+		private var _avgSpeed:Number = 0;
 
+		private var _bounceVelocity:Vector3D = new Vector3D();
+		private var _bouncePosition:Vector3D = new Vector3D();
+		
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
 			super();
 
@@ -62,7 +69,6 @@ package com.away3d.gloop.gameobjects
 
 			_meshComponent = new MeshComponent();
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
-			//_mesh.mesh = new Mesh( new SphereGeometry(Settings.GLOOP_RADIUS), colorMaterial );
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
 //			geom = new CylinderGeometry( Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS, 2 * Settings.GLOOP_RADIUS );
@@ -95,13 +101,11 @@ package com.away3d.gloop.gameobjects
 				_physics.b2body.SetLinearVelocity( new V2( 0, 0 ) );
 			}
 
-//			_anim.play( 'fly' );
+			_bounceVelocity = new Vector3D();
+			_bouncePosition = new Vector3D();
+
+			_anim.play( 'fly' );
 		}
-
-		private var _bounceVelocity:Vector3D = new Vector3D();
-		private var _bouncePosition:Vector3D = new Vector3D();
-
-		private const TO_DEGS:Number = 180 / Math.PI;
 
 		private function contactPostSolveHandler( event:ContactEvent ):void {
 			var collisionStrength:Number = event.impulses.normalImpulse1;
@@ -113,9 +117,10 @@ package com.away3d.gloop.gameobjects
 			_bouncePosition.y += force * Math.abs( collisionNormal.y );
 		}
 
+		// TODO: move all bounce code out of here!
 		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.1;
 		private const BOUNCINESS_SPRING_FORCE:Number = 0.25;
-		private const BOUNCINESS_DAMPENING:Number = 0.95;
+		private const BOUNCINESS_DAMPENING:Number = 0.9;
 		private const BOUNCINESS_EFFECT_ON_SCALE_X:Number = 0.5;
 		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 1;
 		private const ALIGNMENT_VELOCITY_FACTOR:Number = 0.2;
@@ -126,9 +131,22 @@ package com.away3d.gloop.gameobjects
 			super.update( dt );
 			_splat.update( dt );
 
+			var velocity:V2 = _physics.linearVelocity;
+			var speed:Number = velocity.length();
+
+			if (!inEditMode) {
+				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
+				
+				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
+					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
+				}
+			}
+
 			// update inner mesh orientation depending on velocity
-			var velocity:V2 = _physics.b2body.GetLinearVelocity();
-			_physics.b2body.ApplyTorque( velocity.x * ALIGNMENT_VELOCITY_FACTOR ); // align towards horizontal trajectory
+			if( speed > 0 ) {
+				var flyTorque:Number = velocity.x;
+				_physics.b2body.ApplyTorque( flyTorque * ALIGNMENT_VELOCITY_FACTOR ); // align towards horizontal trajectory
+			}
 			_physics.b2body.ApplyTorque( _meshComponent.mesh.rotationZ * ALIGNMENT_RESTORE_FACTOR ); // tend to point upwards
 
 			// bounce
@@ -150,6 +168,10 @@ package com.away3d.gloop.gameobjects
 				_tracer.x = -400 + _tracer.stage.stageWidth / 2 + 50 * _bouncePosition.x;
 				_tracer.y = 300 + _tracer.stage.stageHeight / 2 + 50 * _bouncePosition.y;
 			}
+		}
+		
+		public function onLaunch():void {
+			_avgSpeed = 10;
 		}
 
 		override public function get debugColor1():uint {
@@ -190,6 +212,6 @@ class GloopPhysicsComponent extends PhysicsComponent
 	override public function create():void {
 		super.create();
 		setCollisionGroup( GLOOP );
-		friction = 0.1;
+		friction = 0.01;
 	}
 }
