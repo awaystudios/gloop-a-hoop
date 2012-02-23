@@ -16,6 +16,7 @@ package com.away3d.gloop.gameobjects {
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
+			gloop.onHitGoalWall();
 		}
 		
 		override public function get debugColor1():uint {

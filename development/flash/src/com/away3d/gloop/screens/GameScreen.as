@@ -8,37 +8,41 @@ package com.away3d.gloop.screens
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-	
+
 	import com.away3d.gloop.camera.FreeFlyCameraController;
 	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
+	import com.away3d.gloop.level.events.LevelEvent;
 	import com.away3d.gloop.utils.HierarchyTool;
-	
+
 	import flash.display.Sprite;
 	import flash.events.Event;
-	
+	import flash.geom.Vector3D;
+
 	import wck.WCK;
 
 	public class GameScreen extends ScreenBase
 	{
 		private var _db:LevelDatabase;
 		private var _level:Level;
-		
-		private var _gloop : Gloop;
+
+		private var _gloop:Gloop;
 
 		private var _doc:WCK;
 		private var _view:View3D;
 		private var _cameraPointLight:PointLight;
 		private var _sceneLightPicker:StaticLightPicker;
 		private var _inputManager:InputManager;
-		private var _mouse3dTracer:Mesh; // TODO: remove
-		private var _mouse2dTracer:Sprite; // TODO: remove
+		private var _gloopIsFlying:Boolean;
+		private var _fireOffset:Vector3D;
+		private var _targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
-		public function GameScreen(db:LevelDatabase ) {
-			super(false);
+		public function GameScreen( db:LevelDatabase ) {
+			super( false );
 
 			_db = db;
 		}
@@ -54,7 +58,7 @@ package com.away3d.gloop.screens
 
 			_view = new View3D();
 			_view.antiAlias = 4;
-			_view.camera.rotationX = 20;
+			resetCameraOrientation();
 			addChild( _view );
 
 			_cameraPointLight = new PointLight();
@@ -62,37 +66,31 @@ package com.away3d.gloop.screens
 			_cameraPointLight.ambient = 0.4;
 
 			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
-			
-			_gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y, this);
+
+			_gloop = new Gloop( _db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y, this );
+			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
+			_gloop.addEventListener( GameObjectEvent.GLOOP_HIT_GOAL_WALL, onGloopHitGoalWall );
+			_gloop.addEventListener( GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum );
 		}
 
 		public override function activate():void {
 			addEventListener( Event.ENTER_FRAME, onEnterFrame );
 
 			_level = _db.selectedProxy.level;
+			_level.addEventListener( LevelEvent.LEVEL_RESET, onLevelReset )
 			_doc.addChild( _level.world );
+
 			_view.scene = _level.scene;
-			
-			_inputManager = new InputManager(_view, _level);
+
+			_inputManager = new InputManager( _view, _level );
 			_inputManager.reset();
 
-			/*
-			_mouse3dTracer = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFF0000 ) );
-			_level.scene.addChild( _mouse3dTracer );
-
-			_mouse2dTracer = new Sprite(); // TODO: remove tracer
-			_mouse2dTracer.graphics.beginFill(0xFF0000);
-			_mouse2dTracer.graphics.drawCircle(0, 0, 10);
-			_mouse2dTracer.graphics.endFill();
-			_level.world.addChild( _mouse2dTracer );
-			*/
-			
-			_gloop.setSpawn(_level.spawnPoint.x, _level.spawnPoint.y);
+			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splat.splattables = _level.splattableMeshes;
-			
+
 			_db.selectedProxy.level.add( _gloop );
 			_db.selectedProxy.level.reset();
-			
+
 			// Apply nice lighting.
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
@@ -103,27 +101,78 @@ package com.away3d.gloop.screens
 			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
 
+		private function onGloopLostMomentum( event:GameObjectEvent ):void {
+			_gloopIsFlying = false;
+			resetCameraOrientation();
+		}
+
+		private function onGloopHitGoalWall( event:GameObjectEvent ):void {
+			_gloopIsFlying = false;
+			resetCameraOrientation();
+		}
+
+		private function onGloopFired( event:GameObjectEvent ):void {
+			_fireOffset = new Vector3D( _view.camera.x - _gloop.physics.x, _view.camera.y + _gloop.physics.y, 0 );
+			_gloopIsFlying = true;
+		}
+
+		private function onLevelReset( event:LevelEvent ):void {
+			_gloopIsFlying = false;
+			resetCameraOrientation();
+		}
+
+		private function resetCameraOrientation():void {
+			_view.camera.rotationX = 0;
+			_view.camera.rotationY = 0;
+			_view.camera.rotationZ = 0;
+		}
+
 		private function onEnterFrame( ev:Event ):void {
-			var tz : Number;
-			
+
 			if( _level )
 				_level.update();
-			
-			_inputManager.update();
-			
-			tz = -1000 + _inputManager.zoom * 200;
-			_view.camera.z += (tz - _view.camera.z) * 0.4;
-			_view.camera.x += (_inputManager.panX - _view.camera.x) * 0.4;
-			_view.camera.y += (_inputManager.panY - _view.camera.y) * 0.4;
-			
-			// TODO: remove tracers
-			/*
-			_mouse3dTracer.x = _inputManager.mouseX;
-			_mouse3dTracer.y = -_inputManager.mouseY;
-			_mouse3dTracer.z = -_inputManager.PLANE_POSITION.z;
-			_mouse2dTracer.x = _inputManager.mouseX;
-			_mouse2dTracer.y = _inputManager.mouseY;
-			*/
+
+			// evaluate target camera position
+			if( _gloopIsFlying ) {
+				_fireOffset.scaleBy( 0.9 );
+				_targetPosition.x = _gloop.physics.x + _fireOffset.x;
+				_targetPosition.y = -_gloop.physics.y + _fireOffset.y;
+				_view.camera.lookAt( new Vector3D( _targetPosition.x, _targetPosition.y, 0 ) );
+			}
+			else {
+				_inputManager.update();
+				_targetPosition.x = _inputManager.panX;
+				_targetPosition.y = _inputManager.panY;
+			}
+			_targetPosition.z = _inputManager.zoom;
+
+			// contain target position
+			if( _targetPosition.x > _level.dimensionsMax.x ) {
+				_targetPosition.x = _level.dimensionsMax.x;
+				_inputManager.panX = _level.dimensionsMax.x;
+			} else if( _targetPosition.x < _level.dimensionsMin.x ) {
+				_targetPosition.x = _level.dimensionsMin.x;
+				_inputManager.panX = _level.dimensionsMin.x;
+			}
+			if( _targetPosition.y > _level.dimensionsMax.y ) {
+				_targetPosition.y = _level.dimensionsMax.y;
+				_inputManager.panY = _level.dimensionsMax.y;
+			} else if( _targetPosition.y < _level.dimensionsMin.y ) {
+				_targetPosition.y = _level.dimensionsMin.y;
+				_inputManager.panY = _level.dimensionsMin.y;
+			}
+			if( _targetPosition.z > _level.dimensionsMax.z ) {
+				_targetPosition.z = _level.dimensionsMax.z;
+				_inputManager.zoom = _level.dimensionsMax.z;
+			} else if( _targetPosition.z < _level.dimensionsMin.z ) {
+				_targetPosition.z = _level.dimensionsMin.z;
+				_inputManager.zoom = _level.dimensionsMin.z;
+			}
+
+			// ease camera towards target position
+			_view.camera.x += (_targetPosition.x - _view.camera.x) * 0.4;
+			_view.camera.y += (_targetPosition.y - _view.camera.y) * 0.4;
+			_view.camera.z += ( ( _targetPosition.z * 200 - 1000 ) - _view.camera.z) * 0.4;
 
 			_cameraPointLight.position = _view.camera.position;
 

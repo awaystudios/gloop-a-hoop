@@ -128,11 +128,12 @@ package com.away3d.gloop.gameobjects
 
 			_bounceVelocity = 0;
 			_bouncePosition = 0;
-			
+
 			_splat.reset();
 		}
 		
 		override public function update( dt:Number ):void {
+
 			super.update( dt );
 			_splat.update( dt );
 			
@@ -156,7 +157,7 @@ package com.away3d.gloop.gameobjects
 			_bouncePosition += _bounceVelocity;
 			
 			speed = Math.min(speed, 3);
-			
+
 			_meshComponent.mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
 			_meshComponent.mesh.scaleX = 1 + (1 - _meshComponent.mesh.scaleY)
 		}
@@ -181,7 +182,12 @@ package com.away3d.gloop.gameobjects
 		
 		public function onLaunch():void {
 			_avgSpeed = 10;
-			bounceAndFaceDirection(.1);			
+			bounceAndFaceDirection(.1);
+			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_FIRED, this));
+		}
+
+		public function onHitGoalWall():void {
+			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
 		}
 
 		override public function get debugColor1():uint {

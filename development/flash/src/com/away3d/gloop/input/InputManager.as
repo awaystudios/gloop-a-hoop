@@ -29,11 +29,11 @@ package com.away3d.gloop.input {
 		private var _panX : Number;
 		private var _panY : Number;
 		private var _zoom : Number;
-		
+
 		private var _zooming : Boolean;
 		private var _panning : Boolean;
-		
-		
+
+
 		private static const CLICK_TIME:uint = 250;
 		private static const CLICK_DISTANCE_THRESHOLD:uint = 50;
 		
@@ -81,7 +81,7 @@ package com.away3d.gloop.input {
 			
 			if (_targetHoop) 
 				_targetHoop.onDragUpdate(mouseX, mouseY);
-			
+
 			if (_panning && !_zooming) {
 				_panX -= (_view.mouseX - _prevViewMouseX);
 				_panY += (_view.mouseY - _prevViewMouseY);
@@ -90,10 +90,7 @@ package com.away3d.gloop.input {
 			_prevViewMouseX = _view.mouseX;
 			_prevViewMouseY = _view.mouseY;
 		}
-		
-		
-		
-		
+
 		private function onPinch(e : TransformGestureEvent) : void
 		{
 			if (!_targetHoop) {
@@ -169,7 +166,18 @@ package com.away3d.gloop.input {
 			
 			return nearest;
 		}
-		
+
+		public function set panX( value:Number ):void {
+			_panX = value;
+		}
+
+		public function set panY( value:Number ):void {
+			_panY = value;
+		}
+
+		public function set zoom( value:Number ):void {
+			_zoom = value;
+		}
 	}
 
 }

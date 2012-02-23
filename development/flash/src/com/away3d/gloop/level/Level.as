@@ -1,21 +1,21 @@
 package com.away3d.gloop.level
 {
-	import Box2DAS.Collision.AABB;
-	
+
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.GameObject;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	
+	import com.away3d.gloop.level.events.LevelEvent;
+
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
-	
+	import flash.geom.Vector3D;
+
 	import wck.World;
 
 	public class Level extends EventDispatcher
@@ -32,6 +32,9 @@ package com.away3d.gloop.level
 		private var _splattables : Vector.<Mesh>;
 		
 		private var _mode:Boolean = EDIT_MODE;
+
+		private var _dimensionsMin:Vector3D = new Vector3D( -500, -500, 0.001 ); // TODO: set these values from external data
+		private var _dimensionsMax:Vector3D = new Vector3D( 500, 500, 3.5 );
 		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
@@ -107,7 +110,6 @@ package com.away3d.gloop.level
 			return object;
 		}
 
-
 		public function setup() : void
 		{
 			var btn : Button;
@@ -163,6 +165,7 @@ package com.away3d.gloop.level
 				object.reset();
 			}
 			setMode(Level.EDIT_MODE, true);
+			dispatchEvent( new LevelEvent( LevelEvent.LEVEL_RESET, this ) );
 		}
 
 
@@ -196,6 +199,22 @@ package com.away3d.gloop.level
 		
 		private function onGloopCollectStar(e:GameObjectEvent):void {
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_STAR_COLLECT));
+		}
+
+		public function get dimensionsMin():Vector3D {
+			return _dimensionsMin;
+		}
+
+		public function get dimensionsMax():Vector3D {
+			return _dimensionsMax;
+		}
+
+		public function set dimensionsMin( value:Vector3D ):void {
+			_dimensionsMin = value;
+		}
+
+		public function set dimensionsMax( value:Vector3D ):void {
+			_dimensionsMax = value;
 		}
 	}
 }
