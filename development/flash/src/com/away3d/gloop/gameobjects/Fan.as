@@ -5,11 +5,10 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
-
+	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.greensock.TweenLite;
-	import com.greensock.easing.Expo;
-	import com.greensock.easing.Strong;
+	import com.greensock.easing.Cubic;
 
 	public class Fan extends DefaultGameObject implements IButtonControllable
 	{
@@ -18,7 +17,7 @@ package com.away3d.gloop.gameobjects
 		private var _isOn:Boolean;
 		private var _activeFanStrength:Object = { t:0 };
 
-		private const FAN_ON_OFF_TIME:Number = 1.5;
+		private const FAN_ON_OFF_TIME:Number = 0.4;
 
 		public function Fan( worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup:uint = 0 ) {
 
@@ -63,7 +62,8 @@ package com.away3d.gloop.gameobjects
 		public function toggleOn():void {
 			if( _isOn ) return;
 			_isOn = true;
-			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:1, ease:Strong.easeIn } );
+			var d : Number = Math.random() * 0.2;
+			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { delay: d, t:1, ease:Cubic.easeIn } );
 			FanPhysicsComponent( _physics ).isOn = _isOn;
 		}
 
@@ -84,8 +84,8 @@ package com.away3d.gloop.gameobjects
 import Box2DAS.Common.V2;
 import Box2DAS.Dynamics.ContactEvent;
 import Box2DAS.Dynamics.b2Fixture;
-import com.away3d.gloop.Settings;
 
+import com.away3d.gloop.Settings;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
