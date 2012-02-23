@@ -48,8 +48,8 @@ package com.away3d.gloop.level
 			_buttons = new Vector.<Button>();
 		}
 		
-		public function setMode(value:Boolean):void {
-			if (value == _mode) return;
+		public function setMode(value:Boolean, force:Boolean = false):void {
+			if (!force && value == _mode) return;
 			
 			trace("Level, set mode: " + (value ? "play" : "edit"));
 			_mode = value;
@@ -150,6 +150,7 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.reset();
 			}
+			setMode(Level.EDIT_MODE, true);
 		}
 
 
