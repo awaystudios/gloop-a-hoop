@@ -38,8 +38,8 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.setStatic();
 			
-			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.HOOP_RADIUS, Settings.HOOP_RADIUS, 5), new ColorMaterial(0xffcc00));
+			_meshComponent = new MeshComponent();
+			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.HOOP_RADIUS, Settings.HOOP_RADIUS, 5), new ColorMaterial(0xffcc00));
 		}
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {

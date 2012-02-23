@@ -39,13 +39,13 @@ package com.away3d.gloop.gameobjects
 
 			var fanMaterial:ColorMaterial = new ColorMaterial( 0xCCCCCC );
 
-			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh( new CylinderGeometry( 50, 50, 5 ), fanMaterial );
-			_mesh.mesh.rotationZ = rotation;
+			_meshComponent = new MeshComponent();
+			_meshComponent.mesh = new Mesh( new CylinderGeometry( 50, 50, 5 ), fanMaterial );
+			_meshComponent.mesh.rotationZ = rotation;
 
 			_movableMesh = new Mesh( new CubeGeometry( 5, 5, 100 ), fanMaterial );
 			_movableMesh.y = 10;
-			_mesh.mesh.addChild( _movableMesh );
+			_meshComponent.mesh.addChild( _movableMesh );
 		}
 
 		override public function update( dt:Number ):void {

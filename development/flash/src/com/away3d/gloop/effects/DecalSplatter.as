@@ -42,8 +42,6 @@ package com.away3d.gloop.effects
 			splatDirection = new Vector3D( 0, 1, 0 );
 		}
 
-		// TODO: manage decal mesh reuse
-		// TODO: implement projective zOffset, clip decals on edges, use circular random position instead of square, improve performance
 		public function evaluate():void {
 
 			_meshCollider.updateTarget( targets );
@@ -51,7 +49,7 @@ package com.away3d.gloop.effects
 			var rayPosition:Vector3D;
 			var rayDirection:Vector3D;
 			for( var i:uint; i < numRays; ++i ) {
-				// update ray position // TODO: apply randomization
+				// update ray position
 				rayPosition = sourcePosition.clone();
 				rayDirection = splatDirection.clone();
 				if( numRays > 1 ) {
@@ -82,8 +80,8 @@ package com.away3d.gloop.effects
 			var decal:Mesh = getNextDecal();
 			decal.scale( scale );
 			decal.position = position;
-			var offsetPosition:Vector3D = position.add( normal );
-			decal.lookAt( offsetPosition, new Vector3D( rand( -1, 1 ), rand( -1, 1 ), rand( -1, 1 ) ) );
+//			var offsetPosition:Vector3D = position.add( normal );
+//			decal.lookAt( offsetPosition, new Vector3D( rand( -1, 1 ), rand( -1, 1 ), rand( -1, 1 ) ) );
 			scene.addChild( decal );
 		}
 

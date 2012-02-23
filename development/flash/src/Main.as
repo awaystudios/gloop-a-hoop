@@ -122,7 +122,7 @@ package
 			
 			_db.selectedProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 			
-			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y);
+			gloop = new Gloop(_db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y, this);
 			
 			// TODO: this is a temporary provision of meshes for gloop to splat on
 			var splattables:Vector.<Mesh> = new Vector.<Mesh>()

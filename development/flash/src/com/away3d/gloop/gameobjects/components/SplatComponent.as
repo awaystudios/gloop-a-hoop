@@ -24,18 +24,18 @@ package com.away3d.gloop.gameobjects.components
 		{
 			_physics = physics;
 			_decalSplatter = new DecalSplatter(Settings.GLOOP_MAX_DECALS_TOTAL);
-			_decalSplatter.apertureX = 0.5;
-			_decalSplatter.apertureY = 0.5;
-			_decalSplatter.apertureZ = 0.5;
-			_decalSplatter.minScale = 0.5;
-			_decalSplatter.maxScale = 3;
-			_decalSplatter.maxDistance = 75;
+			_decalSplatter.apertureX = 0.35;
+			_decalSplatter.apertureY = 0.35;
+			_decalSplatter.apertureZ = 0.35;
+			_decalSplatter.minScale = 1;
+			_decalSplatter.maxScale = 2;
+			_decalSplatter.maxDistance = 100;
 			_decalSplatter.zOffset = -1;
 			_decalSplatter.shrinkFactor = 0.995;
-			
-			var colorMaterial : ColorMaterial = new ColorMaterial(0x00ff00);
-			var sphereDecal : Mesh = new Mesh(new SphereGeometry(5, 8, 6), colorMaterial);
-			_decalSplatter.decals = Vector.<Mesh>([sphereDecal]);
+
+			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
+			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), colorMaterial );
+			_decalSplatter.decals = Vector.<Mesh>( [sphereDecal] ); // TODO: implement Sprite3D's as decals
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
 		}

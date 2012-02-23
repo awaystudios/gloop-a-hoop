@@ -7,7 +7,7 @@ package com.away3d.gloop.gameobjects
 	public class DefaultGameObject extends GameObject
 	{
 		private var _mode:Boolean;
-		protected var _mesh : MeshComponent;
+		protected var _meshComponent : MeshComponent;
 		protected var _physics : PhysicsComponent;
 		
 		public function DefaultGameObject()
@@ -17,10 +17,10 @@ package com.away3d.gloop.gameobjects
 		
 		public override function update(dt:Number):void
 		{
-			if (_mesh && _physics) {
-				_mesh.mesh.x = _physics.x;
-				_mesh.mesh.y = -_physics.y;
-				_mesh.mesh.rotationZ = -physics.rotation;
+			if (_meshComponent && _physics) {
+				_meshComponent.mesh.x = _physics.x;
+				_meshComponent.mesh.y = -_physics.y;
+				_meshComponent.mesh.rotationZ = -physics.rotation;
 			}
 		}
 		
@@ -44,8 +44,8 @@ package com.away3d.gloop.gameobjects
 			return _physics;
 		}
 		
-		public function get mesh():MeshComponent {
-			return _mesh;
+		public function get meshComponent():MeshComponent {
+			return _meshComponent;
 		}
 		
 		public function get debugColor1():uint {

@@ -77,62 +77,62 @@ package com.away3d.gloop.level
 		public function add(object:DefaultGameObject):DefaultGameObject {
 			_all_objects.push(object);
 			if (object.physics) world.addChild(object.physics);
-			if (object.mesh) scene.addChild(object.mesh.mesh);
-			
+			if (object.meshComponent) scene.addChild(object.meshComponent.mesh);
+
 			if (object is Button) {
 				_buttons.push(Button(object));
 			}
 			else if (object is IButtonControllable) {
 				_btn_controllables.push(IButtonControllable(object));
 			}
-			
+
 			object.addEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
 			object.addEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
-			
+
 			return object;
 		}
-		
-		
+
+
 		public function setup() : void
 		{
 			var btn : Button;
-			
+
 			for each (btn in _buttons) {
 				var i : uint;
-				
+
 				for (i=0; i<_btn_controllables.length; i++) {
 					if (_btn_controllables[i].buttonGroup == btn.buttonGroup)
 						btn.addControllable(_btn_controllables[i]);
 				}
 			}
 		}
-		
-		
+
+
 		public function update() : void
 		{
 			var i : uint;
-			
+
 			for (i=0; i<_all_objects.length; i++) {
 				_all_objects[i].update(1);
 			}
 		}
-		
-		
+
+
 		public function dispose() : void
 		{
 			var obj : DefaultGameObject;
-			
+
 			while (obj = _all_objects.pop()) {
-				if (obj.mesh && obj.mesh.mesh && obj.mesh.mesh.parent)
-					obj.mesh.mesh.parent.removeChild(obj.mesh.mesh);
-				
+				if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent)
+					obj.meshComponent.mesh.parent.removeChild(obj.meshComponent.mesh);
+
 				if (obj.physics && obj.physics.parent)
 					obj.physics.parent.removeChild(obj.physics);
-				
+
 				obj.dispose();
 			}
 		}
-		
+
 		/**
 		 * Resets the level to its "pre-play" state, player edits are maintaned, but any toggled items are reset, launchers reloaded and so on
 		 */
@@ -141,18 +141,17 @@ package com.away3d.gloop.level
 				object.reset();
 			}
 		}
-		
-		
+
+
 		private function win() : void
 		{
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
 		}
-		
-		
+
+
 		private function lose() : void
 		{
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
-			reset();
 		}
 		
 		private function onLauncherCatchGloop(e:GameObjectEvent):void {

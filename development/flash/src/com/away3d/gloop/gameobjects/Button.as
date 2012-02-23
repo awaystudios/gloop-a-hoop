@@ -27,8 +27,8 @@ package com.away3d.gloop.gameobjects
 			
 			_physics.setStatic();
 			
-			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.BUTTON_RADIUS, Settings.BUTTON_RADIUS, 5), new ColorMaterial(debugColor1));
+			_meshComponent = new MeshComponent();
+			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.BUTTON_RADIUS, Settings.BUTTON_RADIUS, 5), new ColorMaterial(debugColor1));
 			
 			_btnGroup = btnGroup;
 			

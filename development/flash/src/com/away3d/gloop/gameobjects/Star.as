@@ -21,22 +21,22 @@ package com.away3d.gloop.gameobjects
 			_physics.applyGravity = false;
 			_physics.isSensor = true;
 			
-			_mesh = new MeshComponent();
-			_mesh.mesh = new Mesh(new CylinderGeometry(Settings.STAR_RADIUS, Settings.STAR_RADIUS, 5), new ColorMaterial(debugColor1));
-			_mesh.mesh.rotationX = 90;
+			_meshComponent = new MeshComponent();
+			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.STAR_RADIUS, Settings.STAR_RADIUS, 5), new ColorMaterial(debugColor1));
+			_meshComponent.mesh.rotationX = 90;
 		}
 		
 		override public function reset():void {
 			super.reset();
 			_touched = false;
-			_mesh.mesh.visible = true;
+			_meshComponent.mesh.visible = true;
 		}
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
 			if (_touched) return;
 			_touched = true;
-			_mesh.mesh.visible = false;
+			_meshComponent.mesh.visible = false;
 			trace("star!");
 		}
 		

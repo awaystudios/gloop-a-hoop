@@ -15,7 +15,9 @@ package com.away3d.gloop.utils
 
 			if( object is Mesh ) {
 				var mesh:Mesh = object as Mesh;
-				mesh.material.lightPicker = picker;
+				if( mesh.material ) {
+					mesh.material.lightPicker = picker;
+				}
 			}
 
 			if( object is ObjectContainer3D || object is Entity ) {
