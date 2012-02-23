@@ -17,6 +17,7 @@ package
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
+	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
 	
@@ -79,6 +80,7 @@ package
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
+			_stack.addScreen( Screens.WIN, new WinScreen() );
 		}
 		
 		
@@ -115,6 +117,8 @@ package
 		private function onDbLevelWin(ev : Event) : void
 		{
 			saveState( _db.getStateXml() );
+			
+			_stack.gotoScreen(Screens.WIN);
 		}
 		
 		
