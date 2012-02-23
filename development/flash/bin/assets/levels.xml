@@ -1,5 +1,8 @@
 <levels>
-    <level id="1" awd="assets/levels/testlevel.awd">
+    <level id="1" awd="assets/levels/001.awd">
+    </level>
+
+    <level id="999" awd="assets/levels/testlevel.awd">
         <inventory>
             <hoop variant="trampoline"/>
             <hoop variant="rocket"/>

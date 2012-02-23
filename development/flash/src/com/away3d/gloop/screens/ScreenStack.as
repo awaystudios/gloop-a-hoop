@@ -4,14 +4,18 @@ package com.away3d.gloop.screens
 
 	public class ScreenStack
 	{
+		private var _w : Number;
+		private var _h : Number;
 		private var _ctr : Sprite;
 		
 		private var _screens : Vector.<ScreenBase>;
 		private var _screens_by_id : Object;
 		private var _active_screen : ScreenBase;
 		
-		public function ScreenStack(ctr : Sprite)
+		public function ScreenStack(w : Number, h : Number, ctr : Sprite)
 		{
+			_w = w;
+			_h = h;
 			_ctr = ctr;
 			
 			_screens = new Vector.<ScreenBase>();
@@ -35,7 +39,7 @@ package com.away3d.gloop.screens
 			}
 			
 			_active_screen = _screens_by_id[id];
-			_active_screen.init();
+			_active_screen.init(_w, _h);
 			
 			_ctr.addChild(_active_screen);
 			_active_screen.activate();
