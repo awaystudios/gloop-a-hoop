@@ -16,9 +16,9 @@ GLOOP_RADIUS                  30
 GLOOP_RESTITUTION             0.75
 HOOP_RADIUS                   60
 HOOP_ROTATION_STEP            45
-LAUNCHER_POWER_MAX            200    # the drag distance is capped to this value, dragging longer won't make a difference
+LAUNCHER_POWER_MAX            60    # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_POWER_MIN            30    # dragging a distance shorter than this cancels the launch
-LAUNCHER_POWER_SCALE          10    # the value remaining is scaled by this multiplier before being applied to gloop
+LAUNCHER_POWER_SCALE          4    # the value remaining is scaled by this multiplier before being applied to gloop
 PHYSICS_GRAVITY_Y             1
 PHYSICS_POSITION_ITERATIONS   5
 PHYSICS_SCALE                 60
