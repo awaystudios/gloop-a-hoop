@@ -2,28 +2,24 @@ package com.away3d.gloop.gameobjects
 {
 
 	import Box2DAS.Common.V2;
-	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	
 	import Box2DAS.Dynamics.ContactEvent;
-
-	import away3d.containers.ObjectContainer3D;
-
+	
 	import away3d.core.base.Geometry;
-	import away3d.core.base.Object3D;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.CylinderGeometry;
-	import away3d.primitives.SphereGeometry;
-
+	import away3d.materials.TextureMaterial;
+	import away3d.textures.BitmapTexture;
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
-
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
-
 	import flash.geom.Vector3D;
+	import flash.utils.setInterval;
 
 	public class Gloop extends DefaultGameObject
 	{
@@ -40,6 +36,12 @@ package com.away3d.gloop.gameobjects
 
 		private var _bounceVelocity:Vector3D = new Vector3D();
 		private var _bouncePosition:Vector3D = new Vector3D();
+		
+		[Embed("/../assets/gloop/diff.png")]
+		private var GloopDiffusePNGAsset : Class;
+
+		[Embed("/../assets/gloop/spec.png")]
+		private var GloopSpecularPNGAsset : Class;
 
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
 
@@ -59,8 +61,6 @@ package com.away3d.gloop.gameobjects
 		}
 
 		private function init():void {
-			var geom:Geometry;
-
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
@@ -68,16 +68,46 @@ package com.away3d.gloop.gameobjects
 
 			_splat = new SplatComponent( _physics );
 
-			_meshComponent = new MeshComponent();
-			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
+			_physics.reportPostSolve = true;
+			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
+			
+			initVisual();
+			initAnim();
+		}
+		
+		
+		private function initVisual():void
+		{
+			var diff_tex : BitmapTexture;
+			var spec_tex : BitmapTexture;
+			var mat : TextureMaterial;
+			var geom:Geometry;
+			
+			diff_tex = new BitmapTexture(Bitmap(new GloopDiffusePNGAsset).bitmapData);
+			spec_tex = new BitmapTexture(Bitmap(new GloopSpecularPNGAsset).bitmapData);
+			
+			mat = new TextureMaterial(diff_tex);
+			mat.animateUVs = true;
+			mat.specularMap = spec_tex;
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
-//			geom = new CylinderGeometry( Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS, 2 * Settings.GLOOP_RADIUS );
-			_innerMesh = new Mesh( geom, colorMaterial );
+			_innerMesh = new Mesh( geom, mat );
+			_innerMesh.subMeshes[0].scaleU = 0.5;
+			_innerMesh.subMeshes[0].scaleV = 0.5;
 
+			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh();
 			_meshComponent.mesh.addChild( _innerMesh );
-
+			
+			// TODO: Replace with nicer texture animations.
+			mat.repeat = true;
+			setInterval(function() : void {
+				_innerMesh.subMeshes[0].offsetU += 0.5;
+			}, 300);
+		}
+		
+		private function initAnim():void
+		{
 			_anim = new VertexAnimationComponent( _innerMesh );
 			_anim.addSequence( 'fly', [
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
@@ -87,9 +117,8 @@ package com.away3d.gloop.gameobjects
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
 			] );
 
-			_physics.reportPostSolve = true;
-			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
 		}
+		
 
 		override public function reset():void {
 			super.reset();
@@ -131,7 +160,7 @@ package com.away3d.gloop.gameobjects
 
 			super.update( dt );
 			_splat.update( dt );
-
+			
 			var velocity:V2 = _physics.linearVelocity;
 			var speed:Number = velocity.length();
 
@@ -189,9 +218,9 @@ package com.away3d.gloop.gameobjects
 	}
 }
 
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.Settings;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
 class GloopPhysicsComponent extends PhysicsComponent
 {

@@ -14,6 +14,10 @@ package com.away3d.gloop.level
 		
 		private var _completed : Boolean;
 		
+		// Best star result and stars collected this round
+		private var _best_num_stars : uint;
+		private var _round_num_stars : uint;
+		
 		private var _inventory : Vector.<LevelInventoryItem>;
 		
 		
@@ -64,6 +68,7 @@ package com.away3d.gloop.level
 			xml = new XML('<level/>');
 			xml.@id = _id.toString();
 			xml.@completed = _completed.toString();
+			xml.@stars = _best_num_stars.toString();
 			
 			return xml;
 		}
@@ -72,6 +77,7 @@ package com.away3d.gloop.level
 		public function setStateFromXml(xml : XML) : void
 		{
 			_completed = (xml.@completed.toString() == 'true');
+			_best_num_stars = parseInt(xml.@stars.toString()) || 0;
 		}
 		
 		
@@ -89,6 +95,16 @@ package com.away3d.gloop.level
 			}
 		}
 		
+		
+		public function reset() : void
+		{
+			_level.reset();
+			
+			_round_num_stars = 0;
+			
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_RESET));
+		}
+		
 		private function onLevelComplete(ev : Event) : void
 		{
 			var loader : LevelLoader;
@@ -97,14 +113,30 @@ package com.away3d.gloop.level
 			loader.removeEventListener(Event.COMPLETE, onLevelComplete);
 			
 			_level = loader.loadedLevel;
-			_level.addEventListener(GameEvent.LEVEL_LOSE, onLevelGameEvent);
-			_level.addEventListener(GameEvent.LEVEL_WIN, onLevelGameEvent);
+			_level.addEventListener(GameEvent.LEVEL_LOSE, onLevelLose);
+			_level.addEventListener(GameEvent.LEVEL_WIN, onLevelWin);
+			_level.addEventListener(GameEvent.LEVEL_STAR_COLLECT, onLevelStarCollect);
 			
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOAD));
 		}
 		
 		
-		private function onLevelGameEvent(ev : GameEvent) : void
+		private function onLevelStarCollect(ev : GameEvent) : void
+		{
+			_round_num_stars++;
+			dispatchEvent(ev.clone());
+		}
+		
+		private function onLevelWin(ev : GameEvent) : void
+		{
+			_completed = true;
+			if (_round_num_stars > _best_num_stars)
+				_best_num_stars = _round_num_stars;
+			
+			dispatchEvent(ev.clone());
+		}
+		
+		private function onLevelLose(ev : GameEvent) : void
 		{
 			dispatchEvent(ev.clone());
 		}

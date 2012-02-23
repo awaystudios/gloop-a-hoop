@@ -149,6 +149,7 @@ package
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
 			if( ev.keyCode == Keyboard.R ) {
 				_stack.gotoScreen( Screens.LOADING );
+				_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 				_db.selectedProxy.load( true );
 			}
 			
@@ -158,11 +159,12 @@ package
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
 					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
 					_stack.gotoScreen( Screens.LOADING );
+					_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 					_db.selectedProxy.load( true );
 				});
 			}
 			
-			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.level.reset();
+			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.reset();
 			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
 		}

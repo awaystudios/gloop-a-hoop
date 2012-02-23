@@ -3,10 +3,12 @@ package com.away3d.gloop.gameobjects
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
-	import com.away3d.gloop.Settings;
 	
 	public class Star extends DefaultGameObject
 	{
@@ -37,7 +39,8 @@ package com.away3d.gloop.gameobjects
 			if (_touched) return;
 			_touched = true;
 			_meshComponent.mesh.visible = false;
-			trace("star!");
+			
+			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_COLLECT_STAR, this));
 		}
 		
 		override public function get debugColor1():uint {

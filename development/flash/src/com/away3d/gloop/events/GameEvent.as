@@ -8,6 +8,8 @@ package com.away3d.gloop.events
 		public static const LEVEL_LOSE : String = 'levelLose';
 		public static const LEVEL_LOAD : String = 'levelLoad';
 		public static const LEVEL_SELECT : String = 'levelSelect';
+		public static const LEVEL_RESET : String = 'levelReset';
+		public static const LEVEL_STAR_COLLECT : String = 'levelStarCollect';
 		
 		public function GameEvent(type : String)
 		{
