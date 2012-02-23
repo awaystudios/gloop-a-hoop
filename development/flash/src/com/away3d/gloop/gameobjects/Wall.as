@@ -2,6 +2,12 @@ package com.away3d.gloop.gameobjects {
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
+	
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	
+	import flash.geom.Matrix3D;
+	import flash.geom.Point;
+	import flash.geom.Vector3D;
 
 	/**
 	 * ...
@@ -15,6 +21,18 @@ package com.away3d.gloop.gameobjects {
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.setStatic(true);
+			
+			
+			if (Settings.SHOW_COLLISION_WALLS){
+				var material:ColorMaterial = new ColorMaterial(debugColor1);
+				_meshComponent = new MeshComponent();
+				var cube:CubeGeometry = new CubeGeometry(width, height, 60);
+				var mtx:Matrix3D = new Matrix3D;
+				mtx.appendTranslation(width/2, height/2, 0);
+				mtx.appendTranslation(offsetX, -offsetY, 0);
+				_meshComponent.mesh = new Mesh(cube, material);
+				cube.applyTransformation(mtx);
+			}
 		}
 		
 		override public function get debugColor1():uint {
@@ -44,11 +62,11 @@ class WallPhysicsComponent extends PhysicsComponent {
 		_width = width;
 		_height = height;
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawRect(_offsetX, _offsetY, _width, _height);
+		graphics.drawRect(_offsetX, _offsetY - _height, _width, _height);
 	}
 	
 	public override function shapes():void {
-		box(_width, _height, new V2(_width/2  +_offsetX, _height/2 + _offsetY));
+		box(_width, _height, new V2(_width/2 + _offsetX, _height/2 + _offsetY - _height));
 	}
 	
 	override public function create():void {

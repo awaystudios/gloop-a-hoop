@@ -9,6 +9,7 @@ package com.away3d.gloop.level
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
 	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.Fan;
 	import com.away3d.gloop.gameobjects.GameObjectType;
@@ -89,7 +90,7 @@ package com.away3d.gloop.level
 			min = mesh.bounds.min;
 			dim = mesh.bounds.max.subtract(min);
 			
-			wall = new Wall(min.x, -min.y, dim.x, -dim.y);
+			wall = new Wall(min.x, -min.y, dim.x, dim.y);
 			wall.physics.x = obj.x * _scale;
 			wall.physics.y = -obj.y * _scale;
 			wall.physics.rotation = -obj.rotationZ;
@@ -168,7 +169,7 @@ package com.away3d.gloop.level
 			min = mesh.bounds.min;
 			dim = mesh.bounds.max.subtract(min);
 			
-			target = new GoalWall(min.x, -min.y, dim.x, -dim.y);
+			target = new GoalWall(min.x, -min.y, dim.x, dim.y);
 			target.physics.x = obj.x * _scale;
 			target.physics.y = -obj.y * _scale;
 			target.physics.rotation = -obj.rotationZ;
@@ -228,7 +229,7 @@ package com.away3d.gloop.level
 				visual = true;
 			}
 			
-			if (visual) {
+			if (visual && Settings.SHOW_COSMETIC_MESHES) {
 				var mesh : Mesh
 				
 				obj.x *= _scale;
