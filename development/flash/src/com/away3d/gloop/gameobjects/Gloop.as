@@ -18,15 +18,11 @@ package com.away3d.gloop.gameobjects
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.geom.Vector3D;
 	import flash.utils.setInterval;
 
 	public class Gloop extends DefaultGameObject
 	{
 		private var _anim:VertexAnimationComponent;
-
-		private var _innerMesh:Mesh;
-		private var _tracer:Sprite;
 
 		private var _splat:SplatComponent;
 		private var _spawnX:Number;
@@ -34,8 +30,9 @@ package com.away3d.gloop.gameobjects
 
 		private var _avgSpeed:Number = 0;
 
-		private var _bounceVelocity:Vector3D = new Vector3D();
-		private var _bouncePosition:Vector3D = new Vector3D();
+		private var _bounceVelocity:Number = 0;
+		private var _bouncePosition:Number = 0;
+		private var _facingRotation:Number = 0;
 		
 		[Embed("/../assets/gloop/diff.png")]
 		private var GloopDiffusePNGAsset : Class;
@@ -44,19 +41,11 @@ package com.away3d.gloop.gameobjects
 		private var GloopSpecularPNGAsset : Class;
 
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
-
 			super();
 
 			_spawnX = spawnX;
 			_spawnY = spawnY;
-
-			// TODO: remove tracer
-			_tracer = new Sprite();
-			_tracer.graphics.beginFill( 0x00FF00 );
-			_tracer.graphics.drawCircle( 0, 0, 5 );
-			_tracer.graphics.endFill();
-			traceSpr.addChild( _tracer );
-
+			
 			init();
 		}
 
@@ -71,7 +60,7 @@ package com.away3d.gloop.gameobjects
 
 			_physics.reportPostSolve = true;
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
-			
+
 			initVisual();
 			initAnim();
 		}
@@ -92,24 +81,22 @@ package com.away3d.gloop.gameobjects
 			mat.specularMap = spec_tex;
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
-			_innerMesh = new Mesh( geom, mat );
-			_innerMesh.subMeshes[0].scaleU = 0.5;
-			_innerMesh.subMeshes[0].scaleV = 0.5;
-
+			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh();
-			_meshComponent.mesh.addChild( _innerMesh );
+			_meshComponent.mesh = new Mesh( geom, mat );
+			_meshComponent.mesh.subMeshes[0].scaleU = 0.5;
+			_meshComponent.mesh.subMeshes[0].scaleV = 0.5;
 			
 			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
 			setInterval(function() : void {
-				_innerMesh.subMeshes[0].offsetU += 0.5;
+				_meshComponent.mesh.subMeshes[0].offsetU += 0.5;
 			}, 300);
 		}
 		
 		private function initAnim():void
 		{
-			_anim = new VertexAnimationComponent( _innerMesh );
+			_anim = new VertexAnimationComponent( _meshComponent.mesh );
 			_anim.addSequence( 'fly', [
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame1Geom' ) ),
@@ -139,43 +126,13 @@ package com.away3d.gloop.gameobjects
 				_physics.b2body.SetLinearVelocity( new V2( 0, 0 ) );
 			}
 
-			_bounceVelocity = new Vector3D();
-			_bouncePosition = new Vector3D();
+			_bounceVelocity = 0;
+			_bouncePosition = 0;
 			
 			_splat.reset();
-
-			//_anim.play( 'fly' );
 		}
-
-		private var _bounceIsStrongerOnX:Boolean;
-		private function contactPostSolveHandler( event:ContactEvent ):void {
-			var collisionStrength:Number = event.impulses.normalImpulse1;
-			var collisionNormal:Vector3D = new Vector3D( event.normal.x, event.normal.y, 0 );
-			collisionNormal = _innerMesh.sceneTransform.deltaTransformVector( collisionNormal );
-			collisionNormal.normalize(); // TODO: need normalize?
-			var force:Number = collisionStrength * BOUNCINESS_IMPACT_DISPLACEMENT;
-			var absX:Number = Math.abs( collisionNormal.x );
-			var absY:Number = Math.abs( collisionNormal.y );
-			_bounceIsStrongerOnX = absX > absY;
-			if( _bounceIsStrongerOnX ) {
-				_bouncePosition.x += force * Math.abs( collisionNormal.x ); // use force to alter spring position
-			}
-			else {
-				_bouncePosition.y += force * Math.abs( collisionNormal.y );
-			}
-		}
-
-		// TODO: move all bounce code out of here!
-		private const BOUNCINESS_IMPACT_DISPLACEMENT:Number = 0.2;
-		private const BOUNCINESS_SPRING_FORCE:Number = 0.25;
-		private const BOUNCINESS_DAMPENING:Number = 0.8;
-		private const BOUNCINESS_EFFECT_ON_SCALE_X:Number = 0.33;
-		private const BOUNCINESS_EFFECT_ON_SCALE_Y:Number = 0.33;
-//		private const ALIGNMENT_VELOCITY_FACTOR:Number = 0.2;
-//		private const ALIGNMENT_RESTORE_FACTOR:Number = 0.01;
-
+		
 		override public function update( dt:Number ):void {
-
 			super.update( dt );
 			_splat.update( dt );
 			
@@ -189,50 +146,42 @@ package com.away3d.gloop.gameobjects
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
 				}
 			}
-
-			// update inner mesh orientation depending on velocity
-			/*if( speed > 0 ) {
-				var flyTorque:Number = velocity.x;
-				_physics.b2body.ApplyTorque( flyTorque * ALIGNMENT_VELOCITY_FACTOR ); // align towards horizontal trajectory
+						
+			_facingRotation -= velocity.x * .25;
+			_meshComponent.mesh.rotationZ = _facingRotation;
+			
+			_bounceVelocity -= (_bouncePosition - 0.5) * .1;
+			_bounceVelocity *= .8;
+			
+			_bouncePosition += _bounceVelocity;
+			
+			speed = Math.min(speed, 3);
+			
+			_meshComponent.mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
+			_meshComponent.mesh.scaleX = 1 + (1 - _meshComponent.mesh.scaleY)
+		}
+		
+		private function contactPostSolveHandler( e:ContactEvent ):void {
+			var force:Number = e.impulses.normalImpulse1 * .1;
+			force = Math.min(force, .3);
+			bounceAndFaceDirection(-force);
+		}
+		
+		private function bounceAndFaceDirection(bounceAmount:Number):void{
+			var velocity:V2 = _physics.linearVelocity;
+			
+			if (velocity.length() < 2){
+				_facingRotation = 0;
+			} else {
+				_facingRotation = Math.atan2(velocity.x, velocity.y) / Math.PI * 180 - 180;
 			}
-			_physics.b2body.ApplyTorque( _meshComponent.mesh.rotationZ * ALIGNMENT_RESTORE_FACTOR ); // tend to point upwards*/
-			_innerMesh.rotationX = -_meshComponent.mesh.rotationX; // force inner mesh look up
-			_innerMesh.rotationY = -_meshComponent.mesh.rotationY;
-			_innerMesh.rotationZ = -_meshComponent.mesh.rotationZ;
-
-			// bounce
-			var distance:Number = _bouncePosition.length; // apply spring acceleration
-			if( distance > 0 ) {
-				var force:Number = distance * BOUNCINESS_SPRING_FORCE;
-				_bounceVelocity.x -= force * _bouncePosition.x / distance;
-				_bounceVelocity.y -= force * _bouncePosition.y / distance;
-			}
-			_bounceVelocity.x *= BOUNCINESS_DAMPENING; // dampen velocity
-			_bounceVelocity.y *= BOUNCINESS_DAMPENING;
-			_bouncePosition.x += _bounceVelocity.x; // update position
-			_bouncePosition.y += _bounceVelocity.y;
-			var scx:Number = _bouncePosition.x * BOUNCINESS_EFFECT_ON_SCALE_X;
-			var scy:Number = _bouncePosition.y * BOUNCINESS_EFFECT_ON_SCALE_Y;
-			if( _bounceIsStrongerOnX ) {
-				_innerMesh.scaleX = 1 - scx;
-				_innerMesh.scaleY = 1 + scx;
-			}
-			else {
-				_innerMesh.scaleX = 1 + scy;
-				_innerMesh.scaleY = 1 - scy;
-			}
-//			_innerMesh.scaleX = 1 - _bouncePosition.x * BOUNCINESS_EFFECT_ON_SCALE_X; // apply scale
-//			_innerMesh.scaleY = 1 - _bouncePosition.y * BOUNCINESS_EFFECT_ON_SCALE_Y;
-
-			// TODO: remove tracer
-			if( _tracer.stage ) {
-				_tracer.x = -400 + _tracer.stage.stageWidth / 2 + 50 * _bouncePosition.x;
-				_tracer.y = 300 + _tracer.stage.stageHeight / 2 + 50 * _bouncePosition.y;
-			}
+			
+			_bounceVelocity = bounceAmount;
 		}
 		
 		public function onLaunch():void {
 			_avgSpeed = 10;
+			bounceAndFaceDirection(.1);			
 		}
 
 		override public function get debugColor1():uint {
@@ -263,9 +212,8 @@ class GloopPhysicsComponent extends PhysicsComponent
 		graphics.drawCircle( 0, 0, Settings.GLOOP_RADIUS );
 		graphics.beginFill( gameObject.debugColor2 );
 		graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
-
 	}
-
+	
 	public override function shapes():void {
 		circle( Settings.GLOOP_RADIUS );
 	}

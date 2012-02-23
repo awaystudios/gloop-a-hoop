@@ -13,7 +13,7 @@ GLOOP_LINEAR_DAMPING          .1
 GLOOP_MAX_DECALS_PER_HIT      20
 GLOOP_MAX_DECALS_TOTAL        30
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
-GLOOP_RADIUS                  30
+GLOOP_RADIUS                  16
 GLOOP_RESTITUTION             0.75
 HOOP_RADIUS                   60
 HOOP_ROTATION_STEP            45
