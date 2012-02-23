@@ -20,7 +20,7 @@ package com.away3d.gloop.utils {
 		private var _loader		:URLLoader;
 		private var _data		:String = "";
 		private var _targetClass:Class;
-		private static const REGEX:RegExp = /^(?<!#)(\w+)\s+:\s+(.*?)\s*(#.*)?$/gm;
+		private static const REGEX:RegExp = /^(?<!#)(\w+)\s+(.*?)\s*(#.*)?$/gm;
 		
 		public function SettingsLoader(targetClass:Class) {
 			_targetClass = targetClass;
@@ -83,13 +83,11 @@ package com.away3d.gloop.utils {
 			
 			varlist.sortOn("name");
 			
-			
-			
 			for each (data in varlist) {
 				var spaces:String = "";
 				for (var i:int = 0; i <= maxlen - data.name.length; i++) spaces += " ";
 				
-				var output:String = data.name + " :" + spaces + data.value;
+				var output:String = data.name + spaces + data.value;
 				if (data.comment) output += "    # " + data.comment;
 				trace(output);
 			}
