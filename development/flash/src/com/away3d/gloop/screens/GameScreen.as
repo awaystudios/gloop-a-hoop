@@ -83,7 +83,7 @@ package com.away3d.gloop.screens
 		private function initHUD() : void
 		{
 			_hud = new HUD();
-			_hud.scale(0.1);
+			_hud.scale(0.05);
 			_hud.x = -15;
 			_hud.y = -5;
 			_hud.z = _view.camera.lens.near + 1;
