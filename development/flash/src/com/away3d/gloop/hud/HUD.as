@@ -67,12 +67,12 @@ package com.away3d.gloop.hud
 			var i : uint;
 			var len : uint;
 			
-			len = _levelProxy.inventory.length;
+			len = _levelProxy.inventory.items.length;
 			for (i=0; i<len; i++) {
 				var btn : InventoryButton;
 				var item : LevelInventoryItem;
 				
-				item = _levelProxy.inventory[i];
+				item = _levelProxy.inventory.items[i];
 				btn = new InventoryButton(item);
 				btn.x = i*60;
 				
