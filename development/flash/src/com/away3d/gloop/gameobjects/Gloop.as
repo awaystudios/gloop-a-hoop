@@ -19,6 +19,7 @@ package com.away3d.gloop.gameobjects
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.trace.Trace;
 	import flash.utils.setInterval;
 
 	public class Gloop extends DefaultGameObject
@@ -112,6 +113,12 @@ package com.away3d.gloop.gameobjects
 		}
 		
 		
+		public function get traceComponent() : PathTraceComponent
+		{
+			return _trace;
+		}
+		
+		
 		public function setSpawn(x : Number, y : Number) : void
 		{
 			_spawnX = x;
@@ -189,13 +196,12 @@ package com.away3d.gloop.gameobjects
 			_avgSpeed = 10;
 			bounceAndFaceDirection(.1);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_FIRED, this));
-			_trace.deleteAllPaths();
-			_trace.startNewPath();
+			
+			_trace.reset();
 		}
 
 		public function onHitGoalWall():void {
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
-			_trace.deleteAllPaths();
 		}
 
 		override public function get debugColor1():uint {

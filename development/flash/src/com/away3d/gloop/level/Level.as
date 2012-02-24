@@ -3,19 +3,20 @@ package com.away3d.gloop.level
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
-
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.level.events.LevelEvent;
-
+	
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-
+	
 	import wck.World;
 
 	public class Level extends EventDispatcher
@@ -99,6 +100,13 @@ package com.away3d.gloop.level
 			}
 			else if (object is IButtonControllable) {
 				_btn_controllables.push(IButtonControllable(object));
+			}
+			
+			// Special cases for Gloop
+			if (object is Gloop) {
+				var gloop : Gloop = Gloop(object);
+				
+				_scene.addChild(gloop.traceComponent.pathTracer);
 			}
 
 			object.addEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
