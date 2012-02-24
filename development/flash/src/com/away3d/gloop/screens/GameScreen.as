@@ -9,13 +9,14 @@ package com.away3d.gloop.screens
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
 	
+	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.hud.HUD;
 	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
-	import com.away3d.gloop.level.events.LevelEvent;
+	import com.away3d.gloop.level.LevelProxy;
 	import com.away3d.gloop.utils.HierarchyTool;
 	
 	import flash.display.Sprite;
@@ -27,7 +28,8 @@ package com.away3d.gloop.screens
 	public class GameScreen extends ScreenBase
 	{
 		private var _db:LevelDatabase;
-		private var _level:Level;
+		private var _level : Level;
+		private var _levelProxy:LevelProxy;
 
 		private var _gloop:Gloop;
 
@@ -102,10 +104,12 @@ package com.away3d.gloop.screens
 		public override function activate():void {
 			addEventListener( Event.ENTER_FRAME, onEnterFrame );
 
-			_level = _db.selectedProxy.level;
-			_level.addEventListener( LevelEvent.LEVEL_RESET, onLevelReset )
+			_levelProxy = _db.selectedProxy;
+			_level = _levelProxy.level;
+			
+			_levelProxy.addEventListener( GameEvent.LEVEL_RESET, onLevelReset )
+				
 			_doc.addChild( _level.world );
-
 			_view.scene = _level.scene;
 			
 			// Camera must be in scene since it needs to update
@@ -118,12 +122,13 @@ package com.away3d.gloop.screens
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splat.splattables = _level.splattableMeshes;
 
-			_db.selectedProxy.level.add( _gloop );
-			_db.selectedProxy.level.reset();
+			_level.add(_gloop);
+			_levelProxy.reset();
 			
-			_hud.reset(_db.selectedProxy);
+			_hud.reset(_levelProxy);
 
 			// Apply nice lighting.
+			// TODO: Don't affect HUD
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
 			}
@@ -146,7 +151,7 @@ package com.away3d.gloop.screens
 			_gloopIsFlying = true;
 		}
 
-		private function onLevelReset( event:LevelEvent ):void {
+		private function onLevelReset(event : GameEvent):void {
 			reset();
 		}
 

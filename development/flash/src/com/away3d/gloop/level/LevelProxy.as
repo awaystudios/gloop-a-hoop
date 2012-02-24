@@ -135,7 +135,6 @@ package com.away3d.gloop.level
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOAD));
 		}
 		
-		
 		private function onLevelStarCollect(ev : GameEvent) : void
 		{
 			_round_num_stars++;
@@ -154,6 +153,7 @@ package com.away3d.gloop.level
 		private function onLevelLose(ev : GameEvent) : void
 		{
 			dispatchEvent(ev.clone());
+			reset();
 		}
 	}
 }

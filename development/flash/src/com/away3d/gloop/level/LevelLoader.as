@@ -21,7 +21,6 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.hoops.LauncherHoop;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
-	import com.away3d.gloop.level.utils.SceneGraphIterator;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;

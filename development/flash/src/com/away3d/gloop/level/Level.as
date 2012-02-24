@@ -11,7 +11,6 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.level.events.LevelEvent;
 	
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
@@ -173,7 +172,6 @@ package com.away3d.gloop.level
 				object.reset();
 			}
 			setMode(Level.EDIT_MODE, true);
-			dispatchEvent( new LevelEvent( LevelEvent.LEVEL_RESET, this ) );
 		}
 
 
@@ -186,7 +184,6 @@ package com.away3d.gloop.level
 		private function lose() : void
 		{
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOSE));
-			reset();
 		}
 		
 		private function onLauncherCatchGloop(e:GameObjectEvent):void {
