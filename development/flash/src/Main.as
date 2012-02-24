@@ -128,7 +128,7 @@ package
 		{
 			saveState( _db.getStateXml() );
 			
-			_stack.gotoScreen(Screens.WIN);
+			//_stack.gotoScreen(Screens.WIN);
 		}
 		
 		

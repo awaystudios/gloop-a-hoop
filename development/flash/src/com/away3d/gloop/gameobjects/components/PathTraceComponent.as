@@ -9,13 +9,17 @@ package com.away3d.gloop.gameobjects.components
 	import com.away3d.gloop.effects.PathTracer;
 	
 	import flash.events.Event;
+	import flash.geom.Point;
 
 	public class PathTraceComponent
 	{
 		private var _physics:PhysicsComponent;
 		private var _pathTracer:PathTracer;
 		private var _time:Number = 0;
-		private var _lastPosition:V2 = new V2();
+		
+		private var _lastPosX : Number;
+		private var _lastPosY : Number;
+		
 
 		public function PathTraceComponent(physics:PhysicsComponent) {
 
@@ -32,25 +36,35 @@ package com.away3d.gloop.gameobjects.components
 		public function reset() : void
 		{
 			_pathTracer.reset();
+			_lastPosX = _physics.x;
+			_lastPosY = _physics.y;
 		}
 
 
-		private const TIME_STEP:Number = 1;
-		private const PLACEMENT_OFFSET:Number = 10;
+		private const TRACE_MIN_DTIME : Number = 1;
+		private const TRACE_MIN_DPOS_SQUARED : Number = 100;
 
 		public function update( dt:Number ):void {
 			if (_pathTracer.hasMore) {
 				_time += dt;
-				if( _time > TIME_STEP ) {
+				if( _time > TRACE_MIN_DTIME ) {
 					var speed:Number = _physics.linearVelocity.length();
 					if( speed > 0 ) {
-						var position:V2 = new V2( _physics.x, _physics.y );
-						var distance:Number = new V2( position.x - _lastPosition.x, position.y - _lastPosition.y ).length();
-						if( distance > PLACEMENT_OFFSET ) {
+						var dx : Number, dy : Number;
+						var dSquared : Number;
+						
+						dx = _physics.x - _lastPosX;
+						dy = _physics.y - _lastPosY;
+						dSquared = dx*dx + dy*dy;
+						
+						if( dSquared > TRACE_MIN_DPOS_SQUARED ) {
 							_pathTracer.tracePoint( _physics.x, -_physics.y, 0 );
-							_lastPosition = position.clone();
+							
+							_lastPosX = _physics.x;
+							_lastPosY = _physics.y;
 						}
 					}
+					
 					_time = 0;
 				}
 			}
