@@ -59,6 +59,10 @@ package com.away3d.gloop
 		
 		static public var SHOW_COLLISION_WALLS : Boolean = false;
 		static public var SHOW_COSMETIC_MESHES : Boolean = true;
+		
+		static public var TRACE_NUM_POINTS : uint = 40;
+		static public var TRACE_MIN_DTIME : Number = 1;
+		static public var TRACE_MIN_DPOS_SQUARED : Number = 100;
 	}
 
 }
