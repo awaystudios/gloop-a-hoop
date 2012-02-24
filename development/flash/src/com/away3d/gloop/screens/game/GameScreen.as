@@ -99,8 +99,6 @@ package com.away3d.gloop.screens.game
 		{
 			_gloop = new Gloop(0, 0, this);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
-			_gloop.addEventListener( GameObjectEvent.GLOOP_HIT_GOAL_WALL, onGloopHitGoalWall );
-			_gloop.addEventListener( GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum );
 		}
 		
 		
@@ -160,21 +158,14 @@ package com.away3d.gloop.screens.game
 			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
 
-		private function onGloopLostMomentum( event:GameObjectEvent ):void {
-			reset();
-		}
-
-		private function onGloopHitGoalWall( event:GameObjectEvent ):void {
-			reset();
-		}
-
 		private function onGloopFired( event:GameObjectEvent ):void {
 			_cameraController.setGloopFired(
 				_view.camera.x - _gloop.physics.x,
 				_view.camera.y + _gloop.physics.y);
 		}
 
-		private function onLevelReset(event : GameEvent):void {
+		private function onLevelReset(event : GameEvent):void
+		{
 			reset();
 		}
 
