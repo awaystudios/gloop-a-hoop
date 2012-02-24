@@ -22,6 +22,18 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function reset() : void
+		{
+			var i : uint;
+			var len : uint;
+			
+			len = _items.length;
+			for (i=0; i<len; i++) {
+				_items[i].reset();
+			}
+		}
+		
+		
 		public function parseXml(xml : XML) : void
 		{
 			var item_xml : XML;
