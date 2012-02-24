@@ -1,29 +1,33 @@
 <levels>
-    <level id="1" awd="assets/levels/001.awd">
-        <inventory>
-            <hoop variant="trampoline"/>
-            <hoop variant="rocket"/>
-        </inventory>
-    </level>
+    <chapter poster="assets/chapters/01.jpg">
+        <title>Chapter 1</title>
 
-    <level id="2" awd="assets/levels/002.awd">
-        <inventory>
-            <hoop variant="trampoline"/>
-            <hoop variant="rocket"/>
-        </inventory>
-    </level>
+        <level id="1" awd="assets/levels/001.awd">
+            <inventory>
+                <hoop variant="trampoline"/>
+                <hoop variant="rocket"/>
+            </inventory>
+        </level>
 
-    <level id="3" awd="assets/levels/003.awd">
-        <inventory>
-            <hoop variant="trampoline"/>
-            <hoop variant="rocket"/>
-        </inventory>
-    </level>
+        <level id="2" awd="assets/levels/002.awd">
+            <inventory>
+                <hoop variant="trampoline"/>
+                <hoop variant="rocket"/>
+            </inventory>
+        </level>
 
-    <level id="999" awd="assets/levels/testlevel.awd">
-        <inventory>
-            <hoop variant="trampoline"/>
-            <hoop variant="rocket"/>
-        </inventory>
-    </level>
+        <level id="3" awd="assets/levels/003.awd">
+            <inventory>
+                <hoop variant="trampoline"/>
+                <hoop variant="rocket"/>
+            </inventory>
+        </level>
+
+        <level id="999" awd="assets/levels/testlevel.awd">
+            <inventory>
+                <hoop variant="trampoline"/>
+                <hoop variant="rocket"/>
+            </inventory>
+        </level>
+    </chapter>
 </levels>

@@ -112,6 +112,8 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
+			// TODO: Show chapter select screen
+			_db.selectChapter(_db.chapters[0]);
 			_stack.gotoScreen( Screens.LEVELS );
 		}
 
@@ -119,8 +121,8 @@ package
 		private function onDbSelect( ev:Event ):void {
 			_stack.gotoScreen( Screens.LOADING );
 
-			_db.selectedProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
-			_db.selectedProxy.load();
+			_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
+			_db.selectedLevelProxy.load();
 		}
 		
 		
@@ -139,7 +141,7 @@ package
 
 
 		private function onSelectedLevelLoad( ev:Event ):void {
-			_db.selectedProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+			_db.selectedLevelProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 			_stack.gotoScreen( Screens.GAME );
 		}
 
@@ -147,8 +149,8 @@ package
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
 			if( ev.keyCode == Keyboard.R ) {
 				_stack.gotoScreen( Screens.LOADING );
-				_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-				_db.selectedProxy.load( true );
+				_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+				_db.selectedLevelProxy.load( true );
 			}
 			
 			// reload settings and restart level
@@ -157,14 +159,14 @@ package
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
 					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
 					_stack.gotoScreen( Screens.LOADING );
-					_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-					_db.selectedProxy.load( true );
+					_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+					_db.selectedLevelProxy.load( true );
 				});
 			}
 			
-			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.reset();
-			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
-			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
+			if( ev.keyCode == Keyboard.F2) _db.selectedLevelProxy.reset();
+			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
+			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
 		}
 	}
 }

@@ -23,12 +23,15 @@ package com.away3d.gloop.screens.levelselect
 		protected override function initScreen() : void
 		{
 			var i : uint;
+			var len : uint;
 			
-			for (i=0; i<_db.levels.length; i++) {
+			len = _db.selectedChapter.levels.length;
+			
+			for (i=0; i<len; i++) {
 				var thumb : LevelThumb;
 				var level : LevelProxy;
 				
-				level = _db.levels[i];
+				level = _db.selectedChapter.levels[i];
 				thumb = new LevelThumb(level);
 				thumb.x = i*120;
 				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
@@ -42,7 +45,7 @@ package com.away3d.gloop.screens.levelselect
 			var thumb : LevelThumb;
 			
 			thumb = LevelThumb(ev.currentTarget);
-			_db.select(thumb.levelProxy);
+			_db.selectLevel(thumb.levelProxy);
 		}
 	}
 }
