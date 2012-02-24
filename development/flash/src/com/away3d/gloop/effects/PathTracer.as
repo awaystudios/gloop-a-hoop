@@ -1,57 +1,81 @@
 package com.away3d.gloop.effects
 {
 
+	import away3d.containers.ObjectContainer3D;
+	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.DefaultMaterialBase;
 	import away3d.primitives.SphereGeometry;
+	
+	import com.away3d.gloop.Settings;
 
-	public class PathTracer extends Mesh
+	public class PathTracer extends ObjectContainer3D
 	{
-		private var _pathEntry:Mesh;
-		private var _paths:Vector.<Mesh>;
-		private var _currentPath:Mesh;
+		private var _poolSize : uint;
+		
+		private var _path : Vector.<Mesh>;
+		private var _pointsTraced : uint;
+		
+		private var _minScale : Number;
+		private var _maxScale : Number;
 
-		public var minScale:Number = 0.5;
-		public var maxScale:Number = 1;
-
-		// TODO: manage path entry pool
-		// TODO: trace points at a constant distance, independent of physics speed
-
-		public function PathTracer() {
-
+		public function PathTracer(poolSize : uint = 20)
+		{
 			super();
-			_paths = new Vector.<Mesh>();
-			_pathEntry = new Mesh( new SphereGeometry( 5 ), new ColorMaterial( 0xFFFFFF ) );
+			
+			_poolSize = poolSize;
+			_minScale = Settings.TRACE_MIN_SCALE;
+			_maxScale = Settings.TRACE_MAX_SCALE;
+			
+			init();
 		}
+		
+		private function init() : void
+		{
+			var i : uint;
+			var mat : DefaultMaterialBase;
+			var geom : Geometry;
+			
+			geom = new SphereGeometry( 5 );
+			mat = new ColorMaterial( 0xFFFFFF );
+			
+			_path = new Vector.<Mesh>(_poolSize, true);
+			for (i=0; i<_poolSize; i++) {
+				_path[i] = new Mesh(geom, mat);
+			}
+			
+			_pointsTraced = 0;
+		}
+		
+		
+		public function get hasMore() : Boolean
+		{
+			return (_pointsTraced < _poolSize);
+		}
+		
+		
+		public function reset() : void
+		{
+			var i : uint;
+			
+			for (i=0; i<_pointsTraced; i++) {
+				removeChild(_path[i]);
+			}
+			
+			_pointsTraced = 0;
+		}
+		
 
 		public function tracePoint( x:Number, y:Number, z:Number ):void {
-			if( !_currentPath ) return;
-			var entry:Mesh = _pathEntry.clone() as Mesh;
+			var entry : Mesh;
+			
+			entry = _path[_pointsTraced++];
 			entry.x = x;
 			entry.y = y;
 			entry.z = z;
-			entry.scale( rand( minScale, maxScale ) );
-			_currentPath.addChild( entry );
-		}
-
-		public function createNewPath():void {
-			_currentPath = new Mesh();
-			addChild( _currentPath );
-			_paths.push( _currentPath );
-		}
-
-		public function deletePath( index:uint ):void {
-			var path:Mesh = _paths[ index ];
-			removeChild( path );
-			_paths.splice( _paths.indexOf( path ), 1 );
-			path = null;
-			if( _paths.length > 0 ) {
-				_currentPath = _paths[ 0 ];
-			}
-		}
-
-		public function get numPaths():uint {
-			return _paths.length;
+			entry.scaleX = entry.scaleY = entry.scaleZ = rand(_minScale, _maxScale);
+			addChild( entry );
 		}
 
 		private function rand(min:Number, max:Number):Number

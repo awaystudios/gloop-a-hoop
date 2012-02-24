@@ -8,19 +8,20 @@ package com.away3d.gloop.screens
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-
+	
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.hud.HUD;
 	import com.away3d.gloop.input.InputManager;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.events.LevelEvent;
 	import com.away3d.gloop.utils.HierarchyTool;
-
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Vector3D;
-
+	
 	import wck.WCK;
 
 	public class GameScreen extends ScreenBase
@@ -37,6 +38,9 @@ package com.away3d.gloop.screens
 		private var _inputManager:InputManager;
 		private var _gloopIsFlying:Boolean;
 		private var _fireOffset:Vector3D;
+		
+		private var _hud : HUD;
+		
 
 		public function GameScreen( db:LevelDatabase ) {
 			super( false );
@@ -45,7 +49,17 @@ package com.away3d.gloop.screens
 		}
 
 
-		protected override function initScreen():void {
+		protected override function initScreen():void
+		{
+			initWorld();
+			initHUD();
+			initGloop();
+		}
+
+		
+		
+		private function initWorld() : void
+		{
 			_doc = new WCK();
 			_doc.x = 80;
 			_doc.y = 80;
@@ -57,14 +71,29 @@ package com.away3d.gloop.screens
 			_view.antiAlias = 4;
 			resetCameraOrientation();
 			addChild( _view );
-
+			
 			_cameraPointLight = new PointLight();
 			_cameraPointLight.specular = 0.3;
 			_cameraPointLight.ambient = 0.4;
 
 			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
-
-			_gloop = new Gloop( _db.selectedProxy.level.spawnPoint.x, _db.selectedProxy.level.spawnPoint.y, this );
+		}
+		
+		
+		private function initHUD() : void
+		{
+			_hud = new HUD();
+			_hud.scale(0.1);
+			_hud.x = -15;
+			_hud.y = -5;
+			_hud.z = _view.camera.lens.near + 1;
+			_view.camera.addChild(_hud);
+		}
+		
+		
+		private function initGloop() : void
+		{
+			_gloop = new Gloop(0, 0, this);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
 			_gloop.addEventListener( GameObjectEvent.GLOOP_HIT_GOAL_WALL, onGloopHitGoalWall );
 			_gloop.addEventListener( GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum );
@@ -78,6 +107,10 @@ package com.away3d.gloop.screens
 			_doc.addChild( _level.world );
 
 			_view.scene = _level.scene;
+			
+			// Camera must be in scene since it needs to update
+			// for the HUD to update accordingly.
+			_view.scene.addChild(_view.camera);
 
 			_inputManager = new InputManager( _view, _level );
 			_inputManager.reset();
