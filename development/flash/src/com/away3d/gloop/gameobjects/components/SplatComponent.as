@@ -40,7 +40,7 @@ package com.away3d.gloop.gameobjects.components
 			_decalSplatter.maxScale = 2;
 			_decalSplatter.maxDistance = 100;
 			_decalSplatter.zOffset = -1;
-			_decalSplatter.shrinkFactor = 0.995;
+			_decalSplatter.shrinkFactor = 0.999;
 
 			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
 			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), colorMaterial );

@@ -25,6 +25,7 @@ package com.away3d.gloop.effects
 		}
 
 		public function tracePoint( x:Number, y:Number, z:Number ):void {
+			if( !_currentPath ) return;
 			var entry:Mesh = _pathEntry.clone() as Mesh;
 			entry.x = x;
 			entry.y = y;

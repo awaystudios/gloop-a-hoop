@@ -9,8 +9,6 @@ package com.away3d.gloop.screens
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
 
-	import com.away3d.gloop.camera.FreeFlyCameraController;
-	import com.away3d.gloop.camera.ICameraController;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.input.InputManager;
@@ -101,13 +99,11 @@ package com.away3d.gloop.screens
 		}
 
 		private function onGloopLostMomentum( event:GameObjectEvent ):void {
-			_gloopIsFlying = false;
-			resetCameraOrientation();
+			reset();
 		}
 
 		private function onGloopHitGoalWall( event:GameObjectEvent ):void {
-			_gloopIsFlying = false;
-			resetCameraOrientation();
+			reset();
 		}
 
 		private function onGloopFired( event:GameObjectEvent ):void {
@@ -116,8 +112,14 @@ package com.away3d.gloop.screens
 		}
 
 		private function onLevelReset( event:LevelEvent ):void {
+			reset();
+		}
+
+		private function reset():void {
 			_gloopIsFlying = false;
 			resetCameraOrientation();
+			_inputManager.panX = _gloop.physics.x;
+			_inputManager.panY = -_gloop.physics.y;
 		}
 
 		private function resetCameraOrientation():void {
