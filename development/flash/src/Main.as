@@ -13,10 +13,11 @@ package
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
-	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
+	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.utils.HierarchyTool;
@@ -73,7 +74,8 @@ package
 		private function initDb():void {
 			_db = new LevelDatabase();
 			_db.addEventListener( Event.COMPLETE, onDbComplete );
-			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbSelect );
+			_db.addEventListener( GameEvent.CHAPTER_SELECT, onDbChapterSelect );
+			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbLevelSelect );
 			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
 			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
 			_db.loadXml( 'assets/levels.xml' );
@@ -89,6 +91,7 @@ package
 			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
+			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_stack) );
 		}
@@ -112,14 +115,18 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
-			// TODO: Show chapter select screen
-			_db.selectChapter(_db.chapters[0]);
+			_stack.gotoScreen( Screens.CHAPTERS );
+		}
+		
+		
+		private function onDbChapterSelect(ev : GameEvent) : void
+		{
 			_stack.gotoScreen( Screens.LEVELS );
 		}
 
 
-		private function onDbSelect( ev:Event ):void {
-			_stack.gotoScreen( Screens.LOADING );
+		private function onDbLevelSelect(ev : GameEvent):void {
+			_stack.gotoScreen(Screens.LOADING);
 
 			_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
 			_db.selectedLevelProxy.load();
