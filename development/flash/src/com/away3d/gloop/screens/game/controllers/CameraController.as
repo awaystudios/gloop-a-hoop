@@ -33,6 +33,13 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
+		public function resetOrientation() : void
+		{
+			_camera.rotationX = 0;
+			_camera.rotationY = 0;
+			_camera.rotationZ = 0;
+		}
+		
 		
 		public function setGloopFired(offX : Number, offY : Number) : void
 		{

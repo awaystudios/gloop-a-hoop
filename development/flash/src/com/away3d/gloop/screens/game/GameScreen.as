@@ -74,7 +74,6 @@ package com.away3d.gloop.screens.game
 
 			_view = new View3D();
 			_view.antiAlias = 4;
-			resetCameraOrientation();
 			addChild( _view );
 			
 			_cameraPointLight = new PointLight();
@@ -181,16 +180,11 @@ package com.away3d.gloop.screens.game
 
 		private function reset():void {
 			_cameraController.setGloopIdle();
-			resetCameraOrientation();
+			_cameraController.resetOrientation();
 			_inputManager.panX = _gloop.physics.x;
 			_inputManager.panY = -_gloop.physics.y;
 		}
 
-		private function resetCameraOrientation():void {
-			_view.camera.rotationX = 0;
-			_view.camera.rotationY = 0;
-			_view.camera.rotationZ = 0;
-		}
 
 		private function onEnterFrame( ev:Event ):void {
 
