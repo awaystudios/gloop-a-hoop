@@ -15,7 +15,7 @@ package com.away3d.gloop.screens.chapterselect
 			_data = data;
 			
 			graphics.beginFill(0xffcc00);
-			graphics.drawRect(0, 0, 100, 100);
+			graphics.drawRect(-300, -200, 600, 400);
 		}
 		
 		
