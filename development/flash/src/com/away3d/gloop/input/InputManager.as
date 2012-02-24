@@ -133,6 +133,8 @@ package com.away3d.gloop.input
 			super.onViewMouseDown(e);
 			_mouseDownTime = getTimer();
 			_isClick = true;
+			_panning = false;
+			_zooming = false;
 			
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
