@@ -65,6 +65,13 @@ package com.away3d.gloop
 		static public var TRACE_MIN_DPOS_SQUARED : Number = 100;
 		static public var TRACE_MIN_SCALE : Number = 0.3;
 		static public var TRACE_MAX_SCALE : Number = 0.7;
+		
+		[comment("the maximum time in milliseconds between down and up events to consider the input a click")]
+		static public var INPUT_CLICK_TIME : uint = 250;
+		[comment("the maximum distance a hoops centerpoint can be from the click to be considered hit")]
+		static public var INPUT_PICK_DISTANCE : uint = 50;
+		[comment("the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)")]
+		static public var INPUT_DRAG_THRESHOLD_SQUARED : uint = 100;
 	}
 
 }

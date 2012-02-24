@@ -1,5 +1,7 @@
-package com.away3d.gloop.input {
+package com.away3d.gloop.input
+{
 	import Box2DAS.Common.V2;
+	import com.away3d.gloop.Settings;
 	
 	import away3d.containers.View3D;
 	
@@ -12,53 +14,51 @@ package com.away3d.gloop.input {
 	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
-
+	
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
 	 */
-	public class InputManager extends MouseManager {
+	public class InputManager extends MouseManager
+	{
 		
-		private var _level:Level;
-		private var _mouseDownTime:Number = 0;
-		private var _targetHoop:Hoop;
+		private var _level : Level;
+		private var _mouseDownTime : Number = 0;
+		private var _targetHoop : Hoop;
 		
 		private var _prevViewMouseX : Number;
 		private var _prevViewMouseY : Number;
 		
+		private var _startViewMouseX : Number;
+		private var _startViewMouseY : Number;
+		
 		private var _panX : Number;
 		private var _panY : Number;
 		private var _zoom : Number;
-
+		
+		private var _isClick : Boolean;
 		private var _zooming : Boolean;
 		private var _panning : Boolean;
-
-
-		private static const CLICK_TIME:uint = 250;
-		private static const CLICK_DISTANCE_THRESHOLD:uint = 50;
 		
-		public function InputManager(view:View3D) {
+		public function InputManager(view : View3D)
+		{
 			super(view);
 		}
-		
 		
 		public function get panX() : Number
 		{
 			return _panX;
 		}
 		
-		
 		public function get panY() : Number
 		{
 			return _panY;
 		}
 		
-		
 		public function get zoom() : Number
 		{
 			return _zoom;
 		}
-		
 		
 		public function reset(level : Level) : void
 		{
@@ -68,13 +68,11 @@ package com.away3d.gloop.input {
 			_panY = 300;
 		}
 		
-		
 		public function activate() : void
 		{
 			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
 			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
-		
 		
 		public function deactivate() : void
 		{
@@ -82,18 +80,21 @@ package com.away3d.gloop.input {
 			_view.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
-		
-		
-		override public function update():void {
-			if (!_mouseDown) 
+		override public function update() : void
+		{
+			if (!_mouseDown)
 				return; // if there's no touch, there's no sense in updating
 			
 			super.update();
 			
-			if (_targetHoop) 
+			var distance:Number = (_startViewMouseX - _view.mouseX) * (_startViewMouseX - _view.mouseX) + (_startViewMouseY - _view.mouseY) * (_startViewMouseY - _view.mouseY);
+			if (distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED) _isClick = false;
+			
+			if (_targetHoop && !_isClick)
 				_targetHoop.onDragUpdate(mouseX, mouseY);
-
-			if (_panning && !_zooming) {
+			
+			if (_panning && !_zooming)
+			{
 				_panX -= (_view.mouseX - _prevViewMouseX);
 				_panY += (_view.mouseY - _prevViewMouseY);
 			}
@@ -101,13 +102,14 @@ package com.away3d.gloop.input {
 			_prevViewMouseX = _view.mouseX;
 			_prevViewMouseY = _view.mouseY;
 		}
-
+		
 		private function onPinch(e : TransformGestureEvent) : void
 		{
-			if (!_targetHoop) {
+			if (!_targetHoop)
+			{
 				_zooming = true;
 				_zoom += ((e.scaleX + e.scaleY) * 0.5) - 1;
-			} 
+			}
 		}
 		
 		private function onMouseWheel(e : MouseEvent) : void
@@ -115,78 +117,61 @@ package com.away3d.gloop.input {
 			_zoom += e.delta * 0.01;
 		}
 		
-		override protected function onViewMouseDown(e:MouseEvent):void {
+		override protected function onViewMouseDown(e : MouseEvent) : void
+		{
 			super.onViewMouseDown(e);
 			_mouseDownTime = getTimer();
-			super.update(); // force update of mouse position to get the proper target
-			_targetHoop = getNearestHoop(mouseX, mouseY);
-			if (_targetHoop) {
+			_isClick = true;
+			
+			_targetHoop = _level.getNearestHoop(mouseX, mouseY);
+			if (_targetHoop)
+			{
 				_targetHoop.onDragStart(mouseX, mouseY);
 			}
-			else {
+			else
+			{
 				_panning = true;
+				_isClick = false;	// if no hoop was near enough we're sure it's a drag
 			}
 			
-			_prevViewMouseX = _view.mouseX;
-			_prevViewMouseY = _view.mouseY;
+			_startViewMouseX = _prevViewMouseX = _view.mouseX;
+			_startViewMouseY = _prevViewMouseY = _view.mouseY;
 		}
 		
-		
-		override protected function onViewMouseUp(e:MouseEvent):void {
+		override protected function onViewMouseUp(e : MouseEvent) : void
+		{
 			super.onViewMouseUp(e);
-			var clickDuration:Number = getTimer() - _mouseDownTime;
+			var clickDuration : Number = getTimer() - _mouseDownTime;
+			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
 			
-			// deal with click if duration was short enough
-			if (_targetHoop && clickDuration < CLICK_TIME) _targetHoop.onClick(mouseX, mouseY);
-			// end dragging
-			if (_targetHoop) _targetHoop.onDragEnd(mouseX, mouseY);
+			if (_targetHoop) {
+				// deal with click if duration was short enough
+				if (_isClick) {
+					_targetHoop.onClick(mouseX, mouseY);
+					
+				// else, end dragging
+				} else {
+					_targetHoop.onDragEnd(mouseX, mouseY);
+				}
+			}
 			
 			_targetHoop = null;
 			_panning = false;
 			_zooming = false;
 		}
 		
-		/**
-		 * Returns the nearest hoop to the supplied coordinates assuming it is closer than CLICK_DISTANCE_THRESHOLD
-		 * @param	mouseX
-		 * @param	mousey
-		 * @return
-		 */
-		private function getNearestHoop(mouseX:Number, mousey:Number):Hoop {
-			var hoop:Hoop;
-			var nearest:Hoop;
-			var dist:Number = 0;
-			var nearestDist:Number = CLICK_DISTANCE_THRESHOLD;
-			var mousePos:Point = new Point(mouseX, mouseY);
-			var hoopPos:Point = new Point;
-			
-			for (var i:int = 0; i < _level.objects.length; i++) {
-				hoop = _level.objects[i] as Hoop;
-				if (!hoop) continue;
-				
-				hoopPos.x = hoop.physics.x;
-				hoopPos.y = hoop.physics.y;
-				
-				dist = Point.distance(mousePos, hoopPos);
-				
-				if (dist < nearestDist) {
-					nearestDist = dist;
-					nearest = hoop;
-				}
-			}
-			
-			return nearest;
-		}
-
-		public function set panX( value:Number ):void {
+		public function set panX(value : Number) : void
+		{
 			_panX = value;
 		}
-
-		public function set panY( value:Number ):void {
+		
+		public function set panY(value : Number) : void
+		{
 			_panY = value;
 		}
-
-		public function set zoom( value:Number ):void {
+		
+		public function set zoom(value : Number) : void
+		{
 			_zoom = value;
 		}
 	}

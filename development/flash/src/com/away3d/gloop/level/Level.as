@@ -3,6 +3,7 @@ package com.away3d.gloop.level
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -69,6 +70,42 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.setMode(value);
 			}
+		}
+		
+		/**
+		 * Returns the nearest hoop to the supplied coordinates assuming it is closer than INPUT_PICK_DISTANCE
+		 * @param	mouseX
+		 * @param	mousey
+		 * @return
+		 */
+		public function getNearestHoop(worldX : Number, worldY : Number) : Hoop
+		{
+			var hoop : Hoop;
+			var nearest : Hoop;
+			var dist : Number = 0;
+			var nearestDist : Number = Settings.INPUT_PICK_DISTANCE;
+			var mousePos : Point = new Point(worldX, worldY);
+			var hoopPos : Point = new Point;
+			
+			for (var i : int = 0; i < _all_objects.length; i++)
+			{
+				hoop = _all_objects[i] as Hoop;
+				if (!hoop)
+					continue;
+				
+				hoopPos.x = hoop.physics.x;
+				hoopPos.y = hoop.physics.y;
+				
+				dist = Point.distance(mousePos, hoopPos);
+				
+				if (dist < nearestDist)
+				{
+					nearestDist = dist;
+					nearest = hoop;
+				}
+			}
+			
+			return nearest;
 		}
 		
 		public function get spawnPoint() : Point
