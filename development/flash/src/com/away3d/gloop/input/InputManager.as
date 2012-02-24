@@ -134,7 +134,10 @@ package com.away3d.gloop.input
 			_mouseDownTime = getTimer();
 			_isClick = true;
 			
-			_targetHoop = _level.getNearestHoop(mouseX, mouseY);
+			// if the level has a unplaced hoop, don't pick any hoops from the level
+			if (_level.unplacedHoop == null) {
+				_targetHoop = _level.getNearestHoop(mouseX, mouseY);
+			}
 			
 			_startViewMouseX = _prevViewMouseX = _view.mouseX;
 			_startViewMouseY = _prevViewMouseY = _view.mouseY;
@@ -145,6 +148,10 @@ package com.away3d.gloop.input
 			super.onViewMouseUp(e);
 			var clickDuration : Number = getTimer() - _mouseDownTime;
 			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
+			
+			if (_level.unplacedHoop && _isClick) {
+				_level.placeQueuedHoop(mouseX, mouseY);
+			} 
 			
 			if (_targetHoop) {
 				// deal with click if duration was short enough

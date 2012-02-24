@@ -40,6 +40,8 @@ package com.away3d.gloop.level
 		private var _dimensionsMin:Vector3D = new Vector3D( -350, -350, 0.001 ); // TODO: set these values from external data
 		private var _dimensionsMax:Vector3D = new Vector3D( 350, 350, 3.5 );
 		
+		private var _unplacedHoop:Hoop;
+		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
 		
@@ -70,6 +72,16 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.setMode(value);
 			}
+		}
+		
+		public function queueHoopForPlacement(unplacedHoop:Hoop):void {
+			_unplacedHoop = unplacedHoop;
+		}
+		
+		public function placeQueuedHoop(worldX:Number, worldY:Number):void {
+			add(_unplacedHoop);
+			_unplacedHoop.moveTo(worldX, worldY);
+			_unplacedHoop = null;
 		}
 		
 		/**
@@ -264,6 +276,10 @@ package com.away3d.gloop.level
 
 		public function set dimensionsMax( value:Vector3D ):void {
 			_dimensionsMax = value;
+		}
+		
+		public function get unplacedHoop():Hoop {
+			return _unplacedHoop;
 		}
 	}
 }

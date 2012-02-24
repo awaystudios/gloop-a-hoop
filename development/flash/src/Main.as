@@ -6,6 +6,7 @@ package
 	import away3d.library.AssetLibrary;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
+	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -165,6 +166,7 @@ package
 			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.reset();
 			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
+			if (ev.keyCode == Keyboard.F5) _db.selectedProxy.level.queueHoopForPlacement(new RocketHoop);
 		}
 	}
 }

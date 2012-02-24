@@ -68,23 +68,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
-			
-			var pos:V2 = new V2(mouseX, mouseY);
-
-			// floor to the nearest whole grid
-			// then offset by half a grid to align to the center of grid "boxes" not the intersections
-			pos.x = Math.floor(pos.x / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
-			pos.y = Math.floor(pos.y / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
-			
-			// transform point into physics coord space
-			pos.x /= Settings.PHYSICS_SCALE;
-			pos.y /= Settings.PHYSICS_SCALE;
-			
-			var angle:Number = _physics.b2body.GetAngle();
-			
-			_physics.b2body.SetTransform(pos, angle);
-			_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
-			
+			moveTo(mouseX, mouseY);
 			displayAsColliding(isCollidingWithLevel);
 		}
 		
@@ -106,6 +90,24 @@ package com.away3d.gloop.gameobjects.hoops
 			} else {
 				_meshComponent.mesh.material = _material;
 			}
+		}
+		
+		public function moveTo(worldX:Number, worldY:Number, snapToGrid:Boolean = true ):void {
+			var pos:V2 = new V2(worldX, worldY);
+			
+			if (snapToGrid) {
+				pos.x = snapToHoopGrid(pos.x);
+				pos.y = snapToHoopGrid(pos.y);
+			}
+
+			// transform point into physics coord space
+			pos.x /= Settings.PHYSICS_SCALE;
+			pos.y /= Settings.PHYSICS_SCALE;
+			
+			var angle:Number = _physics.b2body.GetAngle();
+			
+			_physics.b2body.SetTransform(pos, angle);
+			_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
 		}
 		
 		private function get isCollidingWithLevel():Boolean {
@@ -159,7 +161,13 @@ package com.away3d.gloop.gameobjects.hoops
 		public function get draggable():Boolean {
 			return _draggable;
 		}
-
+		
+		public static function snapToHoopGrid(value:Number):int {
+			// floor to the nearest whole grid
+			// then offset by half a grid to align to the center of grid "boxes" not the intersections
+			return Math.floor(value / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
+		}
+	
 	}
 
 }
