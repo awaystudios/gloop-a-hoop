@@ -87,8 +87,19 @@ package com.away3d.gloop.input
 			
 			super.update();
 			
+			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startViewMouseX - _view.mouseX) * (_startViewMouseX - _view.mouseX) + (_startViewMouseY - _view.mouseY) * (_startViewMouseY - _view.mouseY);
-			if (distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED) _isClick = false;
+			
+			// if we still might be clicking and the player has moved far enough, start the dragging
+			if (_isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED) {
+				_isClick = false;
+				
+				if (_targetHoop) {
+					_targetHoop.onDragStart(mouseX, mouseY);
+				} else {
+					_panning = true;
+				}
+			}
 			
 			if (_targetHoop && !_isClick)
 				_targetHoop.onDragUpdate(mouseX, mouseY);
@@ -124,15 +135,6 @@ package com.away3d.gloop.input
 			_isClick = true;
 			
 			_targetHoop = _level.getNearestHoop(mouseX, mouseY);
-			if (_targetHoop)
-			{
-				_targetHoop.onDragStart(mouseX, mouseY);
-			}
-			else
-			{
-				_panning = true;
-				_isClick = false;	// if no hoop was near enough we're sure it's a drag
-			}
 			
 			_startViewMouseX = _prevViewMouseX = _view.mouseX;
 			_startViewMouseY = _prevViewMouseY = _view.mouseY;
