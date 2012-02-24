@@ -1,15 +1,56 @@
 package com.away3d.gloop.level
 {
-	public class LevelInventoryItem
+	import com.away3d.gloop.events.InventoryEvent;
+	
+	import flash.events.EventDispatcher;
+
+	public class LevelInventoryItem extends EventDispatcher
 	{
-		public var type : String;
-		public var variant : String;
-		public var used : Boolean;
+		private var _type : String;
+		private var _variant : String;
 		
-		public function LevelInventoryItem(type : String, variant : String)
+		private var _numLeft : uint;
+		private var _numTotal : uint;
+		
+		
+		public function LevelInventoryItem(type : String, variant : String, numTotal : uint)
 		{
-			type = type;
-			variant = variant;
+			_type = type;
+			_variant = variant;
+			_numTotal = numTotal;
+		}
+		
+		
+		public function get type() : String
+		{
+			return _type;
+		}
+		
+		
+		public function get variant() : String
+		{
+			return _variant;
+		}
+		
+		
+		public function get numLeft() : uint
+		{
+			return _numLeft;
+		}
+		
+		
+		public function useOne() : void
+		{
+			if (_numLeft) {
+				_numLeft--;
+				dispatchEvent(new InventoryEvent(InventoryEvent.ITEM_CHANGE));
+			}
+		}
+		
+		
+		public function reset() : void
+		{
+			_numLeft = _numTotal;
 		}
 	}
 }

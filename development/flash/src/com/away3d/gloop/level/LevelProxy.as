@@ -19,12 +19,12 @@ package com.away3d.gloop.level
 		private var _best_num_stars : uint;
 		private var _round_num_stars : uint;
 		
-		private var _inventory : Vector.<LevelInventoryItem>;
+		private var _inventory : LevelInventory;
 		
 		
 		public function LevelProxy()
 		{
-			_inventory = new Vector.<LevelInventoryItem>();
+			_inventory = new LevelInventory();
 		}
 		
 		
@@ -46,7 +46,7 @@ package com.away3d.gloop.level
 		}
 		
 		
-		public function get inventory() : Vector.<LevelInventoryItem>
+		public function get inventory() : LevelInventory
 		{
 			return _inventory;
 		}
@@ -60,17 +60,10 @@ package com.away3d.gloop.level
 		
 		public function parseXml(xml : XML) : void
 		{
-			var item_xml : XML;
-			
 			_id = parseInt(xml.@id.toString());
 			_awd_url = xml.@awd.toString();
 			
-			for each (item_xml in xml.inventory.children()) {
-				var item : LevelInventoryItem;
-				
-				item = new LevelInventoryItem(item_xml.name(), item_xml.@variant.toString());
-				_inventory.push(item);
-			}
+			_inventory.parseXml(xml.inventory[0]);
 		}
 		
 		
