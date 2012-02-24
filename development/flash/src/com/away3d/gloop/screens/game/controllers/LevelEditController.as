@@ -53,7 +53,7 @@ package com.away3d.gloop.screens.game.controllers
 						break;
 				}
 				
-				if (hoop && item.numLeft>0) {
+				if (hoop) {
 					item.useOne();
 					_levelProxy.level.queueHoopForPlacement(hoop);
 				}
