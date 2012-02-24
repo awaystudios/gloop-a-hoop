@@ -1,21 +1,18 @@
 package com.away3d.gloop.gameobjects.hoops
 {
-	import Box2DAS.Common.V2;
-	import Box2DAS.Dynamics.ContactEvent;
-	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
-	
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
-	
-	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.Gloop;
+	import Box2DAS.Common.V2;
+	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-	import com.away3d.gloop.level.Level;
+	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.Settings;
 	
-	import flash.geom.ColorTransform;
+	
+	
 	
 	/**
 	 * ...
@@ -27,7 +24,14 @@ package com.away3d.gloop.gameobjects.hoops
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
 		protected var _resolveGloopCollisions:Boolean = false;
-		protected var _lastValidPosition:V2;
+		
+		protected var _lastPositionX:int = 0;
+		protected var _lastPositionY:int = 0;
+		protected var _lastValidPositionX:int = 0;
+		protected var _lastValidPositionY:int = 0;
+		protected var _needsPositionValidation:Boolean = true;
+		
+		protected var _newlyPlaced:Boolean = true;
 		
 		private var _material:ColorMaterial;
 		private var _material_invalid:ColorMaterial;
@@ -41,8 +45,6 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
-			
-			_physics.setStatic();
 			
 			_material = new ColorMaterial(debugColor1);
 			_material_invalid = new ColorMaterial(0xff0000);
@@ -62,26 +64,49 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode) return;
-			_lastValidPosition = _physics.b2body.GetPosition();
 			_physics.setStatic(false);
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
-			moveTo(mouseX, mouseY);
-			displayAsColliding(isCollidingWithLevel);
+			
+			var posX:int = snapToHoopGrid(mouseX);
+			var posY:int = snapToHoopGrid(mouseY);
+			
+			if (posX != _lastPositionX || posY != _lastPositionY) {
+				moveTo(posX, posY, false);
+				_lastPositionX = posX;
+				_lastPositionY = posY;
+			} else if (isCollidingWithLevel) {
+				displayAsColliding(true);
+			} else {
+				displayAsColliding(false);
+				_lastValidPositionX = _lastPositionX;
+				_lastValidPositionY = _lastPositionY;
+			}
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
-			_physics.setStatic(true);
-			
+			_needsPositionValidation = true;
+		}
+		
+		private function validatePosition():void {
 			if (isCollidingWithLevel) {
-				var angle:Number = _physics.b2body.GetAngle();
-				_physics.b2body.SetTransform(_lastValidPosition, angle);
-				_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+				
+				// if we're inside the wall and the hoop hasn't been validated at all, there's no valid place to go back to
+				// so it has to be removed
+				if (_newlyPlaced) {
+					dispatchEvent(new GameObjectEvent(GameObjectEvent.HOOP_REMOVE, this));
+					
+				// if not, we go back to wherever was the last valid position
+				} else {
+					moveTo(_lastValidPositionX, _lastValidPositionY);
+				}
 			}
-			
+			_newlyPlaced = false;
+			_physics.setStatic(true);
 			displayAsColliding(false);
+			_needsPositionValidation = false;
 		}
 		
 		private function displayAsColliding(value:Boolean):void {
@@ -112,11 +137,16 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private function get isCollidingWithLevel():Boolean {
 			var contacts:b2ContactEdge = _physics.b2body.GetContactList();
-		
-			//PhysicsComponent(contacts.contact.GetFixtureA().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
-			//PhysicsComponent(contacts.contact.GetFixtureB().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
-				
-			return contacts && contacts.contact.IsTouching();
+			
+			while (contacts) {
+				//PhysicsComponent(contacts.contact.GetFixtureA().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+				//PhysicsComponent(contacts.contact.GetFixtureB().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+
+				if (contacts.contact.IsTouching()) return true;
+				contacts = contacts.next;
+			}
+			
+			return false;
 		}
 		
 		public override function onCollidingWithGloopStart(gloop:Gloop):void
@@ -135,6 +165,8 @@ package com.away3d.gloop.gameobjects.hoops
 			_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
 			_meshComponent.mesh.scaleZ = _meshComponent.mesh.scaleX;
+			
+			if (_needsPositionValidation) validatePosition();
 		}
 		
 		override public function setMode(value:Boolean):void {

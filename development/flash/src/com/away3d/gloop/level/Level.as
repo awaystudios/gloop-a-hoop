@@ -168,8 +168,22 @@ package com.away3d.gloop.level
 			object.addEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
 			object.addEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
 			object.addEventListener(GameObjectEvent.GLOOP_COLLECT_STAR, onGloopCollectStar);
+			object.addEventListener(GameObjectEvent.HOOP_REMOVE, onHoopRemove);
 
 			return object;
+		}
+		
+		/**
+		 * Removes and disposes of an object. The object will not be usable after this.
+		 * @param	object	the object to remove
+		 * @return	true if object was removed, false if it could not be found
+		 */
+		private function remove(object:DefaultGameObject):Boolean {
+			var index:int = _all_objects.indexOf(object);
+			if (index < 0) return false;
+			_all_objects.splice(index, 1);
+			disposeObject(object);
+			return true;
 		}
 
 		public function setup() : void
@@ -202,21 +216,26 @@ package com.away3d.gloop.level
 			var obj : DefaultGameObject;
 			
 			while (obj = _all_objects.pop()) {
-				if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent)
-					obj.meshComponent.mesh.parent.removeChild(obj.meshComponent.mesh);
-
-				if (obj.physics && obj.physics.parent){
-					obj.physics.parent.removeChild(obj.physics);
-					obj.physics.destroy();
-				}
-
-				obj.removeEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
-				obj.removeEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
-				obj.removeEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
-				obj.removeEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
-					
-				obj.dispose();
+				disposeObject(obj);
 			}			
+		}
+		
+		public function disposeObject( obj : DefaultGameObject ):void {
+			if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent)
+				obj.meshComponent.mesh.parent.removeChild(obj.meshComponent.mesh);
+
+			if (obj.physics && obj.physics.parent){
+				obj.physics.parent.removeChild(obj.physics);
+				obj.physics.destroy();
+			}
+
+			obj.removeEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);
+			obj.removeEventListener(GameObjectEvent.LAUNCHER_FIRE_GLOOP, onLauncherFireGloop);
+			obj.removeEventListener(GameObjectEvent.GLOOP_HIT_GOAL_WALL, onHitGoalWall);
+			obj.removeEventListener(GameObjectEvent.GLOOP_LOST_MOMENTUM, onGloopLostMomentum);
+			obj.removeEventListener(GameObjectEvent.HOOP_REMOVE, onHoopRemove);
+			
+			obj.dispose();
 		}
 
 		/**
@@ -260,6 +279,11 @@ package com.away3d.gloop.level
 		
 		private function onGloopCollectStar(e:GameObjectEvent):void {
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_STAR_COLLECT));
+		}
+		
+		private function onHoopRemove(e:GameObjectEvent):void {
+			trace("New hoop placed inside wall, removing it");
+			remove(e.gameObject);
 		}
 
 		public function get dimensionsMin():Vector3D {

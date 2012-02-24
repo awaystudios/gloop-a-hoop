@@ -8,6 +8,7 @@ package com.away3d.gloop.screens.game
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
+	import flash.utils.setTimeout;
 	
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
@@ -140,8 +141,11 @@ package com.away3d.gloop.screens.game
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splat.splattables = _level.splattableMeshes;
 
-			_level.add(_gloop);
-			_levelProxy.reset();
+			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
+			setTimeout(function():void {
+				_level.add(_gloop);
+				_levelProxy.reset();				
+			}, 200);
 
 			// Apply nice lighting.
 			// TODO: Don't affect HUD
