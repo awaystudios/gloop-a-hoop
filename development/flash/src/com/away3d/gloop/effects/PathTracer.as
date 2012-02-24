@@ -7,6 +7,8 @@ package com.away3d.gloop.effects
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
 	import away3d.primitives.SphereGeometry;
+	
+	import com.away3d.gloop.Settings;
 
 	public class PathTracer extends ObjectContainer3D
 	{
@@ -14,15 +16,17 @@ package com.away3d.gloop.effects
 		
 		private var _path : Vector.<Mesh>;
 		private var _pointsTraced : uint;
-
-		public var minScale:Number = 0.5;
-		public var maxScale:Number = 1;
+		
+		private var _minScale : Number;
+		private var _maxScale : Number;
 
 		public function PathTracer(poolSize : uint = 20)
 		{
 			super();
 			
 			_poolSize = poolSize;
+			_minScale = Settings.TRACE_MIN_SCALE;
+			_maxScale = Settings.TRACE_MAX_SCALE;
 			
 			init();
 		}
@@ -70,7 +74,7 @@ package com.away3d.gloop.effects
 			entry.x = x;
 			entry.y = y;
 			entry.z = z;
-			entry.scaleX = entry.scaleY = entry.scaleZ = rand(minScale, maxScale);
+			entry.scaleX = entry.scaleY = entry.scaleZ = rand(_minScale, _maxScale);
 			addChild( entry );
 		}
 

@@ -63,6 +63,8 @@ package com.away3d.gloop
 		static public var TRACE_NUM_POINTS : uint = 40;
 		static public var TRACE_MIN_DTIME : Number = 1;
 		static public var TRACE_MIN_DPOS_SQUARED : Number = 100;
+		static public var TRACE_MIN_SCALE : Number = 0.3;
+		static public var TRACE_MAX_SCALE : Number = 0.7;
 	}
 
 }
