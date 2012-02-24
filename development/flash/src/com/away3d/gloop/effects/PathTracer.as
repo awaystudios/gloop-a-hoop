@@ -19,6 +19,7 @@ package com.away3d.gloop.effects
 		
 		private var _minScale : Number;
 		private var _maxScale : Number;
+		private var _decayScale : Number;
 
 		public function PathTracer(poolSize : uint = 20)
 		{
@@ -63,6 +64,7 @@ package com.away3d.gloop.effects
 				removeChild(_path[i]);
 			}
 			
+			_decayScale = 1;
 			_pointsTraced = 0;
 		}
 		
@@ -74,8 +76,11 @@ package com.away3d.gloop.effects
 			entry.x = x;
 			entry.y = y;
 			entry.z = z;
-			entry.scaleX = entry.scaleY = entry.scaleZ = rand(_minScale, _maxScale);
+			entry.scaleX = entry.scaleY = entry.scaleZ = rand(_minScale, _maxScale) * _decayScale;
 			addChild( entry );
+			
+			if ((_poolSize-_pointsTraced) < 10)
+				_decayScale -= 0.1;
 		}
 
 		private function rand(min:Number, max:Number):Number
