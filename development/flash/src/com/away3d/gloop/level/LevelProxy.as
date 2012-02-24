@@ -40,6 +40,12 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get inventory() : Vector.<LevelInventoryItem>
+		{
+			return _inventory;
+		}
+		
+		
 		public function get completed() : Boolean
 		{
 			return _completed;

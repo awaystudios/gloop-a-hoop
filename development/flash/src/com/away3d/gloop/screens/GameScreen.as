@@ -120,6 +120,8 @@ package com.away3d.gloop.screens
 
 			_db.selectedProxy.level.add( _gloop );
 			_db.selectedProxy.level.reset();
+			
+			_hud.reset(_db.selectedProxy);
 
 			// Apply nice lighting.
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
