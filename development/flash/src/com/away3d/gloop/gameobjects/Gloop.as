@@ -134,7 +134,6 @@ package com.away3d.gloop.gameobjects
 			_bouncePosition = 0;
 
 			_splat.reset();
-			_trace.deleteAllPaths();
 		}
 		
 		override public function update( dt:Number ):void {
@@ -151,7 +150,6 @@ package com.away3d.gloop.gameobjects
 
 				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
-					_trace.deleteAllPaths();
 				}
 			}
 						
@@ -191,6 +189,7 @@ package com.away3d.gloop.gameobjects
 			_avgSpeed = 10;
 			bounceAndFaceDirection(.1);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_FIRED, this));
+			_trace.deleteAllPaths();
 			_trace.startNewPath();
 		}
 
