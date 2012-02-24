@@ -142,8 +142,6 @@ package com.away3d.gloop.screens.game
 
 			_level.add(_gloop);
 			_levelProxy.reset();
-			
-			_hud.reset(_levelProxy);
 
 			// Apply nice lighting.
 			// TODO: Don't affect HUD
@@ -169,7 +167,10 @@ package com.away3d.gloop.screens.game
 			reset();
 		}
 
-		private function reset():void {
+		private function reset():void
+		{
+			_hud.reset(_levelProxy);
+			
 			_cameraController.setGloopIdle();
 			_cameraController.resetOrientation();
 			_inputManager.panX = _gloop.physics.x;

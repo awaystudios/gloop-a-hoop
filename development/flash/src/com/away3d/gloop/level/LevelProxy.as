@@ -40,6 +40,12 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get starsCollected() : uint
+		{
+			return _round_num_stars;
+		}
+		
+		
 		public function get inventory() : Vector.<LevelInventoryItem>
 		{
 			return _inventory;
