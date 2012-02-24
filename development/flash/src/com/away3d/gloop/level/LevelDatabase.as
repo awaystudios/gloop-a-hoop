@@ -9,33 +9,48 @@ package com.away3d.gloop.level
 
 	public class LevelDatabase extends EventDispatcher
 	{
-		private var _levels : Vector.<LevelProxy>;
-		private var _selected : LevelProxy;
+		private var _chapters : Vector.<ChapterData>;
+		private var _selectedChapter : ChapterData;
+		private var _selectedLevelProxy : LevelProxy;
 		
 		
 		public function LevelDatabase()
 		{
-			_levels = new Vector.<LevelProxy>();
+			_chapters = new Vector.<ChapterData>();
 		}
 		
 		
-		public function get levels() : Vector.<LevelProxy>
+		public function get chapters() : Vector.<ChapterData>
 		{
-			return _levels;
+			return _chapters;
 		}
 		
 		
-		public function get selectedProxy() : LevelProxy
+		public function get selectedChapter() : ChapterData
 		{
-			return _selected;
+			return _selectedChapter;
+		}
+		
+		public function get selectedLevelProxy() : LevelProxy
+		{
+			return _selectedLevelProxy;
 		}
 		
 		
-		public function select(proxy : LevelProxy) : void
+		public function selectChapter(chapter : ChapterData) : void
 		{
-			_selected = proxy;
-			_selected.addEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
-			_selected.addEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
+			_selectedChapter = chapter;
+			dispatchEvent(new GameEvent(GameEvent.CHAPTER_SELECT));
+		}
+		
+		
+		public function selectLevel(proxy : LevelProxy) : void
+		{
+			deselectCurrentLevel();
+			
+			_selectedLevelProxy = proxy;
+			_selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
+			_selectedLevelProxy.addEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
 			
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_SELECT));
 		}
@@ -43,14 +58,23 @@ package com.away3d.gloop.level
 		
 		public function getStateXml() : XML
 		{
-			var i : uint;
 			var xml : XML;
+			var chapter : ChapterData;
 			
 			xml = new XML('<state><levels/></state>');
 			
-			for (i=0; i<_levels.length; i++) {
-				if (_levels[i].completed) {
-					xml.levels.appendChild(_levels[i].getStateXml());
+			for each (chapter in _chapters) {
+				var i : uint;
+				var len : uint;
+				
+				len = chapter.levels.length;
+				for (i=0; i<len; i++) {
+					var level : LevelProxy;
+					
+					level = chapter.levels[i];
+					if (level.completed) {
+						xml.levels.appendChild(level.getStateXml());
+					}
 				}
 			}
 			
@@ -84,11 +108,11 @@ package com.away3d.gloop.level
 		}
 		
 		
-		private function deselectCurrent() : void
+		private function deselectCurrentLevel() : void
 		{
-			if (_selected) {
-				_selected.removeEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
-				_selected.removeEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
+			if (_selectedLevelProxy) {
+				_selectedLevelProxy.removeEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
+				_selectedLevelProxy.removeEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
 			}
 		}
 		
@@ -97,9 +121,12 @@ package com.away3d.gloop.level
 		{
 			var i : uint;
 			
-			for (i=0; i<_levels.length; i++) {
-				if (_levels[i].id == id)
-					return _levels[i];
+			for (i=0; i<_chapters.length; i++) {
+				var level : LevelProxy;
+				
+				level = _chapters[i].getLevelById(id);
+				if (level)
+					return level;
 			}
 			
 			return null;
@@ -115,6 +142,7 @@ package com.away3d.gloop.level
 		private function onXmlLoaderComplete(ev : Event) : void
 		{
 			var xml : XML;
+			var chapter_xml : XML;
 			var level_xml : XML;
 			var xml_loader : URLLoader;
 			
@@ -122,13 +150,13 @@ package com.away3d.gloop.level
 			xml_loader.removeEventListener(Event.COMPLETE, onXmlLoaderComplete);
 			xml = new XML(xml_loader.data);
 			
-			for each (level_xml in xml.level) {
-				var level : LevelProxy;
+			for each (chapter_xml in xml.chapter) {
+				var chapter : ChapterData;
 				
-				level = new LevelProxy();
-				level.parseXml(level_xml);
+				chapter = new ChapterData();
+				chapter.parseXml(chapter_xml);
 				
-				_levels.push(level);
+				_chapters.push(chapter);
 			}
 			
 			dispatchEvent(new Event(Event.COMPLETE));

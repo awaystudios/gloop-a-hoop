@@ -35,8 +35,8 @@ package com.away3d.gloop.gameobjects
 			_plane.width = roundToGrid(boundsWidth);
 			_plane.height = roundToGrid(boundsHeight);
 			
-			_meshComponent.mesh.x = roundToGrid(boundsX + _plane.width / 2);
-			_meshComponent.mesh.y = roundToGrid(boundsY + _plane.height / 2);
+			_meshComponent.mesh.x = roundToGrid(boundsX + _plane.width / 2) + Settings.GRID_SIZE/2;
+			_meshComponent.mesh.y = roundToGrid(boundsY + _plane.height / 2) + Settings.GRID_SIZE/2;
 			
 			_meshComponent.mesh.subMeshes[0].scaleU = _plane.width / Settings.GRID_SIZE;
 			_meshComponent.mesh.subMeshes[0].scaleV = _plane.height / Settings.GRID_SIZE;

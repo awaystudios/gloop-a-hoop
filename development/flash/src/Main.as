@@ -14,10 +14,11 @@ package
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
-	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
+	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.utils.HierarchyTool;
@@ -74,7 +75,8 @@ package
 		private function initDb():void {
 			_db = new LevelDatabase();
 			_db.addEventListener( Event.COMPLETE, onDbComplete );
-			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbSelect );
+			_db.addEventListener( GameEvent.CHAPTER_SELECT, onDbChapterSelect );
+			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbLevelSelect );
 			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
 			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
 			_db.loadXml( 'assets/levels.xml' );
@@ -90,6 +92,7 @@ package
 			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
+			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_stack) );
 		}
@@ -113,15 +116,21 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
+			_stack.gotoScreen( Screens.CHAPTERS );
+		}
+		
+		
+		private function onDbChapterSelect(ev : GameEvent) : void
+		{
 			_stack.gotoScreen( Screens.LEVELS );
 		}
 
 
-		private function onDbSelect( ev:Event ):void {
-			_stack.gotoScreen( Screens.LOADING );
+		private function onDbLevelSelect(ev : GameEvent):void {
+			_stack.gotoScreen(Screens.LOADING);
 
-			_db.selectedProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
-			_db.selectedProxy.load();
+			_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
+			_db.selectedLevelProxy.load();
 		}
 		
 		
@@ -140,7 +149,7 @@ package
 
 
 		private function onSelectedLevelLoad( ev:Event ):void {
-			_db.selectedProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+			_db.selectedLevelProxy.removeEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
 			_stack.gotoScreen( Screens.GAME );
 		}
 
@@ -148,8 +157,8 @@ package
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
 			if( ev.keyCode == Keyboard.R ) {
 				_stack.gotoScreen( Screens.LOADING );
-				_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-				_db.selectedProxy.load( true );
+				_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+				_db.selectedLevelProxy.load( true );
 			}
 			
 			// reload settings and restart level
@@ -158,15 +167,15 @@ package
 				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
 					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
 					_stack.gotoScreen( Screens.LOADING );
-					_db.selectedProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-					_db.selectedProxy.load( true );
+					_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+					_db.selectedLevelProxy.load( true );
 				});
 			}
 			
-			if( ev.keyCode == Keyboard.F2) _db.selectedProxy.reset();
-			if( ev.keyCode == Keyboard.F3) _db.selectedProxy.level.setMode(Level.EDIT_MODE);
-			if( ev.keyCode == Keyboard.F4) _db.selectedProxy.level.setMode(Level.PLAY_MODE);
-			if (ev.keyCode == Keyboard.F5) _db.selectedProxy.level.queueHoopForPlacement(new RocketHoop);
+			if( ev.keyCode == Keyboard.F2) _db.selectedLevelProxy.reset();
+			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
+			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
+			if (ev.keyCode == Keyboard.F5) _db.selectedLevelProxy.level.queueHoopForPlacement(new RocketHoop);
 		}
 	}
 }

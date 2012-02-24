@@ -48,6 +48,9 @@ package com.away3d.gloop.utils {
 			
 			var result:*;
 			while (result = REGEX.exec(_data)) {
+				if (result[2]=='true') result[2] = true;
+				else if (result[2]=='false') result[2] = false;
+				
 				_targetClass[result[1]] = result[2];
 			}
 			

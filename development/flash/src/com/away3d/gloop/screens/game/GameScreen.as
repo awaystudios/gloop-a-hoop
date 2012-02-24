@@ -114,7 +114,7 @@ package com.away3d.gloop.screens.game
 		public override function activate():void {
 			addEventListener( Event.ENTER_FRAME, onEnterFrame );
 
-			_levelProxy = _db.selectedProxy;
+			_levelProxy = _db.selectedLevelProxy;
 			_level = _levelProxy.level;
 			
 			_levelProxy.addEventListener( GameEvent.LEVEL_RESET, onLevelReset )
