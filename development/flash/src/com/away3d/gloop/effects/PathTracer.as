@@ -70,7 +70,7 @@ package com.away3d.gloop.effects
 			entry.x = x;
 			entry.y = y;
 			entry.z = z;
-			entry.scale( rand( minScale, maxScale ) );
+			entry.scaleX = entry.scaleY = entry.scaleZ = rand(minScale, maxScale);
 			addChild( entry );
 		}
 
