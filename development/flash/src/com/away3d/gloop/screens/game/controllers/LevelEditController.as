@@ -37,10 +37,14 @@ package com.away3d.gloop.screens.game.controllers
 		
 		private function onInventorySelect(ev : InventoryEvent) : void
 		{
-			if (ev.item.type == GameObjectType.HOOP) {
+			var item : LevelInventoryItem;
+			
+			item = ev.item;
+			
+			if (item.type == GameObjectType.HOOP) {
 				var hoop : Hoop;
 				
-				switch (ev.item.variant) {
+				switch (item.variant) {
 					case HoopType.TRAMPOLINE:
 						hoop = new TrampolineHoop();
 						break;
@@ -50,6 +54,7 @@ package com.away3d.gloop.screens.game.controllers
 				}
 				
 				if (hoop) {
+					item.useOne();
 					_levelProxy.level.queueHoopForPlacement(hoop);
 				}
 			}
