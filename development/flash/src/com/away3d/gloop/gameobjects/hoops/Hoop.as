@@ -7,6 +7,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.Settings;
 	
@@ -23,10 +24,14 @@ package com.away3d.gloop.gameobjects.hoops
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
 		protected var _resolveGloopCollisions:Boolean = false;
+		
 		protected var _lastPositionX:int = 0;
 		protected var _lastPositionY:int = 0;
 		protected var _lastValidPositionX:int = 0;
 		protected var _lastValidPositionY:int = 0;
+		protected var _needsPositionValidation:Boolean = true;
+		
+		protected var _newlyPlaced:Boolean = true;
 		
 		private var _material:ColorMaterial;
 		private var _material_invalid:ColorMaterial;
@@ -40,8 +45,6 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
-			
-			_physics.setStatic();
 			
 			_material = new ColorMaterial(debugColor1);
 			_material_invalid = new ColorMaterial(0xff0000);
@@ -84,12 +87,26 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			_needsPositionValidation = true;
+		}
+		
+		private function validatePosition():void {
 			if (isCollidingWithLevel) {
-				moveTo(_lastValidPositionX, _lastValidPositionY);
+				
+				// if we're inside the wall and the hoop hasn't been validated at all, there's no valid place to go back to
+				// so it has to be removed
+				if (_newlyPlaced) {
+					dispatchEvent(new GameObjectEvent(GameObjectEvent.HOOP_REMOVE, this));
+					
+				// if not, we go back to wherever was the last valid position
+				} else {
+					moveTo(_lastValidPositionX, _lastValidPositionY);
+				}
 			}
-			
+			_newlyPlaced = false;
 			_physics.setStatic(true);
 			displayAsColliding(false);
+			_needsPositionValidation = false;
 		}
 		
 		private function displayAsColliding(value:Boolean):void {
@@ -148,6 +165,8 @@ package com.away3d.gloop.gameobjects.hoops
 			_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
 			_meshComponent.mesh.scaleZ = _meshComponent.mesh.scaleX;
+			
+			if (_needsPositionValidation) validatePosition();
 		}
 		
 		override public function setMode(value:Boolean):void {

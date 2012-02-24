@@ -17,6 +17,8 @@ package com.away3d.gloop.gameobjects.events {
 
 		public static const GLOOP_COLLECT_STAR  :String = "gameobjectevent_gloop_collect_star";
 		
+		public static const HOOP_REMOVE		  :String = "gameobjectevent_hoop_remove";
+		
 		private var _gameObject:DefaultGameObject;
 		
 		public function GameObjectEvent(type:String, gameObject:DefaultGameObject) { 
