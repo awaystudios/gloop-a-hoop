@@ -73,6 +73,7 @@ package com.away3d.gloop.screens.chapterselect
 		{
 			endDrag();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		}
 		
 		
