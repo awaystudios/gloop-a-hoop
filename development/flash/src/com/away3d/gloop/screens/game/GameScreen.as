@@ -8,7 +8,6 @@ package com.away3d.gloop.screens.game
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
-	import flash.utils.setTimeout;
 	
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
@@ -20,11 +19,13 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.level.LevelProxy;
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
+	import com.away3d.gloop.screens.game.controllers.LevelEditController;
 	import com.away3d.gloop.utils.HierarchyTool;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Vector3D;
+	import flash.utils.setTimeout;
 	
 	import wck.WCK;
 
@@ -35,6 +36,7 @@ package com.away3d.gloop.screens.game
 		private var _levelProxy:LevelProxy;
 		
 		private var _cameraController : CameraController;
+		private var _editController : LevelEditController;
 
 		private var _gloop:Gloop;
 
@@ -107,6 +109,7 @@ package com.away3d.gloop.screens.game
 		{
 			_inputManager = new InputManager(_view);
 			_cameraController = new CameraController(_inputManager, _view.camera, _gloop);
+			_editController = new LevelEditController();
 		}
 		
 		
@@ -126,6 +129,8 @@ package com.away3d.gloop.screens.game
 			// Camera must be in scene since it needs to update
 			// for the HUD to update accordingly.
 			_view.scene.addChild(_view.camera);
+			
+			_editController.activate(_levelProxy);
 
 			_cameraController.setBounds(
 				_level.dimensionsMin.x,
@@ -157,6 +162,8 @@ package com.away3d.gloop.screens.game
 		public override function deactivate():void
 		{
 			_inputManager.deactivate();
+			_editController.deactivate();
+			
 			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
 
