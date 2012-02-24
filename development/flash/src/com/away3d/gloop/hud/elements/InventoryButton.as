@@ -9,6 +9,9 @@ package com.away3d.gloop.hud.elements
 	{
 		private var _item : LevelInventoryItem;
 		
+		private var _enabledMat : ColorMaterial;
+		private var _disabledMat : ColorMaterial;
+		
 		public function InventoryButton(item : LevelInventoryItem)
 		{
 			super();
@@ -18,7 +21,10 @@ package com.away3d.gloop.hud.elements
 			
 			drawRect(0, 0, 50, 50, 0, 0, 0, 0);
 			
-			material = new ColorMaterial(0xffcc00);
+			_enabledMat = new ColorMaterial(0x00aa00);
+			_disabledMat = new ColorMaterial(0xff0000);
+			
+			redraw();
 		}
 		
 		
@@ -28,9 +34,15 @@ package com.away3d.gloop.hud.elements
 		}
 		
 		
+		private function redraw() : void
+		{
+			material = (_item.numLeft > 0)? _enabledMat : _disabledMat;
+		}
+		
+		
 		private function onItemChange(ev : InventoryEvent) : void
 		{
-			visible = (_item.numLeft > 0);
+			redraw();
 		}
 	}
 }
