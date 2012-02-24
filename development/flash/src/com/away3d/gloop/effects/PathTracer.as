@@ -3,6 +3,7 @@ package com.away3d.gloop.effects
 
 	import away3d.containers.ObjectContainer3D;
 	import away3d.core.base.Geometry;
+	import away3d.entities.Entity;
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
@@ -14,7 +15,7 @@ package com.away3d.gloop.effects
 	{
 		private var _poolSize : uint;
 		
-		private var _path : Vector.<Mesh>;
+		private var _path : Vector.<Entity>;
 		private var _pointsTraced : uint;
 		
 		private var _minScale : Number;
@@ -35,15 +36,12 @@ package com.away3d.gloop.effects
 		private function init() : void
 		{
 			var i : uint;
-			var mat : DefaultMaterialBase;
-			var geom : Geometry;
-			
-			geom = new SphereGeometry( 5 );
-			mat = new ColorMaterial( 0xFFFFFF );
-			
-			_path = new Vector.<Mesh>(_poolSize, true);
+
+			var decal:Entity = new PseudoSpriteDecal( 0xFFFFFF );
+
+			_path = new Vector.<Entity>(_poolSize, true);
 			for (i=0; i<_poolSize; i++) {
-				_path[i] = new Mesh(geom, mat);
+				_path[i] = decal.clone() as Entity;
 			}
 			
 			_pointsTraced = 0;
@@ -70,7 +68,7 @@ package com.away3d.gloop.effects
 		
 
 		public function tracePoint( x:Number, y:Number, z:Number ):void {
-			var entry : Mesh;
+			var entry : Entity;
 			
 			entry = _path[_pointsTraced++];
 			entry.x = x;
