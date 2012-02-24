@@ -83,12 +83,18 @@ package com.away3d.gloop.utils {
 			
 			varlist.sortOn("name");
 			
+			var lastGroup:String = varlist[0].name.split("_")[0];
 			for each (data in varlist) {
 				var spaces:String = "";
 				for (var i:int = 0; i <= maxlen - data.name.length; i++) spaces += " ";
 				
 				var output:String = data.name + spaces + data.value;
 				if (data.comment) output += "    # " + data.comment;
+				
+				var group:String = data.name.split("_")[0];
+				if (group != lastGroup) trace("");
+				lastGroup = group;
+				
 				trace(output);
 			}
 		}

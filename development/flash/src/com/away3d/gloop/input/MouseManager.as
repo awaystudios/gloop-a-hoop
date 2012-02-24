@@ -46,10 +46,12 @@ package com.away3d.gloop.input
 
 		protected function onViewMouseDown(e:MouseEvent):void {
 			_mouseDown = true;
+			update();
 		}
 
 		protected function onViewMouseUp(e:MouseEvent):void {
 			_mouseDown = false;
+			update();
 		}
 
 		public function get mouseX():Number{
