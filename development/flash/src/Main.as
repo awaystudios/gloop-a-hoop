@@ -13,7 +13,7 @@ package
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
-	import com.away3d.gloop.screens.GameScreen;
+	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;

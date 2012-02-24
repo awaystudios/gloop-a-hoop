@@ -37,12 +37,8 @@ package com.away3d.gloop.input {
 		private static const CLICK_TIME:uint = 250;
 		private static const CLICK_DISTANCE_THRESHOLD:uint = 50;
 		
-		public function InputManager(view:View3D, level:Level) {
+		public function InputManager(view:View3D) {
 			super(view);
-			_level = level;
-			
-			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
-			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		
@@ -64,11 +60,26 @@ package com.away3d.gloop.input {
 		}
 		
 		
-		public function reset() : void
+		public function reset(level : Level) : void
 		{
+			_level = level;
 			_zoom = 1;
 			_panX = 0;
 			_panY = 300;
+		}
+		
+		
+		public function activate() : void
+		{
+			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+		}
+		
+		
+		public function deactivate() : void
+		{
+			_view.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			_view.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		
