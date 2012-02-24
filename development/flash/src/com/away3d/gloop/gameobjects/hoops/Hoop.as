@@ -69,7 +69,12 @@ package com.away3d.gloop.gameobjects.hoops
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
 			
-			var pos:V2 = new V2(Math.round(mouseX / Settings.GRID_SIZE) * Settings.GRID_SIZE, Math.round(mouseY / Settings.GRID_SIZE) * Settings.GRID_SIZE);
+			var pos:V2 = new V2(mouseX, mouseY);
+
+			// floor to the nearest whole grid
+			// then offset by half a grid to align to the center of grid "boxes" not the intersections
+			pos.x = Math.floor(pos.x / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
+			pos.y = Math.floor(pos.y / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
 			
 			// transform point into physics coord space
 			pos.x /= Settings.PHYSICS_SCALE;
@@ -173,7 +178,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 	{
 		super(gameObject);
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawCircle(0, 0, Settings.HOOP_RADIUS);
+		graphics.drawCircle(0, 0, Settings.HOOP_RADIUS * .8);
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect( -Settings.HOOP_RADIUS, -Settings.HOOP_RADIUS / 6, Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
 		
@@ -189,7 +194,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 		box(Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
 		
 		// used for collision with the world
-		circle(Settings.HOOP_RADIUS * 1);
+		circle(Settings.HOOP_RADIUS * .8);
 	}
 	
 	override public function create():void {
