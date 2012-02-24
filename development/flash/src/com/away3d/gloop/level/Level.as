@@ -3,19 +3,20 @@ package com.away3d.gloop.level
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
-
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import com.away3d.gloop.gameobjects.HoopGrid;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.level.events.LevelEvent;
-
+	
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-
+	
 	import wck.World;
 
 	public class Level extends EventDispatcher
@@ -30,6 +31,8 @@ package com.away3d.gloop.level
 		private var _btn_controllables : Vector.<IButtonControllable>;
 		
 		private var _splattables : Vector.<Mesh>;
+		
+		private var _grid:HoopGrid;
 		
 		private var _mode:Boolean = EDIT_MODE;
 
@@ -53,6 +56,9 @@ package com.away3d.gloop.level
 			_btn_controllables = new Vector.<IButtonControllable>();
 			_buttons = new Vector.<Button>();
 			_splattables = new Vector.<Mesh>;
+			
+			_grid = new HoopGrid();
+			add(_grid);
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -165,6 +171,7 @@ package com.away3d.gloop.level
 				object.reset();
 			}
 			setMode(Level.EDIT_MODE, true);
+			_grid.setDimensions(_dimensionsMin.x, _dimensionsMin.y, _dimensionsMax.x - _dimensionsMin.x, _dimensionsMax.y - _dimensionsMin.y);
 			dispatchEvent( new LevelEvent( LevelEvent.LEVEL_RESET, this ) );
 		}
 
