@@ -1,9 +1,9 @@
 package com.away3d.gloop.hud
 {
-	import away3d.core.base.data.Vertex;
-	
+	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.hud.elements.HUDElement;
 	import com.away3d.gloop.hud.elements.InventoryButton;
+	import com.away3d.gloop.hud.elements.StarIcon;
 	import com.away3d.gloop.level.LevelInventoryItem;
 	import com.away3d.gloop.level.LevelProxy;
 
@@ -11,20 +11,54 @@ package com.away3d.gloop.hud
 	{
 		private var _levelProxy : LevelProxy;
 		
+		private var _stars : Vector.<StarIcon>;
+		
 		private var _inventoryButtons : Vector.<InventoryButton>;
 		
 		public function HUD()
 		{
+			init();
+		}
+		
+		
+		private function init() : void
+		{
+			_stars = new Vector.<StarIcon>();
+			_stars[0] = new StarIcon();
+			_stars[0].y = 50;
+			addChild(_stars[0]);
+			
+			_stars[1] = new StarIcon();
+			_stars[1].x = 30;
+			_stars[1].y = _stars[0].y;
+			addChild(_stars[1]);
+			
+			_stars[2] = new StarIcon();
+			_stars[2].x = 60;
+			_stars[2].y = _stars[0].y;
+			addChild(_stars[2]);
+			
 			_inventoryButtons = new Vector.<InventoryButton>();
 		}
 		
 		
 		public function reset(levelProxy : LevelProxy) : void
 		{
-			_levelProxy = levelProxy;
+			if (levelProxy != _levelProxy) {
+				if (_levelProxy) {
+					_levelProxy.removeEventListener(GameEvent.LEVEL_STAR_COLLECT, onLevelProxyStarCollect);
+				}
+				
+				_levelProxy = levelProxy;
+				_levelProxy.addEventListener(GameEvent.LEVEL_STAR_COLLECT, onLevelProxyStarCollect);
+				
+				clear();
+				draw();
+			}
 			
-			clear();
-			draw();
+			_stars[0].visible = false;
+			_stars[1].visible = false;
+			_stars[2].visible = false;
 		}
 		
 		
@@ -54,6 +88,19 @@ package com.away3d.gloop.hud
 			
 			while (btn = _inventoryButtons.pop()) {
 				removeChild(btn);
+			}
+		}
+		
+		
+		private function onLevelProxyStarCollect(ev : GameEvent) : void
+		{
+			var i : uint;
+			var len : uint;
+			
+			len = _levelProxy.starsCollected;
+			
+			for (i=0; i<len; i++) {
+				_stars[i].visible = true;
 			}
 		}
 	}
