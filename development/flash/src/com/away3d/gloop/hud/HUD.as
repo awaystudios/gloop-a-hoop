@@ -1,5 +1,7 @@
 package com.away3d.gloop.hud
 {
+	import away3d.events.MouseEvent3D;
+	
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.hud.elements.HUDElement;
 	import com.away3d.gloop.hud.elements.InventoryButton;
@@ -75,6 +77,8 @@ package com.away3d.gloop.hud
 				item = _levelProxy.inventory.items[i];
 				btn = new InventoryButton(item);
 				btn.x = i*60;
+				btn.mouseEnabled = true;
+				btn.addEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
 				
 				addChild(btn);
 				_inventoryButtons.push(btn);
@@ -87,8 +91,19 @@ package com.away3d.gloop.hud
 			var btn : InventoryButton;
 			
 			while (btn = _inventoryButtons.pop()) {
+				btn.removeEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
 				removeChild(btn);
 			}
+		}
+		
+		
+		private function onInventoryButtonClick(ev : MouseEvent3D) : void
+		{
+			var btn : InventoryButton;
+			
+			btn = InventoryButton(ev.currentTarget);
+			
+			_levelProxy.inventory.select(btn.inventoryItem);
 		}
 		
 		

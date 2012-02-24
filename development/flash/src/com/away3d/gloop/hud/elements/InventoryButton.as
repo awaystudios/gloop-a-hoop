@@ -18,5 +18,11 @@ package com.away3d.gloop.hud.elements
 			
 			material = new ColorMaterial(0xffcc00);
 		}
+		
+		
+		public function get inventoryItem() : LevelInventoryItem
+		{
+			return _item;
+		}
 	}
 }

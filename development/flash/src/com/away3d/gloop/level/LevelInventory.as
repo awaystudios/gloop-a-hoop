@@ -1,11 +1,16 @@
 package com.away3d.gloop.level
 {
+	import com.away3d.gloop.events.InventoryEvent;
+	import com.away3d.gloop.hud.elements.InventoryButton;
+	
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
 	public class LevelInventory extends EventDispatcher
 	{
 		private var _items : Vector.<LevelInventoryItem>;
+		
+		private var _selectedItem : LevelInventoryItem;
 		
 		
 		public function LevelInventory()
@@ -16,9 +21,22 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get selectedItem() : LevelInventoryItem
+		{
+			return _selectedItem;
+		}
+		
+		
 		public function get items() : Vector.<LevelInventoryItem>
 		{
 			return _items;
+		}
+		
+		
+		public function select(item : LevelInventoryItem) : void
+		{
+			_selectedItem = item;
+			dispatchEvent(new InventoryEvent(InventoryEvent.ITEM_SELECT, item));
 		}
 		
 		
