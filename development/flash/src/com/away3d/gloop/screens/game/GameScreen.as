@@ -149,7 +149,7 @@ package com.away3d.gloop.screens.game
 			
 			_cannon.meshComponent.mesh.x = _level.spawnPoint.x;
 			_cannon.meshComponent.mesh.y = -_level.spawnPoint.y;
-			_view.scene.addChild(_cannon.meshComponent.mesh);
+			_level.add(_cannon);
 
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splat.splattables = _level.splattableMeshes;

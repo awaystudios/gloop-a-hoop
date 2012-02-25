@@ -9,10 +9,14 @@ package com.away3d.gloop.gameobjects
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
+	
+	import flash.utils.setTimeout;
 
 	public class Cannon extends DefaultGameObject
 	{
 		private var _animComponent : VertexAnimationComponent;
+		
+		private var _cannonBody : Mesh;
 		
 		public function Cannon()
 		{
@@ -31,22 +35,30 @@ package com.away3d.gloop.gameobjects
 		
 		private function initVisual() : void
 		{
-			var mat : DefaultMaterialBase;
-			var geom : Geometry;
+			var bodyMat : DefaultMaterialBase;
+			var footMat : DefaultMaterialBase;
+			var footGeom : Geometry;
+			var bodyGeom : Geometry;
 			
-			mat = new ColorMaterial(0xffcc00);
-			geom = Geometry(AssetLibrary.getAsset('CannonFrame0_geom')).clone();
+			bodyMat = new ColorMaterial(0xffcc00);
+			footMat = new ColorMaterial(0x00ffcc);
+			
+			bodyGeom = Geometry(AssetLibrary.getAsset('CannonFrame0_geom')).clone();
+			footGeom = Geometry(AssetLibrary.getAsset('CannonFoot_geom'));
 			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(geom, mat);
+			_meshComponent.mesh = new Mesh(footGeom, footMat);
+			
+			_cannonBody = new Mesh(bodyGeom, bodyMat);
+			_meshComponent.mesh.addChild(_cannonBody);
 		}
 		
 		
 		private function initAnim() : void
 		{
-			_animComponent = new VertexAnimationComponent(_meshComponent.mesh);
+			_animComponent = new VertexAnimationComponent(_cannonBody);
 			_animComponent.addSequence('fire', [
-				_meshComponent.mesh.geometry,
+				_cannonBody.geometry,
 				Geometry(AssetLibrary.getAsset('CannonFrame1_geom')).clone(),
 				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')).clone(),
 				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')).clone(),
