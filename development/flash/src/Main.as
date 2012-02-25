@@ -6,11 +6,12 @@ package
 	import away3d.library.AssetLibrary;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
-	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
+	import away3d.loaders.parsers.Max3DSParser;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
@@ -40,6 +41,10 @@ package
 		
 		[Embed('/../assets/gloop/flying/flying.awd', mimeType='application/octet-stream')]
 		private var FlyingAWDAsset : Class;
+		
+		[Embed('/../assets/cannon/cannon.3ds', mimeType='application/octet-stream')]
+		private var Cannon3DSAsset : Class;
+		
 
 		public function Main() {
 			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
@@ -50,6 +55,7 @@ package
 			removeEventListener( Event.ADDED_TO_STAGE, init );
 
 			Loader3D.enableParser( AWD2Parser );
+			Loader3D.enableParser( Max3DSParser );
 
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -60,6 +66,7 @@ package
 			initStack();
 			
 			AssetLibrary.loadData(FlyingAWDAsset);
+			AssetLibrary.loadData(Cannon3DSAsset);
 			
 			var s:AwayStats = new AwayStats();
 			s.x = stage.stageWidth - s.width;
@@ -138,7 +145,7 @@ package
 		{
 			saveState( _db.getStateXml() );
 			
-			//_stack.gotoScreen(Screens.WIN);
+			_stack.gotoScreen(Screens.WIN);
 		}
 		
 		

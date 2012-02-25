@@ -10,6 +10,7 @@ package com.away3d.gloop.screens.game
 	import away3d.primitives.SphereGeometry;
 	
 	import com.away3d.gloop.events.GameEvent;
+	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.hud.HUD;
@@ -39,6 +40,7 @@ package com.away3d.gloop.screens.game
 		private var _editController : LevelEditController;
 
 		private var _gloop:Gloop;
+		private var _cannon:Cannon;
 
 		private var _doc:WCK;
 		private var _view:View3D;
@@ -60,7 +62,7 @@ package com.away3d.gloop.screens.game
 		{
 			initWorld();
 			initHUD();
-			initGloop();
+			initPersistantObjects();
 			initControllers();
 		}
 
@@ -98,10 +100,12 @@ package com.away3d.gloop.screens.game
 		}
 		
 		
-		private function initGloop() : void
+		private function initPersistantObjects() : void
 		{
 			_gloop = new Gloop(0, 0, this);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
+			
+			_cannon = new Cannon();
 		}
 		
 		
@@ -142,6 +146,10 @@ package com.away3d.gloop.screens.game
 			
 			_inputManager.reset(_level);
 			_inputManager.activate();
+			
+			_cannon.meshComponent.mesh.x = _level.spawnPoint.x;
+			_cannon.meshComponent.mesh.y = -_level.spawnPoint.y;
+			_view.scene.addChild(_cannon.meshComponent.mesh);
 
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splat.splattables = _level.splattableMeshes;

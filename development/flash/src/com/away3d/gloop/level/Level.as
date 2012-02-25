@@ -33,8 +33,6 @@ package com.away3d.gloop.level
 		
 		private var _splattables : Vector.<Mesh>;
 		
-		private var _grid:HoopGrid;
-		
 		private var _mode:Boolean = EDIT_MODE;
 
 		private var _dimensionsMin:Vector3D = new Vector3D( -350, -350, 0.001 ); // TODO: set these values from external data
@@ -59,9 +57,6 @@ package com.away3d.gloop.level
 			_btn_controllables = new Vector.<IButtonControllable>();
 			_buttons = new Vector.<Button>();
 			_splattables = new Vector.<Mesh>;
-			
-			_grid = new HoopGrid();
-			add(_grid);
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -246,7 +241,6 @@ package com.away3d.gloop.level
 				object.reset();
 			}
 			setMode(Level.EDIT_MODE, true);
-			_grid.setDimensions(_dimensionsMin.x, _dimensionsMin.y, _dimensionsMax.x - _dimensionsMin.x, _dimensionsMax.y - _dimensionsMin.y);
 		}
 
 
