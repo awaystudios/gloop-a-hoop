@@ -8,6 +8,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.TextureMaterial;
 	import away3d.textures.BitmapTexture;
 	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
+	import com.away3d.gloop.Settings;
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
@@ -15,11 +16,13 @@ package com.away3d.gloop.gameobjects
 	
 	import flash.display.Bitmap;
 
-	public class Cannon extends DefaultGameObject
+	public class Cannon extends DefaultGameObject implements IMouseInteractive
 	{
 		private var _animComponent : VertexAnimationComponent;
 		private var _cannonBody : Mesh;
 		private var _launcher : GloopLauncherComponent;
+		
+		private var _timeSinceLaunch : Number = 0;
 		
 		public function Cannon()
 		{
@@ -75,6 +78,61 @@ package com.away3d.gloop.gameobjects
 			
 			_animComponent.play('fire');
 		}
+		
+		override public function reset():void {
+			super.reset();
+			_launcher.reset();
+			
+			// set as sensor to disable resolution of gloop collisions
+			_physics.isSensor = true;
+		}
+		
+		public function catchGloop(gloop:Gloop):void {
+			_launcher.catchGloop(gloop);	
+		}
+		
+		
+		public function onClick(mouseX:Number, mouseY:Number):void {
+			// do nothing
+		}
+		
+		public function onDragStart(mouseX:Number, mouseY:Number):void {
+			// do nothing
+		}
+		
+		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			if (_launcher.gloop) {
+				_launcher.onDragUpdate(mouseX, mouseY);
+			}
+		}
+		
+		public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			if (_launcher.gloop) {
+				_launcher.onDragEnd(mouseX, mouseY);
+				
+				// if the launcher fired this time, reset the time since launch
+				if (_launcher.fired) {
+					_timeSinceLaunch = 0;
+				}
+			}
+		}
+		
+		override public function update(dt : Number) : void
+		{
+			super.update(dt);
+			_launcher.update(dt);
+			
+			// if the launcher has been fired and we're still a sensor
+			if (_launcher.fired && _physics.isSensor) {
+				
+				// if enough time has passed, enable the physics
+				_timeSinceLaunch += dt;
+				if (_timeSinceLaunch > Settings.CANNON_PHYSICS_DELAY) {
+					_physics.isSensor = false;
+				}
+			}
+			
+		}
 	}
 }
 
@@ -108,9 +166,14 @@ class CannonPhysicsComponent extends PhysicsComponent
 	
 	override public function create():void {
 		super.create();
-		setCollisionGroup(LEVEL, b2fixtures[0]);
-		setCollisionGroup(LEVEL, b2fixtures[1]);
+		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
+		setCollisionGroup(GLOOP_SENSOR, b2fixtures[1]);
+		
+		b2fixtures[0].SetSensor(true);
+		b2fixtures[1].SetSensor(true);
 		
 		allowDragging = true;
+		
+		setStatic();
 	}
 }

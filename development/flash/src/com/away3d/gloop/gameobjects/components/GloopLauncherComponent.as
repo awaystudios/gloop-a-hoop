@@ -83,6 +83,10 @@ package com.away3d.gloop.gameobjects.components {
 			return _aim;
 		}
 		
+		public function get fired():Boolean {
+			return _fired;
+		}
+		
 	}
 
 }

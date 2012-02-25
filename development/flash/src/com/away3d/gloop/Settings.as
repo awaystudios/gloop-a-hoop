@@ -19,6 +19,9 @@ package com.away3d.gloop
 		static public var CANNON_BARREL_Y : Number = 0;
 		static public var CANNON_BARREL_W : Number = 100;
 		static public var CANNON_BARREL_H : Number = 100;
+		
+		[comment("the time to wait before enabling gloop/cannon collisions after launching, in updates")]
+		static public var CANNON_PHYSICS_DELAY:Number = 8;
 
 		static public var GLOOP_RADIUS : Number = 25;
 		static public var GLOOP_ANGULAR_DAMPING : Number = 0;
