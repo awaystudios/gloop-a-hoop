@@ -11,6 +11,8 @@ package com.away3d.gloop.gameobjects
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
+	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
@@ -26,17 +28,14 @@ package com.away3d.gloop.gameobjects
 	public class Gloop extends DefaultGameObject
 	{
 		private var _anim:VertexAnimationComponent;
-
-		private var _splat:SplatComponent;
-		private var _trace:PathTraceComponent;
+		private var _splatComponent:SplatComponent;
+		private var _traceComponent:PathTraceComponent;
+		private var _visualComponent:GloopVisualComponent;
+		
 		private var _spawnX:Number;
 		private var _spawnY:Number;
-
+		
 		private var _avgSpeed:Number = 0;
-
-		private var _bounceVelocity:Number = 0;
-		private var _bouncePosition:Number = 0;
-		private var _facingRotation:Number = 0;
 		
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
 			super();
@@ -47,55 +46,36 @@ package com.away3d.gloop.gameobjects
 			init();
 		}
 
-		private function init():void {
+		private function init():void
+		{
+			initPhysics();
+			initVisual();
+		}
+		
+		
+		private function initPhysics() : void
+		{
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
 			_physics.restitution = Settings.GLOOP_RESTITUTION;
 			_physics.linearDamping = Settings.GLOOP_LINEAR_DAMPING;
 
-			_splat = new SplatComponent( _physics );
-
 			_physics.reportPostSolve = true;
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
-
-			initVisual();
-			initAnim();
 		}
 		
 		
 		private function initVisual():void
 		{
-			var diff_tex : BitmapTexture;
-			var spec_tex : BitmapTexture;
-			var mat : TextureMaterial;
-			var geom:Geometry;
-			
-			diff_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffusePNGAsset).bitmapData);
-			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
-			
-			mat = new TextureMaterial(diff_tex);
-			mat.animateUVs = true;
-			mat.specularMap = spec_tex;
+			// Create special mesh component and use it as
+			// mesh component for this default game object
+			_visualComponent = new GloopVisualComponent( _physics );
+			_meshComponent = _visualComponent;
 
-			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
+			_splatComponent = new SplatComponent( _physics );
+			_traceComponent = new PathTraceComponent( _physics );
 			
-			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh( geom, mat );
-			_meshComponent.mesh.subMeshes[0].scaleU = 0.5;
-			_meshComponent.mesh.subMeshes[0].scaleV = 0.5;
-
-			_trace = new PathTraceComponent( _physics );
-			
-			// TODO: Replace with nicer texture animations.
-			mat.repeat = true;
-			setInterval(function() : void {
-				_meshComponent.mesh.subMeshes[0].offsetU += 0.5;
-			}, 300);
-		}
-		
-		private function initAnim():void
-		{
 			_anim = new VertexAnimationComponent( _meshComponent.mesh );
 			_anim.addSequence( 'fly', [
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
@@ -104,13 +84,12 @@ package com.away3d.gloop.gameobjects
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
 			] );
-
 		}
 		
 		
 		public function get traceComponent() : PathTraceComponent
 		{
-			return _trace;
+			return _traceComponent;
 		}
 		
 		
@@ -132,20 +111,20 @@ package com.away3d.gloop.gameobjects
 				_physics.b2body.SetLinearVelocity( new V2( 0, 0 ) );
 			}
 
-			_bounceVelocity = 0;
-			_bouncePosition = 0;
-
-			_splat.reset();
+			_splatComponent.reset();
+			_visualComponent.reset();
 		}
 		
-		override public function update( dt:Number ):void {
-
+		override public function update( dt:Number ):void
+		{
 			super.update( dt );
-			_splat.update( dt );
-			_trace.update( dt );
 			
 			var velocity:V2 = _physics.linearVelocity;
 			var speed:Number = velocity.length();
+			
+			_splatComponent.update( dt );
+			_traceComponent.update( dt );
+			_visualComponent.update( dt, speed, velocity.x );
 
 			if (!inEditMode) {
 				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
@@ -155,44 +134,24 @@ package com.away3d.gloop.gameobjects
 				}
 			}
 						
-			_facingRotation -= velocity.x * .25;
-			_meshComponent.mesh.rotationZ = _facingRotation;
-			
-			_bounceVelocity -= (_bouncePosition - 0.5) * .1;
-			_bounceVelocity *= .8;
-			
-			_bouncePosition += _bounceVelocity;
-			
-			speed = Math.min(speed, 3);
-
-			_meshComponent.mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
-			_meshComponent.mesh.scaleX = 1 + (1 - _meshComponent.mesh.scaleY)
 		}
 		
-		private function contactPostSolveHandler( e:ContactEvent ):void {
+		private function contactPostSolveHandler( e:ContactEvent ):void
+		{
 			var force:Number = e.impulses.normalImpulse1 * .1;
 			force = Math.min(force, .3);
-			bounceAndFaceDirection(-force);
+			
+			_visualComponent.bounceAndFaceDirection(-force);
 		}
 		
-		private function bounceAndFaceDirection(bounceAmount:Number):void{
-			var velocity:V2 = _physics.linearVelocity;
-			
-			if (velocity.length() < 2){
-				_facingRotation = 0;
-			} else {
-				_facingRotation = Math.atan2(velocity.x, velocity.y) / Math.PI * 180 - 180;
-			}
-			
-			_bounceVelocity = bounceAmount;
-		}
-		
-		public function onLaunch():void {
+		public function onLaunch():void
+		{
 			_avgSpeed = 10;
-			bounceAndFaceDirection(.1);
+			
+			_visualComponent.bounceAndFaceDirection(.1);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_FIRED, this));
 			
-			_trace.reset();
+			_traceComponent.reset();
 		}
 
 		public function onHitGoalWall():void {
@@ -208,34 +167,7 @@ package com.away3d.gloop.gameobjects
 		}
 
 		public function get splat():SplatComponent {
-			return _splat;
+			return _splatComponent;
 		}
-	}
-}
-
-import com.away3d.gloop.Settings;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-
-class GloopPhysicsComponent extends PhysicsComponent
-{
-
-	public function GloopPhysicsComponent( gameObject:DefaultGameObject ) {
-		super( gameObject );
-
-		graphics.beginFill( gameObject.debugColor1 );
-		graphics.drawCircle( 0, 0, Settings.GLOOP_RADIUS );
-		graphics.beginFill( gameObject.debugColor2 );
-		graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
-	}
-	
-	public override function shapes():void {
-		circle( Settings.GLOOP_RADIUS );
-	}
-
-	override public function create():void {
-		super.create();
-		autoSleep = false;
-		setCollisionGroup( GLOOP );
 	}
 }
