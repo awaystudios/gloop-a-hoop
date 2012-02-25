@@ -3,14 +3,14 @@ package com.away3d.gloop.input
 	import Box2DAS.Common.V2;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.Settings;
-
+	
 	import away3d.containers.View3D;
-
+	
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.level.Level;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
 	import flash.events.TransformGestureEvent;
@@ -19,28 +19,28 @@ package com.away3d.gloop.input
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
-
+	
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
 	 */
 	public class InputManager extends MouseManager
 	{
-
+		
 		private var _level : Level;
 		private var _mouseDownTime : Number = 0;
 		private var _targetObject : IMouseInteractive;
 
 		private var _prevViewMouseX : Number;
 		private var _prevViewMouseY : Number;
-
+		
 		private var _startViewMouseX : Number;
 		private var _startViewMouseY : Number;
-
+		
 		private var _panX : Number;
 		private var _panY : Number;
 		private var _zoom : Number;
-
+		
 		private var _isClick : Boolean;
 		private var _zooming : Boolean;
 		private var _panning : Boolean;
@@ -59,22 +59,22 @@ package com.away3d.gloop.input
 		{
 			super(view);
 		}
-
+		
 		public function get panX() : Number
 		{
 			return _panX;
 		}
-
+		
 		public function get panY() : Number
 		{
 			return _panY;
 		}
-
+		
 		public function get zoom() : Number
 		{
 			return _zoom;
 		}
-
+		
 		public function reset(level : Level) : void
 		{
 			_level = level;
@@ -82,7 +82,7 @@ package com.away3d.gloop.input
 			_panX = 0;
 			_panY = 300;
 		}
-
+		
 		public function activate() : void
 		{
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
@@ -165,14 +165,14 @@ package com.away3d.gloop.input
 			_mouseX = _view.mouseX;
 			_mouseY = _view.mouseY;
 		}
-
+		
 		override public function update() : void
 		{
 			if (!_mouseDown)
 				return; // if there's no touch, there's no sense in updating
-
+			
 			super.update();
-
+			
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startViewMouseX - _mouseX) * (_startViewMouseX - _mouseX) + (_startViewMouseY - _mouseY) * (_startViewMouseY - _mouseY);
 
@@ -199,12 +199,12 @@ package com.away3d.gloop.input
 			_prevViewMouseX = _mouseX;
 			_prevViewMouseY = _mouseY;
 		}
-
+		
 		private function onMouseWheel(e : MouseEvent) : void
 		{
 			_zoom += e.delta * 0.01;
 		}
-
+		
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
 			_dirty = true;
@@ -214,22 +214,22 @@ package com.away3d.gloop.input
 			_isClick = true;
 			_panning = false;
 			_zooming = false;
-
+			
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(mouseX, mouseY);
 			}
-
+			
 			_startViewMouseX = _prevViewMouseX = _view.mouseX;
 			_startViewMouseY = _prevViewMouseY = _view.mouseY;
 		}
-
+		
 		override protected function onViewMouseUp(e : MouseEvent) : void
 		{
 			super.onViewMouseUp(e);
 			var clickDuration : Number = getTimer() - _mouseDownTime;
 			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
-
+			
 			if (_level.unplacedHoop && _isClick) {
 				_level.placeQueuedHoop(mouseX, mouseY);
 			}
@@ -249,17 +249,17 @@ package com.away3d.gloop.input
 			_panning = false;
 			_zooming = false;
 		}
-
+		
 		public function set panX(value : Number) : void
 		{
 			_panX = value;
 		}
-
+		
 		public function set panY(value : Number) : void
 		{
 			_panY = value;
 		}
-
+		
 		public function set zoom(value : Number) : void
 		{
 			_zoom = value;
