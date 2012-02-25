@@ -17,6 +17,11 @@ package com.away3d.gloop.gameobjects.components
 	{
 		private var _physics : PhysicsComponent;
 		
+		private var _stdAnim : VertexAnimationComponent;
+		
+		private var _stdMesh : Mesh;
+		private var _splatMesh : Mesh;
+		
 		private var _bounceVelocity:Number = 0;
 		private var _bouncePosition:Number = 0;
 		private var _facingRotation:Number = 0;
@@ -33,6 +38,16 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function init() : void
 		{
+			initStandard();
+			initSplat();
+			
+			mesh = new Mesh();
+			mesh.addChild(_stdMesh);
+		}
+		
+		
+		private function initStandard() : void
+		{
 			var diff_tex : BitmapTexture;
 			var spec_tex : BitmapTexture;
 			var mat : TextureMaterial;
@@ -47,15 +62,30 @@ package com.away3d.gloop.gameobjects.components
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
 			
-			mesh = new Mesh( geom, mat );
-			mesh.subMeshes[0].scaleU = 0.5;
-			mesh.subMeshes[0].scaleV = 0.5;
+			_stdMesh = new Mesh(geom, mat);
+			_stdMesh.subMeshes[0].scaleU = 0.5;
+			_stdMesh.subMeshes[0].scaleV = 0.5;
 			
 			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
 			setInterval(function() : void {
-				mesh.subMeshes[0].offsetU += 0.5;
+				_stdMesh.subMeshes[0].offsetU += 0.5;
 			}, 300);
+			
+			_stdAnim = new VertexAnimationComponent( _stdMesh );
+			_stdAnim.addSequence( 'fly', [
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame1Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame2Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
+			] );
+		}
+		
+		
+		private function initSplat() : void
+		{
+			
 		}
 		
 		

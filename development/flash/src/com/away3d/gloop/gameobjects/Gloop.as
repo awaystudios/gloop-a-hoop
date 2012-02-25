@@ -27,7 +27,6 @@ package com.away3d.gloop.gameobjects
 
 	public class Gloop extends DefaultGameObject
 	{
-		private var _anim:VertexAnimationComponent;
 		private var _splatComponent:SplatComponent;
 		private var _traceComponent:PathTraceComponent;
 		private var _visualComponent:GloopVisualComponent;
@@ -48,13 +47,6 @@ package com.away3d.gloop.gameobjects
 
 		private function init():void
 		{
-			initPhysics();
-			initVisual();
-		}
-		
-		
-		private function initPhysics() : void
-		{
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
@@ -63,11 +55,7 @@ package com.away3d.gloop.gameobjects
 
 			_physics.reportPostSolve = true;
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
-		}
-		
-		
-		private function initVisual():void
-		{
+			
 			// Create special mesh component and use it as
 			// mesh component for this default game object
 			_visualComponent = new GloopVisualComponent( _physics );
@@ -75,15 +63,6 @@ package com.away3d.gloop.gameobjects
 
 			_splatComponent = new SplatComponent( _physics );
 			_traceComponent = new PathTraceComponent( _physics );
-			
-			_anim = new VertexAnimationComponent( _meshComponent.mesh );
-			_anim.addSequence( 'fly', [
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame1Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame2Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
-			] );
 		}
 		
 		
