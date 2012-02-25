@@ -20,6 +20,7 @@ package com.away3d.gloop.gameobjects.components
 		private var _physics : PhysicsComponent;
 		
 		private var _stdAnim : VertexAnimationComponent;
+		private var _splatAnim : VertexAnimationComponent;
 		
 		private var _stdMesh : Mesh;
 		private var _splatMesh : Mesh;
@@ -88,14 +89,27 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function initSplat() : void
 		{
+			var tex : BitmapTexture;
 			var mat : TextureMaterial;
 			var geom : Geometry;
 			
-			mat = new TextureMaterial(new BitmapTexture(new BitmapData(32, 32, false, 0xffffff)));
+			tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSplatDiffusePNGAsset).bitmapData);
+			mat = new TextureMaterial(tex);
 			
 			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
 			
 			_splatMesh = new Mesh(geom, mat);
+			
+			_splatAnim = new VertexAnimationComponent(_splatMesh);
+			_splatAnim.addSequence( 'splat', [
+				Geometry(AssetLibrary.getAsset('GlSplatFr0_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr1_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr2_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom'))
+			], 200, false);
 		}
 		
 		
@@ -105,6 +119,7 @@ package com.away3d.gloop.gameobjects.components
 				mesh.removeChild(_stdMesh);
 			
 			mesh.addChild(_splatMesh);
+			_splatAnim.play('splat');
 		}
 		
 		

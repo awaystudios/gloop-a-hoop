@@ -9,6 +9,9 @@ package com.away3d.gloop.utils
 		[Embed('/../assets/gloop/splat/splat.3ds', mimeType='application/octet-stream')]
 		public static var GloopSplat3DSAsset : Class;
 		
+		[Embed('/../assets/gloop/splat/diff.png')]
+		public static var GloopSplatDiffusePNGAsset : Class;
+		
 		[Embed("/../assets/gloop/diff.png")]
 		public static var GloopDiffusePNGAsset : Class;
 

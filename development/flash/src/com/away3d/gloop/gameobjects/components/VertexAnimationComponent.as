@@ -33,12 +33,13 @@ package com.away3d.gloop.gameobjects.components
 			_animator.play(sequenceName);
 		}
 		
-		public function addSequence(name : String, frames : Array, frameDuration : uint = 200) : void
+		public function addSequence(name : String, frames : Array, frameDuration : uint = 200, loop : Boolean = true) : void
 		{
 			var frame : Geometry;
 			var seq : VertexAnimationSequence;
 			
 			seq = new VertexAnimationSequence(name);
+			seq.looping = loop;
 			for each (frame in frames) {
 				seq.addFrame(frame, frameDuration);
 			}
