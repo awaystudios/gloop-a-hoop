@@ -18,7 +18,7 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.gameobjects.hoops.HoopType;
-	import com.away3d.gloop.gameobjects.hoops.LauncherHoop;
+	import com.away3d.gloop.gameobjects.hoops.GlueHoop;	
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	
@@ -103,7 +103,7 @@ package com.away3d.gloop.level
 			_level.spawnPoint.x = obj.x * _scale;
 			_level.spawnPoint.y = -obj.y * _scale;
 			
-			var hoop:LauncherHoop = new LauncherHoop(obj.x * _scale, -obj.y * _scale);
+			var hoop:GlueHoop = new GlueHoop(obj.x * _scale, -obj.y * _scale);
 			_level.add(hoop);
 		}
 		
