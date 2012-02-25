@@ -77,8 +77,6 @@ package com.away3d.gloop.hud
 				item = _levelProxy.inventory.items[i];
 				btn = new InventoryButton(item);
 				btn.x = i*60;
-				// TODO: try to avoid enabling the picking system for performance
-				// TODO: picking system causes a runtime error on iPad2 ( pixel bender failure? )
 				btn.mouseEnabled = true;
 				btn.addEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
 				

@@ -24,8 +24,6 @@ public class MouseRaycast extends ColliderBase {
 
         if( !item ) return _collisionExists = false;
 
-//        trace( "picking test ------------------------------------------------------------" );
-
         // init
         var t:Number;
         var entity:Entity;
@@ -36,8 +34,6 @@ public class MouseRaycast extends ColliderBase {
         var entityHasBeenChecked:Dictionary = new Dictionary();
         var entityToCollisionVoDictionary:Dictionary = new Dictionary();
         var collisionVOs:Vector.<MouseCollisionVO> = new Vector.<MouseCollisionVO>();
-
-//        var time:uint = getTimer();
 
         // sweep renderables and collect entities whose bounds are hit by ray
         while( item ) {
@@ -79,11 +75,6 @@ public class MouseRaycast extends ColliderBase {
             item = item.next;
         }
 
-//        time = getTimer() - time;
-//        trace( "phase 1 test time: " + time + ", with " + collisionVOs.length + " bounds colliders." );
-//        time = getTimer();
-//        var triTests:uint;
-
         // no bound hits?
         var numBoundHits:uint = collisionVOs.length;
         if( numBoundHits == 0 ) return _collisionExists = false;
@@ -113,7 +104,6 @@ public class MouseRaycast extends ColliderBase {
                     if( collisionVO.cameraIsInEntityBounds
                             || item.renderable.mouseHitMethod == MouseHitMethod.MESH_CLOSEST_HIT
                             || item.renderable.mouseHitMethod == MouseHitMethod.MESH_ANY_HIT ) {
-//                        triTests++;
                         _triangleCollider.breakOnFirstTriangleHit = item.renderable.mouseHitMethod == MouseHitMethod.MESH_ANY_HIT;
 						_triangleCollider.updateTarget( item.renderable as SubMesh );
 						if( _triangleCollider.evaluate() ) { // triangle collision exists?
@@ -133,9 +123,6 @@ public class MouseRaycast extends ColliderBase {
                 }
             }
         }
-
-//        time = getTimer() - time;
-//        trace( "phase 2 test time: " + time + ", with " + triTests + " triangle collision tests." );
 
         // use nearest collision found
         _t = _nearestCollisionVO.finalCollisionT;

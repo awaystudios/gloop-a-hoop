@@ -34,7 +34,7 @@ package away3d.entities
 		
 		private var _showBounds : Boolean;
 		private var _partitionNode : EntityNode;
-		private var _mouseEnabled : Boolean;
+		private var _mouseEnabled : Boolean = false;
 
 		protected var _mvpTransformStack : Vector.<Matrix3D> = new Vector.<Matrix3D>();
 		protected var _zIndices : Vector.<Number> = new Vector.<Number>();
