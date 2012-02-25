@@ -6,11 +6,13 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
+	import away3d.primitives.CubeGeometry;
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.utils.setInterval;
 
 	public class GloopVisualComponent extends MeshComponent
@@ -41,8 +43,9 @@ package com.away3d.gloop.gameobjects.components
 			initStandard();
 			initSplat();
 			
+			// Will be used as container for either
+			// standard or splat mesh.
 			mesh = new Mesh();
-			mesh.addChild(_stdMesh);
 		}
 		
 		
@@ -85,12 +88,33 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function initSplat() : void
 		{
+			var mat : TextureMaterial;
+			var geom : Geometry;
 			
+			mat = new TextureMaterial(new BitmapTexture(new BitmapData(32, 32, false, 0x0000ff)));
+			
+			geom = new CubeGeometry();
+			
+			_splatMesh = new Mesh(geom, mat);
+		}
+		
+		
+		public function splat() : void
+		{
+			if (mesh.contains(_stdMesh))
+				mesh.removeChild(_stdMesh);
+			
+			mesh.addChild(_splatMesh);
 		}
 		
 		
 		public function reset() : void
 		{
+			if (mesh.contains(_splatMesh))
+				mesh.removeChild(_splatMesh);
+			
+			mesh.addChild(_stdMesh);
+			
 			_bounceVelocity = 0;
 			_bouncePosition = 0;
 		}

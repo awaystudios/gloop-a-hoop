@@ -123,6 +123,12 @@ package com.away3d.gloop.gameobjects
 			_visualComponent.bounceAndFaceDirection(-force);
 		}
 		
+		public function splatOnTarget() : void
+		{
+			_visualComponent.splat();
+		}
+		
+		
 		public function onLaunch():void
 		{
 			_avgSpeed = 10;
@@ -145,7 +151,7 @@ package com.away3d.gloop.gameobjects
 			return 0x7da628;
 		}
 
-		public function get splat():SplatComponent {
+		public function get splatComponent():SplatComponent {
 			return _splatComponent;
 		}
 	}
