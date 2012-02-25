@@ -82,10 +82,10 @@ package com.away3d.gloop.screens.game.controllers
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 			}
 			else {
-				resetOrientation();
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
+				resetOrientation();
 			}
 			targetPosition.z = _inputManager.zoom;
 

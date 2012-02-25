@@ -54,11 +54,11 @@ package com.away3d.gloop.input
 			update();
 		}
 
-		public function get mouseX():Number{
+		public function get projectedMouseX():Number{
 			return _intersection.x;
 		}
 
-		public function get mouseY():Number{
+		public function get projectedMouseY():Number{
 			return -_intersection.y;
 		}
 	}
