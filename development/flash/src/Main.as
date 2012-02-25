@@ -25,6 +25,7 @@ package
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.utils.AssetLoaderQueue;
+	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
 	
@@ -43,12 +44,6 @@ package
 		private var _db:LevelDatabase;
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
-		
-		[Embed('/../assets/gloop/flying/flying.awd', mimeType='application/octet-stream')]
-		private var FlyingAWDAsset : Class;
-		
-		[Embed('/../assets/cannon/cannon.3ds', mimeType='application/octet-stream')]
-		private var Cannon3DSAsset : Class;
 		
 
 		public function Main()
@@ -126,8 +121,8 @@ package
 			_stack.gotoScreen(Screens.LOADING);
 			
 			_queue = new AssetLoaderQueue();
-			_queue.addResource(FlyingAWDAsset);
-			_queue.addResource(Cannon3DSAsset);
+			_queue.addResource(EmbeddedResources.FlyingAWDAsset);
+			_queue.addResource(EmbeddedResources.Cannon3DSAsset);
 			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
 			_queue.load();
 		}

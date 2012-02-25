@@ -16,6 +16,7 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -37,12 +38,6 @@ package com.away3d.gloop.gameobjects
 		private var _bouncePosition:Number = 0;
 		private var _facingRotation:Number = 0;
 		
-		[Embed("/../assets/gloop/diff.png")]
-		private var GloopDiffusePNGAsset : Class;
-
-		[Embed("/../assets/gloop/spec.png")]
-		private var GloopSpecularPNGAsset : Class;
-
 		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
 			super();
 
@@ -76,8 +71,8 @@ package com.away3d.gloop.gameobjects
 			var mat : TextureMaterial;
 			var geom:Geometry;
 			
-			diff_tex = new BitmapTexture(Bitmap(new GloopDiffusePNGAsset).bitmapData);
-			spec_tex = new BitmapTexture(Bitmap(new GloopSpecularPNGAsset).bitmapData);
+			diff_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffusePNGAsset).bitmapData);
+			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
 			
 			mat = new TextureMaterial(diff_tex);
 			mat.animateUVs = true;
