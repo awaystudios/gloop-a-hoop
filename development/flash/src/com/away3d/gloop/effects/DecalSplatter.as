@@ -66,22 +66,16 @@ package com.away3d.gloop.effects
 					var distance:Number = position.subtract( sourcePosition ).length;
 					if( distance > maxDistance ) continue;
 
-					// evaluate normal and place decal with an offset
-					var normal:Vector3D = _meshCollider.collidingMesh.sceneTransform.deltaTransformVector( _meshCollider.collisionNormal );
-					normal.scaleBy( zOffset );
-					position = position.add( normal );
-					placeDecalAt( position, normal, rand( minScale, maxScale ) );
+					placeDecalAt( position, rand( minScale, maxScale ) );
 				}
 			}
 		}
 
-		private function placeDecalAt( position:Vector3D, normal:Vector3D, scale:Number = 1 ):void {
+		private function placeDecalAt( position:Vector3D, scale:Number = 1 ):void {
 			var scene:Scene3D = _meshCollider.collidingMesh.scene;
 			var decal:Mesh = getNextDecal();
 			decal.scale( scale );
 			decal.position = position;
-//			var offsetPosition:Vector3D = position.add( normal );
-//			decal.lookAt( offsetPosition, new Vector3D( rand( -1, 1 ), rand( -1, 1 ), rand( -1, 1 ) ) );
 			scene.addChild( decal );
 		}
 
