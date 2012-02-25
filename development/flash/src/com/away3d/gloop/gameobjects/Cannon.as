@@ -1,5 +1,6 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.animators.data.VertexAnimationState;
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -22,6 +23,10 @@ package com.away3d.gloop.gameobjects
 		private var _animComponent : VertexAnimationComponent;
 		private var _cannonBody : Mesh;
 		private var _launcher : GloopLauncherComponent;
+		
+		private var _frame0 : Geometry;
+		private var _frame1 : Geometry;
+		private var _animState : VertexAnimationState;
 		
 		private var _timeSinceLaunch : Number = 0;
 		
@@ -69,20 +74,30 @@ package com.away3d.gloop.gameobjects
 		
 		private function initAnim() : void
 		{
+			_frame0 = Geometry(AssetLibrary.getAsset('CannonFrame0_geom'));
+			_frame1 = Geometry(AssetLibrary.getAsset('CannonFrame1_geom'));
+			
 			_animComponent = new VertexAnimationComponent(_cannonBody);
 			_animComponent.addSequence('fire', [
-				Geometry(AssetLibrary.getAsset('CannonFrame0_geom')),
-				Geometry(AssetLibrary.getAsset('CannonFrame1_geom')),
+				_frame1,
 				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')),
 				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')),
 				Geometry(AssetLibrary.getAsset('CannonFrame0_geom')),
-			], 100, false);
+			], 50, false);
+			
+			_animState = VertexAnimationState(_cannonBody.animationState);
 		}
 		
 		
 		override public function reset():void {
 			super.reset();
 			_launcher.reset();
+			
+			_animComponent.stop();
+			_animState.poses[0] = _frame0;
+			_animState.poses[1] = _frame1;
+			_animState.weights[0] = 1;
+			_animState.weights[1] = 0;
 			
 			// set as sensor to disable resolution of gloop collisions
 			_physics.isSensor = true;
@@ -103,7 +118,15 @@ package com.away3d.gloop.gameobjects
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (_launcher.gloop) {
+				var pow : Number;
+				
 				_launcher.onDragUpdate(mouseX, mouseY);
+				
+				pow = _launcher.dragAmount;
+				trace(pow);
+				_animState.weights[0] = 1-pow;
+				_animState.weights[1] = pow;
+				_animState.invalidateState();
 			}
 		}
 		
@@ -120,7 +143,7 @@ package com.away3d.gloop.gameobjects
 					if (_launcher.fired) {
 						_timeSinceLaunch = 0;
 					}
-				}, 300);
+				}, 150);
 			}
 		}
 		

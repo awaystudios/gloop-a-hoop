@@ -22,6 +22,11 @@ package com.away3d.gloop.gameobjects.components {
 			_aim = new Point;
 		}
 		
+		public function get dragAmount() : Number
+		{
+			return Math.min(1, _aim.length/Settings.LAUNCHER_POWER_MAX);
+		}
+		
 		public function reset():void {
 			_fired = false;
 		}

@@ -33,6 +33,11 @@ package com.away3d.gloop.gameobjects.components
 			_animator.play(sequenceName);
 		}
 		
+		public function stop() : void
+		{
+			_animator.stop();
+		}
+		
 		public function addSequence(name : String, frames : Array, frameDuration : uint = 200, loop : Boolean = true) : void
 		{
 			var frame : Geometry;
