@@ -4,7 +4,7 @@ FAN_AREA_HEIGHT               100
 FAN_AREA_WIDTH                60
 FAN_BODY_HEIGHT               5
 FAN_BODY_WIDTH                60
-FAN_POWER                     0.25
+FAN_POWER                     0.15
 
 GLOOP_ANGULAR_DAMPING         1
 GLOOP_DECAL_MIN_SPEED         0.01
