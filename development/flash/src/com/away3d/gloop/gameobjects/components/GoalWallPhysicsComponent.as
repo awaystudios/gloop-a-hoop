@@ -22,7 +22,7 @@ package com.away3d.gloop.gameobjects.components {
 			if (e.fixture == b2fixtures[1]) {
 				var gloop:Gloop = getGloop(e.other);
 				if (!gloop) return;
-				GoalWall(_gameObject).onGloopEnterSensor(gloop));
+				GoalWall(_gameObject).onGloopEnterSensor(gloop);
 				return;
 			}
 			
@@ -33,7 +33,7 @@ package com.away3d.gloop.gameobjects.components {
 			if (e.fixture == b2fixtures[1]) {
 				var gloop:Gloop = getGloop(e.other);
 				if (!gloop) return;
-				GoalWall(_gameObject).ongGloopExitSensor(gloop));
+				GoalWall(_gameObject).onGloopExitSensor(gloop);
 				return;
 			}
 			

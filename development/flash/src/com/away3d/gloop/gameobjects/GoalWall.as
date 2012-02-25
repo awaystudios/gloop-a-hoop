@@ -25,7 +25,7 @@ package com.away3d.gloop.gameobjects {
 			// gloop goes into sensor
 		}
 		
-		public function ongGloopExitSensor(gloop:Gloop):void {
+		public function onGloopExitSensor(gloop:Gloop):void {
 			// gloop leaves sensor
 		}
 		
