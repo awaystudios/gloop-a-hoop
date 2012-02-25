@@ -58,10 +58,10 @@ package com.away3d.gloop.gameobjects
 		{
 			_animComponent = new VertexAnimationComponent(_cannonBody);
 			_animComponent.addSequence('fire', [
-				_cannonBody.geometry,
-				Geometry(AssetLibrary.getAsset('CannonFrame1_geom')).clone(),
-				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')).clone(),
-				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')).clone(),
+				Geometry(AssetLibrary.getAsset('CannonFrame0_geom')),
+				Geometry(AssetLibrary.getAsset('CannonFrame1_geom')),
+				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')),
+				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')),
 			]);
 			
 			_animComponent.play('fire');

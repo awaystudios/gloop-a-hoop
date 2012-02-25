@@ -4,6 +4,8 @@ package
 	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
+	import away3d.library.assets.AssetType;
+	import away3d.library.utils.AssetLibraryIterator;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
 	import away3d.loaders.parsers.Max3DSParser;
@@ -133,6 +135,20 @@ package
 		
 		private function onAssetsComplete(ev : Event) : void
 		{
+			var it : AssetLibraryIterator;
+			var mesh : Mesh;
+			
+			// Get rid of meshes to avoid having to clone geometries
+			// to circumvent issues with material/animation sharing.
+			it = AssetLibrary.createIterator(AssetType.MESH);
+			while (mesh = Mesh(it.next())) {
+				AssetLibrary.removeAsset(mesh, false);
+				mesh.material = null;
+				mesh.geometry = null;
+				mesh.dispose();
+			}
+			
+			// Load levels
 			_db.loadXml( 'assets/levels.xml' );
 		}
 		
