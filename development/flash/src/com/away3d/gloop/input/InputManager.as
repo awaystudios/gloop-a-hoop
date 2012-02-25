@@ -1,6 +1,7 @@
 package com.away3d.gloop.input
 {
 	import Box2DAS.Common.V2;
+	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.Settings;
 
 	import away3d.containers.View3D;
@@ -28,7 +29,7 @@ package com.away3d.gloop.input
 
 		private var _level : Level;
 		private var _mouseDownTime : Number = 0;
-		private var _targetHoop : Hoop;
+		private var _targetObject : IMouseInteractive;
 
 		private var _prevViewMouseX : Number;
 		private var _prevViewMouseY : Number;
@@ -179,15 +180,15 @@ package com.away3d.gloop.input
 			if (_isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED) {
 				_isClick = false;
 
-				if (_targetHoop) {
-					_targetHoop.onDragStart(mouseX, mouseY);
+				if (_targetObject) {
+					_targetObject.onDragStart(mouseX, mouseY);
 				} else {
 					_panning = true;
 				}
 			}
 
-			if (_targetHoop && !_isClick)
-				_targetHoop.onDragUpdate(mouseX, mouseY);
+			if (_targetObject && !_isClick)
+				_targetObject.onDragUpdate(mouseX, mouseY);
 
 			if (_panning && !_zooming)
 			{
@@ -216,7 +217,7 @@ package com.away3d.gloop.input
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
-				_targetHoop = _level.getNearestHoop(mouseX, mouseY);
+				_targetObject = _level.getNearestIMouseInteractive(mouseX, mouseY);
 			}
 
 			_startViewMouseX = _prevViewMouseX = _view.mouseX;
@@ -233,18 +234,18 @@ package com.away3d.gloop.input
 				_level.placeQueuedHoop(mouseX, mouseY);
 			}
 
-			if (_targetHoop) {
+			if (_targetObject) {
 				// deal with click if duration was short enough
 				if (_isClick) {
-					_targetHoop.onClick(mouseX, mouseY);
+					_targetObject.onClick(mouseX, mouseY);
 
 				// else, end dragging
 				} else {
-					_targetHoop.onDragEnd(mouseX, mouseY);
+					_targetObject.onDragEnd(mouseX, mouseY);
 				}
 			}
 
-			_targetHoop = null;
+			_targetObject = null;
 			_panning = false;
 			_zooming = false;
 		}

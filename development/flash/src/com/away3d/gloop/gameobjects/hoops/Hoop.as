@@ -9,6 +9,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.Settings;
 	
 	
@@ -18,7 +19,7 @@ package com.away3d.gloop.gameobjects.hoops
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
 	 */
-	public class Hoop extends DefaultGameObject
+	public class Hoop extends DefaultGameObject implements IMouseInteractive
 	{
 		
 		protected var _rotatable:Boolean = true;

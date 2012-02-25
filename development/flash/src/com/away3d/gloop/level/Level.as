@@ -4,6 +4,7 @@ package com.away3d.gloop.level
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -85,30 +86,30 @@ package com.away3d.gloop.level
 		 * @param	mousey
 		 * @return
 		 */
-		public function getNearestHoop(worldX : Number, worldY : Number) : Hoop
+		public function getNearestIMouseInteractive(worldX : Number, worldY : Number) : IMouseInteractive
 		{
-			var hoop : Hoop;
-			var nearest : Hoop;
+			var object : IMouseInteractive;
+			var nearest : IMouseInteractive;
 			var dist : Number = 0;
 			var nearestDist : Number = Settings.INPUT_PICK_DISTANCE;
 			var mousePos : Point = new Point(worldX, worldY);
-			var hoopPos : Point = new Point;
+			var objectPos : Point = new Point;
 			
 			for (var i : int = 0; i < _all_objects.length; i++)
 			{
-				hoop = _all_objects[i] as Hoop;
-				if (!hoop)
+				object = _all_objects[i] as IMouseInteractive;
+				if (!object)
 					continue;
 				
-				hoopPos.x = hoop.physics.x;
-				hoopPos.y = hoop.physics.y;
+				objectPos.x = object.physics.x;
+				objectPos.y = object.physics.y;
 				
-				dist = Point.distance(mousePos, hoopPos);
+				dist = Point.distance(mousePos, objectPos);
 				
 				if (dist < nearestDist)
 				{
 					nearestDist = dist;
-					nearest = hoop;
+					nearest = object;
 				}
 			}
 			
