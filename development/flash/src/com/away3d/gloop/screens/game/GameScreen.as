@@ -8,6 +8,7 @@ package com.away3d.gloop.screens.game
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.primitives.SphereGeometry;
+	import com.away3d.gloop.Settings;
 	
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
@@ -71,15 +72,16 @@ package com.away3d.gloop.screens.game
 		private function initWorld() : void
 		{
 			_doc = new WCK();
-			_doc.x = 80;
-			_doc.y = 80;
+			_doc.x = 120;
+			_doc.y = 120;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
-			addChild( _doc );
-
+			
 			_view = new View3D();
 			_view.antiAlias = 4;
 			addChild( _view );
+			
+			addChild( _doc );
 			
 			_cameraPointLight = new PointLight();
 			_cameraPointLight.specular = 0.3;
