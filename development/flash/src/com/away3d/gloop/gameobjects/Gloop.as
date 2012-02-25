@@ -235,6 +235,7 @@ class GloopPhysicsComponent extends PhysicsComponent
 
 	override public function create():void {
 		super.create();
+		autoSleep = false;
 		setCollisionGroup( GLOOP );
 	}
 }
