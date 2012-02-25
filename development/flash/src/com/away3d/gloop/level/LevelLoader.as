@@ -89,7 +89,7 @@ package com.away3d.gloop.level
 			min = mesh.bounds.min;
 			dim = mesh.bounds.max.subtract(min);
 			
-			wall = new Wall(min.x, -min.y, dim.x, dim.y);
+			wall = new Wall(min.x, -min.y - dim.y, dim.x, dim.y);
 			wall.physics.x = obj.x * _scale;
 			wall.physics.y = -obj.y * _scale;
 			wall.physics.rotation = -obj.rotationZ;
@@ -165,7 +165,7 @@ package com.away3d.gloop.level
 			min = mesh.bounds.min;
 			dim = mesh.bounds.max.subtract(min);
 			
-			target = new GoalWall(min.x, -min.y, dim.x, dim.y);
+			target = new GoalWall(min.x, -min.y - dim.y, dim.x, dim.y);
 			target.physics.x = obj.x * _scale;
 			target.physics.y = -obj.y * _scale;
 			target.physics.rotation = -obj.rotationZ;

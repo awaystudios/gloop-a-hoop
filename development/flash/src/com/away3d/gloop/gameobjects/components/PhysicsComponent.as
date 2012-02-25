@@ -12,7 +12,7 @@ package com.away3d.gloop.gameobjects.components
 	
 	public class PhysicsComponent extends BodyShape
 	{
-		private var _gameObject : DefaultGameObject;
+		public var _gameObject : DefaultGameObject;
 		
 		public static const HOOP : int = 1;
 		public static const GLOOP_SENSOR : int = 2;
@@ -120,7 +120,7 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject.onCollidingWithGloopEnd(gloop);
 		}
 		
-		private function getGloop(fixture:b2Fixture):Gloop {
+		public function getGloop(fixture:b2Fixture):Gloop {
 			var otherPhysics : PhysicsComponent = fixture.m_userData as PhysicsComponent;
 			if (!otherPhysics) return null;
 			var gloop : Gloop = otherPhysics.gameObject as Gloop;

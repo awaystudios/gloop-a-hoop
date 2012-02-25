@@ -41,7 +41,10 @@ package com.away3d.gloop
 		[comment("values closer to one makes the average move faster")]
 		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
 		
-		static public const HOOP_RADIUS : Number = GRID_SIZE/2;
+		static public const HOOP_RADIUS : Number = GRID_SIZE / 2;
+		
+		static public var GOALWALL_DETECTOR_HEIGHT : Number = 200;
+		static public var GOALWALL_DETECTOR_WIDTH : Number = 200;
 		
 		static public var HOOP_ROTATION_STEP : Number = 45;
 

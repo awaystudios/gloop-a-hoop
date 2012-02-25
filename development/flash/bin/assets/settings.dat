@@ -29,6 +29,9 @@ GLOOP_RADIUS                  16
 GLOOP_RESTITUTION             0.75
 GLOOP_SPLAT_COOLDOWN          20    # delay between splats while on a surface, in updates
 
+GOALWALL_DETECTOR_HEIGHT      300
+GOALWALL_DETECTOR_WIDTH       0
+
 GRID_SIZE                     100
 
 HOOP_ROTATION_STEP            45
