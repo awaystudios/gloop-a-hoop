@@ -46,7 +46,7 @@ package com.away3d.gloop.input
 		private var _touchDistance:Number = 0;
 		private var _lastTouchDistance:Number = 0;
 
-		private var _dirty:Boolean = true;
+		private var _interacting:Boolean;
 
 		public function InputManager(view : View3D)
 		{
@@ -128,10 +128,10 @@ package com.away3d.gloop.input
 		{
 			super.onViewMouseDown(e);
 
-			_dirty = true;
 			_isClick = true;
 			_panning = false;
 			_zooming = false;
+			_interacting = true;
 			_mouseDownTime = getTimer();
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
@@ -167,6 +167,7 @@ package com.away3d.gloop.input
 			_targetObject = null;
 			_panning = false;
 			_zooming = false;
+			_interacting = false;
 		}
 
 		private function onTouch( event:TouchEvent ):void {
@@ -197,6 +198,7 @@ package com.away3d.gloop.input
 			}
 
 			if( _touch1.id >= 0 && _touch2.id >= 0 ) {
+				_interacting = true;
 				// update mouse position
 				_interactionPointX = _touch1.x;
 				_interactionPointY = _touch1.y;
@@ -208,6 +210,9 @@ package com.away3d.gloop.input
 					_zoom += ( _touchDistance - _lastTouchDistance ) * 0.01;
 				}
 				_lastTouchDistance = _touchDistance;
+			}
+			else {
+				_interacting = false;
 			}
 		}
 
@@ -235,12 +240,8 @@ package com.away3d.gloop.input
 			return _zoom;
 		}
 
-		public function recordDirty():void {
-			_dirty = false;
-		}
-
-		public function isDirty():Boolean {
-			return _dirty;
+		public function get interacting():Boolean {
+			return _interacting;
 		}
 	}
 

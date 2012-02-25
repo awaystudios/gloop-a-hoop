@@ -24,6 +24,7 @@ package com.away3d.gloop.screens.game.controllers
 		private var _offY : Number;
 		
 		private var _gloopIsFlying : Boolean;
+		private var _interactedSinceGloopWasFired:Boolean;
 		
 		public function CameraController(inputManager : InputManager, camera : Camera3D, gloop : Gloop)
 		{
@@ -35,9 +36,9 @@ package com.away3d.gloop.screens.game.controllers
 		
 		public function resetOrientation() : void
 		{
-			_camera.rotationX = 0;
-			_camera.rotationY = 0;
-			_camera.rotationZ = 0;
+			_camera.rotationX *= 0.9;
+			_camera.rotationY *= 0.9;
+			_camera.rotationZ *= 0.9;
 		}
 		
 		
@@ -46,7 +47,7 @@ package com.away3d.gloop.screens.game.controllers
 			_gloopIsFlying = true;
 			_offX = offX;
 			_offY = offY;
-			_inputManager.recordDirty();
+			_interactedSinceGloopWasFired = false;
 		}
 		
 		
@@ -71,8 +72,11 @@ package com.away3d.gloop.screens.game.controllers
 		{
 			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
+			if( _inputManager.interacting ) _interactedSinceGloopWasFired = true;
+
 			// evaluate target camera position
-			if( !_inputManager.isDirty() && _gloopIsFlying ) { // TODO: doesn't work on mobile, it's always dirty on mobile
+			// TODO: verify if this works correctly on mobile ( follows gloop on a shot but stops following as soon as the view is panned )
+			if( !_interactedSinceGloopWasFired && _gloopIsFlying ) {
 				_offX *= 0.9;
 				_offY *= 0.9;
 				targetPosition.x = _gloop.physics.x + _offX;
@@ -92,7 +96,7 @@ package com.away3d.gloop.screens.game.controllers
 			// contain target position
 			if( targetPosition.x > _boundsMaxX ) { // TODO: implement softer containment ( like in ipad's scrolling )
 				targetPosition.x = _boundsMaxX;
-				_inputManager.panX = _boundsMaxX;
+				_inputManager.panX *= _boundsMaxX;
 			} else if( targetPosition.x < _boundsMinX ) {
 				targetPosition.x = _boundsMinX;
 				_inputManager.panX = _boundsMinX;
@@ -113,9 +117,10 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			// ease camera towards target position
-			_camera.x += (targetPosition.x - _camera.x) * 0.4;
-			_camera.y += (targetPosition.y - _camera.y) * 0.4;
-			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * 0.4;
+			var easeFactor:Number = _inputManager.interacting ? 0.4 : 0.2; // TODO: properly implement camera inertia?
+			_camera.x += (targetPosition.x - _camera.x) * easeFactor;
+			_camera.y += (targetPosition.y - _camera.y) * easeFactor;
+			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * easeFactor;
 		}
 	}
 }
