@@ -76,7 +76,7 @@ package com.away3d.gloop.screens.game.controllers
 				_offY *= 0.9;
 				
 				targetPosition.x = _gloop.physics.x + _offX;
-				targetPosition.y = -_gloop.physics.y + _offY;
+				targetPosition.y = -_gloop.physics.y + _offY; // TODO: allow user to pan view while gloop is flying?
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 			}
 			else {
