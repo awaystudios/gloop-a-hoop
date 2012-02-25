@@ -79,6 +79,7 @@ package com.away3d.gloop.gameobjects
 			_animComponent.play('fire');
 		}
 		
+		
 		override public function reset():void {
 			super.reset();
 			_launcher.reset();
@@ -121,6 +122,9 @@ package com.away3d.gloop.gameobjects
 		{
 			super.update(dt);
 			_launcher.update(dt);
+			
+			_meshComponent.mesh.rotationZ = 0;
+			_cannonBody.rotationZ = 90-_physics.rotation;
 			
 			// if the launcher has been fired and we're still a sensor
 			if (_launcher.fired && _physics.isSensor) {
