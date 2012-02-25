@@ -276,6 +276,11 @@ package com.away3d.gloop.input
 		public function get interacting():Boolean {
 			return _interacting;
 		}
+
+		public function resetVelocities():void {
+			_onPanImpulse = false;
+			_panVelocityX = _panVelocityY = 0;
+		}
 	}
 
 }
