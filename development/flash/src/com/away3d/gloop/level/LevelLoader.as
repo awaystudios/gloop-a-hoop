@@ -102,9 +102,6 @@ package com.away3d.gloop.level
 		{
 			_level.spawnPoint.x = obj.x * _scale;
 			_level.spawnPoint.y = -obj.y * _scale;
-			
-			var hoop:GlueHoop = new GlueHoop(obj.x * _scale, -obj.y * _scale);
-			_level.add(hoop);
 		}
 		
 		
