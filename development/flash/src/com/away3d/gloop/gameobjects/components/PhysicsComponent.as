@@ -1,10 +1,13 @@
 package com.away3d.gloop.gameobjects.components
 {
 	
+	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.b2Fixture;
 	import Box2DAS.Dynamics.ContactEvent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.Settings;
 	import wck.BodyShape;
 	
 	public class PhysicsComponent extends BodyShape
@@ -35,6 +38,31 @@ package com.away3d.gloop.gameobjects.components
 			{
 				type = 'Dynamic';
 			}
+		}
+		
+		public function moveTo(worldX:Number, worldY:Number, snapToGrid:Boolean ):void {
+			var pos:V2 = new V2(worldX, worldY);
+			
+			if (snapToGrid) {
+				pos.x = Hoop.snapToHoopGrid(pos.x);
+				pos.y = Hoop.snapToHoopGrid(pos.y);
+			}
+			
+			// physics are not intialized, we can set them on the visual object and wck will read them from here
+			if (!b2body) {
+				x = pos.x;
+				y = pos.y;
+				return;
+			}
+
+			// transform point into physics coord space
+			pos.x /= Settings.PHYSICS_SCALE;
+			pos.y /= Settings.PHYSICS_SCALE;
+			
+			var angle:Number = b2body.GetAngle();
+			
+			b2body.SetTransform(pos, angle);
+			updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
 		}
 		
 		/**
@@ -72,7 +100,7 @@ package com.away3d.gloop.gameobjects.components
 					fixture.SetFilterData({categoryBits: GLOOP, maskBits: LEVEL | GLOOP | GLOOP_SENSOR, groupIndex: 0});
 					break;
 				case LEVEL: 
-					fixture.SetFilterData({categoryBits: LEVEL, maskBits: GLOOP | HOOP, groupIndex: 0});
+					fixture.SetFilterData({categoryBits: LEVEL, maskBits: GLOOP | HOOP | LEVEL, groupIndex: 0});
 					break;
 			}
 		

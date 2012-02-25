@@ -74,7 +74,7 @@ package com.away3d.gloop.gameobjects.hoops
 			var posY:int = snapToHoopGrid(mouseY);
 			
 			if (posX != _lastPositionX || posY != _lastPositionY) {
-				moveTo(posX, posY, false);
+				_physics.moveTo(posX, posY, false);
 				_lastPositionX = posX;
 				_lastPositionY = posY;
 			} else if (isCollidingWithLevel) {
@@ -100,7 +100,7 @@ package com.away3d.gloop.gameobjects.hoops
 					
 				// if not, we go back to wherever was the last valid position
 				} else {
-					moveTo(_lastValidPositionX, _lastValidPositionY);
+					_physics.moveTo(_lastValidPositionX, _lastValidPositionY, true);
 				}
 			}
 			_newlyPlaced = false;
@@ -115,24 +115,6 @@ package com.away3d.gloop.gameobjects.hoops
 			} else {
 				_meshComponent.mesh.material = _material;
 			}
-		}
-		
-		public function moveTo(worldX:Number, worldY:Number, snapToGrid:Boolean = true ):void {
-			var pos:V2 = new V2(worldX, worldY);
-			
-			if (snapToGrid) {
-				pos.x = snapToHoopGrid(pos.x);
-				pos.y = snapToHoopGrid(pos.y);
-			}
-
-			// transform point into physics coord space
-			pos.x /= Settings.PHYSICS_SCALE;
-			pos.y /= Settings.PHYSICS_SCALE;
-			
-			var angle:Number = _physics.b2body.GetAngle();
-			
-			_physics.b2body.SetTransform(pos, angle);
-			_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
 		}
 		
 		private function get isCollidingWithLevel():Boolean {
