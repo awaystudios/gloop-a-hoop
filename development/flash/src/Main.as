@@ -22,6 +22,7 @@ package
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
+	import com.away3d.gloop.utils.AssetLoaderQueue;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
 	
@@ -35,6 +36,8 @@ package
 	[SWF(width="1024", height="768", frameRate="60")]
 	public class Main extends Sprite
 	{
+		private var _queue : AssetLoaderQueue;
+		
 		private var _db:LevelDatabase;
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
@@ -46,33 +49,27 @@ package
 		private var Cannon3DSAsset : Class;
 		
 
-		public function Main() {
-			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
+		public function Main()
+		{
+			init();
 		}
-
-
-		private function init( event:Event ):void {
-			removeEventListener( Event.ADDED_TO_STAGE, init );
-
-			Loader3D.enableParser( AWD2Parser );
-			Loader3D.enableParser( Max3DSParser );
-
+		
+		
+		private function init() : void
+		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
+			
+			var s:AwayStats = new AwayStats();
+			s.x = stage.stageWidth - s.width;
+			addChild(s);
 
 			initSettings();
 			initDb();
 			initStack();
 			
-			AssetLibrary.loadData(FlyingAWDAsset);
-			AssetLibrary.loadData(Cannon3DSAsset);
-			
-			var s:AwayStats = new AwayStats();
-			s.x = stage.stageWidth - s.width;
-			parent.addChild(s);
-
-			_stack.gotoScreen( Screens.LOADING );
+			loadAssets();
 		}
 		
 		private function initSettings():void {
@@ -86,7 +83,6 @@ package
 			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbLevelSelect );
 			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
 			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
-			_db.loadXml( 'assets/levels.xml' );
 		}
 
 
@@ -105,6 +101,7 @@ package
 		}
 		
 		
+		
 		protected function loadState(db : LevelDatabase) : void
 		{
 			// To be overridden in AIR version.
@@ -118,6 +115,26 @@ package
 			trace(xml.toXMLString());
 		}
 		
+		
+		private function loadAssets() : void
+		{
+			AssetLibrary.enableParser( AWD2Parser );
+			AssetLibrary.enableParser( Max3DSParser );
+			
+			_stack.gotoScreen(Screens.LOADING);
+			
+			_queue = new AssetLoaderQueue();
+			_queue.addResource(FlyingAWDAsset);
+			_queue.addResource(Cannon3DSAsset);
+			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
+			_queue.load();
+		}
+		
+		
+		private function onAssetsComplete(ev : Event) : void
+		{
+			_db.loadXml( 'assets/levels.xml' );
+		}
 		
 
 		private function onDbComplete( ev:Event ):void {
