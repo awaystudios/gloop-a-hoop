@@ -21,7 +21,6 @@ package com.away3d.gloop.gameobjects.components
 		private var _lastPosX : Number;
 		private var _lastPosY : Number;
 		
-
 		public function PathTraceComponent(physics:PhysicsComponent) {
 
 			_physics = physics;
