@@ -71,6 +71,7 @@ package com.away3d.gloop.gameobjects.components {
 		
 		public function update(dt:Number):void {
 			if (!_gloop) return;
+			if (!_gloop.physics.b2body) return; // gloop hasn't inited its physics yet, wait for a bit
 			_gloop.physics.b2body.SetLinearVelocity(new V2(0, 0)); // kill incident velocity
 			_gloop.physics.b2body.SetTransform(_gameObject.physics.b2body.GetPosition().clone(), 0); // position gloop on top of launcher
 		}
