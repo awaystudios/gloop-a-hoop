@@ -5,12 +5,14 @@ package com.away3d.gloop.gameobjects
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
-	import away3d.primitives.CubeGeometry;
+	import away3d.materials.TextureMaterial;
+	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
+	import com.away3d.gloop.utils.EmbeddedResources;
 	
-	import flash.utils.setTimeout;
+	import flash.display.Bitmap;
 
 	public class Cannon extends DefaultGameObject
 	{
@@ -35,13 +37,16 @@ package com.away3d.gloop.gameobjects
 		
 		private function initVisual() : void
 		{
+			var tex : BitmapTexture;
 			var bodyMat : DefaultMaterialBase;
 			var footMat : DefaultMaterialBase;
 			var footGeom : Geometry;
 			var bodyGeom : Geometry;
 			
-			bodyMat = new ColorMaterial(0xffcc00);
-			footMat = new ColorMaterial(0x00ffcc);
+			tex = new BitmapTexture(Bitmap(new EmbeddedResources.CannonDiffusePNGAsset()).bitmapData);
+			
+			bodyMat = new TextureMaterial(tex);
+			footMat = new TextureMaterial(tex);
 			
 			bodyGeom = Geometry(AssetLibrary.getAsset('CannonFrame0_geom')).clone();
 			footGeom = Geometry(AssetLibrary.getAsset('CannonFoot_geom'));
