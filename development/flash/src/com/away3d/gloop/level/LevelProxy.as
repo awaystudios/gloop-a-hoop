@@ -113,6 +113,7 @@ package com.away3d.gloop.level
 		public function reset() : void
 		{
 			_level.reset();
+			_inventory.reset();
 			
 			_round_num_stars = 0;
 			

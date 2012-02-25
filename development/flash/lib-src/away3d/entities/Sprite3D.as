@@ -9,6 +9,7 @@ package away3d.entities
 	import away3d.bounds.BoundingVolumeBase;
 	import away3d.cameras.Camera3D;
 	import away3d.core.base.IRenderable;
+	import away3d.core.base.Object3D;
 	import away3d.core.base.SubGeometry;
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.core.partition.EntityNode;
@@ -57,6 +58,11 @@ package away3d.entities
 				_geometry.updateVertexTangentData( Vector.<Number>( [1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0] ) );
 				_geometry.updateVertexNormalData( Vector.<Number>( [.0, .0, -1.0, .0, .0, -1.0, .0, .0, -1.0, .0, .0, -1.0] ) );
 			}
+		}
+
+		override public function clone():Object3D {
+	   		var clone:Sprite3D = new Sprite3D( _material, _width, _height );
+			return clone;
 		}
 
 		public function get width():Number {

@@ -2,6 +2,7 @@ package com.away3d.gloop.effects
 {
 
 	import away3d.containers.Scene3D;
+	import away3d.entities.Entity;
 	import away3d.entities.Mesh;
 
 	import flash.geom.Vector3D;
@@ -14,7 +15,7 @@ package com.away3d.gloop.effects
 		public var apertureZ:Number = 0;
 		public var sourcePosition:Vector3D;
 		public var splatDirection:Vector3D;
-		public var decals:Vector.<Mesh>;
+		public var decals:Vector.<Entity>;
 		public var zOffset:Number = 1;
 		public var targets:Vector.<Mesh>;
 		public var maxDistance:Number = 50;
@@ -23,20 +24,20 @@ package com.away3d.gloop.effects
 		public var shrinkFactor:Number = 0.99;
 
 		private var _maxDecals:uint;
-		private var _decals:Vector.<Mesh>;
+		private var _instantiatedDecals:Vector.<Entity>;
 		private var _currentDecalIndex:uint;
 		private var _meshCollider:MeshCollider;
 
 		public function shrinkDecals():void {
-			for( var i:uint, len:uint = _decals.length; i < len; ++i ) {
-				var decal:Mesh = _decals[ i ];
+			for( var i:uint, len:uint = _instantiatedDecals.length; i < len; ++i ) {
+				var decal:Entity = _instantiatedDecals[ i ];
 				decal.scale( shrinkFactor );
 			}
 		}
 
 		public function DecalSplatter( maxDecals:uint = 10 ) {
 			_maxDecals = maxDecals;
-			_decals = new Vector.<Mesh>();
+			_instantiatedDecals = new Vector.<Entity>();
 			_meshCollider = new MeshCollider();
 			sourcePosition = new Vector3D();
 			splatDirection = new Vector3D( 0, 1, 0 );
@@ -65,37 +66,30 @@ package com.away3d.gloop.effects
 					var position:Vector3D = _meshCollider.collidingMesh.sceneTransform.transformVector( _meshCollider.collisionPoint );
 					var distance:Number = position.subtract( sourcePosition ).length;
 					if( distance > maxDistance ) continue;
-
-					// evaluate normal and place decal with an offset
-					var normal:Vector3D = _meshCollider.collidingMesh.sceneTransform.deltaTransformVector( _meshCollider.collisionNormal );
-					normal.scaleBy( zOffset );
-					position = position.add( normal );
-					placeDecalAt( position, normal, rand( minScale, maxScale ) );
+					placeDecalAt( position, rand( minScale, maxScale ) );
 				}
 			}
 		}
 
-		private function placeDecalAt( position:Vector3D, normal:Vector3D, scale:Number = 1 ):void {
+		private function placeDecalAt( position:Vector3D, scale:Number = 1 ):void {
 			var scene:Scene3D = _meshCollider.collidingMesh.scene;
-			var decal:Mesh = getNextDecal();
+			var decal:Entity = getNextDecal();
 			decal.scale( scale );
 			decal.position = position;
-//			var offsetPosition:Vector3D = position.add( normal );
-//			decal.lookAt( offsetPosition, new Vector3D( rand( -1, 1 ), rand( -1, 1 ), rand( -1, 1 ) ) );
 			scene.addChild( decal );
 		}
 
-		private function getNextDecal():Mesh {
-			var decal:Mesh;
-			if( _decals.length - 1 < _currentDecalIndex ) {
+		private function getNextDecal():Entity {
+			var decal:Entity;
+			if( _instantiatedDecals.length - 1 < _currentDecalIndex ) {
 				var randDecalIndex:uint = Math.floor( Math.random() * decals.length );
-				decal = decals[ randDecalIndex ].clone() as Mesh;
+				decal = decals[ randDecalIndex ].clone() as Entity;
 			}
 			else {
-				decal = _decals[ _currentDecalIndex ];
+				decal = _instantiatedDecals[ _currentDecalIndex ];
 				decal.scaleX = decal.scaleY = decal.scaleZ = 1;
 			}
-			_decals.push( decal );
+			_instantiatedDecals.push( decal );
 			_currentDecalIndex++;
 			if( _currentDecalIndex > _maxDecals ) _currentDecalIndex = 0;
 			return decal;
