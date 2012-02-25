@@ -7,6 +7,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.DefaultMaterialBase;
 	import away3d.materials.TextureMaterial;
 	import away3d.textures.BitmapTexture;
+	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
@@ -17,8 +18,8 @@ package com.away3d.gloop.gameobjects
 	public class Cannon extends DefaultGameObject
 	{
 		private var _animComponent : VertexAnimationComponent;
-		
 		private var _cannonBody : Mesh;
+		private var _launcher : GloopLauncherComponent;
 		
 		public function Cannon()
 		{
@@ -32,6 +33,9 @@ package com.away3d.gloop.gameobjects
 		{
 			initVisual();
 			initAnim();
+			
+			_launcher = new GloopLauncherComponent(this);
+			_physics = new CannonPhysicsComponent(this);
 		}
 		
 		
@@ -71,5 +75,42 @@ package com.away3d.gloop.gameobjects
 			
 			_animComponent.play('fire');
 		}
+	}
+}
+
+import Box2DAS.Common.V2;
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.hoops.Hoop;
+import com.away3d.gloop.level.Level;
+import com.away3d.gloop.Settings;
+import flash.utils.setInterval;
+
+class CannonPhysicsComponent extends PhysicsComponent
+{
+	
+	public function CannonPhysicsComponent(gameObject:DefaultGameObject)
+	{
+		super(gameObject);
+		graphics.beginFill(gameObject.debugColor1);
+		graphics.drawRect( Settings.CANNON_BASE_X, Settings.CANNON_BASE_Y, Settings.CANNON_BASE_W, Settings.CANNON_BASE_H);
+		
+		graphics.beginFill(gameObject.debugColor2);
+		graphics.drawRect( Settings.CANNON_BARREL_X, Settings.CANNON_BARREL_Y, Settings.CANNON_BARREL_W, Settings.CANNON_BARREL_H);
+	}
+	
+	public override function shapes() : void
+	{
+		// used for gloop collision
+		box(Settings.CANNON_BASE_W, Settings.CANNON_BASE_H, new V2(Settings.CANNON_BASE_W / 2  + Settings.CANNON_BASE_X, Settings.CANNON_BASE_H / 2 + Settings.CANNON_BASE_Y));
+		box(Settings.CANNON_BARREL_W, Settings.CANNON_BARREL_H, new V2(Settings.CANNON_BARREL_W / 2  + Settings.CANNON_BARREL_X, Settings.CANNON_BARREL_H / 2 + Settings.CANNON_BARREL_Y));
+	}
+	
+	override public function create():void {
+		super.create();
+		setCollisionGroup(LEVEL, b2fixtures[0]);
+		setCollisionGroup(LEVEL, b2fixtures[1]);
+		
+		allowDragging = true;
 	}
 }

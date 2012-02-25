@@ -149,8 +149,7 @@ package com.away3d.gloop.screens.game
 			_inputManager.reset(_level);
 			_inputManager.activate();
 			
-			_cannon.meshComponent.mesh.x = _level.spawnPoint.x;
-			_cannon.meshComponent.mesh.y = -_level.spawnPoint.y;
+			_cannon.physics.moveTo(_level.spawnPoint.x, _level.spawnPoint.y, false);
 			_level.add(_cannon);
 
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );

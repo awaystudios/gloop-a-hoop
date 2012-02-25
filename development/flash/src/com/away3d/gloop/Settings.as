@@ -9,6 +9,16 @@ package com.away3d.gloop
 	public class Settings
 	{
 		static public var GRID_SIZE : Number = 100;
+		
+		static public var CANNON_BASE_X : Number = 0;
+		static public var CANNON_BASE_Y : Number = 0;
+		static public var CANNON_BASE_W : Number = 100;
+		static public var CANNON_BASE_H : Number = 100;
+		
+		static public var CANNON_BARREL_X : Number = 0;
+		static public var CANNON_BARREL_Y : Number = 0;
+		static public var CANNON_BARREL_W : Number = 100;
+		static public var CANNON_BARREL_H : Number = 100;
 
 		static public var GLOOP_RADIUS : Number = 25;
 		static public var GLOOP_ANGULAR_DAMPING : Number = 0;
@@ -27,7 +37,9 @@ package com.away3d.gloop
 
 		[comment("values closer to one makes the average move faster")]
 		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
+		
 		static public const HOOP_RADIUS : Number = GRID_SIZE/2;
+		
 		static public var HOOP_ROTATION_STEP : Number = 45;
 
 		static public var BUTTON_RADIUS : Number = 60;
