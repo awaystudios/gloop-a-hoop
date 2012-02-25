@@ -12,6 +12,7 @@ package com.away3d.gloop.gameobjects
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
+	import com.away3d.gloop.gameobjects.components.GloopMeshComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
@@ -67,32 +68,9 @@ package com.away3d.gloop.gameobjects
 		
 		private function initVisual():void
 		{
-			var diff_tex : BitmapTexture;
-			var spec_tex : BitmapTexture;
-			var mat : TextureMaterial;
-			var geom:Geometry;
-			
-			diff_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffusePNGAsset).bitmapData);
-			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
-			
-			mat = new TextureMaterial(diff_tex);
-			mat.animateUVs = true;
-			mat.specularMap = spec_tex;
-
-			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
-			
-			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh( geom, mat );
-			_meshComponent.mesh.subMeshes[0].scaleU = 0.5;
-			_meshComponent.mesh.subMeshes[0].scaleV = 0.5;
+			_meshComponent = new GloopMeshComponent();
 
 			_trace = new PathTraceComponent( _physics );
-			
-			// TODO: Replace with nicer texture animations.
-			mat.repeat = true;
-			setInterval(function() : void {
-				_meshComponent.mesh.subMeshes[0].offsetU += 0.5;
-			}, 300);
 		}
 		
 		private function initAnim():void
