@@ -47,16 +47,16 @@ package com.away3d.gloop.input
 		private var _mouseX:Number;
 		private var _mouseY:Number;
 
-		private var _touchs:Dictionary;
-		private var _touchIds:Vector.<uint>;
-		private var _numTouchs:int;
-		private var _biTouchDistance:Number = 0;
+		private var _touch1:TouchVO = new TouchVO();
+		private var _touch2:TouchVO = new TouchVO();
+		private var _touchDistance:Number = 0;
+		private var _lastTouchDistance:Number = 0;
+
+		private var _dirty:Boolean = true;
 
 		public function InputManager(view : View3D)
 		{
 			super(view);
-			_touchs = new Dictionary();
-			_touchIds = new Vector.<uint>();
 		}
 
 		public function get panX() : Number
@@ -112,44 +112,52 @@ package com.away3d.gloop.input
 
 		private function onTouch( event:TouchEvent ):void {
 
-			var touch:Point;
-			var touch1:Point;
-
-			if( event.type == TouchEvent.TOUCH_BEGIN && !_touchs[ event.touchPointID ] ) {
-				_touchs[ event.touchPointID ] = new Point( event.stageX, event.stageY );
-				_touchIds.push( event.touchPointID );
-				_numTouchs++;
-			}
-			else if( event.type == TouchEvent.TOUCH_END ) {
-				delete _touchs[ event.touchPointID ];
-				_touchIds.splice( _touchIds.indexOf( event.touchPointID ), 1 );
-				_numTouchs--;
-			}
-			else if( event.type == TouchEvent.TOUCH_MOVE ) {
-				touch = _touchs[ event.touchPointID ];
-				touch.x = event.stageX;
-				touch.y = event.stageY;
-			}
-
-			if( _numTouchs > 1 ) {
-				touch = _touchs[ _touchIds[ 0 ] ];
-				_mouseX = touch.x;
-				_mouseY = touch.y;
-			}
-
-			if( _numTouchs == 2 && !_targetHoop ) {
-				touch = _touchs[ _touchIds[ 0 ] ];
-				touch1 = _touchs[ _touchIds[ 1 ] ];
-				var distance:Number = touch1.subtract( touch ).length;
-				var deltaDistance:Number = distance - _biTouchDistance;
-				if( _biTouchDistance != 0 ) {
-					_zoom += deltaDistance * 0.01;
+			var touchVO:TouchVO;
+			if( event.type == TouchEvent.TOUCH_BEGIN ) {
+				touchVO = _touch1.id == -1 ? _touch1 : _touch2;
+				if( _touch1.id == -1 ) {
+					touchVO = _touch1;
 				}
-				_biTouchDistance = distance;
+				else {
+					touchVO = _touch2;
+					_lastTouchDistance = 0;
+				}
+				touchVO.id = event.touchPointID;
+				touchVO.x = event.stageX;
+				touchVO.y = event.stageY;
 			}
 			else {
-				_biTouchDistance = 0;
+				touchVO = event.touchPointID == _touch1.id ? _touch1 : _touch2;
+				if( event.type == TouchEvent.TOUCH_END ) {
+					touchVO.id = -1;
+				}
+				else if( event.type == TouchEvent.TOUCH_MOVE ) {
+					touchVO.x = event.stageX;
+					touchVO.y = event.stageY;
+				}
 			}
+
+			if( _touch1.id > 0 && _touch2.id > 0 ) {
+				// update mouse position
+				_mouseX = _touch1.x;
+				_mouseY = _touch1.y;
+				// update zoom
+				var dx:Number = _touch1.x - _touch2.x;
+				var dy:Number = _touch1.y - _touch2.y;
+				_touchDistance = Math.sqrt( dx * dx + dy * dy );
+				if( _lastTouchDistance != 0 ) {
+					_zoom += ( _touchDistance - _lastTouchDistance ) * 0.01;
+				}
+				_lastTouchDistance = _touchDistance;
+			}
+		}
+
+		public function recordDirty():void {
+			_dirty = false;
+		}
+
+		public function isDirty():Boolean {
+			return _dirty;
 		}
 
 		private function onMouseMove( event:MouseEvent ):void {
@@ -198,6 +206,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
+			_dirty = true;
+
 			super.onViewMouseDown(e);
 			_mouseDownTime = getTimer();
 			_isClick = true;

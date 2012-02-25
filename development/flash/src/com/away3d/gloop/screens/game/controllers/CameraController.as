@@ -46,6 +46,7 @@ package com.away3d.gloop.screens.game.controllers
 			_gloopIsFlying = true;
 			_offX = offX;
 			_offY = offY;
+			_inputManager.recordDirty();
 		}
 		
 		
@@ -71,15 +72,17 @@ package com.away3d.gloop.screens.game.controllers
 			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
 			// evaluate target camera position
-			if( _gloopIsFlying ) {
+			if( !_inputManager.isDirty() && _gloopIsFlying ) { // TODO: doesn't work on mobile, it's always dirty on mobile
 				_offX *= 0.9;
 				_offY *= 0.9;
-				
 				targetPosition.x = _gloop.physics.x + _offX;
-				targetPosition.y = -_gloop.physics.y + _offY; // TODO: allow user to pan view while gloop is flying?
+				targetPosition.y = -_gloop.physics.y + _offY;
+				_inputManager.panX = targetPosition.x;
+				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 			}
 			else {
+				resetOrientation();
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
