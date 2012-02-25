@@ -6,6 +6,9 @@ package com.away3d.gloop.utils
 		[Embed('/../assets/gloop/flying/flying.awd', mimeType='application/octet-stream')]
 		public static var FlyingAWDAsset : Class;
 		
+		[Embed('/../assets/gloop/splat/splat.3ds', mimeType='application/octet-stream')]
+		public static var GloopSplat3DSAsset : Class;
+		
 		[Embed("/../assets/gloop/diff.png")]
 		public static var GloopDiffusePNGAsset : Class;
 

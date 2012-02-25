@@ -20,6 +20,8 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.utils.HierarchyTool;
 	
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
 	
 	import wck.WCK;
@@ -159,6 +161,13 @@ package com.away3d.gloop.screens.game
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
 			}
+			
+			
+			// TODO: Remove this (for debugging only)
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(ev : KeyboardEvent) : void {
+				if (ev.keyCode == Keyboard.SPACE)
+					_gloop.splatOnTarget();
+			});
 		}
 
 		public override function deactivate():void

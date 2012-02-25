@@ -91,9 +91,9 @@ package com.away3d.gloop.gameobjects.components
 			var mat : TextureMaterial;
 			var geom : Geometry;
 			
-			mat = new TextureMaterial(new BitmapTexture(new BitmapData(32, 32, false, 0x0000ff)));
+			mat = new TextureMaterial(new BitmapTexture(new BitmapData(32, 32, false, 0xffffff)));
 			
-			geom = new CubeGeometry();
+			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
 			
 			_splatMesh = new Mesh(geom, mat);
 		}
