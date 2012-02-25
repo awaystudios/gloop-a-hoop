@@ -11,8 +11,12 @@ package com.away3d.gloop.input
 	import com.away3d.gloop.level.Level;
 
 	import flash.events.MouseEvent;
+	import flash.events.TouchEvent;
 	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
+	import flash.ui.Multitouch;
+	import flash.ui.MultitouchInputMode;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 
 	/**
@@ -40,9 +44,19 @@ package com.away3d.gloop.input
 		private var _zooming : Boolean;
 		private var _panning : Boolean;
 
+		private var _mouseX:Number;
+		private var _mouseY:Number;
+
+		private var _touchs:Dictionary;
+		private var _touchIds:Vector.<uint>;
+		private var _numTouchs:int;
+		private var _biTouchDistance:Number = 0;
+
 		public function InputManager(view : View3D)
 		{
 			super(view);
+			_touchs = new Dictionary();
+			_touchIds = new Vector.<uint>();
 		}
 
 		public function get panX() : Number
@@ -70,14 +84,80 @@ package com.away3d.gloop.input
 
 		public function activate() : void
 		{
-			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
+			_view.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+//			_view.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
+			_view.stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
+			_view.stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
+			_view.stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch);
 			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 
-		public function deactivate() : void
-		{
-			_view.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, onPinch);
-			_view.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+		public function deactivate() : void {
+			_view.stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+//			_view.stage.removeEventListener( TransformGestureEvent.GESTURE_ZOOM, onPinch );
+			_view.stage.removeEventListener( TouchEvent.TOUCH_BEGIN, onTouch );
+			_view.stage.removeEventListener( TouchEvent.TOUCH_END, onTouch );
+			_view.stage.removeEventListener( TouchEvent.TOUCH_MOVE, onTouch );
+			_view.stage.removeEventListener( MouseEvent.MOUSE_WHEEL, onMouseWheel );
+		}
+
+		// TODO: remove when new method is reviewed ( replaced by "onTouch()" )
+		/*private function onPinch(e : TransformGestureEvent) : void {
+		 if( !_targetHoop ) {
+		 _zooming = true;
+		 _zoom += ((e.scaleX + e.scaleY) * 0.5) - 1;
+		 }
+		 }*/
+
+		private function onTouch( event:TouchEvent ):void {
+
+			var touch:Point;
+
+			if( event.type == TouchEvent.TOUCH_BEGIN && !_touchs[ event.touchPointID ] ) {
+				_touchs[ event.touchPointID ] = new Point( event.stageX, event.stageY );
+				_touchIds.push( event.touchPointID );
+				_numTouchs++;
+			}
+			else if( event.type == TouchEvent.TOUCH_END ) {
+				delete _touchs[ event.touchPointID ];
+				_touchIds.splice( _touchIds.indexOf( event.touchPointID ), 1 );
+				_numTouchs--;
+			}
+			else if( event.type == TouchEvent.TOUCH_MOVE ) {
+				touch = _touchs[ event.touchPointID ];
+				touch.x = event.stageX;
+				touch.y = event.stageY;
+			}
+
+			if( _numTouchs > 1 ) {
+				var acumX:Number = 0;
+				var acumY:Number = 0;
+				for each( touch in _touchs ) {
+					if( touch ) {
+						acumX += touch.x;
+						acumY += touch.y;
+					}
+				}
+				_mouseX = acumX / _numTouchs;
+				_mouseY = acumY / _numTouchs;
+			}
+
+			if( _numTouchs == 2 && !_targetHoop ) {
+				var point0:Point = _touchs[ _touchIds[ 0 ] ];
+				var point1:Point = _touchs[ _touchIds[ 1 ] ];
+				var distance:Number = point1.subtract( point0 ).length;
+				var deltaDistance:Number = distance - _biTouchDistance;
+				if( _biTouchDistance != 0 ) {
+					_zoom += deltaDistance * 0.01;
+				}
+				_biTouchDistance = distance;
+			}
+		}
+
+		private function onMouseMove( event:MouseEvent ):void {
+			_mouseX = _view.mouseX;
+			_mouseY = _view.mouseY;
 		}
 
 		override public function update() : void
@@ -88,7 +168,7 @@ package com.away3d.gloop.input
 			super.update();
 
 			// calculate how far from the origin the players finger has moved
-			var distance:Number = (_startViewMouseX - _view.mouseX) * (_startViewMouseX - _view.mouseX) + (_startViewMouseY - _view.mouseY) * (_startViewMouseY - _view.mouseY);
+			var distance:Number = (_startViewMouseX - _mouseX) * (_startViewMouseX - _mouseX) + (_startViewMouseY - _mouseY) * (_startViewMouseY - _mouseY);
 
 			// if we still might be clicking and the player has moved far enough, start the dragging
 			if (_isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED) {
@@ -106,21 +186,12 @@ package com.away3d.gloop.input
 
 			if (_panning && !_zooming)
 			{
-				_panX -= (_view.mouseX - _prevViewMouseX);
-				_panY += (_view.mouseY - _prevViewMouseY);
+				_panX -= (_mouseX - _prevViewMouseX);
+				_panY += (_mouseY - _prevViewMouseY);
 			}
 
-			_prevViewMouseX = _view.mouseX;
-			_prevViewMouseY = _view.mouseY;
-		}
-
-		private function onPinch(e : TransformGestureEvent) : void
-		{
-			if (!_targetHoop)
-			{
-				_zooming = true;
-				_zoom += ((e.scaleX + e.scaleY) * 0.5) - 1;
-			}
+			_prevViewMouseX = _mouseX;
+			_prevViewMouseY = _mouseY;
 		}
 
 		private function onMouseWheel(e : MouseEvent) : void
