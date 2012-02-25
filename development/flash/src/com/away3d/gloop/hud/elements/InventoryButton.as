@@ -30,7 +30,7 @@ package com.away3d.gloop.hud.elements
 		
 		private function onItemChange(ev : InventoryEvent) : void
 		{
-			visible = (_item.numLeft > 0);
+			// TODO: visual cue
 		}
 	}
 }

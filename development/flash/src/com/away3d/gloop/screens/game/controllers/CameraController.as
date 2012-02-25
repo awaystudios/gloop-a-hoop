@@ -91,7 +91,7 @@ package com.away3d.gloop.screens.game.controllers
 
 			// contain target position
 			if( targetPosition.x > _boundsMaxX ) { // TODO: implement softer containment ( like in ipad's scrolling )
-				targetPosition.x *= _boundsMaxX;
+				targetPosition.x = _boundsMaxX;
 				_inputManager.panX = _boundsMaxX;
 			} else if( targetPosition.x < _boundsMinX ) {
 				targetPosition.x = _boundsMinX;

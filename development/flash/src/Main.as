@@ -4,13 +4,16 @@ package
 	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
+	import away3d.library.assets.AssetType;
+	import away3d.library.utils.AssetLibraryIterator;
 	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
-	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
+	import away3d.loaders.parsers.Max3DSParser;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
@@ -21,6 +24,8 @@ package
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
+	import com.away3d.gloop.utils.AssetLoaderQueue;
+	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
 	
@@ -34,38 +39,34 @@ package
 	[SWF(width="1024", height="768", frameRate="60")]
 	public class Main extends Sprite
 	{
+		private var _queue : AssetLoaderQueue;
+		
 		private var _db:LevelDatabase;
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
 		
-		[Embed('/../assets/gloop/flying/flying.awd', mimeType='application/octet-stream')]
-		private var FlyingAWDAsset : Class;
 
-		public function Main() {
-			addEventListener( Event.ADDED_TO_STAGE, init, false, 0, true );
+		public function Main()
+		{
+			init();
 		}
-
-
-		private function init( event:Event ):void {
-			removeEventListener( Event.ADDED_TO_STAGE, init );
-
-			Loader3D.enableParser( AWD2Parser );
-
+		
+		
+		private function init() : void
+		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
+			
+			var s:AwayStats = new AwayStats();
+			s.x = stage.stageWidth - s.width;
+			addChild(s);
 
 			initSettings();
 			initDb();
 			initStack();
 			
-			AssetLibrary.loadData(FlyingAWDAsset);
-			
-			var s:AwayStats = new AwayStats();
-			s.x = stage.stageWidth - s.width;
-			parent.addChild(s);
-
-			_stack.gotoScreen( Screens.LOADING );
+			loadAssets();
 		}
 		
 		private function initSettings():void {
@@ -79,7 +80,6 @@ package
 			_db.addEventListener( GameEvent.LEVEL_SELECT, onDbLevelSelect );
 			_db.addEventListener( GameEvent.LEVEL_LOSE, onDbLevelLose );
 			_db.addEventListener( GameEvent.LEVEL_WIN, onDbLevelWin );
-			_db.loadXml( 'assets/levels.xml' );
 		}
 
 
@@ -98,6 +98,7 @@ package
 		}
 		
 		
+		
 		protected function loadState(db : LevelDatabase) : void
 		{
 			// To be overridden in AIR version.
@@ -111,6 +112,40 @@ package
 			trace(xml.toXMLString());
 		}
 		
+		
+		private function loadAssets() : void
+		{
+			AssetLibrary.enableParser( AWD2Parser );
+			AssetLibrary.enableParser( Max3DSParser );
+			
+			_stack.gotoScreen(Screens.LOADING);
+			
+			_queue = new AssetLoaderQueue();
+			_queue.addResource(EmbeddedResources.FlyingAWDAsset);
+			_queue.addResource(EmbeddedResources.Cannon3DSAsset);
+			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
+			_queue.load();
+		}
+		
+		
+		private function onAssetsComplete(ev : Event) : void
+		{
+			var it : AssetLibraryIterator;
+			var mesh : Mesh;
+			
+			// Get rid of meshes to avoid having to clone geometries
+			// to circumvent issues with material/animation sharing.
+			it = AssetLibrary.createIterator(AssetType.MESH);
+			while (mesh = Mesh(it.next())) {
+				AssetLibrary.removeAsset(mesh, false);
+				mesh.material = null;
+				mesh.geometry = null;
+				mesh.dispose();
+			}
+			
+			// Load levels
+			_db.loadXml( 'assets/levels.xml' );
+		}
 		
 
 		private function onDbComplete( ev:Event ):void {
@@ -138,7 +173,7 @@ package
 		{
 			saveState( _db.getStateXml() );
 			
-			//_stack.gotoScreen(Screens.WIN);
+			_stack.gotoScreen(Screens.WIN);
 		}
 		
 		
