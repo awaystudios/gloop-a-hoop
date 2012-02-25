@@ -113,6 +113,7 @@ package com.away3d.gloop.input
 		private function onTouch( event:TouchEvent ):void {
 
 			var touch:Point;
+			var touch1:Point;
 
 			if( event.type == TouchEvent.TOUCH_BEGIN && !_touchs[ event.touchPointID ] ) {
 				_touchs[ event.touchPointID ] = new Point( event.stageX, event.stageY );
@@ -131,27 +132,23 @@ package com.away3d.gloop.input
 			}
 
 			if( _numTouchs > 1 ) {
-				var acumX:Number = 0;
-				var acumY:Number = 0;
-				for each( touch in _touchs ) {
-					if( touch ) {
-						acumX += touch.x;
-						acumY += touch.y;
-					}
-				}
-				_mouseX = acumX / _numTouchs;
-				_mouseY = acumY / _numTouchs;
+				touch = _touchs[ _touchIds[ 0 ] ];
+				_mouseX = touch.x;
+				_mouseY = touch.y;
 			}
 
 			if( _numTouchs == 2 && !_targetHoop ) {
-				var point0:Point = _touchs[ _touchIds[ 0 ] ];
-				var point1:Point = _touchs[ _touchIds[ 1 ] ];
-				var distance:Number = point1.subtract( point0 ).length;
+				touch = _touchs[ _touchIds[ 0 ] ];
+				touch1 = _touchs[ _touchIds[ 1 ] ];
+				var distance:Number = touch1.subtract( touch ).length;
 				var deltaDistance:Number = distance - _biTouchDistance;
 				if( _biTouchDistance != 0 ) {
 					_zoom += deltaDistance * 0.01;
 				}
 				_biTouchDistance = distance;
+			}
+			else {
+				_biTouchDistance = 0;
 			}
 		}
 
