@@ -11,6 +11,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
@@ -31,7 +32,7 @@ package com.away3d.gloop.gameobjects
 		private var _trace:PathTraceComponent;
 		private var _spawnX:Number;
 		private var _spawnY:Number;
-
+		
 		private var _avgSpeed:Number = 0;
 
 		private var _bounceVelocity:Number = 0;
@@ -210,31 +211,5 @@ package com.away3d.gloop.gameobjects
 		public function get splat():SplatComponent {
 			return _splat;
 		}
-	}
-}
-
-import com.away3d.gloop.Settings;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-
-class GloopPhysicsComponent extends PhysicsComponent
-{
-
-	public function GloopPhysicsComponent( gameObject:DefaultGameObject ) {
-		super( gameObject );
-
-		graphics.beginFill( gameObject.debugColor1 );
-		graphics.drawCircle( 0, 0, Settings.GLOOP_RADIUS );
-		graphics.beginFill( gameObject.debugColor2 );
-		graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
-	}
-	
-	public override function shapes():void {
-		circle( Settings.GLOOP_RADIUS );
-	}
-
-	override public function create():void {
-		super.create();
-		setCollisionGroup( GLOOP );
 	}
 }
