@@ -137,8 +137,8 @@ package com.away3d.gloop.input
 					touchVO.y = event.stageY;
 				}
 			}
-
-			if( _touch1.id > 0 && _touch2.id > 0 ) {
+			
+			if( _touch1.id >= 0 && _touch2.id >= 0 ) {
 				// update mouse position
 				_mouseX = _touch1.x;
 				_mouseY = _touch1.y;
