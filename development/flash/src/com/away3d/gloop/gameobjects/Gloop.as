@@ -46,20 +46,23 @@ package com.away3d.gloop.gameobjects
 			init();
 		}
 
-		private function init():void {
+		private function init():void
+		{
+			initPhysics();
+			initVisual();
+		}
+		
+		
+		private function initPhysics() : void
+		{
 			_physics = new GloopPhysicsComponent( this );
 			_physics.angularDamping = Settings.GLOOP_ANGULAR_DAMPING;
 			_physics.friction = Settings.GLOOP_FRICTION;
 			_physics.restitution = Settings.GLOOP_RESTITUTION;
 			_physics.linearDamping = Settings.GLOOP_LINEAR_DAMPING;
 
-			_splatComponent = new SplatComponent( _physics );
-
 			_physics.reportPostSolve = true;
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
-
-			initVisual();
-			initAnim();
 		}
 		
 		
@@ -70,11 +73,9 @@ package com.away3d.gloop.gameobjects
 			_visualComponent = new GloopVisualComponent( _physics );
 			_meshComponent = _visualComponent;
 
+			_splatComponent = new SplatComponent( _physics );
 			_traceComponent = new PathTraceComponent( _physics );
-		}
-		
-		private function initAnim():void
-		{
+			
 			_anim = new VertexAnimationComponent( _meshComponent.mesh );
 			_anim.addSequence( 'fly', [
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
@@ -83,7 +84,6 @@ package com.away3d.gloop.gameobjects
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
 				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
 			] );
-
 		}
 		
 		
