@@ -6,16 +6,24 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
+	import away3d.primitives.CubeGeometry;
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.utils.setInterval;
 
 	public class GloopVisualComponent extends MeshComponent
 	{
 		private var _physics : PhysicsComponent;
+		
+		private var _stdAnim : VertexAnimationComponent;
+		private var _splatAnim : VertexAnimationComponent;
+		
+		private var _stdMesh : Mesh;
+		private var _splatMesh : Mesh;
 		
 		private var _bounceVelocity:Number = 0;
 		private var _bouncePosition:Number = 0;
@@ -33,6 +41,17 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function init() : void
 		{
+			initStandard();
+			initSplat();
+			
+			// Will be used as container for either
+			// standard or splat mesh.
+			mesh = new Mesh();
+		}
+		
+		
+		private function initStandard() : void
+		{
 			var diff_tex : BitmapTexture;
 			var spec_tex : BitmapTexture;
 			var mat : TextureMaterial;
@@ -47,20 +66,70 @@ package com.away3d.gloop.gameobjects.components
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
 			
-			mesh = new Mesh( geom, mat );
-			mesh.subMeshes[0].scaleU = 0.5;
-			mesh.subMeshes[0].scaleV = 0.5;
+			_stdMesh = new Mesh(geom, mat);
+			_stdMesh.subMeshes[0].scaleU = 0.5;
+			_stdMesh.subMeshes[0].scaleV = 0.5;
 			
 			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
 			setInterval(function() : void {
-				mesh.subMeshes[0].offsetU += 0.5;
+				_stdMesh.subMeshes[0].offsetU += 0.5;
 			}, 300);
+			
+			_stdAnim = new VertexAnimationComponent( _stdMesh );
+			_stdAnim.addSequence( 'fly', [
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame1Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame2Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
+				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
+			] );
+		}
+		
+		
+		private function initSplat() : void
+		{
+			var tex : BitmapTexture;
+			var mat : TextureMaterial;
+			var geom : Geometry;
+			
+			tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSplatDiffusePNGAsset).bitmapData);
+			mat = new TextureMaterial(tex);
+			
+			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
+			
+			_splatMesh = new Mesh(geom, mat);
+			
+			_splatAnim = new VertexAnimationComponent(_splatMesh);
+			_splatAnim.addSequence( 'splat', [
+				Geometry(AssetLibrary.getAsset('GlSplatFr0_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr1_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr2_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
+				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom'))
+			], 200, false);
+		}
+		
+		
+		public function splat() : void
+		{
+			if (mesh.contains(_stdMesh))
+				mesh.removeChild(_stdMesh);
+			
+			mesh.addChild(_splatMesh);
+			_splatAnim.play('splat');
 		}
 		
 		
 		public function reset() : void
 		{
+			if (mesh.contains(_splatMesh))
+				mesh.removeChild(_splatMesh);
+			
+			mesh.addChild(_stdMesh);
+			
 			_bounceVelocity = 0;
 			_bouncePosition = 0;
 		}

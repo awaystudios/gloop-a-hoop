@@ -1,13 +1,9 @@
 package com.away3d.gloop.screens.game
 {
 
-	import away3d.cameras.lenses.PerspectiveLens;
 	import away3d.containers.View3D;
-	import away3d.entities.Mesh;
 	import away3d.lights.PointLight;
-	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
-	import away3d.primitives.SphereGeometry;
 	import com.away3d.gloop.Settings;
 	
 	import com.away3d.gloop.events.GameEvent;
@@ -24,9 +20,9 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
 	import com.away3d.gloop.utils.HierarchyTool;
 	
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.geom.Vector3D;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
 	
 	import wck.WCK;
@@ -153,7 +149,7 @@ package com.away3d.gloop.screens.game
 			_level.add(_cannon);
 
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
-			_gloop.splat.splattables = _level.splattableMeshes;
+			_gloop.splatComponent.splattables = _level.splattableMeshes;
 
 			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
 			setTimeout(function():void {
@@ -166,6 +162,13 @@ package com.away3d.gloop.screens.game
 			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
 			}
+			
+			
+			// TODO: Remove this (for debugging only)
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(ev : KeyboardEvent) : void {
+				if (ev.keyCode == Keyboard.SPACE)
+					_gloop.splatOnTarget();
+			});
 		}
 
 		public override function deactivate():void
@@ -196,7 +199,7 @@ package com.away3d.gloop.screens.game
 			_inputManager.panX = _gloop.physics.x;
 			_inputManager.panY = -_gloop.physics.y;
 		}
-
+		
 
 		private function onEnterFrame( ev:Event ):void {
 
