@@ -7,14 +7,15 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.DefaultMaterialBase;
 	import away3d.materials.TextureMaterial;
 	import away3d.textures.BitmapTexture;
-	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
-	import com.away3d.gloop.Settings;
 	
+	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
+	import flash.utils.setTimeout;
 
 	public class Cannon extends DefaultGameObject implements IMouseInteractive
 	{
@@ -74,9 +75,8 @@ package com.away3d.gloop.gameobjects
 				Geometry(AssetLibrary.getAsset('CannonFrame1_geom')),
 				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')),
 				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')),
-			]);
-			
-			_animComponent.play('fire');
+				Geometry(AssetLibrary.getAsset('CannonFrame0_geom')),
+			], 100, false);
 		}
 		
 		
@@ -109,12 +109,18 @@ package com.away3d.gloop.gameobjects
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			if (_launcher.gloop) {
-				_launcher.onDragEnd(mouseX, mouseY);
+				_animComponent.play('fire');
 				
-				// if the launcher fired this time, reset the time since launch
-				if (_launcher.fired) {
-					_timeSinceLaunch = 0;
-				}
+				// TODO: Solve this in a nicer way, or at least make sure
+				// it can't happen twice in parallel?
+				setTimeout(function() : void {
+					_launcher.onDragEnd(mouseX, mouseY);
+					
+					// if the launcher fired this time, reset the time since launch
+					if (_launcher.fired) {
+						_timeSinceLaunch = 0;
+					}
+				}, 300);
 			}
 		}
 		
