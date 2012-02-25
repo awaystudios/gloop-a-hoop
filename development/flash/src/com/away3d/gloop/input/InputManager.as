@@ -27,6 +27,9 @@ package com.away3d.gloop.input
 		private var _interactionPointX:Number = 0;
 		private var _interactionPointY:Number = 0;
 
+		private var _interactionDeltaX:Number = 0;
+		private var _interactionDeltaY:Number = 0;
+
 		private var _prevInteractionPointX : Number = 0;
 		private var _prevInteractionPointY : Number = 0;
 		
@@ -46,7 +49,14 @@ package com.away3d.gloop.input
 		private var _touchDistance:Number = 0;
 		private var _lastTouchDistance:Number = 0;
 
+		private var _panVelocityX:Number = 0;
+		private var _panVelocityY:Number = 0;
+
 		private var _interacting:Boolean;
+
+		private var _onPanImpulse:Boolean;
+
+		private const MAX_IMPULSE:Number = 50;
 
 		public function InputManager(view : View3D)
 		{
@@ -59,6 +69,8 @@ package com.away3d.gloop.input
 			_zoom = 1;
 			_panX = 0;
 			_panY = 300;
+			_panVelocityX = 0;
+			_panVelocityY = 0;
 		}
 		
 		public function activate() : void
@@ -81,9 +93,22 @@ package com.away3d.gloop.input
 
 		override public function update():void {
 
+			_interactionDeltaX = -(_interactionPointX - _prevInteractionPointX);
+			_interactionDeltaY = (_interactionPointY - _prevInteractionPointY);
+			_prevInteractionPointX = _interactionPointX;
+			_prevInteractionPointY = _interactionPointY;
+
+			if( _onPanImpulse ) {
+				_panVelocityX *= 0.9;
+				_panVelocityY *= 0.9;
+				_panX += _panVelocityX;
+				_panY += _panVelocityY;
+				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
+//				trace( "impusling: " + speed );
+				if( speed < 0.1 ) _onPanImpulse = false;
+			}
+
 			if( !_mouseDown ) {
-				_prevInteractionPointX = _interactionPointX;
-				_prevInteractionPointY = _interactionPointY;
 				return; // if there's no touch, there's no sense in updating
 			}
 
@@ -106,12 +131,9 @@ package com.away3d.gloop.input
 				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
 
 			if( _panning && !_zooming ) {
-				_panX -= (_interactionPointX - _prevInteractionPointX);
-				_panY += (_interactionPointY - _prevInteractionPointY);
+				_panX += _interactionDeltaX;
+				_panY += _interactionDeltaY;
 			}
-
-			_prevInteractionPointX = _interactionPointX;
-			_prevInteractionPointY = _interactionPointY;
 		}
 
 		private function onMouseWheel(e : MouseEvent) : void
@@ -168,6 +190,17 @@ package com.away3d.gloop.input
 			_panning = false;
 			_zooming = false;
 			_interacting = false;
+
+			_panVelocityX = _interactionDeltaX;
+			_panVelocityY = _interactionDeltaY;
+			var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
+			if( speed > 10 ) {
+				_onPanImpulse = true;
+				_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
+				_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
+				_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
+				_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
+			}
 		}
 
 		private function onTouch( event:TouchEvent ):void {
