@@ -11,6 +11,7 @@
 	import away3d.core.base.SubMesh;
 	import away3d.core.partition.EntityNode;
 	import away3d.core.partition.MeshNode;
+	import away3d.core.raycast.MouseHitMethod;
 	import away3d.events.GeometryEvent;
 	import away3d.library.assets.AssetType;
 	import away3d.library.assets.IAsset;
@@ -30,7 +31,7 @@
 		private var _material : MaterialBase;
 		arcane var _animationState : AnimationStateBase;
 		private var _castsShadows : Boolean = true;
-		private var _mouseHitMethod:uint;
+		private var _mouseHitMethod:uint = MouseHitMethod.BOUNDS_ONLY;
 
 		/**
 		 * Create a new Mesh object.
