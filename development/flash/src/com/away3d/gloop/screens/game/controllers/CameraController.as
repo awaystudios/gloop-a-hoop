@@ -94,19 +94,23 @@ package com.away3d.gloop.screens.game.controllers
 			targetPosition.z = _inputManager.zoom;
 
 			// contain target position
-			if( targetPosition.x > _boundsMaxX ) { // TODO: implement softer containment ( like in ipad's scrolling )
-				targetPosition.x = _boundsMaxX;
-				_inputManager.panX *= _boundsMaxX;
+			if( targetPosition.x > _boundsMaxX ) {
+				targetPosition.x *= 0.95;
+				_inputManager.panX = targetPosition.x;
+				_inputManager.resetVelocities();
 			} else if( targetPosition.x < _boundsMinX ) {
-				targetPosition.x = _boundsMinX;
-				_inputManager.panX = _boundsMinX;
+				targetPosition.x *= 0.95;
+				_inputManager.panX = targetPosition.x;
+				_inputManager.resetVelocities();
 			}
 			if( targetPosition.y > _boundsMaxY ) {
-				targetPosition.y = _boundsMaxY;
-				_inputManager.panY = _boundsMaxY;
+				targetPosition.y *= 0.95;
+				_inputManager.panY = targetPosition.y;
+				_inputManager.resetVelocities();
 			} else if( targetPosition.y < _boundsMinY ) {
-				targetPosition.y = _boundsMinY;
-				_inputManager.panY = _boundsMinY;
+				targetPosition.y *= 0.95;
+				_inputManager.panY = targetPosition.y;
+				_inputManager.resetVelocities();
 			}
 			if( targetPosition.z > _boundsMaxZ ) {
 				targetPosition.z = _boundsMaxZ;
@@ -117,10 +121,9 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			// ease camera towards target position
-			var easeFactor:Number = _inputManager.interacting ? 0.4 : 0.2; // TODO: properly implement camera inertia?
-			_camera.x += (targetPosition.x - _camera.x) * easeFactor;
-			_camera.y += (targetPosition.y - _camera.y) * easeFactor;
-			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * easeFactor;
+			_camera.x += (targetPosition.x - _camera.x) * 0.4;
+			_camera.y += (targetPosition.y - _camera.y) * 0.4;
+			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * 0.4;
 		}
 	}
 }
