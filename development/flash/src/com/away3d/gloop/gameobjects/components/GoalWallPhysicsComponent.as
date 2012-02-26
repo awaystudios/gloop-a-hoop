@@ -56,7 +56,7 @@ package com.away3d.gloop.gameobjects.components {
 		
 		override public function create():void {
 			super.create();
-			setCollisionGroup(LEVEL, b2fixtures[1]);
+			setCollisionGroup(GLOOP_SENSOR, b2fixtures[1]);
 			b2fixtures[1].SetSensor(true);
 		}
 		
