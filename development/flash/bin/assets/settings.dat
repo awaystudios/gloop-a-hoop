@@ -10,11 +10,11 @@ CANNON_BARREL_Y               -35
 CANNON_BARREL_W               125
 CANNON_BARREL_H               60
 
-FAN_AREA_HEIGHT               100
-FAN_AREA_WIDTH                60
+FAN_AREA_HEIGHT               200
+FAN_AREA_WIDTH                50
 FAN_BODY_HEIGHT               5
-FAN_BODY_WIDTH                60
-FAN_POWER                     0.15
+FAN_BODY_WIDTH                50
+FAN_POWER                     0.05
 
 GLOOP_ANGULAR_DAMPING         1
 GLOOP_DECAL_MIN_SPEED         0.01
@@ -50,7 +50,7 @@ PHYSICS_SCALE                 60
 PHYSICS_TIME_STEP             0.05
 PHYSICS_VELOCITY_ITERATIONS   5
 
-ROCKET_POWER                  15
+ROCKET_POWER                  1.8
 
 SHOW_COLLISION_WALLS          false
 SHOW_COSMETIC_MESHES          true

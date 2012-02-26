@@ -41,6 +41,8 @@ package com.away3d.gloop
 		[comment("values closer to one makes the average move faster")]
 		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
 		
+		static public const GLOOP_MAX_SPEED : Number = 5.5;
+		
 		static public const HOOP_RADIUS : Number = GRID_SIZE / 2;
 		
 		static public var GOALWALL_DETECTOR_HEIGHT : Number = 200;
@@ -66,6 +68,8 @@ package com.away3d.gloop
 		static public var FAN_AREA_WIDTH : Number = 60;
 		static public var FAN_AREA_HEIGHT : Number = 100;
 		static public var FAN_POWER : Number = 0.25;
+		
+		static public var FAN_ON_OFF_TIME:Number = 0.4;
 
 		static public var STAR_RADIUS : Number = 30;
 

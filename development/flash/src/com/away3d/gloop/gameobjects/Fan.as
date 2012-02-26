@@ -5,10 +5,12 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
-	
+	import Box2DAS.Common.V2;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.greensock.TweenLite;
+	import com.away3d.gloop.Settings;
 	import com.greensock.easing.Cubic;
+	import com.greensock.TweenLite;
+	
 
 	public class Fan extends DefaultGameObject implements IButtonControllable
 	{
@@ -16,11 +18,9 @@ package com.away3d.gloop.gameobjects
 		private var _movableMesh:Mesh;
 		private var _isOn:Boolean;
 		private var _activeFanStrength:Object = { t:0 };
-
-		private const FAN_ON_OFF_TIME:Number = 0.4;
+		private var _gloop:Gloop;
 
 		public function Fan( worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup:uint = 0 ) {
-
 			super();
 
 			_btnGroup = btnGroup;
@@ -39,7 +39,7 @@ package com.away3d.gloop.gameobjects
 			var fanMaterial:ColorMaterial = new ColorMaterial( 0xCCCCCC );
 
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh( new CylinderGeometry( 50, 50, 5 ), fanMaterial );
+			_meshComponent.mesh = new Mesh( new CylinderGeometry( Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT ), fanMaterial );
 			_meshComponent.mesh.rotationZ = rotation;
 
 			_movableMesh = new Mesh( new CubeGeometry( 5, 5, 100 ), fanMaterial );
@@ -52,62 +52,57 @@ package com.away3d.gloop.gameobjects
 			if( _isOn ) {
 				_movableMesh.rotationY += 25 * _activeFanStrength.t; // TODO: implement on/off inertia to physics as well?
 			}
+			
+			if(_isOn && _gloop){
+				var distanceToFan:Number = _gloop.physics.b2body.GetWorldCenter().subtract( _physics.b2body.GetWorldCenter() ).length();
+				var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -Settings.FAN_POWER * ( 1 / distanceToFan + 1 ) * dt ) );
+				_gloop.physics.b2body.ApplyImpulse( impulse, _gloop.physics.b2body.GetWorldCenter() ); // apply up impulse
+			}
 		}
-
-		public function get buttonGroup():uint {
-			return _btnGroup;
+		
+		override public function onCollidingWithGloopStart(gloop:Gloop):void {
+			super.onCollidingWithGloopStart(gloop);
+			_gloop = gloop;
 		}
-
+		
+		override public function onCollidingWithGloopEnd(gloop:Gloop):void {
+			super.onCollidingWithGloopEnd(gloop);
+			_gloop = null;
+		}
 
 		public function toggleOn():void {
 			if( _isOn ) return;
 			_isOn = true;
 			var d : Number = Math.random() * 0.2;
-			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { delay: d, t:1, ease:Cubic.easeIn } );
-			FanPhysicsComponent( _physics ).isOn = _isOn;
+			TweenLite.to( _activeFanStrength, Settings.FAN_ON_OFF_TIME, { delay: d, t:1, ease:Cubic.easeIn } );
 		}
-
 
 		public function toggleOff():void {
 			if( !_isOn ) return;
-			TweenLite.to( _activeFanStrength, FAN_ON_OFF_TIME, { t:0, onComplete:onToggleOffComplete } );
-			FanPhysicsComponent( _physics ).isOn = _isOn;
+			TweenLite.to( _activeFanStrength, Settings.FAN_ON_OFF_TIME, { t:0, onComplete:onToggleOffComplete } );
 		}
 
 		private function onToggleOffComplete():void {
 			_isOn = false;
-			FanPhysicsComponent( _physics ).isOn = _isOn;
+		}
+		
+		public function get buttonGroup():uint {
+			return _btnGroup;
 		}
 	}
 }
 
 import Box2DAS.Common.V2;
-import Box2DAS.Dynamics.ContactEvent;
 import Box2DAS.Dynamics.b2Fixture;
-
-import com.away3d.gloop.Settings;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-
-import flash.events.Event;
-
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.Settings;
 import wck.BodyShape;
 
 class FanPhysicsComponent extends PhysicsComponent
 {
-	
-	private var _bodyFixture:b2Fixture;
-	private var _areaFixture:b2Fixture;
-	private var _bodyInFanArea:BodyShape; // TODO: allow more than 1?
-	private var _isOn:Boolean;
-
 	public function FanPhysicsComponent( gameObject:DefaultGameObject ) {
-
 		super( gameObject );
-
-		reportBeginContact = true;
-		addEventListener( ContactEvent.BEGIN_CONTACT, handleBeginContact );
-		addEventListener( ContactEvent.END_CONTACT, handleEndContact );
 
 		graphics.beginFill( gameObject.debugColor1 );
 		graphics.drawRect( -Settings.FAN_BODY_WIDTH / 2, -Settings.FAN_BODY_HEIGHT / 2, Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT );
@@ -116,60 +111,17 @@ class FanPhysicsComponent extends PhysicsComponent
 		graphics.drawRect( -Settings.FAN_AREA_WIDTH / 2, -Settings.FAN_BODY_HEIGHT - Settings.FAN_AREA_HEIGHT, Settings.FAN_AREA_WIDTH, Settings.FAN_AREA_HEIGHT );
 	}
 
-	public function handleBeginContact( e:ContactEvent ):void {
-		if( !_isOn ) return;
-		if( !e.fixture.IsSensor() ) return; // only listening for interaction with the area fixture
-		var body:BodyShape = e.other.m_userData;
-		if( body ) {
-			_bodyInFanArea = body;
-			startImpulse();
-		}
-	}
-
-	public function handleEndContact( e:ContactEvent ):void {
-		if( !_isOn ) return;
-		if( !e.fixture.IsSensor() ) return; // only listening for interaction with the area fixture
-		var body:BodyShape = e.other.m_userData;
-		if( body ) {
-			_bodyInFanArea = null;
-			stopImpulse();
-		}
-	}
-
-	private function startImpulse():void {
-		if( !hasEventListener( Event.ENTER_FRAME ) ) {
-			addEventListener( Event.ENTER_FRAME, enterframeHandler );
-		}
-	}
-
-	private function stopImpulse():void {
-		if( hasEventListener( Event.ENTER_FRAME ) ) {
-			removeEventListener( Event.ENTER_FRAME, enterframeHandler );
-		}
-	}
-
-	private function enterframeHandler( event:Event ):void {
-		var distanceToFan:Number = _bodyInFanArea.b2body.GetWorldCenter().subtract( b2body.GetWorldCenter() ).length();
-		var impulse:V2 = b2body.GetWorldVector( new V2( 0, -Settings.FAN_POWER * ( 1 / distanceToFan + 1 ) ) );
-		_bodyInFanArea.b2body.ApplyImpulse( impulse, _bodyInFanArea.b2body.GetWorldCenter() ); // apply up impulse
-	}
-
 	public override function shapes():void {
 		// defines fan body fixture
-		_bodyFixture = box( Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT );
+		box( Settings.FAN_BODY_WIDTH, Settings.FAN_BODY_HEIGHT );
 		// defines fan area fixture
-		_areaFixture = box( Settings.FAN_AREA_WIDTH, Settings.FAN_AREA_HEIGHT, new V2( 0, -Settings.FAN_BODY_HEIGHT - Settings.FAN_AREA_HEIGHT + Settings.FAN_BODY_HEIGHT / 2 ) );
-		_areaFixture.SetSensor( true );
+		box( Settings.FAN_AREA_WIDTH, Settings.FAN_AREA_HEIGHT, new V2( 0, -Settings.FAN_BODY_HEIGHT - Settings.FAN_AREA_HEIGHT + Settings.FAN_BODY_HEIGHT / 2 ) );
 	}
 
 	override public function create():void {
 		super.create();
-		setCollisionGroup( GLOOP_SENSOR, _bodyFixture );
-		setCollisionGroup( GLOOP_SENSOR, _areaFixture );
-	}
-
-	public function set isOn( value:Boolean ):void {
-		_isOn = value;
-		if( !_isOn ) stopImpulse();
+		setCollisionGroup( GLOOP_SENSOR, b2fixtures[0] );
+		setCollisionGroup( GLOOP_SENSOR, b2fixtures[1] );
+		b2fixtures[1].SetSensor( true );
 	}
 }
