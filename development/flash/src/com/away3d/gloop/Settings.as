@@ -31,8 +31,8 @@ package com.away3d.gloop
 
 		static public var GLOOP_DECAL_SPEED_FACTOR : Number = 2;
 		static public var GLOOP_DECAL_MIN_SPEED : Number = 0.5;
-		static public var GLOOP_MAX_DECALS_PER_HIT : Number = 20;
-		static public var GLOOP_MAX_DECALS_TOTAL : Number = 30;
+		static public var GLOOP_DECAL_LIMIT_PER_HIT : Number = 20;
+		static public var GLOOP_DECAL_LIMIT_TOTAL : Number = 30;
 		static public var GLOOP_LOST_MOMENTUM_THRESHOLD : Number = .01;
 		
 		[comment("delay between splats while on a surface, in updates")]

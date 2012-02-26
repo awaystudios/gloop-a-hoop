@@ -1,29 +1,30 @@
 BUTTON_RADIUS                 60
 
-CANNON_BASE_X                 -20
-CANNON_BASE_Y                 -35
-CANNON_BASE_W                 30
-CANNON_BASE_H                 110
-
+CANNON_BARREL_H               60
+CANNON_BARREL_W               125
 CANNON_BARREL_X               -100
 CANNON_BARREL_Y               -35
-CANNON_BARREL_W               125
-CANNON_BARREL_H               60
+CANNON_BASE_H                 110
+CANNON_BASE_W                 30
+CANNON_BASE_X                 -20
+CANNON_BASE_Y                 -35
+CANNON_PHYSICS_DELAY          8    # the time to wait before enabling gloop/cannon collisions after launching, in updates
 
 FAN_AREA_HEIGHT               200
 FAN_AREA_WIDTH                50
 FAN_BODY_HEIGHT               5
 FAN_BODY_WIDTH                50
+FAN_ON_OFF_TIME               0.4
 FAN_POWER                     0.05
 
 GLOOP_ANGULAR_DAMPING         1
+GLOOP_DECAL_LIMIT_PER_HIT     20
+GLOOP_DECAL_LIMIT_TOTAL       30
 GLOOP_DECAL_MIN_SPEED         0.01
 GLOOP_DECAL_SPEED_FACTOR      2
 GLOOP_FRICTION                0.5
 GLOOP_LINEAR_DAMPING          0.1
 GLOOP_LOST_MOMENTUM_THRESHOLD 0.01
-GLOOP_MAX_DECALS_PER_HIT      20
-GLOOP_MAX_DECALS_TOTAL        30
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
 GLOOP_RADIUS                  16
 GLOOP_RESTITUTION             0.75
