@@ -101,6 +101,11 @@ package com.away3d.gloop.gameobjects
 			var velocity:V2 = _physics.linearVelocity;
 			var speed:Number = velocity.length();
 			
+			if (speed > Settings.GLOOP_MAX_SPEED) {
+				velocity.normalize(Settings.GLOOP_MAX_SPEED);
+				_physics.b2body.SetLinearVelocity(velocity);
+			}
+			
 			_splatComponent.update( dt );
 			_traceComponent.update( dt );
 			_visualComponent.update( dt, speed, velocity.x );
