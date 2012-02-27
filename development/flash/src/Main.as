@@ -124,6 +124,7 @@ package
 			_queue.addResource(EmbeddedResources.FlyingAWDAsset);
 			_queue.addResource(EmbeddedResources.GloopSplat3DSAsset);
 			_queue.addResource(EmbeddedResources.Cannon3DSAsset);
+			_queue.addResource(EmbeddedResources.Fan3DSAsset);
 			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
 			_queue.load();
 		}

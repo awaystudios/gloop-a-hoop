@@ -1,7 +1,9 @@
 package com.away3d.gloop.gameobjects
 {
 
+	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
@@ -13,7 +15,7 @@ package com.away3d.gloop.gameobjects
 	public class Fan extends DefaultGameObject implements IButtonControllable
 	{
 		private var _btnGroup:uint;
-		private var _movableMesh:Mesh;
+		private var _blades:Mesh;
 		private var _isOn:Boolean;
 		private var _activeFanStrength:Object = { t:0 };
 
@@ -39,18 +41,22 @@ package com.away3d.gloop.gameobjects
 			var fanMaterial:ColorMaterial = new ColorMaterial( 0xCCCCCC );
 
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh( new CylinderGeometry( 50, 50, 5 ), fanMaterial );
+			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('FanAxis_geom')), fanMaterial );
 			_meshComponent.mesh.rotationZ = rotation;
+			
+			var guard : Mesh;
+			
+			guard = new Mesh(Geometry(AssetLibrary.getAsset('FanGuard_geom')), fanMaterial);
+			_meshComponent.mesh.addChild(guard);
 
-			_movableMesh = new Mesh( new CubeGeometry( 5, 5, 100 ), fanMaterial );
-			_movableMesh.y = 10;
-			_meshComponent.mesh.addChild( _movableMesh );
+			_blades = new Mesh(Geometry(AssetLibrary.getAsset('FanBlades_geom')), fanMaterial);
+			_meshComponent.mesh.addChild( _blades );
 		}
 
 		override public function update( dt:Number ):void {
 			super.update( dt );
 			if( _isOn ) {
-				_movableMesh.rotationY += 25 * _activeFanStrength.t; // TODO: implement on/off inertia to physics as well?
+				_blades.rotationY += 25 * _activeFanStrength.t; // TODO: implement on/off inertia to physics as well?
 			}
 		}
 
