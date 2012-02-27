@@ -32,7 +32,7 @@ package com.away3d.gloop.gameobjects.components
 		public function SplatComponent(physics : PhysicsComponent)
 		{
 			_physics = physics;
-			_decalSplatter = new DecalSplatter(Settings.GLOOP_MAX_DECALS_TOTAL);
+			_decalSplatter = new DecalSplatter(Settings.GLOOP_DECAL_LIMIT_TOTAL);
 			_decalSplatter.apertureX = 0.35;
 			_decalSplatter.apertureY = 0.35;
 			_decalSplatter.apertureZ = 0.35;
@@ -128,7 +128,7 @@ package com.away3d.gloop.gameobjects.components
 			// splat intensity ( num splats ) depends on body speed
 			var linearVelocity : V2 = _physics.b2body.GetLinearVelocity();
 			var speed : Number = linearVelocity.length();
-			_decalSplatter.numRays = 1 + Math.min(Math.floor(Settings.GLOOP_DECAL_SPEED_FACTOR * speed), Settings.GLOOP_MAX_DECALS_PER_HIT);
+			_decalSplatter.numRays = 1 + Math.min(Math.floor(Settings.GLOOP_DECAL_SPEED_FACTOR * speed), Settings.GLOOP_DECAL_LIMIT_PER_HIT);
 			// perform splat
 			if (speed > Settings.GLOOP_DECAL_MIN_SPEED)
 			{
