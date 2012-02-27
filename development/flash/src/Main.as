@@ -36,7 +36,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
-	[SWF(width="1024", height="768", frameRate="60")]
+	[SWF(width="1024", height="768", frameRate="30")]
 	public class Main extends Sprite
 	{
 		private var _queue : AssetLoaderQueue;

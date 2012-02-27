@@ -47,7 +47,7 @@ LAUNCHER_POWER_SCALE          -0.05    # the value remaining is scaled by this m
 PHYSICS_GRAVITY_Y             2
 PHYSICS_POSITION_ITERATIONS   5
 PHYSICS_SCALE                 60
-PHYSICS_TIME_STEP             0.05
+PHYSICS_TIME_STEP             0.1
 PHYSICS_VELOCITY_ITERATIONS   5
 
 ROCKET_POWER                  15
