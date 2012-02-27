@@ -26,8 +26,8 @@ package com.away3d.gloop.gameobjects {
 				_meshComponent = new MeshComponent();
 				var cube:CubeGeometry = new CubeGeometry(width, height, 60);
 				var mtx:Matrix3D = new Matrix3D;
-				mtx.appendTranslation(width/2, height/2, 0);
-				mtx.appendTranslation(offsetX, -offsetY, 0);
+				mtx.appendTranslation(width/2, -height/2, 0);
+				mtx.appendTranslation(offsetX, offsetY, 0);
 				_meshComponent.mesh = new Mesh(cube, material);
 				cube.applyTransformation(mtx);
 			}
