@@ -56,7 +56,10 @@ package com.away3d.gloop.gameobjects.components
 			
 			if (_inContact) {
 				if (_cooldown <= 0) {
-					var contacts:b2ContactEdge = _physics.b2body.GetContactList();
+					var contacts:b2ContactEdge;
+					
+					if (_physics.b2body)
+						contacts = _physics.b2body.GetContactList();
 					
 					if (contacts) {
 						var wm : b2WorldManifold;

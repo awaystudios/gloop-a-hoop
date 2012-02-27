@@ -5,6 +5,7 @@ package com.away3d.gloop.screens.game
 	import away3d.lights.PointLight;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.utils.Timestep;
 	
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
@@ -46,6 +47,7 @@ package com.away3d.gloop.screens.game
 		private var _inputManager:InputManager;
 		
 		private var _hud : HUD;
+		private var _timestep:Timestep;
 		
 
 		public function GameScreen( db:LevelDatabase ) {
@@ -114,11 +116,9 @@ package com.away3d.gloop.screens.game
 			_editController = new LevelEditController();
 		}
 		
-		
-		
-
 		public override function activate():void {
 			addEventListener( Event.ENTER_FRAME, onEnterFrame );
+			_timestep = new Timestep(60);
 
 			_levelProxy = _db.selectedLevelProxy;
 			_level = _levelProxy.level;
@@ -206,10 +206,13 @@ package com.away3d.gloop.screens.game
 
 		private function onEnterFrame( ev:Event ):void {
 
-			if( _level )
-				_level.update();
-
-			_cameraController.update();
+			_timestep.tick();
+			var updates:int = _timestep.steps;
+			
+			while (updates-- > 0) {
+				if( _level ) _level.update();
+				_cameraController.update();
+			}
 			
 			_cameraPointLight.position = _view.camera.position;
 

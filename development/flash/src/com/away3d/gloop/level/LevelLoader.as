@@ -210,8 +210,6 @@ package com.away3d.gloop.level
 						break;
 					
 					case GameObjectType.TARGET:
-						// Targets are visual as well
-						visual = true;
 						parseTarget(obj);
 						break;
 				}

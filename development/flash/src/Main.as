@@ -36,7 +36,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
-	[SWF(width="1024", height="768", frameRate="60")]
+	[SWF(width="1024", height="768", frameRate="30")]
 	public class Main extends Sprite
 	{
 		private var _queue : AssetLoaderQueue;
@@ -124,6 +124,9 @@ package
 			_queue.addResource(EmbeddedResources.FlyingAWDAsset);
 			_queue.addResource(EmbeddedResources.GloopSplat3DSAsset);
 			_queue.addResource(EmbeddedResources.Cannon3DSAsset);
+			_queue.addResource(EmbeddedResources.Fan3DSAsset);
+			_queue.addResource(EmbeddedResources.Button3DSAsset);
+			_queue.addResource(EmbeddedResources.Target3DSAsset);
 			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
 			_queue.load();
 		}

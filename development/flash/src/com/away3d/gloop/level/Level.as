@@ -199,8 +199,9 @@ package com.away3d.gloop.level
 
 		public function update() : void
 		{
+			_world.step();
+			
 			var i : uint;
-
 			for (i=0; i<_all_objects.length; i++) {
 				_all_objects[i].update(1);
 			}

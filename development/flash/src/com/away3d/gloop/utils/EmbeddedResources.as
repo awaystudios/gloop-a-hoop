@@ -25,5 +25,21 @@ package com.away3d.gloop.utils
 		
 		[Embed("/../assets/cannon/diff.png")]
 		public static var CannonDiffusePNGAsset : Class;
+		
+		
+		// Target
+		[Embed("/../assets/props/target/target.3ds", mimeType="application/octet-stream")]
+		public static var Target3DSAsset : Class;
+		
+		[Embed("/../assets/props/target/diff.png")]
+		public static var TargetDiffusePNGAsset : Class;
+		
+		
+		// Misc props
+		[Embed("/../assets/props/fan/fan.3ds", mimeType="application/octet-stream")]
+		public static var Fan3DSAsset : Class;
+		
+		[Embed("/../assets/props/button/button.3ds", mimeType="application/octet-stream")]
+		public static var Button3DSAsset : Class;
 	}
 }
