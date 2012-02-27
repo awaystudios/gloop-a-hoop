@@ -1,11 +1,14 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
-	import com.away3d.gloop.Settings;
 	
 	public class Button extends DefaultGameObject
 	{
@@ -28,7 +31,7 @@ package com.away3d.gloop.gameobjects
 			_physics.setStatic();
 			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.BUTTON_RADIUS, Settings.BUTTON_RADIUS, 5), new ColorMaterial(debugColor1));
+			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('Button_geom')), new ColorMaterial(debugColor1));
 			
 			_btnGroup = btnGroup;
 			

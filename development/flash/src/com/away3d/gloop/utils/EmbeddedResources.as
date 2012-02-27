@@ -30,5 +30,8 @@ package com.away3d.gloop.utils
 		// Props
 		[Embed("/../assets/props/fan/fan.3ds", mimeType="application/octet-stream")]
 		public static var Fan3DSAsset : Class;
+		
+		[Embed("/../assets/props/button/button.3ds", mimeType="application/octet-stream")]
+		public static var Button3DSAsset : Class;
 	}
 }
