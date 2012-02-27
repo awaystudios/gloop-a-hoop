@@ -1,0 +1,18 @@
+<languageVersion : 1.0;>
+
+kernel ChannelScramblerFilter
+<	namespace : "com.adobe.example";
+ 	vendor : "Adobe Systems Inc.";
+ 	version : 1;
+ 	description : "Changes the color channel order from rgb to gbr.";
+>
+{
+	input image3 inputImage;
+	output pixel4 outPixel;
+
+	void evaluatePixel() {
+		pixel3 samplePixel = sampleNearest( inputImage, outCoord() );
+		outPixel.rgb = samplePixel.gbr;
+        outPixel.a = 1.0;
+	}
+}
