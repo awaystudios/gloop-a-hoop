@@ -104,6 +104,7 @@ package com.away3d.gloop.screens.game
 		{
 			_gloop = new Gloop(0, 0, this);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_APPROACH_GOAL_WALL, onGloopApproachGoalWall);
+			_gloop.addEventListener( GameObjectEvent.GLOOP_MISSED_GOAL_WALL, onGloopMissedGoalWall);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
 			
 			_cannon = new Cannon();
@@ -177,6 +178,12 @@ package com.away3d.gloop.screens.game
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
 		{
 			_cameraController.setGloopFinishing(_level.targetRotation * Math.PI/180);
+		}
+		
+		private function onGloopMissedGoalWall(ev : GameObjectEvent) : void
+		{
+			// Return to regular fired mode.
+			_cameraController.setGloopMissed();
 		}
 
 		private function onGloopFired( event:GameObjectEvent ):void {

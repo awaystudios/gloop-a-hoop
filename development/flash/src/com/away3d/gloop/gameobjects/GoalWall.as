@@ -63,6 +63,7 @@ package com.away3d.gloop.gameobjects {
 		
 		public function onGloopExitSensor(gloop:Gloop):void {
 			// gloop leaves sensor
+			gloop.onMissGoalWall();
 		}
 		
 		override public function get debugColor1():uint {

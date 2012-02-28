@@ -95,7 +95,6 @@ package com.away3d.gloop.gameobjects
 		override public function update( dt:Number ):void
 		{
 			if (_didHit) {
-				_didHit = false;
 				_physics.setStatic(true);
 			}
 			
@@ -138,6 +137,12 @@ package com.away3d.gloop.gameobjects
 		public function onApproachGoalWall() : void
 		{
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_APPROACH_GOAL_WALL, this));
+		}
+		
+		public function onMissGoalWall() : void
+		{
+			if (!_didHit)
+				dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_MISSED_GOAL_WALL, this));
 		}
 		
 		public function splatOnTarget(angle : Number) : void

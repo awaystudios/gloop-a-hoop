@@ -54,6 +54,12 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
+		public function setGloopMissed() : void
+		{
+			_finishMode = false;
+		}
+		
+		
 		
 		public function setGloopFinishing(targetRotationRadians : Number) : void
 		{
@@ -104,7 +110,7 @@ package com.away3d.gloop.screens.game.controllers
 				if (_finishMode) {
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
 					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
-					targetPosition.z = 50;
+					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}
 				else {
