@@ -11,8 +11,8 @@ package com.away3d.gloop.gameobjects
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
 	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
+	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
@@ -33,6 +33,8 @@ package com.away3d.gloop.gameobjects
 		
 		private var _spawnX:Number;
 		private var _spawnY:Number;
+		
+		private var _didHit : Boolean;
 		
 		private var _avgSpeed:Number = 0;
 		
@@ -81,6 +83,9 @@ package com.away3d.gloop.gameobjects
 
 		override public function reset():void {
 			super.reset();
+			
+			_didHit = false;
+			_physics.setStatic(false);
 
 			_physics.x = _spawnX,
 			_physics.y = _spawnY;
@@ -96,6 +101,11 @@ package com.away3d.gloop.gameobjects
 		
 		override public function update( dt:Number ):void
 		{
+			if (_didHit) {
+				_didHit = false;
+				_physics.setStatic(true);
+			}
+			
 			super.update( dt );
 			
 			var velocity:V2 = _physics.linearVelocity;
@@ -117,7 +127,6 @@ package com.away3d.gloop.gameobjects
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
 				}
 			}
-						
 		}
 		
 		private function contactPostSolveHandler( e:ContactEvent ):void
@@ -128,9 +137,9 @@ package com.away3d.gloop.gameobjects
 			_visualComponent.bounceAndFaceDirection(-force);
 		}
 		
-		public function splatOnTarget() : void
+		public function splatOnTarget(angle : Number) : void
 		{
-			_visualComponent.splat();
+			_visualComponent.splat(angle);
 		}
 		
 		
@@ -145,6 +154,7 @@ package com.away3d.gloop.gameobjects
 		}
 
 		public function onHitGoalWall():void {
+			_didHit = true;
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
 		}
 

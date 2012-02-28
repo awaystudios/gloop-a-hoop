@@ -29,6 +29,10 @@ package com.away3d.gloop.gameobjects.components
 		private var _bouncePosition:Number = 0;
 		private var _facingRotation:Number = 0;
 		
+		private var _splatAngle : Number;
+		private var _splatting : Boolean;
+		
+		
 		public function GloopVisualComponent(physics : PhysicsComponent)
 		{
 			super();
@@ -99,6 +103,7 @@ package com.away3d.gloop.gameobjects.components
 			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
 			
 			_splatMesh = new Mesh(geom, mat);
+			_splatMesh.y = -10;
 			
 			_splatAnim = new VertexAnimationComponent(_splatMesh);
 			_splatAnim.addSequence( 'splat', [
@@ -109,17 +114,20 @@ package com.away3d.gloop.gameobjects.components
 				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom')),
 				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
 				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom'))
-			], 200, false);
+			], 100, false);
 		}
 		
 		
-		public function splat() : void
+		public function splat(angle : Number) : void
 		{
 			if (mesh.contains(_stdMesh))
 				mesh.removeChild(_stdMesh);
 			
 			mesh.addChild(_splatMesh);
 			_splatAnim.play('splat');
+			
+			_splatAngle = angle;
+			_splatting = true;
 		}
 		
 		
@@ -132,6 +140,7 @@ package com.away3d.gloop.gameobjects.components
 			
 			_bounceVelocity = 0;
 			_bouncePosition = 0;
+			_splatting = false;
 		}
 		
 		
@@ -150,18 +159,23 @@ package com.away3d.gloop.gameobjects.components
 		
 		public function update(dt : Number, speed : Number, vx : Number) : void
 		{
-			_facingRotation -= vx * .25;
-			mesh.rotationZ = _facingRotation;
-			
-			_bounceVelocity -= (_bouncePosition - 0.5) * .1;
-			_bounceVelocity *= .8;
-			
-			_bouncePosition += _bounceVelocity;
-			
-			speed = Math.min(speed, 3);
-
-			mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
-			mesh.scaleX = 1 + (1 - mesh.scaleY)
+			if (_splatting) {
+				mesh.rotationZ = _splatAngle;
+			}
+			else {
+				_facingRotation -= vx * .25;
+				mesh.rotationZ = _facingRotation;
+				
+				_bounceVelocity -= (_bouncePosition - 0.5) * .1;
+				_bounceVelocity *= .8;
+				
+				_bouncePosition += _bounceVelocity;
+				
+				speed = Math.min(speed, 3);
+	
+				mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
+				mesh.scaleX = 1 + (1 - mesh.scaleY)
+			}
 		}
 	}
 }

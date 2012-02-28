@@ -30,7 +30,7 @@ GLOOP_RADIUS                  16
 GLOOP_RESTITUTION             0.75
 GLOOP_SPLAT_COOLDOWN          20    # delay between splats while on a surface, in updates
 
-GOALWALL_DETECTOR_HEIGHT      300
+GOALWALL_DETECTOR_HEIGHT      100
 GOALWALL_DETECTOR_WIDTH       0
 
 GRID_SIZE                     100
@@ -41,7 +41,7 @@ INPUT_CLICK_TIME              250    # the maximum time in milliseconds between 
 INPUT_DRAG_THRESHOLD_SQUARED  100    # the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)
 INPUT_PICK_DISTANCE           50    # the maximum distance a hoops centerpoint can be from the click to be considered hit
 
-LAUNCHER_POWER_MAX            60    # the drag distance is capped to this value, dragging longer won't make a difference
+LAUNCHER_POWER_MAX            150    # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_POWER_MIN            30    # dragging a distance shorter than this cancels the launch
 LAUNCHER_POWER_SCALE          -0.05    # the value remaining is scaled by this multiplier before being applied to gloop
 

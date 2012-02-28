@@ -155,7 +155,8 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
-			_stack.gotoScreen( Screens.CHAPTERS );
+			//_stack.gotoScreen( Screens.CHAPTERS );
+			_db.selectLevel(_db.chapters[0].levels[0]);
 		}
 		
 		
@@ -177,7 +178,7 @@ package
 		{
 			saveState( _db.getStateXml() );
 			
-			_stack.gotoScreen(Screens.WIN);
+			//_stack.gotoScreen(Screens.WIN);
 		}
 		
 		
