@@ -51,13 +51,13 @@ package com.away3d.gloop.gameobjects {
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
+			gloop.splatOnTarget(_physics.rotation);
 			gloop.onHitGoalWall();
 		}
 		
 		public function onGloopEnterSensor(gloop:Gloop):void {
 			// gloop goes into sensor
 			// TODO: Check that velocity is high enough
-			gloop.splatOnTarget(_physics.rotation);
 		}
 		
 		public function onGloopExitSensor(gloop:Gloop):void {
