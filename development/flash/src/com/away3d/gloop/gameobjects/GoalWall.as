@@ -42,10 +42,10 @@ package com.away3d.gloop.gameobjects {
 			// Diameter of target asset is 100 units. Scale to fit wall
 			// size as defined in level.
 			geom = Geometry(AssetLibrary.getAsset('Target_geom'));
-			geom.scale(_physics.width/100);
 			
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, mat);
+			_meshComponent.mesh.scale(_physics.width/100);
 		}
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
