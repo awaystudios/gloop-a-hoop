@@ -184,7 +184,7 @@ class CannonPhysicsComponent extends PhysicsComponent
 	{
 		super(gameObject);
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawRect( Settings.CANNON_BASE_X, Settings.CANNON_BASE_Y, Settings.CANNON_BASE_W, Settings.CANNON_BASE_H);
+		//graphics.drawRect( Settings.CANNON_BASE_X, Settings.CANNON_BASE_Y, Settings.CANNON_BASE_W, Settings.CANNON_BASE_H);
 		
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect( Settings.CANNON_BARREL_X, Settings.CANNON_BARREL_Y, Settings.CANNON_BARREL_W, Settings.CANNON_BARREL_H);
@@ -193,17 +193,17 @@ class CannonPhysicsComponent extends PhysicsComponent
 	public override function shapes() : void
 	{
 		// used for gloop collision
-		box(Settings.CANNON_BASE_W, Settings.CANNON_BASE_H, new V2(Settings.CANNON_BASE_W / 2  + Settings.CANNON_BASE_X, Settings.CANNON_BASE_H / 2 + Settings.CANNON_BASE_Y));
+		//box(Settings.CANNON_BASE_W, Settings.CANNON_BASE_H, new V2(Settings.CANNON_BASE_W / 2  + Settings.CANNON_BASE_X, Settings.CANNON_BASE_H / 2 + Settings.CANNON_BASE_Y));
 		box(Settings.CANNON_BARREL_W, Settings.CANNON_BARREL_H, new V2(Settings.CANNON_BARREL_W / 2  + Settings.CANNON_BARREL_X, Settings.CANNON_BARREL_H / 2 + Settings.CANNON_BARREL_Y));
 	}
 	
 	override public function create():void {
 		super.create();
 		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
-		setCollisionGroup(GLOOP_SENSOR, b2fixtures[1]);
+		//setCollisionGroup(GLOOP_SENSOR, b2fixtures[1]);
 		
 		b2fixtures[0].SetSensor(true);
-		b2fixtures[1].SetSensor(true);
+		//b2fixtures[1].SetSensor(true);
 		
 		allowDragging = true;
 		
