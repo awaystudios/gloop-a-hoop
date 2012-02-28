@@ -1,9 +1,9 @@
 BUTTON_RADIUS                 60
 
-CANNON_BARREL_H               60
-CANNON_BARREL_W               125
-CANNON_BARREL_X               -100
-CANNON_BARREL_Y               -35
+CANNON_BARREL_H               125
+CANNON_BARREL_W               60
+CANNON_BARREL_X               -30
+CANNON_BARREL_Y               -30
 CANNON_BASE_H                 110
 CANNON_BASE_W                 30
 CANNON_BASE_X                 -20
