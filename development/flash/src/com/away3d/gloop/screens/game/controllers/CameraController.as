@@ -24,6 +24,8 @@ package com.away3d.gloop.screens.game.controllers
 		private var _offY : Number;
 		
 		private var _finishMode : Boolean;
+		private var _finishTargetRotation : Number;
+		
 		private var _gloopIsFlying : Boolean;
 		private var _interactedSinceGloopWasFired:Boolean;
 		
@@ -53,9 +55,10 @@ package com.away3d.gloop.screens.game.controllers
 		
 		
 		
-		public function setGloopFinishing() : void
+		public function setGloopFinishing(targetRotationRadians : Number) : void
 		{
 			_finishMode = true;
+			_finishTargetRotation = targetRotationRadians;
 		}
 		
 		
@@ -95,6 +98,8 @@ package com.away3d.gloop.screens.game.controllers
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 				
 				if (_finishMode) {
+					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
+					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
 					targetPosition.z = 50;
 				}
 				else {

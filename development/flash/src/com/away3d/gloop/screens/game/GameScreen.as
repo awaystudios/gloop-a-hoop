@@ -176,7 +176,7 @@ package com.away3d.gloop.screens.game
 		
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
 		{
-			_cameraController.setGloopFinishing();
+			_cameraController.setGloopFinishing(_level.targetRotation * Math.PI/180);
 		}
 
 		private function onGloopFired( event:GameObjectEvent ):void {
