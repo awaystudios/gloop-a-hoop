@@ -4,9 +4,8 @@ package com.away3d.gloop.screens.game
 	import away3d.containers.View3D;
 	import away3d.lights.PointLight;
 	import away3d.materials.lightpickers.StaticLightPicker;
-	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.utils.Timestep;
 	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.Gloop;
@@ -20,6 +19,7 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
 	import com.away3d.gloop.utils.HierarchyTool;
+	import com.away3d.gloop.utils.Timestep;
 	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -103,6 +103,7 @@ package com.away3d.gloop.screens.game
 		private function initPersistantObjects() : void
 		{
 			_gloop = new Gloop(0, 0, this);
+			_gloop.addEventListener( GameObjectEvent.GLOOP_APPROACH_GOAL_WALL, onGloopApproachGoalWall);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
 			
 			_cannon = new Cannon();
@@ -172,6 +173,11 @@ package com.away3d.gloop.screens.game
 			
 			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
+		
+		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
+		{
+			_cameraController.setGloopFinishing();
+		}
 
 		private function onGloopFired( event:GameObjectEvent ):void {
 			_cameraController.setGloopFired(
@@ -192,6 +198,7 @@ package com.away3d.gloop.screens.game
 			
 			_cameraController.setGloopIdle();
 			_cameraController.resetOrientation();
+			_inputManager.reset(_level);
 			_inputManager.panX = _gloop.physics.x;
 			_inputManager.panY = -_gloop.physics.y;
 		}

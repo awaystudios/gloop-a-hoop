@@ -23,6 +23,7 @@ package com.away3d.gloop.screens.game.controllers
 		private var _offX : Number;
 		private var _offY : Number;
 		
+		private var _finishMode : Boolean;
 		private var _gloopIsFlying : Boolean;
 		private var _interactedSinceGloopWasFired:Boolean;
 		
@@ -51,8 +52,16 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
+		
+		public function setGloopFinishing() : void
+		{
+			_finishMode = true;
+		}
+		
+		
 		public function setGloopIdle() : void
 		{
+			_finishMode = false;
 			_gloopIsFlying = false;
 		}
 		
@@ -84,14 +93,21 @@ package com.away3d.gloop.screens.game.controllers
 				_inputManager.panX = targetPosition.x;
 				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
+				
+				if (_finishMode) {
+					targetPosition.z = 50;
+				}
+				else {
+					targetPosition.z = _inputManager.zoom;
+				}
 			}
 			else {
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
+				targetPosition.z = _inputManager.zoom;
 				resetOrientation();
 			}
-			targetPosition.z = _inputManager.zoom;
 
 			// contain target position
 			if( targetPosition.x > _boundsMaxX ) {

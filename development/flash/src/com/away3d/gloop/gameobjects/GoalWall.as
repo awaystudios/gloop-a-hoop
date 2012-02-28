@@ -58,6 +58,7 @@ package com.away3d.gloop.gameobjects {
 		public function onGloopEnterSensor(gloop:Gloop):void {
 			// gloop goes into sensor
 			// TODO: Check that velocity is high enough
+			gloop.onApproachGoalWall();
 		}
 		
 		public function onGloopExitSensor(gloop:Gloop):void {
