@@ -13,17 +13,10 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
-	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
-	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.utils.EmbeddedResources;
-	
-	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.trace.Trace;
-	import flash.utils.setInterval;
 
 	public class Gloop extends DefaultGameObject
 	{
@@ -134,7 +127,12 @@ package com.away3d.gloop.gameobjects
 			var force:Number = e.impulses.normalImpulse1 * .1;
 			force = Math.min(force, .3);
 			
-			_visualComponent.bounceAndFaceDirection(-force);
+			_visualComponent.bounceAndFaceDirection( -force);
+			
+			// kill any velocity from the contact resolution if we've hit the target
+			if (_didHit) {
+				_physics.b2body.SetLinearVelocity(new V2);	
+			}
 		}
 		
 		public function splatOnTarget(angle : Number) : void
