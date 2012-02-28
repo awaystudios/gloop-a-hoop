@@ -23,6 +23,9 @@ package com.away3d.gloop.screens.game.controllers
 		private var _offX : Number;
 		private var _offY : Number;
 		
+		private var _finishMode : Boolean;
+		private var _finishTargetRotation : Number;
+		
 		private var _gloopIsFlying : Boolean;
 		private var _interactedSinceGloopWasFired:Boolean;
 		
@@ -51,8 +54,17 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
+		
+		public function setGloopFinishing(targetRotationRadians : Number) : void
+		{
+			_finishMode = true;
+			_finishTargetRotation = targetRotationRadians;
+		}
+		
+		
 		public function setGloopIdle() : void
 		{
+			_finishMode = false;
 			_gloopIsFlying = false;
 		}
 		
@@ -70,9 +82,13 @@ package com.away3d.gloop.screens.game.controllers
 		
 		public function update() : void
 		{
+			var ease : Number;
 			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
 			if( _inputManager.interacting ) _interactedSinceGloopWasFired = true;
+			
+			// Default easing
+			ease = 0.4;
 
 			// evaluate target camera position
 			// TODO: verify if this works correctly on mobile ( follows gloop on a shot but stops following as soon as the view is panned )
@@ -84,14 +100,24 @@ package com.away3d.gloop.screens.game.controllers
 				_inputManager.panX = targetPosition.x;
 				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
+				
+				if (_finishMode) {
+					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
+					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
+					targetPosition.z = 50;
+					ease = 0.2;
+				}
+				else {
+					targetPosition.z = _inputManager.zoom;
+				}
 			}
 			else {
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
+				targetPosition.z = _inputManager.zoom;
 				resetOrientation();
 			}
-			targetPosition.z = _inputManager.zoom;
 
 			// contain target position
 			if( targetPosition.x > _boundsMaxX ) {
@@ -121,9 +147,9 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			// ease camera towards target position
-			_camera.x += (targetPosition.x - _camera.x) * 0.4;
-			_camera.y += (targetPosition.y - _camera.y) * 0.4;
-			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * 0.4;
+			_camera.x += (targetPosition.x - _camera.x) * ease;
+			_camera.y += (targetPosition.y - _camera.y) * ease;
+			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * ease;
 		}
 	}
 }

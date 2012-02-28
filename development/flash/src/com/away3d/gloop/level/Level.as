@@ -3,17 +3,18 @@ package com.away3d.gloop.level
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
-	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.HoopGrid;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.GoalWall;
+	import com.away3d.gloop.gameobjects.HoopGrid;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
+	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
@@ -28,6 +29,8 @@ package com.away3d.gloop.level
 		
 		private var _spawn_point :Point;
 		private var _all_objects : Vector.<DefaultGameObject>;
+		
+		private var _targetRotation : Number;
 		
 		private var _buttons : Vector.<Button>;
 		private var _btn_controllables : Vector.<IButtonControllable>;
@@ -116,6 +119,11 @@ package com.away3d.gloop.level
 			return nearest;
 		}
 		
+		public function get targetRotation() : Number
+		{
+			return _targetRotation;
+		}
+		
 		public function get spawnPoint() : Point
 		{
 			return _spawn_point;
@@ -157,6 +165,9 @@ package com.away3d.gloop.level
 				var gloop : Gloop = Gloop(object);
 				
 				_scene.addChild(gloop.traceComponent.pathTracer);
+			}
+			else if (object is GoalWall) {
+				_targetRotation = object.physics.rotation;
 			}
 
 			object.addEventListener(GameObjectEvent.LAUNCHER_CATCH_GLOOP, onLauncherCatchGloop);

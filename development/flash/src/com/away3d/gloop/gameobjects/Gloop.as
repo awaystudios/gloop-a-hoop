@@ -135,6 +135,11 @@ package com.away3d.gloop.gameobjects
 			}
 		}
 		
+		public function onApproachGoalWall() : void
+		{
+			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_APPROACH_GOAL_WALL, this));
+		}
+		
 		public function splatOnTarget(angle : Number) : void
 		{
 			_visualComponent.splat(angle);
