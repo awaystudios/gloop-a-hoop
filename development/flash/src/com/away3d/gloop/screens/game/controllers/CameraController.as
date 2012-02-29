@@ -4,7 +4,9 @@ package com.away3d.gloop.screens.game.controllers
 	
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
-	
+
+	import flash.geom.Point;
+
 	import flash.geom.Vector3D;
 
 	public class CameraController
@@ -84,8 +86,8 @@ package com.away3d.gloop.screens.game.controllers
 			_boundsMinZ = minZ;
 			_boundsMaxZ = maxZ;
 		}
-		
-		
+
+		private var _containVector:Point = new Point();
 		public function update() : void
 		{
 			var ease : Number;
@@ -118,6 +120,18 @@ package com.away3d.gloop.screens.game.controllers
 				}
 			}
 			else {
+
+				if( !_inputManager.interacting ) {
+					if( _containVector.x != 0 ) {
+						_inputManager.panX += 0.25 * _containVector.x;
+						_inputManager.applyImpulse( 0.05 * _containVector.x, 0 );
+					}
+					if( _containVector.y != 0 ) {
+						_inputManager.panY += 0.25 * _containVector.y;
+						_inputManager.applyImpulse( 0, 0.05 * _containVector.y );
+					}
+				}
+
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
@@ -125,25 +139,20 @@ package com.away3d.gloop.screens.game.controllers
 				resetOrientation();
 			}
 
-			// contain target position
-			if( targetPosition.x > _boundsMaxX ) {
-				targetPosition.x *= 0.95;
-				_inputManager.panX = targetPosition.x;
-				_inputManager.resetVelocities();
-			} else if( targetPosition.x < _boundsMinX ) {
-				targetPosition.x *= 0.95;
-				_inputManager.panX = targetPosition.x;
-				_inputManager.resetVelocities();
+			// soft containment for pan
+			_containVector.x = 0;
+			_containVector.y = 0;
+			if( _inputManager.panX > _boundsMaxX ) {
+				_containVector.x = _boundsMaxX - _inputManager.panX;
+			} else if( _inputManager.panX < _boundsMinX ) {
+				_containVector.x = _boundsMinX - _inputManager.panX;
 			}
-			if( targetPosition.y > _boundsMaxY ) {
-				targetPosition.y *= 0.95;
-				_inputManager.panY = targetPosition.y;
-				_inputManager.resetVelocities();
-			} else if( targetPosition.y < _boundsMinY ) {
-				targetPosition.y *= 0.95;
-				_inputManager.panY = targetPosition.y;
-				_inputManager.resetVelocities();
+			if( _inputManager.panY > _boundsMaxY ) {
+				_containVector.y = _boundsMaxY - _inputManager.panY;
+			} else if( _inputManager.panY < _boundsMinY ) {
+				_containVector.y = _boundsMinY - _inputManager.panY;
 			}
+			// hard containment for zoom
 			if( targetPosition.z > _boundsMaxZ ) {
 				targetPosition.z = _boundsMaxZ;
 				_inputManager.zoom = _boundsMaxZ;

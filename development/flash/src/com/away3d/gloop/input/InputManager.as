@@ -7,6 +7,8 @@ package com.away3d.gloop.input
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.level.Level;
 
+	import flash.events.Event;
+
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
 	import flash.ui.Multitouch;
@@ -73,8 +75,9 @@ package com.away3d.gloop.input
 			_panVelocityY = 0;
 		}
 		
-		public function activate() : void
+		override public function activate() : void
 		{
+			super.activate();
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			_view.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			_view.stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
@@ -83,7 +86,8 @@ package com.away3d.gloop.input
 			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 
-		public function deactivate() : void {
+		override public function deactivate() : void {
+			super.deactivate();
 			_view.stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 			_view.stage.removeEventListener( TouchEvent.TOUCH_BEGIN, onTouch );
 			_view.stage.removeEventListener( TouchEvent.TOUCH_END, onTouch );
@@ -165,7 +169,7 @@ package com.away3d.gloop.input
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 		}
 		
-		override protected function onViewMouseUp(e : MouseEvent) : void
+		override protected function onViewMouseUp(e : Event) : void
 		{
 			super.onViewMouseUp(e);
 			var clickDuration : Number = getTimer() - _mouseDownTime;
@@ -201,6 +205,12 @@ package com.away3d.gloop.input
 				_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
 				_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
 			}
+		}
+
+		public function applyImpulse( x:Number, y:Number ):void {
+			_onPanImpulse = true;
+			_panVelocityX += x;
+			_panVelocityY += y;
 		}
 
 		private function onTouch( event:TouchEvent ):void {
@@ -275,11 +285,6 @@ package com.away3d.gloop.input
 
 		public function get interacting():Boolean {
 			return _interacting;
-		}
-
-		public function resetVelocities():void {
-			_onPanImpulse = false;
-			_panVelocityX = _panVelocityY = 0;
 		}
 	}
 
