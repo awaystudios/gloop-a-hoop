@@ -47,6 +47,7 @@ package com.away3d.gloop
 		
 		static public var SCORE_BULLSEYE_MULTIPLIER : Number = 2;
 		static public var SCORE_STAR_VALUE : Number = 350;
+		static public var SCORE_BASE : Number = 500;
 		
 		static public var GOALWALL_DETECTOR_HEIGHT : Number = 200;
 		static public var GOALWALL_DETECTOR_WIDTH : Number = 200;
