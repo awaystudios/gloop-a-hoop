@@ -99,7 +99,7 @@ package com.away3d.gloop.screens.game.controllers
 			ease = 0.4;
 
 			// evaluate target camera position
-			// TODO: verify if this works correctly on mobile ( follows gloop on a shot but stops following as soon as the view is panned )
+			// TODO: confirmed, _interactedSinceGloopWasFired is not working on mobile
 			if( !_interactedSinceGloopWasFired && _gloopIsFlying ) {
 				_offX *= 0.9;
 				_offY *= 0.9;

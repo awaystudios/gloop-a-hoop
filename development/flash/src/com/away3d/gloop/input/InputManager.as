@@ -203,7 +203,7 @@ package com.away3d.gloop.input
 				_panVelocityX = _interactionDeltaX;
 				_panVelocityY = _interactionDeltaY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed > 10 ) {
+				if( speed > 10 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
 					_onPanImpulse = true;
 					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
 					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
