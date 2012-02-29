@@ -129,7 +129,18 @@ package com.away3d.gloop.screens.chapterselect
 		
 		private function onStageMouseMove(ev : MouseEvent) : void
 		{
-			_targetX = _centerX + (stage.mouseX - _mouseDownX);
+			var dx : Number;
+			var mul : Number;
+			
+			dx = (stage.mouseX - _mouseDownX);
+			
+			mul = 1;
+			if (dx < 0 && _curPosterIdx == _posters.length-1)
+				mul = 0.5;
+			else if (dx > 0 && _curPosterIdx == 0)
+				mul = 0.5;
+			
+			_targetX = _centerX + dx * mul;
 		}
 		
 		
