@@ -119,7 +119,8 @@ package com.away3d.gloop.screens.game
 		}
 		
 		public override function activate():void {
-			addEventListener( Event.ENTER_FRAME, onEnterFrame );
+			super.activate();
+			
 			_timestep = new Timestep(60);
 
 			_levelProxy = _db.selectedLevelProxy;
@@ -169,10 +170,9 @@ package com.away3d.gloop.screens.game
 
 		public override function deactivate():void
 		{
+			super.deactivate();
 			_inputManager.deactivate();
 			_editController.deactivate();
-			
-			removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 		}
 		
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
@@ -214,8 +214,7 @@ package com.away3d.gloop.screens.game
 		}
 		
 
-		private function onEnterFrame( ev:Event ):void {
-
+		override protected function update():void {
 			_timestep.tick();
 			var updates:int = _timestep.steps;
 			
