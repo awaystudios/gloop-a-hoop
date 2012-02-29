@@ -3,6 +3,8 @@ package com.away3d.gloop.input
 
 	import away3d.containers.View3D;
 
+	import flash.events.Event;
+
 	import flash.events.MouseEvent;
 	import flash.geom.Vector3D;
 
@@ -22,12 +24,21 @@ package com.away3d.gloop.input
 
 		public function MouseManager(view:View3D) {
 			_view = view;
-			_view.addEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
-			_view.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
-
 			_planeNormal = new Vector3D( 0, 0, -1 );
 			_planeD = -_planeNormal.dotProduct( PLANE_POSITION );
 			_intersection = new Vector3D();
+		}
+
+		public function activate():void {
+			_view.stage.addEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
+			_view.stage.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
+			_view.stage.addEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
+		}
+
+		public function deactivate():void {
+			_view.stage.removeEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
+			_view.stage.removeEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
+			_view.stage.removeEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
 		}
 
 		public function update():void {
@@ -49,7 +60,7 @@ package com.away3d.gloop.input
 			update();
 		}
 
-		protected function onViewMouseUp(e:MouseEvent):void {
+		protected function onViewMouseUp(e:Event):void {
 			_mouseDown = false;
 			update();
 		}

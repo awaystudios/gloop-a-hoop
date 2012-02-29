@@ -11,7 +11,7 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.primitives.SphereGeometry;
 	
 	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.effects.DecalSplatter;
+	import com.away3d.gloop.effects.splat.RaySplatter;
 	
 	import flash.geom.Vector3D;
 	
@@ -22,7 +22,7 @@ package com.away3d.gloop.gameobjects.components
 	public class SplatComponent
 	{
 		
-		private var _decalSplatter : DecalSplatter;
+		private var _decalSplatter : RaySplatter;
 		private var _physics : PhysicsComponent;
 		
 		private var _inContact : Boolean;
@@ -32,7 +32,7 @@ package com.away3d.gloop.gameobjects.components
 		public function SplatComponent(physics : PhysicsComponent)
 		{
 			_physics = physics;
-			_decalSplatter = new DecalSplatter(Settings.GLOOP_DECAL_LIMIT_TOTAL);
+			_decalSplatter = new RaySplatter(Settings.GLOOP_DECAL_LIMIT_TOTAL);
 			_decalSplatter.apertureX = 0.35;
 			_decalSplatter.apertureY = 0.35;
 			_decalSplatter.apertureZ = 0.35;

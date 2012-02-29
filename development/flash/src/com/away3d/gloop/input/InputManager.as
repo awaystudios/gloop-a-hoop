@@ -7,6 +7,8 @@ package com.away3d.gloop.input
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.level.Level;
 
+	import flash.events.Event;
+
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
 	import flash.ui.Multitouch;
@@ -73,8 +75,9 @@ package com.away3d.gloop.input
 			_panVelocityY = 0;
 		}
 		
-		public function activate() : void
+		override public function activate() : void
 		{
+			super.activate();
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			_view.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			_view.stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
@@ -83,7 +86,8 @@ package com.away3d.gloop.input
 			_view.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 
-		public function deactivate() : void {
+		override public function deactivate() : void {
+			super.deactivate();
 			_view.stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 			_view.stage.removeEventListener( TouchEvent.TOUCH_BEGIN, onTouch );
 			_view.stage.removeEventListener( TouchEvent.TOUCH_END, onTouch );
@@ -97,14 +101,13 @@ package com.away3d.gloop.input
 			_interactionDeltaY = (_interactionPointY - _prevInteractionPointY);
 			_prevInteractionPointX = _interactionPointX;
 			_prevInteractionPointY = _interactionPointY;
-
+			
 			if( _onPanImpulse ) {
 				_panVelocityX *= 0.9;
 				_panVelocityY *= 0.9;
 				_panX += _panVelocityX;
 				_panY += _panVelocityY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-//				trace( "impusling: " + speed );
 				if( speed < 0.1 ) _onPanImpulse = false;
 			}
 
@@ -142,10 +145,15 @@ package com.away3d.gloop.input
 		}
 
 		private function onMouseMove( event:MouseEvent ):void {
-			_interactionPointX = _view.mouseX;
-			_interactionPointY = _view.mouseY;
+			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
+			if( _view.mouseX > 0 && _view.mouseX < _view.stage.stageWidth ) {
+				_interactionPointX = _view.mouseX;
+			}
+			if( _view.mouseY > 0 && _view.mouseY < _view.stage.stageHeight ) {
+				_interactionPointY = _view.mouseY;
+			}
 		}
-		
+
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
 			super.onViewMouseDown(e);
@@ -160,17 +168,17 @@ package com.away3d.gloop.input
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
 			}
-			
+
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 		}
-		
-		override protected function onViewMouseUp(e : MouseEvent) : void
+
+		override protected function onViewMouseUp(e : Event) : void
 		{
 			super.onViewMouseUp(e);
 			var clickDuration : Number = getTimer() - _mouseDownTime;
 			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
-			
+
 			if (_level.unplacedHoop && _isClick) {
 				_level.placeQueuedHoop(projectedMouseX, projectedMouseY);
 			}
@@ -191,16 +199,24 @@ package com.away3d.gloop.input
 			_zooming = false;
 			_interacting = false;
 
-			_panVelocityX = _interactionDeltaX;
-			_panVelocityY = _interactionDeltaY;
-			var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-			if( speed > 10 ) {
-				_onPanImpulse = true;
-				_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
-				_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
-				_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
-				_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
+			if( !_isClick ) {
+				_panVelocityX = _interactionDeltaX;
+				_panVelocityY = _interactionDeltaY;
+				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
+				if( speed > 10 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
+					_onPanImpulse = true;
+					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
+					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
+					_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
+					_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
+				}
 			}
+		}
+
+		public function applyImpulse( x:Number, y:Number ):void {
+			_onPanImpulse = true;
+			_panVelocityX += x;
+			_panVelocityY += y;
 		}
 
 		private function onTouch( event:TouchEvent ):void {
@@ -275,11 +291,6 @@ package com.away3d.gloop.input
 
 		public function get interacting():Boolean {
 			return _interacting;
-		}
-
-		public function resetVelocities():void {
-			_onPanImpulse = false;
-			_panVelocityX = _panVelocityY = 0;
 		}
 	}
 
