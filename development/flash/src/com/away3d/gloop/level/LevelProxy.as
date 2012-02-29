@@ -71,6 +71,12 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function calcRoundScore() : uint
+		{
+			return 0;
+		}
+		
+		
 		public function parseXml(xml : XML) : void
 		{
 			_id = parseInt(xml.@id.toString());
