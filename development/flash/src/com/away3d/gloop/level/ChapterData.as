@@ -29,6 +29,12 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function get title() : String
+		{
+			return _title;
+		}
+		
+		
 		public function get posterBitmap() : BitmapData
 		{
 			return _poster;

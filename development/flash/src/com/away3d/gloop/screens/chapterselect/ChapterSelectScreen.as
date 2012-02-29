@@ -2,14 +2,19 @@ package com.away3d.gloop.screens.chapterselect
 {
 	import com.away3d.gloop.level.ChapterData;
 	import com.away3d.gloop.level.LevelDatabase;
+	import com.away3d.gloop.lib.buttons.BackButton;
 	import com.away3d.gloop.screens.ScreenBase;
+	import com.away3d.gloop.screens.ScreenStack;
+	import com.away3d.gloop.screens.Screens;
 	
+	import flash.display.SimpleButton;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	public class ChapterSelectScreen extends ScreenBase
 	{
 		private var _db : LevelDatabase;
+		private var _stack : ScreenStack;
 		private var _posters : Vector.<ChapterPoster>;
 		
 		private var _prevPoster : ChapterPoster;
@@ -22,13 +27,16 @@ package com.away3d.gloop.screens.chapterselect
 		private var _targetX : Number;
 		private var _centerX : Number;
 		private var _mouseDownX : Number;
+			
+		private var _backBtn : SimpleButton;
 		
 		
-		public function ChapterSelectScreen(db : LevelDatabase)
+		public function ChapterSelectScreen(db : LevelDatabase, stack : ScreenStack)
 		{
 			super();
 			
 			_db = db;
+			_stack = stack;
 		}
 		
 		
@@ -58,6 +66,12 @@ package com.away3d.gloop.screens.chapterselect
 			}
 			
 			_curPosterIdx = 0;
+			
+			_backBtn = new BackButton();
+			_backBtn.x = 20;
+			_backBtn.y = 20;
+			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
+			addChild(_backBtn);
 		}
 		
 		
@@ -146,6 +160,12 @@ package com.away3d.gloop.screens.chapterselect
 				poster = ChapterPoster(ev.currentTarget);
 				_db.selectChapter(poster.chapterData);
 			}
+		}
+		
+		
+		private function onBackBtnClick(ev : MouseEvent) : void
+		{
+			_stack.gotoScreen(Screens.START);
 		}
 		
 		
