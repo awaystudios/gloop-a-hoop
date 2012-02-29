@@ -101,14 +101,13 @@ package com.away3d.gloop.input
 			_interactionDeltaY = (_interactionPointY - _prevInteractionPointY);
 			_prevInteractionPointX = _interactionPointX;
 			_prevInteractionPointY = _interactionPointY;
-
+			
 			if( _onPanImpulse ) {
 				_panVelocityX *= 0.9;
 				_panVelocityY *= 0.9;
 				_panX += _panVelocityX;
 				_panY += _panVelocityY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-//				trace( "impusling: " + speed );
 				if( speed < 0.1 ) _onPanImpulse = false;
 			}
 
@@ -146,10 +145,15 @@ package com.away3d.gloop.input
 		}
 
 		private function onMouseMove( event:MouseEvent ):void {
-			_interactionPointX = _view.mouseX;
-			_interactionPointY = _view.mouseY;
+			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
+			if( _view.mouseX > 0 && _view.mouseX < _view.stage.stageWidth ) {
+				_interactionPointX = _view.mouseX;
+			}
+			if( _view.mouseY > 0 && _view.mouseY < _view.stage.stageHeight ) {
+				_interactionPointY = _view.mouseY;
+			}
 		}
-		
+
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
 			super.onViewMouseDown(e);
@@ -164,17 +168,17 @@ package com.away3d.gloop.input
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
 			}
-			
+
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 		}
-		
+
 		override protected function onViewMouseUp(e : Event) : void
 		{
 			super.onViewMouseUp(e);
 			var clickDuration : Number = getTimer() - _mouseDownTime;
 			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
-			
+
 			if (_level.unplacedHoop && _isClick) {
 				_level.placeQueuedHoop(projectedMouseX, projectedMouseY);
 			}
@@ -195,15 +199,17 @@ package com.away3d.gloop.input
 			_zooming = false;
 			_interacting = false;
 
-			_panVelocityX = _interactionDeltaX;
-			_panVelocityY = _interactionDeltaY;
-			var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-			if( speed > 10 ) {
-				_onPanImpulse = true;
-				_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
-				_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
-				_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
-				_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
+			if( !_isClick ) {
+				_panVelocityX = _interactionDeltaX;
+				_panVelocityY = _interactionDeltaY;
+				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
+				if( speed > 10 ) {
+					_onPanImpulse = true;
+					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
+					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
+					_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
+					_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
+				}
 			}
 		}
 
