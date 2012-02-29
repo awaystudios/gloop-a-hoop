@@ -1,7 +1,9 @@
 package com.away3d.gloop.screens
 {
 	import com.away3d.gloop.lib.BackgroundBitmap;
+	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.utils.getTimer;
 	
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -14,6 +16,8 @@ package com.away3d.gloop.screens
 		
 		private var _drawBg : Boolean;
 		private var _initialized : Boolean;
+		
+		private var _background : Shape;
 		
 		public function ScreenBase(drawBackground : Boolean = true)
 		{
@@ -34,12 +38,22 @@ package com.away3d.gloop.screens
 					var scale : Number;
 					var mtx : Matrix;
 					
-					bmp = new BackgroundBitmap();
-					scale = Math.max(_w/bmp.width, _h/bmp.height);
-					mtx = new Matrix(scale, 0, 0, scale);
+					var bgWidth:Number = _w * 1.2;
+					var bgHeight:Number = _h * 1.2;
 					
-					graphics.beginBitmapFill(bmp, mtx);
-					graphics.drawRect(0, 0, _w*scale, _h*scale);
+					bmp = new BackgroundBitmap();
+					scale = Math.max(bgWidth / bmp.width, bgHeight / bmp.height);
+					
+					mtx = new Matrix(scale, 0, 0, scale);
+					mtx.translate( -bgWidth / 2, -bgHeight / 2);
+					
+					_background = new Shape;
+					_background.graphics.beginBitmapFill(bmp, mtx, false, true);
+					_background.graphics.drawRect( -bgWidth / 2, -bgHeight / 2, bgWidth, bgHeight);
+					_background.x = _w / 2;
+					_background.y = _h / 2;
+					
+					addChild(_background);
 				}
 				
 				initScreen();
@@ -49,6 +63,10 @@ package com.away3d.gloop.screens
 		
 		private function onEnterFrame(e:Event):void {
 			update();
+			if (_drawBg) {
+				var t:Number = getTimer();
+				_background.rotation = Math.sin(t / 600) * 3;
+			}
 		}
 		
 		public function get screenWidth() : Number
