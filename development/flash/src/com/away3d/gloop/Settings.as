@@ -41,12 +41,17 @@ package com.away3d.gloop
 		[comment("values closer to one makes the average move faster")]
 		static public var GLOOP_MOMENTUM_MULTIPLIER : Number = .1;
 		
-		static public const GLOOP_MAX_SPEED : Number = 5.5;
+		static public var GLOOP_MAX_SPEED : Number = 5.5;
 		
 		static public const HOOP_RADIUS : Number = GRID_SIZE / 2;
 		
+		static public var SCORE_BULLSEYE_MULTIPLIER : Number = 2;
+		static public var SCORE_STAR_VALUE : Number = 350;
+		
 		static public var GOALWALL_DETECTOR_HEIGHT : Number = 200;
 		static public var GOALWALL_DETECTOR_WIDTH : Number = 200;
+		[comment("the threshold to be under to score a bullseye (0-1) lower is smaller")]
+		static public var GOALWALL_BULLSEYE_THRESHOLD : Number = .2;
 		
 		static public var HOOP_ROTATION_STEP : Number = 45;
 

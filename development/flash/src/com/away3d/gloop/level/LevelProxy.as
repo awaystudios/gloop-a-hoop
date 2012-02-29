@@ -73,7 +73,9 @@ package com.away3d.gloop.level
 		
 		public function calcRoundScore() : uint
 		{
-			return 0;
+			var score:int = _round_num_stars * Settings.SCORE_STAR_VALUE;
+			if (level.finishedWithBullseye) score *= Settings.SCORE_BULLSEYE_MULTIPLIER;
+			return score;
 		}
 		
 		

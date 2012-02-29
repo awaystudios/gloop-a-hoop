@@ -123,7 +123,6 @@ package com.away3d.gloop.gameobjects
 				_launcher.onDragUpdate(mouseX, mouseY);
 				
 				pow = _launcher.dragAmount;
-				trace(pow);
 				_animState.weights[0] = 1-pow;
 				_animState.weights[1] = pow;
 				_animState.invalidateState();

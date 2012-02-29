@@ -25,11 +25,13 @@ GLOOP_DECAL_SPEED_FACTOR      2
 GLOOP_FRICTION                0.5
 GLOOP_LINEAR_DAMPING          0.1
 GLOOP_LOST_MOMENTUM_THRESHOLD 0.01
+GLOOP_MAX_SPEED               5.5
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
 GLOOP_RADIUS                  16
 GLOOP_RESTITUTION             0.75
 GLOOP_SPLAT_COOLDOWN          20    # delay between splats while on a surface, in updates
 
+GOALWALL_BULLSEYE_THRESHOLD   0.2    # the threshold to be under to score a bullseye (0-1) lower is smaller
 GOALWALL_DETECTOR_HEIGHT      100
 GOALWALL_DETECTOR_WIDTH       0
 
@@ -52,6 +54,9 @@ PHYSICS_TIME_STEP             0.05
 PHYSICS_VELOCITY_ITERATIONS   5
 
 ROCKET_POWER                  1.8
+
+SCORE_BULLSEYE_MULTIPLIER     2
+SCORE_STAR_VALUE              350
 
 SHOW_COLLISION_WALLS          false
 SHOW_COSMETIC_MESHES          true

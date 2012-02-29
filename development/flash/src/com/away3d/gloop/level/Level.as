@@ -44,6 +44,8 @@ package com.away3d.gloop.level
 		
 		private var _unplacedHoop:Hoop;
 		
+		private var _finishedWithBullseye : Boolean = false;
+		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
 		
@@ -277,6 +279,12 @@ package com.away3d.gloop.level
 		}
 		
 		private function onHitGoalWall(e:GameObjectEvent):void {
+			var goalWall:GoalWall = e.target as GoalWall;
+			if (goalWall && goalWall.splatDistance < Settings.GOALWALL_BULLSEYE_THRESHOLD) {
+				_finishedWithBullseye = true;
+			} else {
+				_finishedWithBullseye = false;
+			}
 			win();
 		}
 		
@@ -311,6 +319,10 @@ package com.away3d.gloop.level
 		
 		public function get unplacedHoop():Hoop {
 			return _unplacedHoop;
+		}
+		
+		public function get finishedWithBullseye():Boolean {
+			return _finishedWithBullseye;
 		}
 	}
 }
