@@ -45,12 +45,12 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function init() : void
 		{
-			initStandard();
-			initSplat();
-			
 			// Will be used as container for either
 			// standard or splat mesh.
 			mesh = new Mesh();
+			
+			initStandard();
+			initSplat();
 		}
 		
 		
@@ -73,6 +73,7 @@ package com.away3d.gloop.gameobjects.components
 			_stdMesh = new Mesh(geom, mat);
 			_stdMesh.subMeshes[0].scaleU = 0.5;
 			_stdMesh.subMeshes[0].scaleV = 0.5;
+			mesh.addChild(_stdMesh);
 			
 			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
@@ -104,6 +105,7 @@ package com.away3d.gloop.gameobjects.components
 			
 			_splatMesh = new Mesh(geom, mat);
 			_splatMesh.y = -10;
+			mesh.addChild(_splatMesh);
 			
 			_splatAnim = new VertexAnimationComponent(_splatMesh);
 			_splatAnim.addSequence( 'splat', [
@@ -120,10 +122,9 @@ package com.away3d.gloop.gameobjects.components
 		
 		public function splat(angle : Number) : void
 		{
-			if (mesh.contains(_stdMesh))
-				mesh.removeChild(_stdMesh);
+			_stdMesh.visible = false;
+			_splatMesh.visible = true;
 			
-			mesh.addChild(_splatMesh);
 			_splatAnim.play('splat');
 			
 			_splatAngle = angle;
@@ -133,10 +134,8 @@ package com.away3d.gloop.gameobjects.components
 		
 		public function reset() : void
 		{
-			if (mesh.contains(_splatMesh))
-				mesh.removeChild(_splatMesh);
-			
-			mesh.addChild(_stdMesh);
+			_splatMesh.visible = false;
+			_stdMesh.visible = true;
 			
 			_bounceVelocity = 0;
 			_bouncePosition = 0;
