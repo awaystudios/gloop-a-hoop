@@ -18,6 +18,7 @@ package com.away3d.gloop.screens.win
 		private var _stack : ScreenStack;
 		
 		private var _dimCtf : ColorTransform;
+		private var _normalCtf : ColorTransform;
 		
 		public function WinScreen(db : LevelDatabase, stack : ScreenStack)
 		{
@@ -40,6 +41,7 @@ package com.away3d.gloop.screens.win
 			_ui.nextButton.addEventListener(MouseEvent.CLICK, onButtonClick);
 			
 			_dimCtf = new ColorTransform(0, 0, 0, 1, 0x48, 0x1e, 0x3c);
+			_normalCtf = new ColorTransform;
 		}
 		
 		
@@ -50,9 +52,9 @@ package com.away3d.gloop.screens.win
 			proxy = _db.selectedLevelProxy;
 			
 			_ui.scoreTextfield.text = proxy.calcRoundScore().toString();
-			_ui.blob0.transform.colorTransform = (proxy.starsCollected>0)? null : _dimCtf;
-			_ui.blob1.transform.colorTransform = (proxy.starsCollected>1)? null : _dimCtf;
-			_ui.blob2.transform.colorTransform = (_db.selectedLevelProxy.starsCollected>2)? null : _dimCtf;
+			_ui.blob0.transform.colorTransform = (proxy.starsCollected > 0) ? _normalCtf : _dimCtf;
+			_ui.blob1.transform.colorTransform = (proxy.starsCollected > 1) ? _normalCtf : _dimCtf;
+			_ui.blob2.transform.colorTransform = (_db.selectedLevelProxy.starsCollected > 2) ? _normalCtf : _dimCtf;
 		}
 		
 		
