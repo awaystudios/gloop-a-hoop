@@ -20,6 +20,7 @@ package
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.screens.StartScreen;
 	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
@@ -91,6 +92,7 @@ package
 			
 			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
+			_stack.addScreen( Screens.START, new StartScreen(_stack) );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
@@ -155,8 +157,8 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
-			//_stack.gotoScreen( Screens.CHAPTERS );
-			_db.selectLevel(_db.chapters[0].levels[0]);
+			_stack.gotoScreen(Screens.START);
+			//_db.selectLevel(_db.chapters[0].levels[0]);
 		}
 		
 		
