@@ -27,7 +27,7 @@ package com.away3d.gloop.gameobjects {
 		
 		private var _width:Number;
 		private var _height:Number;
-		private var _splatDistance:Number = -1;
+		private var _splatDistance:Number = 1;
 		
 		public function GoalWall(offsetX:Number, offsetY:Number, width:Number, height:Number, worldX:Number = 0, worldY:Number = 0) {
 			_height = height;
@@ -58,7 +58,7 @@ package com.away3d.gloop.gameobjects {
 		
 		override public function reset():void {
 			super.reset();
-			_splatDistance = -1;
+			_splatDistance = 1;
 		}
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
@@ -95,7 +95,7 @@ package com.away3d.gloop.gameobjects {
 		}
 		
 		/**
-		 * Returns a normalized value (0-1) of the distance from the bullseye. Returns -1 if the target has not been hit.
+		 * Returns a normalized value (0-1) of the distance from the bullseye.
 		 */
 		public function get splatDistance():Number {
 			return _splatDistance;
