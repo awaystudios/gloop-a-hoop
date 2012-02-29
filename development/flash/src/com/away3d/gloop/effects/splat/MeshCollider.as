@@ -1,21 +1,20 @@
-package com.away3d.gloop.effects
+package com.away3d.gloop.effects.splat
 {
 	
 	import away3d.core.base.SubMesh;
 	import away3d.core.raycast.colliders.ColliderBase;
-	import away3d.core.raycast.colliders.TriangleCollider;
 	import away3d.entities.Mesh;
 	
 	import flash.geom.Vector3D;
 	
 	public class MeshCollider extends ColliderBase
 	{
-		private var _triangleCollider:TriangleCollider;
+		private var _triangleCollider:AS3TriangleCollider;
 		private var _collisionVO:MeshCollisionVO;
 		
 		public function MeshCollider() {
 			super();
-			_triangleCollider = new TriangleCollider();
+			_triangleCollider = new AS3TriangleCollider();
 		}
 		
 		override public function evaluate():Boolean {
@@ -25,7 +24,7 @@ package com.away3d.gloop.effects
 			var t:Number;
 			var rp:Vector3D, rd:Vector3D;
 			var collisionVO:MeshCollisionVO;
-			var cameraIsInEntityBounds:Boolean;
+			var sourceIsInEntityBounds:Boolean;
 			var collisionVOs:Vector.<MeshCollisionVO> = new Vector.<MeshCollisionVO>();
 			
 			// sweep meshes and collect entities whose bounds are hit by ray
@@ -37,10 +36,10 @@ package com.away3d.gloop.effects
 					rd = mesh.inverseSceneTransform.deltaTransformVector( _rayDirection );
 					// check for ray-bounds collision
 					t = mesh.bounds.intersectsRay( rp, rd );
-					cameraIsInEntityBounds = false;
+					sourceIsInEntityBounds = false;
 					if( t == -1 ) { // if there is no collision, check if the ray starts inside the bounding volume
-						cameraIsInEntityBounds = mesh.bounds.containsPoint( rp );
-						if( cameraIsInEntityBounds ) t = 999;
+						sourceIsInEntityBounds = mesh.bounds.containsPoint( rp );
+						if( sourceIsInEntityBounds ) t = 999;
 					}
 					if( t >= 0 ) { // collision exists for this renderable's entity bounds
 						// store collision VO
@@ -49,7 +48,7 @@ package com.away3d.gloop.effects
 						collisionVO.mesh = mesh;
 						collisionVO.localRayPosition = rp;
 						collisionVO.localRayDirection = rd;
-						collisionVO.cameraIsInEntityBounds = cameraIsInEntityBounds;
+						collisionVO.cameraIsInEntityBounds = sourceIsInEntityBounds;
 						collisionVOs.push( collisionVO );
 					}
 				}
@@ -63,7 +62,6 @@ package com.away3d.gloop.effects
 			collisionVOs = collisionVOs.sort( onSmallestT );
 			
 			// find nearest collision and perform triangle collision tests where necessary
-			_triangleCollider.breakOnFirstTriangleHit = true;
 			for( i = 0; i < numBoundHits; ++i ) {
 				_collisionVO = collisionVOs[ i ];
 				// this collision could only be closer if the bounds collision t is closer, otherwise, no need to test ( except if bounds intersect )
@@ -89,11 +87,6 @@ package com.away3d.gloop.effects
 			if( !_collisionExists )
 				return null;
 			return _collisionVO.mesh;
-		}
-		
-		public function get collisionNormal():Vector3D {
-			if( !_collisionExists ) return null;
-			return _collisionVO.collisionNormal;
 		}
 		
 		override public function get collisionPoint():Vector3D {

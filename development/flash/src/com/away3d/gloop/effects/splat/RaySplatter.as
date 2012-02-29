@@ -1,12 +1,11 @@
-package com.away3d.gloop.effects
+package com.away3d.gloop.effects.splat
 {
-
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
 
 	import flash.geom.Vector3D;
 
-	public class DecalSplatter
+	public class RaySplatter
 	{
 		public var numRays:uint = 1;
 		public var apertureX:Number = 0;
@@ -34,7 +33,7 @@ package com.away3d.gloop.effects
 			}
 		}
 
-		public function DecalSplatter( maxDecals:uint = 10 ) {
+		public function RaySplatter( maxDecals:uint = 10 ) {
 			_maxDecals = maxDecals;
 			_decals = new Vector.<Mesh>();
 			_meshCollider = new MeshCollider();
