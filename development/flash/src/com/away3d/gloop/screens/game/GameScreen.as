@@ -187,6 +187,7 @@ package com.away3d.gloop.screens.game
 		}
 
 		private function onGloopFired( event:GameObjectEvent ):void {
+			_gloop.meshComponent.mesh.visible = true;
 			_cameraController.setGloopFired(
 				_view.camera.x - _gloop.physics.x,
 				_view.camera.y + _gloop.physics.y);
@@ -199,6 +200,8 @@ package com.away3d.gloop.screens.game
 
 		private function reset():void
 		{
+			_gloop.meshComponent.mesh.visible = false;
+			
 			_hud.reset(_levelProxy);
 			
 			_cannon.catchGloop(_gloop);
