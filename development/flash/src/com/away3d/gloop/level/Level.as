@@ -3,6 +3,9 @@ package com.away3d.gloop.level
 
 	import away3d.containers.Scene3D;
 	import away3d.entities.Mesh;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -46,6 +49,9 @@ package com.away3d.gloop.level
 		
 		private var _finishedWithBullseye : Boolean = false;
 		
+		private var _running : Boolean = true;
+		private var _winDelayTimer:Timer;
+		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
 		
@@ -63,6 +69,9 @@ package com.away3d.gloop.level
 			_btn_controllables = new Vector.<IButtonControllable>();
 			_buttons = new Vector.<Button>();
 			_splattables = new Vector.<Mesh>;
+			
+			_winDelayTimer = new Timer(Settings.WIN_DELAY, 1);
+			_winDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onWinDelayTimerComplete);
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -212,6 +221,8 @@ package com.away3d.gloop.level
 
 		public function update() : void
 		{
+			if (!_running) return;
+			
 			_world.step();
 			
 			var i : uint;
@@ -255,13 +266,17 @@ package com.away3d.gloop.level
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.reset();
 			}
+			_running = true;
+			_winDelayTimer.reset();
 			setMode(Level.EDIT_MODE, true);
 		}
 
 
 		private function win() : void
 		{
-			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+			_running = false;
+			_winDelayTimer.reset();
+			_winDelayTimer.start();
 		}
 
 
@@ -299,6 +314,10 @@ package com.away3d.gloop.level
 		private function onHoopRemove(e:GameObjectEvent):void {
 			trace("New hoop placed inside wall, removing it");
 			remove(e.gameObject);
+		}
+		
+		private function onWinDelayTimerComplete(e:TimerEvent):void {
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
 		}
 
 		public function get dimensionsMin():Vector3D {

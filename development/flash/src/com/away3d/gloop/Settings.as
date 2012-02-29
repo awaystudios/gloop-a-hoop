@@ -99,6 +99,9 @@ package com.away3d.gloop
 		static public var INPUT_PICK_DISTANCE : uint = 50;
 		[comment("the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)")]
 		static public var INPUT_DRAG_THRESHOLD_SQUARED : uint = 100;
+		
+		[comment("the number of milliseconds to wait after hitting the goal wall until dispatching the level win")]
+		static public var WIN_DELAY : int = 1500;
 	}
 
 }
