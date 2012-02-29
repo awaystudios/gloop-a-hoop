@@ -1,16 +1,23 @@
 package com.away3d.gloop.screens.win
 {
 	import com.away3d.gloop.level.LevelDatabase;
+	import com.away3d.gloop.level.LevelProxy;
+	import com.away3d.gloop.lib.WinScreenUI;
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.ColorTransform;
 	
 	public class WinScreen extends ScreenBase
 	{
+		private var _ui : WinScreenUI;
+		
 		private var _db : LevelDatabase;
 		private var _stack : ScreenStack;
+		
+		private var _dimCtf : ColorTransform;
 		
 		public function WinScreen(db : LevelDatabase, stack : ScreenStack)
 		{
@@ -18,17 +25,50 @@ package com.away3d.gloop.screens.win
 			
 			_db = db;
 			_stack = stack;
-			
-			graphics.beginFill(0xff0000);
-			graphics.drawRect(0, 0, 1200, 800);
-			
-			addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		
-		private function onClick(ev : MouseEvent) : void
+		protected override function initScreen():void
 		{
-			_stack.gotoScreen(Screens.LEVELS);
+			_ui = new WinScreenUI();
+			_ui.x = _w/2;
+			_ui.y = _h/2.5;
+			addChild(_ui);
+			
+			_ui.replayButton.addEventListener(MouseEvent.CLICK, onButtonClick);
+			_ui.menuButton.addEventListener(MouseEvent.CLICK, onButtonClick);
+			_ui.nextButton.addEventListener(MouseEvent.CLICK, onButtonClick);
+			
+			_dimCtf = new ColorTransform(0, 0, 0, 1, 0x48, 0x1e, 0x3c);
+		}
+		
+		
+		public override function activate() : void
+		{
+			var proxy : LevelProxy;
+			
+			proxy = _db.selectedLevelProxy;
+			
+			_ui.scoreTextfield.text = proxy.calcRoundScore().toString();
+			_ui.blob0.transform.colorTransform = (proxy.starsCollected>0)? null : _dimCtf;
+			_ui.blob1.transform.colorTransform = (proxy.starsCollected>1)? null : _dimCtf;
+			_ui.blob2.transform.colorTransform = (_db.selectedLevelProxy.starsCollected>2)? null : _dimCtf;
+		}
+		
+		
+		private function onButtonClick(ev : MouseEvent) : void
+		{
+			switch (ev.currentTarget) {
+				case _ui.replayButton:
+					_stack.gotoScreen(Screens.GAME);
+					break;
+				case _ui.menuButton:
+					_stack.gotoScreen(Screens.START);
+					break;
+				case _ui.nextButton:
+					// TODO: Implement this
+					break;
+			}
 		}
 	}
 }
