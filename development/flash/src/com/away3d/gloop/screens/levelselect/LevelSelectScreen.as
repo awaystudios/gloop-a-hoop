@@ -24,16 +24,31 @@ package com.away3d.gloop.screens.levelselect
 		{
 			var i : uint;
 			var len : uint;
+			var rows : uint;
+			var cols : uint;
+			var tlx : Number;
+			var tly : Number;
 			
 			len = _db.selectedChapter.levels.length;
+			rows = Math.ceil(len / 5);
+			cols = (len < 5)? len : 5;
+			
+			tlx = _w/2 - cols * 70;
+			tly = _h/2 - rows * 75;
 			
 			for (i=0; i<len; i++) {
 				var thumb : LevelThumb;
 				var level : LevelProxy;
+				var row : uint;
+				var col : uint;
+				
+				row = Math.floor(i / cols);
+				col = i % cols;
 				
 				level = _db.selectedChapter.levels[i];
 				thumb = new LevelThumb(level);
-				thumb.x = i*120;
+				thumb.x = tlx + col * 140;
+				thumb.y = tly + row * 150;
 				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
 				addChild(thumb);
 			}

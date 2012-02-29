@@ -34,15 +34,18 @@ package com.away3d.gloop.level
 		
 		public function parseXml(xml : XML) : void
 		{
+			var idx : uint;
 			var level_xml : XML;
 			
 			_title = xml.title.toString();
 			_posterUrl = xml.@poster.toString();
 			
+			idx = 1;
+			
 			for each (level_xml in xml.level) {
 				var level : LevelProxy;
 				
-				level = new LevelProxy();
+				level = new LevelProxy(idx++);
 				level.parseXml(level_xml);
 				
 				_levels.push(level);

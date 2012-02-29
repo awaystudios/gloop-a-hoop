@@ -10,6 +10,7 @@ package com.away3d.gloop.level
 	public class LevelProxy extends EventDispatcher
 	{
 		private var _id : int;
+		private var _idx : uint;
 		private var _awd_url : String;
 		private var _level : Level;
 		
@@ -22,8 +23,9 @@ package com.away3d.gloop.level
 		private var _inventory : LevelInventory;
 		
 		
-		public function LevelProxy()
+		public function LevelProxy(indexInChapter : uint)
 		{
+			_idx = indexInChapter;
 			_inventory = new LevelInventory();
 		}
 		
@@ -39,6 +41,17 @@ package com.away3d.gloop.level
 			return _id;
 		}
 		
+		
+		public function get indexInChapter() : uint
+		{
+			return _idx;
+		}
+		
+		
+		public function get bestStarsCollected() : uint
+		{
+			return _best_num_stars;
+		}
 		
 		public function get starsCollected() : uint
 		{
