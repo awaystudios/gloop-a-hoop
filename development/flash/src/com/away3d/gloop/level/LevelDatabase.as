@@ -13,6 +13,8 @@ package com.away3d.gloop.level
 		private var _selectedChapter : ChapterData;
 		private var _selectedLevelProxy : LevelProxy;
 		
+		private var _numChaptersLoading : int;
+		
 		
 		public function LevelDatabase()
 		{
@@ -150,16 +152,42 @@ package com.away3d.gloop.level
 			xml_loader.removeEventListener(Event.COMPLETE, onXmlLoaderComplete);
 			xml = new XML(xml_loader.data);
 			
+			_numChaptersLoading = 0;
+			
 			for each (chapter_xml in xml.chapter) {
 				var chapter : ChapterData;
 				
+				_numChaptersLoading++;
+				
 				chapter = new ChapterData();
 				chapter.parseXml(chapter_xml);
+				chapter.addEventListener(Event.COMPLETE, onChapterComplete);
+				chapter.loadPoster();
 				
 				_chapters.push(chapter);
 			}
 			
-			dispatchEvent(new Event(Event.COMPLETE));
+			tryFinishLoad();
+		}
+		
+		
+		private function tryFinishLoad() : void
+		{
+			if (_numChaptersLoading==0) {
+				dispatchEvent(new Event(Event.COMPLETE));
+			}
+		}
+		
+		
+		private function onChapterComplete(ev : Event) : void
+		{
+			var chapter : ChapterData;
+			
+			chapter = ChapterData(ev.currentTarget);
+			chapter.removeEventListener(Event.COMPLETE, onChapterComplete);
+				
+			_numChaptersLoading--;
+			tryFinishLoad();
 		}
 	}
 }
