@@ -158,13 +158,13 @@ package com.away3d.gloop.screens.game
 				_level.add(_gloop);
 				_cannon.catchGloop(_gloop);
 				_levelProxy.reset();			
-			}, 200);
 
-			// Apply nice lighting.
-			// TODO: Don't affect HUD
-			for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
-				HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
-			}
+				// Apply nice lighting.
+				// TODO: Don't affect HUD
+				for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
+					HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
+				}
+			}, 200);
 		}
 
 		public override function deactivate():void
