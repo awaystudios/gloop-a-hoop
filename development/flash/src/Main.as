@@ -157,8 +157,8 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			
-			//_stack.gotoScreen(Screens.START);
-			_db.selectLevel(_db.chapters[0].levels[0]);
+			_stack.gotoScreen(Screens.START);
+			//_db.selectLevel(_db.chapters[0].levels[0]);
 		}
 		
 		
@@ -171,11 +171,8 @@ package
 		private function onDbLevelSelect(ev : GameEvent):void {
 			_stack.gotoScreen(Screens.LOADING);
 
-			_stack.gotoScreen(Screens.WIN);
-			/*
 			_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
 			_db.selectedLevelProxy.load();
-			*/
 		}
 		
 		
