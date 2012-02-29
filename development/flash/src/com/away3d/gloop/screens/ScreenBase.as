@@ -1,6 +1,7 @@
 package com.away3d.gloop.screens
 {
 	import com.away3d.gloop.lib.BackgroundBitmap;
+	import flash.events.Event;
 	
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -46,6 +47,9 @@ package com.away3d.gloop.screens
 			}
 		}
 		
+		private function onEnterFrame(e:Event):void {
+			update();
+		}
 		
 		public function get screenWidth() : Number
 		{
@@ -61,18 +65,24 @@ package com.away3d.gloop.screens
 		
 		public function activate() : void
 		{
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			// To be overridden
 		}
 		
 		
 		public function deactivate() : void
 		{
+			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			// To be overridden
 		}
 		
 		
 		protected function initScreen() : void
 		{
+			// To be overridden
+		}
+		
+		protected function update():void {
 			// To be overridden
 		}
 	}

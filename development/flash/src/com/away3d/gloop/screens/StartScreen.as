@@ -54,17 +54,7 @@ package com.away3d.gloop.screens
 			addChild(_settingsBtn);
 		}
 		
-		override public function activate():void {
-			super.activate();
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		}
-		
-		override public function deactivate():void {
-			super.deactivate();
-			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-		}
-		
-		private function onEnterFrame(e:Event):void {
+		override protected function update():void {
 			var t:Number = getTimer();
 			_logo.rotation = Math.sin(t / 300) * 1.5;
 			_logo.scaleX = 1.0 + Math.cos(t / 150) * .025;
@@ -73,6 +63,7 @@ package com.away3d.gloop.screens
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void
 		{
+			
 		}
 		
 		

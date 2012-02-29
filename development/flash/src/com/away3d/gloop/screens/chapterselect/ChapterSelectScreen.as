@@ -77,16 +77,16 @@ package com.away3d.gloop.screens.chapterselect
 		
 		public override function activate() : void
 		{
+			super.activate();
 			updatePosters();
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		}
 		
 		
 		public override function deactivate() : void
 		{
+			super.deactivate();
 			endDrag();
-			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		}
 		
@@ -180,8 +180,7 @@ package com.away3d.gloop.screens.chapterselect
 		}
 		
 		
-		private function onEnterFrame(ev : Event) : void
-		{
+		override protected function update():void {
 			updatePosterPositions();
 		}
 	}
