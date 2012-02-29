@@ -63,9 +63,6 @@ package com.away3d.gloop.gameobjects {
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
 			super.onCollidingWithGloopStart(gloop);
-			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
-			gloop.splatOnTarget(_physics.rotation);
-			gloop.onHitGoalWall();
 			
 			var gloopCenter:V2 = gloop.physics.b2body.GetWorldCenter();
 			var wallCenter:V2 = this.physics.b2body.GetWorldCenter();
@@ -77,6 +74,11 @@ package com.away3d.gloop.gameobjects {
 			
 			// we can never be closer than the walls _height, so we remove that, then divide by the walls width to get a normalized value back
 			_splatDistance = (_splatDistance - _height) / (_width / 2);
+			
+			gloop.splatOnTarget(_physics.rotation);
+			gloop.onHitGoalWall();
+			
+			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
 		}
 		
 		public function onGloopEnterSensor(gloop:Gloop):void {
