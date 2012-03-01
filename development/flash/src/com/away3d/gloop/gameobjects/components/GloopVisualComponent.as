@@ -6,6 +6,7 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.primitives.CubeGeometry;
 	import away3d.textures.BitmapTexture;
 	
@@ -117,6 +118,13 @@ package com.away3d.gloop.gameobjects.components
 				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
 				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom'))
 			], 100, false);
+		}
+		
+		
+		public override function setLightPicker(picker:LightPickerBase):void
+		{
+			_stdMesh.material.lightPicker = picker;
+			_splatMesh.material.lightPicker = picker;
 		}
 		
 		
