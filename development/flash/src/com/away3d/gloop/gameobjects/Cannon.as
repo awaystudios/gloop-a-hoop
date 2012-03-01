@@ -7,6 +7,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
 	import away3d.materials.TextureMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
@@ -88,6 +89,12 @@ package com.away3d.gloop.gameobjects
 			_animState = VertexAnimationState(_cannonBody.animationState);
 		}
 		
+		public override function setLightPicker(picker:LightPickerBase):void
+		{
+			super.setLightPicker(picker);
+			
+			_cannonBody.material.lightPicker = picker;
+		}
 		
 		override public function reset():void {
 			super.reset();

@@ -1,11 +1,12 @@
 package com.away3d.gloop.level
 {
 
+	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.Scene3D;
+	import away3d.core.base.Object3D;
 	import away3d.entities.Mesh;
-	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
+	import away3d.lights.PointLight;
+	import away3d.materials.lightpickers.StaticLightPicker;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
@@ -19,9 +20,12 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	import flash.utils.Timer;
 	
 	import wck.World;
 
@@ -52,8 +56,12 @@ package com.away3d.gloop.level
 		private var _running : Boolean = true;
 		private var _winDelayTimer:Timer;
 		
+		private var _cameraPointLight:PointLight;
+		private var _sceneLightPicker:StaticLightPicker;
+		
 		public static const EDIT_MODE:Boolean = false;
 		public static const PLAY_MODE:Boolean = true;
+		
 		
 		public function Level()
 		{
@@ -72,6 +80,12 @@ package com.away3d.gloop.level
 			
 			_winDelayTimer = new Timer(Settings.WIN_DELAY, 1);
 			_winDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onWinDelayTimerComplete);
+			
+			_cameraPointLight = new PointLight();
+			_cameraPointLight.specular = 0.3;
+			_cameraPointLight.ambient = 0.4;
+
+			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -161,8 +175,14 @@ package com.away3d.gloop.level
 		
 		public function add(object:DefaultGameObject):DefaultGameObject {
 			_all_objects.push(object);
-			if (object.physics) world.addChild(object.physics);
-			if (object.meshComponent) scene.addChild(object.meshComponent.mesh);
+			
+			object.setLightPicker(_sceneLightPicker);
+			
+			if (object.physics)
+				world.addChild(object.physics);
+			
+			if (object.meshComponent)
+				_scene.addChild(object.meshComponent.mesh);
 
 			if (object is Button) {
 				_buttons.push(Button(object));
@@ -190,6 +210,19 @@ package com.away3d.gloop.level
 
 			return object;
 		}
+		
+		
+		public function addStatic(obj : ObjectContainer3D) : void
+		{
+			if (obj is Mesh) {
+				var mesh : Mesh = Mesh(obj);
+				if (mesh.material)
+					mesh.material.lightPicker = _sceneLightPicker;
+			}
+			
+			_scene.addChild(obj);
+		}
+		
 		
 		/**
 		 * Removes and disposes of an object. The object will not be usable after this.
@@ -319,6 +352,36 @@ package com.away3d.gloop.level
 		private function onWinDelayTimerComplete(e:TimerEvent):void {
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
 		}
+		
+		public function get camLightX() : Number
+		{
+			return _cameraPointLight.x;
+		}
+		public function set camLightX(val : Number) : void
+		{
+			_cameraPointLight.x = val;
+		}
+		
+		
+		public function get camLightY() : Number
+		{
+			return _cameraPointLight.y;
+		}
+		public function set camLightY(val : Number) : void
+		{
+			_cameraPointLight.y = val;
+		}
+		
+		
+		public function get camLightZ() : Number
+		{
+			return _cameraPointLight.z;
+		}
+		public function set camLightZ(val : Number) : void
+		{
+			_cameraPointLight.z = val;
+		}
+		
 
 		public function get dimensionsMin():Vector3D {
 			return _dimensionsMin;

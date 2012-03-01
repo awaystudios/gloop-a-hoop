@@ -42,8 +42,6 @@ package com.away3d.gloop.screens.game
 
 		private var _doc:WCK;
 		private var _view:View3D;
-		private var _cameraPointLight:PointLight;
-		private var _sceneLightPicker:StaticLightPicker;
 		private var _inputManager:InputManager;
 		
 		private var _hud : HUD;
@@ -80,12 +78,6 @@ package com.away3d.gloop.screens.game
 			addChild( _view );
 			
 			addChild( _doc );
-			
-			_cameraPointLight = new PointLight();
-			_cameraPointLight.specular = 0.3;
-			_cameraPointLight.ambient = 0.4;
-
-			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
 		}
 		
 		
@@ -162,9 +154,11 @@ package com.away3d.gloop.screens.game
 
 				// Apply nice lighting.
 				// TODO: Don't affect HUD
+				/*
 				for( var i:uint, len:uint = _level.scene.numChildren; i < len; ++i ) {
 					HierarchyTool.recursiveApplyLightPicker( _level.scene.getChildAt( i ), _sceneLightPicker );
 				}
+				*/
 			}, 200);
 		}
 
@@ -223,7 +217,11 @@ package com.away3d.gloop.screens.game
 				_cameraController.update();
 			}
 			
-			_cameraPointLight.position = _view.camera.position;
+			if (_level) {
+				_level.camLightX = _view.camera.x;
+				_level.camLightY = _view.camera.y;
+				_level.camLightZ = _view.camera.z;
+			}
 
 			_view.render();
 		}

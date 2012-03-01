@@ -240,7 +240,7 @@ package com.away3d.gloop.level
 				
 				// Visual object, add if not already parented
 				if (!obj.parent)
-					_level.scene.addChild(obj);
+					_level.addStatic(obj);
 			}
 		}
 		

@@ -1,5 +1,7 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.materials.lightpickers.LightPickerBase;
+	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.level.Level;
@@ -38,6 +40,12 @@ package com.away3d.gloop.gameobjects
 		
 		public function onCollidingWithGloopEnd(gloop:Gloop):void {
 			
+		}
+		
+		public function setLightPicker(picker : LightPickerBase) : void
+		{
+			if (_meshComponent)
+				_meshComponent.setLightPicker(picker);
 		}
 		
 		public function get physics():PhysicsComponent {
