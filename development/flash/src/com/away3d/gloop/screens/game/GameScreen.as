@@ -1,6 +1,7 @@
 package com.away3d.gloop.screens.game
 {
 
+	import away3d.containers.Scene3D;
 	import away3d.containers.View3D;
 	import away3d.lights.PointLight;
 	import away3d.materials.lightpickers.StaticLightPicker;
@@ -48,10 +49,11 @@ package com.away3d.gloop.screens.game
 		private var _timestep:Timestep;
 		
 
-		public function GameScreen( db:LevelDatabase ) {
+		public function GameScreen( db:LevelDatabase, view : View3D ) {
 			super( false );
 
 			_db = db;
+			_view = view;
 		}
 
 
@@ -72,11 +74,7 @@ package com.away3d.gloop.screens.game
 			_doc.y = 120;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
-			
-			_view = new View3D();
-			_view.antiAlias = 4;
-			addChild( _view );
-			
+			_doc.visible = false;
 			addChild( _doc );
 		}
 		
@@ -167,6 +165,8 @@ package com.away3d.gloop.screens.game
 			super.deactivate();
 			_inputManager.deactivate();
 			_editController.deactivate();
+			
+			_view.scene = new Scene3D();
 		}
 		
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
@@ -222,8 +222,6 @@ package com.away3d.gloop.screens.game
 				_level.camLightY = _view.camera.y;
 				_level.camLightZ = _view.camera.z;
 			}
-
-			_view.render();
 		}
 	}
 }

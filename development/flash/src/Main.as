@@ -1,6 +1,7 @@
 package
 {
 
+	import away3d.containers.View3D;
 	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -46,6 +47,7 @@ package
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
 		
+		private var _view : View3D;
 
 		public function Main()
 		{
@@ -59,9 +61,15 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
 			
+			/*
 			var s:AwayStats = new AwayStats();
 			s.x = stage.stageWidth - s.width;
 			addChild(s);
+			*/
+			
+			_view = new View3D();
+			addChild(_view);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			initSettings();
 			initDb();
@@ -93,7 +101,7 @@ package
 			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
-			_stack.addScreen( Screens.GAME, new GameScreen( _db ) );
+			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_db, _stack) );
@@ -218,6 +226,12 @@ package
 			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
 			if (ev.keyCode == Keyboard.F5) _db.selectedLevelProxy.level.queueHoopForPlacement(new RocketHoop);
+		}
+		
+		
+		private function onEnterFrame(ev : Event) : void
+		{
+			_view.render();
 		}
 	}
 }
