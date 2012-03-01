@@ -20,7 +20,7 @@ package com.away3d.gloop.gameobjects.components {
 		
 		public function GloopLauncherComponent(gameObject:DefaultGameObject) {
 			_gameObject = gameObject;
-			_aim = new Point;
+			_aim = new Point( -1, -1);
 		}
 		
 		public function reset():void {
@@ -37,13 +37,11 @@ package com.away3d.gloop.gameobjects.components {
 			if (_fired) return; // if hoop has fired, disable movement
 			if (!_gloop) return;
 			
-			var hoopPos:V2 = _gameObject.physics.b2body.GetPosition();			
+			var hoopPos:V2 = _gameObject.physics.b2body.GetPosition();
 			_aim.x = hoopPos.x * Settings.PHYSICS_SCALE - mouseX;
 			_aim.y = hoopPos.y * Settings.PHYSICS_SCALE - mouseY;
 			
-			_gameObject.physics.b2body.SetTransform(hoopPos, -Math.atan2(_aim.x, _aim.y));
-			_gameObject.physics.updateBodyMatrix(null);
-			
+			updateAim(hoopPos);
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
@@ -66,6 +64,12 @@ package com.away3d.gloop.gameobjects.components {
 			_fired = true;
 			
 			_gameObject.dispatchEvent(new GameObjectEvent(GameObjectEvent.LAUNCHER_FIRE_GLOOP, _gameObject));
+		}
+		
+		public function updateAim(hoopPos:V2 = null):void {
+			hoopPos ||= _gameObject.physics.b2body.GetPosition();
+			_gameObject.physics.b2body.SetTransform(hoopPos, -Math.atan2(_aim.x, _aim.y));
+			_gameObject.physics.updateBodyMatrix(null);
 		}
 		
 		public function update(dt:Number):void {

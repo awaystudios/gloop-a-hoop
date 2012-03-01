@@ -108,6 +108,7 @@ package com.away3d.gloop.gameobjects
 			
 			// set as sensor to disable resolution of gloop collisions
 			_physics.isSensor = true;
+			_launcher.updateAim();
 		}
 		
 		public function catchGloop(gloop:Gloop):void {
