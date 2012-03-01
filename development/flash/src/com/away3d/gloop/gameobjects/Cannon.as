@@ -130,7 +130,7 @@ package com.away3d.gloop.gameobjects
 				
 				_launcher.onDragUpdate(mouseX, mouseY);
 				
-				pow = _launcher.dragAmount;
+				pow = _launcher.shotPowerNormalized;
 				_animState.weights[0] = 1-pow;
 				_animState.weights[1] = pow;
 				_animState.invalidateState();
@@ -144,7 +144,7 @@ package com.away3d.gloop.gameobjects
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
-			if (_launcher.gloop) {
+			if (_launcher.gloop && _launcher.shotPowerAboveThreshold) {
 				_animComponent.play('fire');
 				
 				// TODO: Solve this in a nicer way, or at least make sure

@@ -59,11 +59,13 @@ package com.away3d.gloop
 		static public var BUTTON_RADIUS : Number = 60;
 
 		[comment("dragging a distance shorter than this cancels the launch")]
-		static public var LAUNCHER_POWER_MIN : Number = 30;
+		static public var LAUNCHER_DRAG_MIN : Number = 30;
 		[comment("the drag distance is capped to this value, dragging longer won't make a difference")]
-		static public var LAUNCHER_POWER_MAX : Number = 200;
-		[comment("the value remaining is scaled by this multiplier before being applied to gloop")]
-		static public var LAUNCHER_POWER_SCALE : Number = 10;
+		static public var LAUNCHER_DRAG_MAX : Number = 200;
+		[comment("this is the minimal force applied when launched")]
+		static public var LAUNCHER_POWER_BASE : Number = 1;
+		[comment("a shot at 100% power will be the sum of the base and this value")]
+		static public var LAUNCHER_POWER_VARIATION : Number = 2;
 
 		static public var ROCKET_POWER : Number = 15;
 

@@ -5,6 +5,7 @@ package com.away3d.gloop.gameobjects.components {
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.hoops.GlueHoop;
 	import com.away3d.gloop.Settings;
+	import com.greensock.easing.Quad;
 	import flash.geom.Point;
 	/**
 	 * ...
@@ -20,11 +21,6 @@ package com.away3d.gloop.gameobjects.components {
 		public function GloopLauncherComponent(gameObject:DefaultGameObject) {
 			_gameObject = gameObject;
 			_aim = new Point;
-		}
-		
-		public function get dragAmount() : Number
-		{
-			return Math.min(1, 0.5 * _aim.length/Settings.LAUNCHER_POWER_MAX);
 		}
 		
 		public function reset():void {
@@ -47,23 +43,21 @@ package com.away3d.gloop.gameobjects.components {
 			
 			_gameObject.physics.b2body.SetTransform(hoopPos, -Math.atan2(_aim.x, _aim.y));
 			_gameObject.physics.updateBodyMatrix(null);
+			
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			if (!_gloop) return;
-			if (_aim.length < Settings.LAUNCHER_POWER_MIN) return;
+			if (!shotPowerAboveThreshold) return;
 			launch();
 		}
 		
-		public function launch() : void
+		private function launch() : void
 		{
 			if (!_gloop)
 				return; // can't fire if not holding the gloop
 			
-			var power:Number = Math.min(_aim.length, Settings.LAUNCHER_POWER_MAX);
-			power = (power - Settings.LAUNCHER_POWER_MIN) * Settings.LAUNCHER_POWER_SCALE;
-				
-			var impulse : V2 = _gameObject.physics.b2body.GetWorldVector(new V2(0, -power));
+			var impulse : V2 = _gameObject.physics.b2body.GetWorldVector(new V2(0, shotPower));
 			_gloop.physics.b2body.ApplyImpulse(impulse, _gameObject.physics.b2body.GetWorldCenter());
 			
 			_gloop.onLaunch();
@@ -79,6 +73,20 @@ package com.away3d.gloop.gameobjects.components {
 			if (!_gloop.physics.b2body) return; // gloop hasn't inited its physics yet, wait for a bit
 			_gloop.physics.b2body.SetLinearVelocity(new V2(0, 0)); // kill incident velocity
 			_gloop.physics.b2body.SetTransform(_gameObject.physics.b2body.GetPosition().clone(), 0); // position gloop on top of launcher
+		}
+		
+		public function get shotPowerAboveThreshold():Boolean {
+			return _aim.length > Settings.LAUNCHER_DRAG_MIN;
+		}
+		
+		public function get shotPowerNormalized():Number {
+			var power:Number = Math.min(_aim.length, Settings.LAUNCHER_DRAG_MAX);
+			power = Math.max(0, (power - Settings.LAUNCHER_DRAG_MIN) / (Settings.LAUNCHER_DRAG_MAX - Settings.LAUNCHER_DRAG_MIN));
+			return Quad.easeIn(power, 0, 1, 1);
+		}
+		
+		public function get shotPower():Number {
+			return Settings.LAUNCHER_POWER_BASE + shotPowerNormalized * Settings.LAUNCHER_POWER_VARIATION;
 		}
 		
 		public function get gloop():Gloop {
