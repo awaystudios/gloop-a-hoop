@@ -8,6 +8,7 @@ package com.away3d.gloop.level
 	import away3d.library.assets.AssetType;
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.DefaultMaterialBase;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Button;
@@ -16,9 +17,9 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.GoalWall;
 	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
+	import com.away3d.gloop.gameobjects.hoops.GlueHoop;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.gameobjects.hoops.HoopType;
-	import com.away3d.gloop.gameobjects.hoops.GlueHoop;	
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	
@@ -232,8 +233,12 @@ package com.away3d.gloop.level
 				
 				mesh = obj as Mesh;
 				if (mesh) {
-					mesh.material.repeat = true;
-					//mesh.material = new ColorMaterial(Math.random() * 0xffffff);
+					var mat : DefaultMaterialBase;
+					
+					mat = DefaultMaterialBase(mesh.material);
+					mat.repeat = true;
+					mat.specular = 0.3;
+					
 					_level.splattableMeshes.push(mesh);
 				}
 				
