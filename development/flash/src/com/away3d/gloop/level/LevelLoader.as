@@ -228,10 +228,12 @@ package com.away3d.gloop.level
 				
 				obj.x *= _scale;
 				obj.y *= _scale;
+				obj.z *= _scale;
 				
 				mesh = obj as Mesh;
 				if (mesh) {
-					mesh.material = new ColorMaterial(Math.random() * 0xffffff);
+					mesh.material.repeat = true;
+					//mesh.material = new ColorMaterial(Math.random() * 0xffffff);
 					_level.splattableMeshes.push(mesh);
 				}
 				
