@@ -170,7 +170,7 @@ package com.away3d.gloop.gameobjects.components
 				mesh.rotationZ = _splatAngle;
 			}
 			else {
-				_facingRotation -= vx * .25;
+				_facingRotation -= vx * .20;
 				mesh.rotationZ = _facingRotation;
 				
 				_bounceVelocity -= (_bouncePosition - 0.5) * .1;
