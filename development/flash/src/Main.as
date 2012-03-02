@@ -18,6 +18,7 @@ package
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelLoader;
+	import com.away3d.gloop.lib.sounds.menu.MenuButtonSound;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
@@ -27,6 +28,8 @@ package
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.settings.SettingsScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.AssetLoaderQueue;
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.HierarchyTool;
@@ -97,6 +100,7 @@ package
 			initSettings();
 			initDb();
 			initStack();
+			initSound();
 			
 			loadAssets();
 		}
@@ -124,6 +128,12 @@ package
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_db, _stack) );
+		}
+		
+		
+		private function initSound() : void
+		{
+			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
 		}
 		
 		

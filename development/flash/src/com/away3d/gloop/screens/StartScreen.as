@@ -3,13 +3,15 @@ package com.away3d.gloop.screens
 	import com.away3d.gloop.lib.LogoBitmap;
 	import com.away3d.gloop.lib.buttons.PlayButton;
 	import com.away3d.gloop.lib.buttons.SettingsButton;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.utils.getTimer;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	
 	import flash.display.Bitmap;
 	import flash.display.SimpleButton;
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.utils.getTimer;
 
 	public class StartScreen extends ScreenBase
 	{
@@ -63,12 +65,14 @@ package com.away3d.gloop.screens
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.SETTINGS);
 		}
 		
 		
 		private function onPlayBtnClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.CHAPTERS);
 		}
 		
