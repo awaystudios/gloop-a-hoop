@@ -175,6 +175,19 @@ package com.away3d.gloop.level
 		}
 		
 		
+		private function parseBounds(obj : ObjectContainer3D) : void
+		{
+			var mesh : Mesh;
+			
+			mesh = Mesh(obj);
+			
+			_level.dimensionsMin.x = mesh.x*_scale + mesh.bounds.min.x;
+			_level.dimensionsMin.y = mesh.y*_scale + mesh.bounds.min.y;
+			_level.dimensionsMax.x = mesh.x*_scale + mesh.bounds.max.x;
+			_level.dimensionsMax.y = mesh.y*_scale + mesh.bounds.max.y;
+		}
+		
+		
 		
 		private function parseSceneGraphObject(obj : ObjectContainer3D) : void
 		{
@@ -212,6 +225,11 @@ package com.away3d.gloop.level
 					
 					case GameObjectType.TARGET:
 						parseTarget(obj);
+						break;
+					
+					case 'backwall':
+						visual = true;
+						parseBounds(obj);
 						break;
 				}
 				

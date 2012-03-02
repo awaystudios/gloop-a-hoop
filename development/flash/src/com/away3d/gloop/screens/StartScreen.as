@@ -63,7 +63,7 @@ package com.away3d.gloop.screens
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void
 		{
-			
+			_stack.gotoScreen(Screens.SETTINGS);
 		}
 		
 		
