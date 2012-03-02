@@ -7,12 +7,11 @@ package com.away3d.gloop.screens.game.controllers
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.PlaneGeometry;
-
+	
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
-
+	
 	import flash.geom.Point;
-
 	import flash.geom.Vector3D;
 
 	use namespace arcane;
@@ -22,6 +21,8 @@ package com.away3d.gloop.screens.game.controllers
 		private var _inputManager : InputManager;
 		private var _camera : Camera3D;
 		private var _gloop : Gloop;
+		
+		private var _lookAtTarget : Vector3D;
 		
 		private var _boundsMinX : Number;
 		private var _boundsMaxX : Number;
@@ -50,6 +51,8 @@ package com.away3d.gloop.screens.game.controllers
 			_inputManager = inputManager;
 			_camera = camera;
 			_gloop = gloop;
+			
+			_lookAtTarget = new Vector3D();
 		}
 		
 		
@@ -58,6 +61,9 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.rotationX *= 0.9;
 			_camera.rotationY *= 0.9;
 			_camera.rotationZ *= 0.9;
+			
+			_lookAtTarget.x = _camera.x;
+			_lookAtTarget.y = _camera.y;
 		}
 		
 		
@@ -123,6 +129,7 @@ package com.away3d.gloop.screens.game.controllers
 		public function update() : void
 		{
 			var ease : Number;
+			var lookAtGloop : Boolean;
 			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
 			if( _inputManager.interacting ) _interactedSinceGloopWasFired = true;
@@ -142,16 +149,19 @@ package com.away3d.gloop.screens.game.controllers
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 				
 				if (_finishMode) {
+					lookAtGloop = true;
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
 					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
 					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}
 				else {
+					lookAtGloop = false;
 					targetPosition.z = _inputManager.zoom;
 				}
 			}
 			else {
+				lookAtGloop = false;
 
 				if( !_inputManager.interacting ) {
 					if( _containVector.x != 0 ) {
@@ -204,6 +214,7 @@ package com.away3d.gloop.screens.game.controllers
 			} else if( panDownDistance < 0 ) {
 				_containVector.y = -panDownDistance;
 			}*/
+			
 
 			// hard containment for zoom
 			if( targetPosition.z > _boundsMaxZ ) {
@@ -218,6 +229,17 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.x += (targetPosition.x - _camera.x) * ease;
 			_camera.y += (targetPosition.y - _camera.y) * ease;
 			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * ease;
+			
+			if (lookAtGloop) {
+				_lookAtTarget.x += (_gloop.meshComponent.mesh.x - _lookAtTarget.x) * ease;
+				_lookAtTarget.y += (_gloop.meshComponent.mesh.y - _lookAtTarget.y) * ease;
+			}
+			else {
+				_lookAtTarget.x += (_camera.x - _lookAtTarget.x) * ease;
+				_lookAtTarget.y += (_camera.y - _lookAtTarget.y) * ease;
+			}
+			
+			_camera.lookAt(_lookAtTarget);
 		}
 	}
 }
