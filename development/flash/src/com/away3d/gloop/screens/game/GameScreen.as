@@ -143,7 +143,7 @@ package com.away3d.gloop.screens.game
 				_level.bounds.right,
 				_level.bounds.top,
 				_level.bounds.bottom,
-				0.001, 3.5); // TODO: Move these to settings
+				3 ); // TODO: Move these to settings
 			
 			_inputManager.reset(_level);
 			_inputManager.activate();

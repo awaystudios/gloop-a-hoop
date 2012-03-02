@@ -1,5 +1,7 @@
 package com.away3d.gloop.screens.game.controllers
 {
+
+	import away3d.arcane;
 	import away3d.cameras.Camera3D;
 	import away3d.cameras.lenses.PerspectiveLens;
 	import away3d.entities.Mesh;
@@ -13,6 +15,8 @@ package com.away3d.gloop.screens.game.controllers
 
 	import flash.geom.Vector3D;
 
+	use namespace arcane;
+
 	public class CameraController
 	{
 		private var _inputManager : InputManager;
@@ -25,7 +29,7 @@ package com.away3d.gloop.screens.game.controllers
 		private var _boundsMaxY : Number;
 		private var _boundsMinZ : Number;
 		private var _boundsMaxZ : Number;
-		
+
 		private var _offX : Number;
 		private var _offY : Number;
 		
@@ -37,7 +41,8 @@ package com.away3d.gloop.screens.game.controllers
 
 		private var _containVector:Point = new Point();
 
-		private var _cameraFovFactor:Number;
+		private var _cameraHorizontalFovFactor:Number;
+		private var _cameraVerticalFovFactor:Number;
 		private var _levelVisibleHalfRange:Number;
 		
 		public function CameraController(inputManager : InputManager, camera : Camera3D, gloop : Gloop)
@@ -85,26 +90,34 @@ package com.away3d.gloop.screens.game.controllers
 			_gloopIsFlying = false;
 		}
 
-		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, minZ : Number, maxZ : Number ) : void
+		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, maxZoom : Number ) : void
 		{
 			_boundsMinX = minX;
 			_boundsMaxX = maxX;
 			_boundsMinY = minY;
 			_boundsMaxY = maxY;
-			_boundsMinZ = minZ;
-			_boundsMaxZ = maxZ;
+			_boundsMaxZ = maxZoom;
 
 			// evaluate camera z factor ( relates pan limits to camera z )
 			var halfRangeX:Number = ( _boundsMaxX - _boundsMinX ) / 2;
 			var halfRangeY:Number = ( _boundsMaxY - _boundsMinY ) / 2;
-			_levelVisibleHalfRange = Math.max( halfRangeX, halfRangeY );
-			var viewAngle:Number = PerspectiveLens( _camera.lens ).fieldOfView / 2;
-			_cameraFovFactor = Math.tan( viewAngle * Math.PI / 180 );
+			_levelVisibleHalfRange = Math.min( halfRangeX, halfRangeY );
+			var hViewAngle:Number = PerspectiveLens( _camera.lens ).fieldOfView / 2;
+			_cameraHorizontalFovFactor = Math.tan( hViewAngle * Math.PI / 180 );
+			var vViewAngle:Number = hViewAngle / _camera.lens.aspectRatio;
+			_cameraVerticalFovFactor = Math.tan( vViewAngle * Math.PI / 180 );
+
+			// evaluate and set min zoom
+			var maxHorizontalZ:Number = halfRangeX / _cameraHorizontalFovFactor;
+			var maxVerticalZ:Number = halfRangeY / _cameraVerticalFovFactor;
+			var maxTotalZ:Number = Math.min( maxHorizontalZ, maxVerticalZ );
+			_camera.z = -maxTotalZ;
+			_inputManager.zoom = _boundsMinZ = ( -maxTotalZ + 1000 ) / 200;
 
 			// uncomment to trace pan containment values from level.
-			var tracePlane:Mesh = new Mesh( new PlaneGeometry( halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
-			tracePlane.rotationX = -90;
-			_camera.scene.addChild( tracePlane );
+//			var tracePlane:Mesh = new Mesh( new PlaneGeometry( 2 * halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
+//			tracePlane.rotationX = -90;
+//			_camera.scene.addChild( tracePlane );
 		}
 
 		public function update() : void
@@ -131,7 +144,7 @@ package com.away3d.gloop.screens.game.controllers
 				if (_finishMode) {
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
 					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
-					targetPosition.z = _boundsMaxZ;
+//					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}
 				else {
@@ -158,26 +171,39 @@ package com.away3d.gloop.screens.game.controllers
 				resetOrientation();
 			}
 
-			// soft containment for pan
-			_containVector.x = 0;
+			// evaluate containment
+			var horizontalVisibleHalfRange:Number = -_camera.z * _cameraHorizontalFovFactor;
+			var verticalVisibleHalfRange:Number = -_camera.z * _cameraVerticalFovFactor;
+			var panRightDistance:Number = _boundsMaxX - ( _inputManager.panX + horizontalVisibleHalfRange );
+			var panLeftDistance:Number = ( _inputManager.panX - horizontalVisibleHalfRange ) - _boundsMinX;
+			var panUpDistance:Number = _boundsMaxY - ( _inputManager.panY + verticalVisibleHalfRange );
+			var panDownDistance:Number = ( _inputManager.panY - verticalVisibleHalfRange ) - _boundsMinY;
+
+			// hard XY containment
+			if( panRightDistance < 0 ) {
+				_inputManager.panX = targetPosition.x = _boundsMaxX - horizontalVisibleHalfRange;
+			} else if( panLeftDistance < 0 ) {
+				_inputManager.panX = targetPosition.x = _boundsMinX + horizontalVisibleHalfRange;
+			}
+			if( panUpDistance < 0 ) {
+				_inputManager.panY = targetPosition.y = _boundsMaxY - verticalVisibleHalfRange;
+			} else if( panDownDistance < 0 ) {
+				_inputManager.panY = targetPosition.y = _boundsMinY + verticalVisibleHalfRange;
+			}
+
+			// soft XY containment
+			_containVector.x = 0; // TODO: if soft containment is not picked, remove all related logic
 			_containVector.y = 0;
-			var visibleHalfRange:Number = -_camera.z * _cameraFovFactor;
-			var zFactor:Number = _levelVisibleHalfRange / visibleHalfRange;
-			var currentMinX:Number = _boundsMinX;
-			var currentMaxX:Number = _boundsMaxX;
-			var currentMinY:Number = _boundsMinY;
-			var currentMaxY:Number = _boundsMaxY;
-			
-			if( _inputManager.panX > currentMaxX ) {
-				_containVector.x = currentMaxX - _inputManager.panX;
-			} else if( _inputManager.panX < currentMinX ) {
-				_containVector.x = currentMinX - _inputManager.panX;
+			/*if( panRightDistance < 0 ) {
+				_containVector.x = panRightDistance;
+			} else if( panLeftDistance < 0 ) {
+				_containVector.x = -panLeftDistance;
 			}
-			if( _inputManager.panY > currentMaxY ) {
-				_containVector.y = currentMaxY - _inputManager.panY;
-			} else if( _inputManager.panY < currentMinY ) {
-				_containVector.y = currentMinY - _inputManager.panY;
-			}
+			if( panUpDistance < 0 ) {
+				_containVector.y = panUpDistance;
+			} else if( panDownDistance < 0 ) {
+				_containVector.y = -panDownDistance;
+			}*/
 
 			// hard containment for zoom
 			if( targetPosition.z > _boundsMaxZ ) {
