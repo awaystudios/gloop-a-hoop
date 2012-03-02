@@ -146,10 +146,10 @@ package com.away3d.gloop.input
 
 		private function onMouseMove( event:MouseEvent ):void {
 			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
-			if( _view.mouseX > 0 && _view.mouseX < _view.stage.stageWidth ) {
+			if( _view.mouseX > 0 && _view.mouseX < 10000 ) {
 				_interactionPointX = _view.mouseX;
 			}
-			if( _view.mouseY > 0 && _view.mouseY < _view.stage.stageHeight ) {
+			if( _view.mouseY > 0 && _view.mouseY < 10000 ) {
 				_interactionPointY = _view.mouseY;
 			}
 		}
