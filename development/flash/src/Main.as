@@ -173,7 +173,7 @@ package
 			loadState(_db);
 			
 			_stack.gotoScreen(Screens.START);
-			_db.selectLevel(_db.chapters[0].levels[0]);
+			//_db.selectLevel(_db.chapters[0].levels[0]);
 		}
 		
 		
