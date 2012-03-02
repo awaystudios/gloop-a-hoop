@@ -15,7 +15,7 @@ FAN_AREA_WIDTH                100
 FAN_BODY_HEIGHT               5
 FAN_BODY_WIDTH                50
 FAN_ON_OFF_TIME               0.4
-FAN_POWER                     0.03
+FAN_POWER                     0.027
 
 GLOOP_ANGULAR_DAMPING         1
 GLOOP_DECAL_LIMIT_PER_HIT     20
@@ -28,7 +28,7 @@ GLOOP_LOST_MOMENTUM_THRESHOLD 0.01
 GLOOP_MAX_SPEED               6.5
 GLOOP_MOMENTUM_MULTIPLIER     0.1    # values closer to one makes the average move faster
 GLOOP_RADIUS                  16
-GLOOP_RESTITUTION             0.75
+GLOOP_RESTITUTION             0.45
 GLOOP_SPLAT_COOLDOWN          20    # delay between splats while on a surface, in updates
 
 GOALWALL_BULLSEYE_THRESHOLD   0.2    # the threshold to be under to score a bullseye (0-1) lower is smaller
@@ -68,6 +68,6 @@ TRACE_MAX_SCALE               0.7
 TRACE_MIN_DPOS_SQUARED        100
 TRACE_MIN_DTIME               1
 TRACE_MIN_SCALE               0.3
-TRACE_NUM_POINTS              20
+TRACE_NUM_POINTS              200
 
 TRAMPOLINE_RESTITUTION        1.25
