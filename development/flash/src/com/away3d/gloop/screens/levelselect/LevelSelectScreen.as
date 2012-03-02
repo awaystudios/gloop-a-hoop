@@ -68,6 +68,8 @@ package com.away3d.gloop.screens.levelselect
 		{
 			var thumb : LevelThumb;
 			
+			SoundManager.play(Sounds.MENU_BUTTON);
+				
 			thumb = LevelThumb(ev.currentTarget);
 			_db.selectLevel(thumb.levelProxy);
 		}
