@@ -12,6 +12,8 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	
 	public class Star extends DefaultGameObject
 	{
@@ -73,6 +75,8 @@ package com.away3d.gloop.gameobjects
 			if (_touched) return;
 			_touched = true;
 			_meshComponent.mesh.visible = false;
+			
+			SoundManager.play(Sounds.GAME_STAR);
 			
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_COLLECT_STAR, this));
 		}

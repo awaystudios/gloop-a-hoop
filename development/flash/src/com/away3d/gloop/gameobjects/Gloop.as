@@ -17,6 +17,9 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
+	
 	import flash.display.Sprite;
 
 	public class Gloop extends DefaultGameObject
@@ -153,6 +156,7 @@ package com.away3d.gloop.gameobjects
 		
 		public function splatOnTarget(angle : Number) : void
 		{
+			SoundManager.play(Sounds.GAME_SPLAT);
 			_visualComponent.splat(angle);
 		}
 		

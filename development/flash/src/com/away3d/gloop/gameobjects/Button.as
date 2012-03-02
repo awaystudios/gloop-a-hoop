@@ -5,11 +5,11 @@ package com.away3d.gloop.gameobjects
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.LightPickerBase;
-	import away3d.primitives.CylinderGeometry;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.greensock.TweenLite;
 	
 	public class Button extends DefaultGameObject
@@ -85,6 +85,8 @@ package com.away3d.gloop.gameobjects
 		{
 			_pressed = !_pressed;
 			
+			SoundManager.play(Sounds.GAME_BUTTON);
+			
 			if (_pressed) toggleOn(true);
 			else toggleOff(true);
 		}
@@ -134,10 +136,9 @@ package com.away3d.gloop.gameobjects
 	}
 }
 
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-import com.away3d.gloop.gameobjects.DefaultGameObject;
-import com.away3d.gloop.gameobjects.hoops.Hoop;
 import com.away3d.gloop.Settings;
+import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
 class ButtonPhysicsComponent extends PhysicsComponent
 {

@@ -2,22 +2,22 @@ package
 {
 
 	import away3d.containers.View3D;
-	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.library.assets.AssetType;
 	import away3d.library.utils.AssetLibraryIterator;
-	import away3d.loaders.Loader3D;
 	import away3d.loaders.parsers.AWD2Parser;
 	import away3d.loaders.parsers.Max3DSParser;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
-	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
-	import com.away3d.gloop.level.LevelLoader;
+	import com.away3d.gloop.lib.sounds.game.ButtonSound;
+	import com.away3d.gloop.lib.sounds.game.CannonSound;
+	import com.away3d.gloop.lib.sounds.game.SplatSound;
+	import com.away3d.gloop.lib.sounds.game.StarSound;
 	import com.away3d.gloop.lib.sounds.menu.MenuButtonSound;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
@@ -32,7 +32,6 @@ package
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.AssetLoaderQueue;
 	import com.away3d.gloop.utils.EmbeddedResources;
-	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
 	import com.away3d.gloop.utils.StateSaveManager;
 	
@@ -133,6 +132,11 @@ package
 		
 		private function initSound() : void
 		{
+			SoundManager.addSound(Sounds.GAME_BUTTON, new ButtonSound());
+			SoundManager.addSound(Sounds.GAME_CANNON, new CannonSound());
+			SoundManager.addSound(Sounds.GAME_SPLAT, new SplatSound());
+			SoundManager.addSound(Sounds.GAME_STAR, new StarSound());
+			
 			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
 		}
 		

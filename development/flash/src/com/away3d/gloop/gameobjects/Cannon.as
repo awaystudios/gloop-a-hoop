@@ -14,6 +14,8 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
@@ -155,6 +157,7 @@ package com.away3d.gloop.gameobjects
 					
 					// if the launcher fired this time, reset the time since launch
 					if (_launcher.fired) {
+						SoundManager.play(Sounds.GAME_CANNON);
 						_timeSinceLaunch = 0;
 					}
 				}, 150);
