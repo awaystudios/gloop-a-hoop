@@ -8,6 +8,7 @@ package com.away3d.gloop.gameobjects.components
 	
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.primitives.SphereGeometry;
 	
 	import com.away3d.gloop.Settings;
@@ -24,6 +25,7 @@ package com.away3d.gloop.gameobjects.components
 		
 		private var _decalSplatter : RaySplatter;
 		private var _physics : PhysicsComponent;
+		private var _material:ColorMaterial;
 		
 		private var _inContact : Boolean;
 		private var _cooldown : int;
@@ -35,16 +37,16 @@ package com.away3d.gloop.gameobjects.components
 			_decalSplatter = new RaySplatter(Settings.GLOOP_DECAL_LIMIT_TOTAL);
 			_decalSplatter.apertureX = 0.35;
 			_decalSplatter.apertureY = 0.35;
-			_decalSplatter.apertureZ = 0.35;
-			_decalSplatter.minScale = 1;
-			_decalSplatter.maxScale = 2;
+			_decalSplatter.apertureZ = 0.5;
 			_decalSplatter.maxDistance = 100;
 			_decalSplatter.zOffset = -1;
 			_decalSplatter.shrinkFactor = 0.999;
+			_decalSplatter.minScale = 0.1;
+			_decalSplatter.maxScale = 2;
 
-			var colorMaterial:ColorMaterial = new ColorMaterial( 0x00ff00 );
-			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), colorMaterial );
-			_decalSplatter.decals = Vector.<Mesh>( [sphereDecal] ); // TODO: implement Sprite3D's as decals
+			_material = new ColorMaterial( 0x00ff00 );
+			var sphereDecal:Mesh = new Mesh( new SphereGeometry( 5, 8, 6 ), _material );
+			_decalSplatter.decals = Vector.<Mesh>( [sphereDecal] );
 			
 			_physics.addEventListener(ContactEvent.BEGIN_CONTACT, handleBeginContact);
 			_physics.addEventListener(ContactEvent.END_CONTACT, handleEndContact);
@@ -138,7 +140,10 @@ package com.away3d.gloop.gameobjects.components
 				_decalSplatter.evaluate();
 			}
 		}
-	
+
+		public function setLightPicker( picker:LightPickerBase ):void {
+			_material.lightPicker = picker;
+		}
 	}
 
 }

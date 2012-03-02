@@ -8,6 +8,7 @@ package com.away3d.gloop.gameobjects
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
@@ -58,6 +59,11 @@ package com.away3d.gloop.gameobjects
 
 			_splatComponent = new SplatComponent( _physics );
 			_traceComponent = new PathTraceComponent( _physics );
+		}
+
+		override public function setLightPicker( picker:LightPickerBase ):void {
+			super.setLightPicker( picker );
+			_splatComponent.setLightPicker( picker );
 		}
 		
 		

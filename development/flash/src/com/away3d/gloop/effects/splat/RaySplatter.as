@@ -16,11 +16,12 @@ package com.away3d.gloop.effects.splat
 		public var decals:Vector.<Mesh>;
 		public var zOffset:Number = 1;
 		public var targets:Vector.<Mesh>;
-		public var maxDistance:Number = 50;
-		public var minScale:Number = 1;
-		public var maxScale:Number = 1;
 		public var shrinkFactor:Number = 0.99;
+		public var maxDistance:Number = 50;
 
+		private var _minScale:Number = 1;
+		private var _maxScale:Number = 1;
+		private var _deltaScale:Number = 0;
 		private var _maxDecals:uint;
 		private var _decals:Vector.<Mesh>;
 		private var _currentDecalIndex:uint;
@@ -64,8 +65,9 @@ package com.away3d.gloop.effects.splat
 					var position:Vector3D = _meshCollider.collidingMesh.sceneTransform.transformVector( _meshCollider.collisionPoint );
 					var distance:Number = position.subtract( sourcePosition ).length;
 					if( distance > maxDistance ) continue;
-
-					placeDecalAt( position, rand( minScale, maxScale ) );
+					var scale:Number = _maxScale - distance * _deltaScale / maxDistance;
+					trace( "placing decal - distance: " + distance + ", scale: " + scale );
+					placeDecalAt( position, scale );
 				}
 			}
 		}
@@ -96,6 +98,24 @@ package com.away3d.gloop.effects.splat
 
 		private function rand( min:Number, max:Number ):Number {
 			return (max - min) * Math.random() + min;
+		}
+
+		public function get minScale():Number {
+			return _minScale;
+		}
+
+		public function set minScale( value:Number ):void {
+			_minScale = value;
+			_deltaScale = _maxScale - _minScale;
+		}
+
+		public function get maxScale():Number {
+			return _maxScale;
+		}
+
+		public function set maxScale( value:Number ):void {
+			_maxScale = value;
+			_deltaScale = _maxScale - _minScale;
 		}
 	}
 }
