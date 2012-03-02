@@ -1,6 +1,8 @@
 package com.away3d.gloop.hud.elements
 {
 	import com.away3d.gloop.level.LevelInventoryItem;
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Cubic;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -9,16 +11,24 @@ package com.away3d.gloop.hud.elements
 	
 	public class InventoryDrawer extends Sprite
 	{
+		private var _w : Number;
 		private var _h : Number;
+		private var _ctr : Sprite;
 		private var _bg : Shape;
 		
 		private var _items : Vector.<InventoryItemButton>;
 		private var _selectedItem : LevelInventoryItem;
 		
+		private var _tabHit : Sprite;
+		
+		private var _open : Boolean;
+		
+		
 		public function InventoryDrawer(h : Number)
 		{
 			super();
 			
+			_w = 140;
 			_h = h;
 			
 			init();
@@ -27,30 +37,40 @@ package com.away3d.gloop.hud.elements
 		
 		private function init() : void
 		{
-			var w : Number;
 			var cr : Number;
 			var tw : Number;
 			var th : Number;
 			
-			_bg = new Shape();
-			_bg.alpha = 0.5;
-			_bg.cacheAsBitmap = true;
-			addChild(_bg);
-			
-			w = 140;
+			_w = 140;
 			cr = 20; // Curve radius
 			tw = 15; // Tab width, excluding curve
 			th = 30; // Tab height, excluding curve
 			
+			_ctr = new Sprite();
+			_ctr.x = -_w;
+			addChild(_ctr);
+			
+			_bg = new Shape();
+			_bg.alpha = 0.5;
+			_bg.cacheAsBitmap = true;
+			_ctr.addChild(_bg);
+			
+			_tabHit = new Sprite();
+			_tabHit.graphics.beginFill(0xffcc00, 0);
+			_tabHit.graphics.drawRect(0, 0, tw+cr, cr+th+cr);
+			_tabHit.x = _w;
+			_tabHit.addEventListener(MouseEvent.CLICK, onTabClick);
+			_ctr.addChild(_tabHit);
+			
 			//_bg.graphics.lineStyle(5, 0xcccccc, 1);
 			_bg.graphics.beginFill(0);
-			_bg.graphics.lineTo(w+tw, 0);
-			_bg.graphics.curveTo(w+tw+cr, 0, w+tw+cr, cr);
-			_bg.graphics.lineTo(w+tw+cr, cr+th);
-			_bg.graphics.curveTo(w+tw+cr, cr+th+cr, w+tw, cr+th+cr);
-			_bg.graphics.lineTo(w, cr+th+cr);
-			_bg.graphics.lineTo(w, _h-cr);
-			_bg.graphics.curveTo(w, _h, w-cr, _h);
+			_bg.graphics.lineTo(_w+tw, 0);
+			_bg.graphics.curveTo(_w+tw+cr, 0, _w+tw+cr, cr);
+			_bg.graphics.lineTo(_w+tw+cr, cr+th);
+			_bg.graphics.curveTo(_w+tw+cr, cr+th+cr, _w+tw, cr+th+cr);
+			_bg.graphics.lineTo(_w, cr+th+cr);
+			_bg.graphics.lineTo(_w, _h-cr);
+			_bg.graphics.curveTo(_w, _h, _w-cr, _h);
 			_bg.graphics.lineTo(0, _h);
 			_bg.graphics.endFill();
 			
@@ -84,7 +104,7 @@ package com.away3d.gloop.hud.elements
 			btn.mouseEnabled = true;
 			btn.addEventListener(MouseEvent.CLICK, onInventoryButtonClick);
 				
-			addChild(btn);
+			_ctr.addChild(btn);
 			_items.push(btn);
 		}
 		
@@ -99,5 +119,14 @@ package com.away3d.gloop.hud.elements
 		}
 		
 		
+		private function onTabClick(ev : MouseEvent) : void
+		{
+			var posx : Number;
+			
+			_open = !_open;
+			posx = _open? 0 : -_w;
+			
+			TweenLite.to(_ctr, 0.2, { x: posx, ease: Cubic.easeInOut });
+		}
 	}
 }
