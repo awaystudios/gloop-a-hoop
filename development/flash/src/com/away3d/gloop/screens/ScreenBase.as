@@ -64,8 +64,10 @@ package com.away3d.gloop.screens
 		private function onEnterFrame(e:Event):void {
 			update();
 			if (_drawBg) {
+				/*
 				var t:Number = getTimer();
 				_background.rotation = Math.sin(t / 600) * 3;
+				*/
 			}
 		}
 		
