@@ -25,6 +25,7 @@ package
 	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
+	import com.away3d.gloop.screens.settings.SettingsScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.utils.AssetLoaderQueue;
 	import com.away3d.gloop.utils.EmbeddedResources;
@@ -106,6 +107,7 @@ package
 			_stack = new ScreenStack(_w, _h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
+			_stack.addScreen( Screens.SETTINGS, new SettingsScreen() );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
