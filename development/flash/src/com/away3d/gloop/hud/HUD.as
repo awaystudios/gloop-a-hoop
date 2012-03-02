@@ -8,9 +8,12 @@ package com.away3d.gloop.hud
 	import com.away3d.gloop.hud.elements.StarIcon;
 	import com.away3d.gloop.level.LevelInventoryItem;
 	import com.away3d.gloop.level.LevelProxy;
+	import com.away3d.gloop.lib.hud.PauseButton;
+	import com.away3d.gloop.lib.hud.RestartButton;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 
 	public class HUD extends Sprite
 	{
@@ -21,6 +24,9 @@ package com.away3d.gloop.hud
 		
 		private var _stars : Vector.<StarIcon>;
 		private var _inventory : InventoryDrawer;
+		
+		private var _restartBtn : RestartButton;
+		private var _pauseBtn : PauseButton;
 		
 		public function HUD(w : Number, h : Number)
 		{
@@ -53,6 +59,17 @@ package com.away3d.gloop.hud
 			_inventory.y = 100;
 			_inventory.addEventListener(Event.SELECT, onInventorySelect);
 			addChild(_inventory);
+			
+			_restartBtn = new RestartButton();
+			_restartBtn.x = _w - 120;
+			_restartBtn.y = 50;
+			_restartBtn.addEventListener(MouseEvent.CLICK, onRestartBtnClick);
+			addChild(_restartBtn);
+			
+			_pauseBtn = new PauseButton();
+			_pauseBtn.x = _w - 50;
+			_pauseBtn.y = _restartBtn.y;
+			addChild(_pauseBtn);
 		}
 		
 		
@@ -112,6 +129,12 @@ package com.away3d.gloop.hud
 		private function onInventorySelect(ev : Event) : void
 		{
 			_levelProxy.inventory.select(_inventory.selectedItem);
+		}
+		
+		
+		private function onRestartBtnClick(ev : MouseEvent) : void
+		{
+			_levelProxy.reset();
 		}
 	}
 }
