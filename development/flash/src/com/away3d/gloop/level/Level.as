@@ -46,8 +46,8 @@ package com.away3d.gloop.level
 		
 		private var _mode:Boolean = EDIT_MODE;
 
-		private var _dimensionsMin:Vector3D = new Vector3D( -350, -350, 0.001 ); // TODO: set these values from external data
-		private var _dimensionsMax:Vector3D = new Vector3D( 350, 350, 3.5 );
+		private var _dimensionsMin:Vector3D = new Vector3D( -350, -400, 0.001 ); // TODO: set these values from external data
+		private var _dimensionsMax:Vector3D = new Vector3D( 350, 400, 3.5 );
 		
 		private var _unplacedHoop:Hoop;
 		

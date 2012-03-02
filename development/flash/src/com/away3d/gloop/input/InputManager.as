@@ -146,10 +146,10 @@ package com.away3d.gloop.input
 
 		private function onMouseMove( event:MouseEvent ):void {
 			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
-			if( _view.mouseX > 0 && _view.mouseX < _view.stage.stageWidth ) {
+			if( _view.mouseX > 0 && _view.mouseX < 100000 ) {
 				_interactionPointX = _view.mouseX;
 			}
-			if( _view.mouseY > 0 && _view.mouseY < _view.stage.stageHeight ) {
+			if( _view.mouseY > 0 && _view.mouseY < 100000 ) {
 				_interactionPointY = _view.mouseY;
 			}
 		}
@@ -203,7 +203,7 @@ package com.away3d.gloop.input
 				_panVelocityX = _interactionDeltaX;
 				_panVelocityY = _interactionDeltaY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed > 10 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
+				if( speed > 5 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
 					_onPanImpulse = true;
 					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
 					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
