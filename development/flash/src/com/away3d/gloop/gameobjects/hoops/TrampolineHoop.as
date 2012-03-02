@@ -1,5 +1,9 @@
 package com.away3d.gloop.gameobjects.hoops {
+	import away3d.core.base.Geometry;
+	import away3d.library.AssetLibrary;
+	
 	import com.away3d.gloop.Settings;
+
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
@@ -12,6 +16,11 @@ package com.away3d.gloop.gameobjects.hoops {
 			_resolveGloopCollisions = true;
 		}
 		
+		
+		protected override function getIconGeometry() : Geometry
+		{
+			return Geometry(AssetLibrary.getAsset('SpringIcon_geom'));
+		}
 	}
 
 }

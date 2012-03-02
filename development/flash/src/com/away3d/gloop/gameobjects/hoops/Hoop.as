@@ -7,6 +7,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 	
 	import com.away3d.gloop.Settings;
@@ -26,6 +27,8 @@ package com.away3d.gloop.gameobjects.hoops
 	public class Hoop extends DefaultGameObject implements IMouseInteractive
 	{
 		private var _color : uint;
+		
+		protected var _iconMesh : Mesh;
 		
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
@@ -68,7 +71,18 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, _material);
+			
+			_iconMesh = new Mesh(getIconGeometry(), _material);
+			_meshComponent.mesh.addChild(_iconMesh);
 		}
+		
+		
+		protected function getIconGeometry() : Geometry
+		{
+			// To be overridden
+			return null;
+		}
+		
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
 			if (inEditMode && rotatable) {
@@ -164,6 +178,9 @@ package com.away3d.gloop.gameobjects.hoops
 			_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
 			_meshComponent.mesh.scaleZ = _meshComponent.mesh.scaleX;
+			
+			_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
+			_iconMesh.rotationY += 0.5;
 			
 			if (_needsPositionValidation) validatePosition();
 		}

@@ -1,7 +1,12 @@
 package com.away3d.gloop.gameobjects.hoops {
 	import Box2DAS.Common.V2;
-	import com.away3d.gloop.gameobjects.Gloop;
+	
+	import away3d.core.base.Geometry;
+	import away3d.library.AssetLibrary;
+	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.Gloop;
+
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
@@ -20,6 +25,10 @@ package com.away3d.gloop.gameobjects.hoops {
 			gloop.physics.b2body.ApplyImpulse( impulse, _physics.b2body.GetWorldCenter() ); // apply up impulse
 		}
 		
+		protected override function getIconGeometry() : Geometry
+		{
+			return Geometry(AssetLibrary.getAsset('RocketIcon_geom'));
+		}
 	}
 
 }

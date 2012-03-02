@@ -1,10 +1,15 @@
 package com.away3d.gloop.gameobjects.hoops
 {
 	import Box2DAS.Common.V2;
+	
+	import away3d.core.base.Geometry;
+	import away3d.library.AssetLibrary;
+	
+	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.gameobjects.Gloop;
-	import com.away3d.gloop.Settings;
+	
 	import flash.geom.Point;
 	
 	/**
@@ -56,6 +61,12 @@ package com.away3d.gloop.gameobjects.hoops
 		{
 			super.update(dt);
 			_launcher.update(dt);
+		}
+		
+		
+		protected override function getIconGeometry() : Geometry
+		{
+			return Geometry(AssetLibrary.getAsset('GlueIcon_geom'));
 		}
 		
 		override public function get debugColor1() : uint
