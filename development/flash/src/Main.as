@@ -36,11 +36,15 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.system.Capabilities;
 	import flash.ui.Keyboard;
 
 	[SWF(width="1024", height="768", frameRate="30")]
 	public class Main extends Sprite
 	{
+		private var _w : Number;
+		private var _h : Number;
+		
 		private var _queue : AssetLoaderQueue;
 		
 		private var _db:LevelDatabase;
@@ -57,17 +61,23 @@ package
 		
 		private function init() : void
 		{
+			var man : String;
+			var sim : Boolean;
+			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
 			
-			/*
-			var s:AwayStats = new AwayStats();
-			s.x = stage.stageWidth - s.width;
-			addChild(s);
-			*/
+			// Running in simulator?
+			man = Capabilities.manufacturer;
+			sim = (man.indexOf('Win')>=0 || man.indexOf('Mac')>=0);
+			
+			_w = sim? stage.stageWidth : stage.fullScreenWidth;
+			_h = sim? stage.stageHeight : stage.fullScreenHeight;
 			
 			_view = new View3D();
+			_view.width = _w;
+			_view.height = _h;
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
@@ -93,12 +103,7 @@ package
 
 
 		private function initStack():void {
-			var w : Number, h : Number;
-			
-			w = stage.stageWidth;
-			h = stage.stageHeight;
-			
-			_stack = new ScreenStack(w, h, this );
+			_stack = new ScreenStack(_w, _h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
