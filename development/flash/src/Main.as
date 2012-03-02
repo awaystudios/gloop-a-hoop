@@ -38,7 +38,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
-//	[SWF(width="1024", height="768", frameRate="30")]
+	[SWF(width="1024", height="768", frameRate="30")]
 	public class Main extends Sprite
 	{
 		private var _queue : AssetLoaderQueue;
@@ -68,8 +68,6 @@ package
 			*/
 			
 			_view = new View3D();
-			_view.width = stage.fullScreenWidth;
-			_view.height = stage.fullScreenHeight;
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
@@ -97,9 +95,9 @@ package
 		private function initStack():void {
 			var w : Number, h : Number;
 			
-			w = stage.fullScreenWidth; // stage.stageWidth and stage.stageHeight are returning incorrect values in my iPad2 ( Li )
-			h = stage.fullScreenHeight;
-
+			w = stage.stageWidth;
+			h = stage.stageHeight;
+			
 			_stack = new ScreenStack(w, h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
