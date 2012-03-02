@@ -1,16 +1,20 @@
 package com.away3d.gloop.gameobjects.hoops
 {
-	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.CylinderGeometry;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
-	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	
+	import away3d.core.base.Geometry;
+	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CylinderGeometry;
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
-	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	
 	
 	
@@ -47,11 +51,21 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
 			
+			initVisual()
+		}
+		
+		
+		private function initVisual() : void
+		{
+			var geom : Geometry;
+			
 			_material = new ColorMaterial(debugColor1);
 			_material_invalid = new ColorMaterial(0xff0000);
 			
+			geom = Geometry(AssetLibrary.getAsset('Hoop_geom'));
+			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.HOOP_RADIUS, Settings.HOOP_RADIUS, 5), _material);
+			_meshComponent.mesh = new Mesh(geom, _material);
 		}
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {

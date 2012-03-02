@@ -138,6 +138,7 @@ package
 			_queue.addResource(EmbeddedResources.Button3DSAsset);
 			_queue.addResource(EmbeddedResources.Target3DSAsset);
 			_queue.addResource(EmbeddedResources.Star3DSAsset);
+			_queue.addResource(EmbeddedResources.Hoop3DSAsset);
 			_queue.addEventListener(Event.COMPLETE, onAssetsComplete);
 			_queue.load();
 		}
