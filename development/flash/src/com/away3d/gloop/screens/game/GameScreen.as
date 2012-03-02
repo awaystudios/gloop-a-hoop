@@ -252,6 +252,11 @@ package com.away3d.gloop.screens.game
 			_inputManager.reset(_level);
 			_inputManager.panX = _gloop.physics.x;
 			_inputManager.panY = -_gloop.physics.y;
+			
+			if (_paused) {
+				_paused = false;
+				removeChild(_pauseOverlay);
+			}
 		}
 		
 
