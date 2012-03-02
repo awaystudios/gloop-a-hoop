@@ -6,6 +6,8 @@ package com.away3d.gloop.screens.chapterselect
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	
 	import flash.display.SimpleButton;
 	import flash.events.Event;
@@ -170,6 +172,7 @@ package com.away3d.gloop.screens.chapterselect
 		
 		private function onBackBtnClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.START);
 		}
 		

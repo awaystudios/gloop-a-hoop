@@ -21,6 +21,8 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.Timestep;
 	
@@ -225,16 +227,19 @@ package com.away3d.gloop.screens.game
 		
 		private function onPauseOverlayResumeButtonClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_levelProxy.resume();
 		}
 		
 		private function onPauseOverlayMainMenuButtonClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.START);
 		}
 		
 		private function onPauseOverlayLevelSelectButtonClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.LEVELS);
 		}
 		

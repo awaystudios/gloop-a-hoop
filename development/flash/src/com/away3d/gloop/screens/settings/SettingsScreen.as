@@ -10,6 +10,8 @@ package com.away3d.gloop.screens.settings
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.StateSaveManager;
 	
 	import flash.events.Event;
@@ -69,23 +71,27 @@ package com.away3d.gloop.screens.settings
 		private function onMusicToggleChange(ev : Event) : void
 		{
 			trace('music', _musicBtn.toggledOn);
+			SoundManager.play(Sounds.MENU_BUTTON);
 		}
 		
 		
 		private function onSoundToggleChange(ev : Event) : void
 		{
 			trace('sound', _soundBtn.toggledOn);
+			SoundManager.play(Sounds.MENU_BUTTON);
 		}
 		
 		
 		private function onClearBtnClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stateMgr.clearState();
 		}
 		
 		
 		private function onBackBtnClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.START);
 		}
 	}

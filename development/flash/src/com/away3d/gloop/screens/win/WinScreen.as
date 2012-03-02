@@ -6,6 +6,8 @@ package com.away3d.gloop.screens.win
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
@@ -60,6 +62,8 @@ package com.away3d.gloop.screens.win
 		
 		private function onButtonClick(ev : MouseEvent) : void
 		{
+			SoundManager.play(Sounds.MENU_BUTTON);
+			
 			switch (ev.currentTarget) {
 				case _ui.replayButton:
 					_stack.gotoScreen(Screens.GAME);
