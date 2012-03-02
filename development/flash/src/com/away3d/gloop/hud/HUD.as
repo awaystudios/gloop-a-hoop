@@ -35,16 +35,17 @@ package com.away3d.gloop.hud
 		{
 			_stars = new Vector.<StarIcon>();
 			_stars[0] = new StarIcon();
+			_stars[0].x = 30;
 			_stars[0].y = 50;
 			addChild(_stars[0]);
 			
 			_stars[1] = new StarIcon();
-			_stars[1].x = 30;
+			_stars[1].x = 90;
 			_stars[1].y = _stars[0].y;
 			addChild(_stars[1]);
 			
 			_stars[2] = new StarIcon();
-			_stars[2].x = 60;
+			_stars[2].x = 150;
 			_stars[2].y = _stars[0].y;
 			addChild(_stars[2]);
 			
@@ -69,9 +70,9 @@ package com.away3d.gloop.hud
 				draw();
 			}
 			
-			_stars[0].visible = false;
-			_stars[1].visible = false;
-			_stars[2].visible = false;
+			_stars[0].collected = false;
+			_stars[1].collected = false;
+			_stars[2].collected = false;
 		}
 		
 		
@@ -104,7 +105,7 @@ package com.away3d.gloop.hud
 			len = _levelProxy.starsCollected;
 			
 			for (i=0; i<len; i++) {
-				_stars[i].visible = true;
+				_stars[i].collected = true;
 			}
 		}
 			
