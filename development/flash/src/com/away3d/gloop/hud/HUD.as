@@ -3,7 +3,8 @@ package com.away3d.gloop.hud
 	import away3d.events.MouseEvent3D;
 	
 	import com.away3d.gloop.events.GameEvent;
-	import com.away3d.gloop.hud.elements.InventoryButton;
+	import com.away3d.gloop.hud.elements.InventoryDrawer;
+	import com.away3d.gloop.hud.elements.InventoryItemButton;
 	import com.away3d.gloop.hud.elements.StarIcon;
 	import com.away3d.gloop.level.LevelInventoryItem;
 	import com.away3d.gloop.level.LevelProxy;
@@ -12,14 +13,20 @@ package com.away3d.gloop.hud
 
 	public class HUD extends Sprite
 	{
+		private var _w : Number;
+		private var _h : Number;
+		
 		private var _levelProxy : LevelProxy;
 		
 		private var _stars : Vector.<StarIcon>;
+		private var _inventory : InventoryDrawer;
+		private var _inventoryButtons : Vector.<InventoryItemButton>;
 		
-		private var _inventoryButtons : Vector.<InventoryButton>;
-		
-		public function HUD()
+		public function HUD(w : Number, h : Number)
 		{
+			_w = w;
+			_h = h;
+			
 			init();
 		}
 		
@@ -41,7 +48,11 @@ package com.away3d.gloop.hud
 			_stars[2].y = _stars[0].y;
 			addChild(_stars[2]);
 			
-			_inventoryButtons = new Vector.<InventoryButton>();
+			_inventory = new InventoryDrawer(_h - 200);
+			_inventory.y = 100;
+			addChild(_inventory);
+			
+			_inventoryButtons = new Vector.<InventoryItemButton>();
 		}
 		
 		
@@ -72,11 +83,11 @@ package com.away3d.gloop.hud
 			
 			len = _levelProxy.inventory.items.length;
 			for (i=0; i<len; i++) {
-				var btn : InventoryButton;
+				var btn : InventoryItemButton;
 				var item : LevelInventoryItem;
 				
 				item = _levelProxy.inventory.items[i];
-				btn = new InventoryButton(item);
+				btn = new InventoryItemButton(item);
 				btn.x = i*60;
 				btn.mouseEnabled = true;
 				btn.addEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
@@ -89,7 +100,7 @@ package com.away3d.gloop.hud
 		
 		private function clear() : void
 		{
-			var btn : InventoryButton;
+			var btn : InventoryItemButton;
 			
 			while (btn = _inventoryButtons.pop()) {
 				btn.removeEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
@@ -100,9 +111,9 @@ package com.away3d.gloop.hud
 		
 		private function onInventoryButtonClick(ev : MouseEvent3D) : void
 		{
-			var btn : InventoryButton;
+			var btn : InventoryItemButton;
 			
-			btn = InventoryButton(ev.currentTarget);
+			btn = InventoryItemButton(ev.currentTarget);
 			
 			_levelProxy.inventory.select(btn.inventoryItem);
 		}

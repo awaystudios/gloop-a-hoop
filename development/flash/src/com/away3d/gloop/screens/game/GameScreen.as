@@ -81,7 +81,7 @@ package com.away3d.gloop.screens.game
 		
 		private function initHUD() : void
 		{
-			_hud = new HUD();
+			_hud = new HUD(_w, _h);
 			addChild(_hud);
 		}
 		

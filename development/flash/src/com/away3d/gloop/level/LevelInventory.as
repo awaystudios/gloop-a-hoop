@@ -1,7 +1,7 @@
 package com.away3d.gloop.level
 {
 	import com.away3d.gloop.events.InventoryEvent;
-	import com.away3d.gloop.hud.elements.InventoryButton;
+	import com.away3d.gloop.hud.elements.InventoryItemButton;
 	
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;

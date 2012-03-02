@@ -7,11 +7,11 @@ package com.away3d.gloop.hud.elements
 	
 	import flash.display.Sprite;
 
-	public class InventoryButton extends Sprite
+	public class InventoryItemButton extends Sprite
 	{
 		private var _item : LevelInventoryItem;
 		
-		public function InventoryButton(item : LevelInventoryItem)
+		public function InventoryItemButton(item : LevelInventoryItem)
 		{
 			super();
 			
