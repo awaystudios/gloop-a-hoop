@@ -100,7 +100,10 @@ package com.away3d.gloop.hud.elements
 			var btn : InventoryItemButton;
 			
 			btn = new InventoryItemButton(item);
-			btn.y = _items.length*60;
+			btn.scaleX = 0.5;
+			btn.scaleY = 0.5;
+			btn.x = _w/2;
+			btn.y = _items.length*100 + 60;
 			btn.mouseEnabled = true;
 			btn.addEventListener(MouseEvent.CLICK, onInventoryButtonClick);
 				
