@@ -1,32 +1,48 @@
 package com.away3d.gloop.screens.settings
 {
 	import com.away3d.gloop.lib.buttons.AboutButton;
+	import com.away3d.gloop.lib.buttons.BackButton;
 	import com.away3d.gloop.lib.buttons.ClearStateButton;
 	import com.away3d.gloop.lib.settings.MusicOffBitmap;
 	import com.away3d.gloop.lib.settings.MusicOnBitmap;
 	import com.away3d.gloop.lib.settings.SoundOffBitmap;
 	import com.away3d.gloop.lib.settings.SoundOnBitmap;
 	import com.away3d.gloop.screens.ScreenBase;
+	import com.away3d.gloop.screens.ScreenStack;
+	import com.away3d.gloop.screens.Screens;
+	
+	import flash.events.MouseEvent;
 	
 	public class SettingsScreen extends ScreenBase
 	{
+		private var _stack : ScreenStack;
+		
+		private var _backBtn : BackButton;
 		private var _aboutBtn : AboutButton;
 		private var _clearBtn : ClearStateButton;
 		
 		private var _soundBtn : ToggleButton;
 		private var _musicBtn : ToggleButton;
 		
-		public function SettingsScreen()
+		public function SettingsScreen(stack : ScreenStack)
 		{
 			super();
+			
+			_stack = stack;
 		}
 		
 		
 		protected override function initScreen():void
 		{
+			_backBtn = new BackButton();
+			_backBtn.x = 20;
+			_backBtn.y = 20;
+			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
+			addChild(_backBtn);
+			
 			_soundBtn = new ToggleButton(new SoundOnBitmap(), new SoundOffBitmap());
 			_soundBtn.x = _w/2 - 100;
-			_soundBtn.y = 0.28* _h;
+			_soundBtn.y = 0.4* _h;
 			addChild(_soundBtn);
 			
 			_musicBtn = new ToggleButton(new MusicOnBitmap(), new MusicOffBitmap());
@@ -36,7 +52,7 @@ package com.away3d.gloop.screens.settings
 			
 			_clearBtn = new ClearStateButton();
 			_clearBtn.x = _w/2 - _clearBtn.width/2;
-			_clearBtn.y = 0.4 * _h;
+			_clearBtn.y = 0.5 * _h;
 			addChild(_clearBtn);
 			
 			/* Add this when necessary
@@ -45,6 +61,12 @@ package com.away3d.gloop.screens.settings
 			_aboutBtn.y = _clearBtn.y + 140;
 			addChild(_aboutBtn);
 			*/
+		}
+		
+		
+		private function onBackBtnClick(ev : MouseEvent) : void
+		{
+			_stack.gotoScreen(Screens.START);
 		}
 	}
 }

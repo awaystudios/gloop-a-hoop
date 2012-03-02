@@ -107,7 +107,7 @@ package
 			_stack = new ScreenStack(_w, _h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
-			_stack.addScreen( Screens.SETTINGS, new SettingsScreen() );
+			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_stack) );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db ) );
