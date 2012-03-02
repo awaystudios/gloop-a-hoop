@@ -102,9 +102,9 @@ package com.away3d.gloop.screens.game.controllers
 			_cameraFovFactor = Math.tan( viewAngle * Math.PI / 180 );
 
 			// uncomment to trace pan containment values from level.
-//			var tracePlane:Mesh = new Mesh( new PlaneGeometry( 2 * halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
-//			tracePlane.rotationX = -90;
-//			_camera.scene.addChild( tracePlane );
+			var tracePlane:Mesh = new Mesh( new PlaneGeometry( halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
+			tracePlane.rotationX = -90;
+			_camera.scene.addChild( tracePlane );
 		}
 
 		public function update() : void
@@ -163,10 +163,11 @@ package com.away3d.gloop.screens.game.controllers
 			_containVector.y = 0;
 			var visibleHalfRange:Number = -_camera.z * _cameraFovFactor;
 			var zFactor:Number = _levelVisibleHalfRange / visibleHalfRange;
-			var currentMinX:Number = zFactor * _boundsMinX;
-			var currentMaxX:Number = zFactor * _boundsMaxX;
-			var currentMinY:Number = zFactor * _boundsMinY;
-			var currentMaxY:Number = zFactor * _boundsMaxY;
+			var currentMinX:Number = _boundsMinX;
+			var currentMaxX:Number = _boundsMaxX;
+			var currentMinY:Number = _boundsMinY;
+			var currentMaxY:Number = _boundsMaxY;
+			
 			if( _inputManager.panX > currentMaxX ) {
 				_containVector.x = currentMaxX - _inputManager.panX;
 			} else if( _inputManager.panX < currentMinX ) {

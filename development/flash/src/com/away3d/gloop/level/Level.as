@@ -24,6 +24,7 @@ package com.away3d.gloop.level
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 	import flash.utils.Timer;
 	
@@ -46,8 +47,7 @@ package com.away3d.gloop.level
 		
 		private var _mode:Boolean = EDIT_MODE;
 
-		private var _dimensionsMin:Vector3D = new Vector3D( -350, -400, 0.001 ); // TODO: set these values from external data
-		private var _dimensionsMax:Vector3D = new Vector3D( 350, 400, 3.5 );
+		private var _bounds : Rectangle;
 		
 		private var _unplacedHoop:Hoop;
 		
@@ -86,6 +86,8 @@ package com.away3d.gloop.level
 			_cameraPointLight.ambient = 0.4;
 
 			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
+			
+			_bounds = new Rectangle();
 		}
 		
 		public function setMode(value:Boolean, force:Boolean = false):void {
@@ -383,20 +385,9 @@ package com.away3d.gloop.level
 		}
 		
 
-		public function get dimensionsMin():Vector3D {
-			return _dimensionsMin;
-		}
-
-		public function get dimensionsMax():Vector3D {
-			return _dimensionsMax;
-		}
-
-		public function set dimensionsMin( value:Vector3D ):void {
-			_dimensionsMin = value;
-		}
-
-		public function set dimensionsMax( value:Vector3D ):void {
-			_dimensionsMax = value;
+		public function get bounds() : Rectangle
+		{
+			return _bounds;
 		}
 		
 		public function get unplacedHoop():Hoop {

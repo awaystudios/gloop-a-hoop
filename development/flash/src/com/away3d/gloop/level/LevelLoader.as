@@ -181,10 +181,10 @@ package com.away3d.gloop.level
 			
 			mesh = Mesh(obj);
 			
-			_level.dimensionsMin.x = mesh.x*_scale + mesh.bounds.min.x;
-			_level.dimensionsMin.y = mesh.y*_scale + mesh.bounds.min.y;
-			_level.dimensionsMax.x = mesh.x*_scale + mesh.bounds.max.x;
-			_level.dimensionsMax.y = mesh.y*_scale + mesh.bounds.max.y;
+			_level.bounds.x = mesh.x*_scale + mesh.bounds.min.x;
+			_level.bounds.y = mesh.y*_scale + mesh.bounds.min.y;
+			_level.bounds.right = mesh.x*_scale + mesh.bounds.max.x;
+			_level.bounds.bottom = mesh.y*_scale + mesh.bounds.max.y;
 		}
 		
 		

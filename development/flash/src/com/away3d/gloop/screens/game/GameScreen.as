@@ -124,12 +124,11 @@ package com.away3d.gloop.screens.game
 			_editController.activate(_levelProxy);
 
 			_cameraController.setBounds(
-				_level.dimensionsMin.x,
-				_level.dimensionsMax.x,
-				_level.dimensionsMin.y,
-				_level.dimensionsMax.y,
-				_level.dimensionsMin.z,
-				_level.dimensionsMax.z);
+				_level.bounds.left,
+				_level.bounds.right,
+				_level.bounds.top,
+				_level.bounds.bottom,
+				0.001, 3.5); // TODO: Move these to settings
 			
 			_inputManager.reset(_level);
 			_inputManager.activate();
