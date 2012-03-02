@@ -4,6 +4,7 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.lib.buttons.MainMenuButton;
 	import com.away3d.gloop.lib.buttons.ResumeButton;
 	
+	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	
 	public class PauseOverlay extends Sprite
@@ -45,6 +46,24 @@ package com.away3d.gloop.screens.game
 			_levelSelectBtn.x = _w/2 - _levelSelectBtn.width/2;
 			_levelSelectBtn.y = _resumeBtn.y + 280;
 			addChild(_levelSelectBtn);
+		}
+		
+		
+		public function get resumeButton() : InteractiveObject
+		{
+			return _resumeBtn;
+		}
+		
+		
+		public function get mainMenuButton() : InteractiveObject
+		{
+			return _mainMenuBtn;
+		}
+		
+		
+		public function get levelSelectButton() : InteractiveObject
+		{
+			return _levelSelectBtn;
 		}
 	}
 }

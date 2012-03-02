@@ -17,6 +17,8 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelProxy;
 	import com.away3d.gloop.screens.ScreenBase;
+	import com.away3d.gloop.screens.ScreenStack;
+	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
 	import com.away3d.gloop.utils.HierarchyTool;
@@ -24,6 +26,7 @@ package com.away3d.gloop.screens.game
 	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
 	
@@ -32,6 +35,7 @@ package com.away3d.gloop.screens.game
 	public class GameScreen extends ScreenBase
 	{
 		private var _db:LevelDatabase;
+		private var _stack : ScreenStack;
 		private var _level : Level;
 		private var _levelProxy:LevelProxy;
 		
@@ -52,10 +56,11 @@ package com.away3d.gloop.screens.game
 		private var _timestep:Timestep;
 		
 
-		public function GameScreen( db:LevelDatabase, view : View3D ) {
+		public function GameScreen( db:LevelDatabase, stack : ScreenStack, view : View3D ) {
 			super( false );
 
 			_db = db;
+			_stack = stack;
 			_view = view;
 		}
 
@@ -88,6 +93,9 @@ package com.away3d.gloop.screens.game
 			addChild(_hud);
 			
 			_pauseOverlay = new PauseOverlay(_w, _h);
+			_pauseOverlay.resumeButton.addEventListener(MouseEvent.CLICK, onPauseOverlayResumeButtonClick);
+			_pauseOverlay.mainMenuButton.addEventListener(MouseEvent.CLICK, onPauseOverlayMainMenuButtonClick);
+			_pauseOverlay.levelSelectButton.addEventListener(MouseEvent.CLICK, onPauseOverlayLevelSelectButtonClick);
 		}
 		
 		
@@ -119,6 +127,7 @@ package com.away3d.gloop.screens.game
 			
 			_levelProxy.addEventListener(GameEvent.LEVEL_RESET, onLevelReset);
 			_levelProxy.addEventListener(GameEvent.GAME_PAUSE, onLevelProxyPause);
+			_levelProxy.addEventListener(GameEvent.GAME_RESUME, onLevelProxyResume);
 				
 			_doc.addChild( _level.world );
 			_view.scene = _level.scene;
@@ -169,6 +178,7 @@ package com.away3d.gloop.screens.game
 			
 			_levelProxy.removeEventListener(GameEvent.LEVEL_RESET, onLevelReset);
 			_levelProxy.removeEventListener(GameEvent.GAME_PAUSE, onLevelProxyPause);
+			_levelProxy.removeEventListener(GameEvent.GAME_RESUME, onLevelProxyResume);
 			
 			_view.scene = new Scene3D();
 		}
@@ -202,6 +212,32 @@ package com.away3d.gloop.screens.game
 			_paused = true;
 			addChild(_pauseOverlay);
 		}
+		
+		
+		private function onLevelProxyResume(ev : GameEvent) : void
+		{
+			if (_paused) {
+				_paused = false;
+				removeChild(_pauseOverlay);
+			}
+		}
+		
+		
+		private function onPauseOverlayResumeButtonClick(ev : MouseEvent) : void
+		{
+			_levelProxy.resume();
+		}
+		
+		private function onPauseOverlayMainMenuButtonClick(ev : MouseEvent) : void
+		{
+			_stack.gotoScreen(Screens.START);
+		}
+		
+		private function onPauseOverlayLevelSelectButtonClick(ev : MouseEvent) : void
+		{
+			_stack.gotoScreen(Screens.LEVELS);
+		}
+		
 
 		private function reset():void
 		{

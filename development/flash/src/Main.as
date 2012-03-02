@@ -120,7 +120,7 @@ package
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
 			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_stack, _stateMgr) );
-			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
+			_stack.addScreen(Screens.GAME, new GameScreen(_db, _stack, _view));
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_db, _stack) );
