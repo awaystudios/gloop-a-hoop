@@ -18,7 +18,6 @@ package
 		}
 		
 		
-		/*
 		protected override function saveState(xml:XML):void
 		{
 			var file : File;
@@ -51,6 +50,5 @@ package
 				db.setStateFromXml(xml);
 			}
 		}
-		*/
 	}
 }
