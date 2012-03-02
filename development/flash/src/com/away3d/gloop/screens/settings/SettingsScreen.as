@@ -10,12 +10,14 @@ package com.away3d.gloop.screens.settings
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.utils.StateSaveManager;
 	
 	import flash.events.MouseEvent;
 	
 	public class SettingsScreen extends ScreenBase
 	{
 		private var _stack : ScreenStack;
+		private var _stateMgr : StateSaveManager;
 		
 		private var _aboutBtn : AboutButton;
 		private var _clearBtn : ClearStateButton;
@@ -23,11 +25,12 @@ package com.away3d.gloop.screens.settings
 		private var _soundBtn : ToggleButton;
 		private var _musicBtn : ToggleButton;
 		
-		public function SettingsScreen(stack : ScreenStack)
+		public function SettingsScreen(stack : ScreenStack, stateMgr : StateSaveManager)
 		{
 			super(true, true);
 			
 			_stack = stack;
+			_stateMgr = stateMgr;
 		}
 		
 		
@@ -48,6 +51,7 @@ package com.away3d.gloop.screens.settings
 			_clearBtn = new ClearStateButton();
 			_clearBtn.x = _w/2 - _clearBtn.width/2;
 			_clearBtn.y = 0.5 * _h;
+			_clearBtn.addEventListener(MouseEvent.CLICK, onClearBtnClick);
 			addChild(_clearBtn);
 			
 			/* Add this when necessary
@@ -56,6 +60,12 @@ package com.away3d.gloop.screens.settings
 			_aboutBtn.y = _clearBtn.y + 140;
 			addChild(_aboutBtn);
 			*/
+		}
+		
+		
+		private function onClearBtnClick(ev : MouseEvent) : void
+		{
+			_stateMgr.clearState();
 		}
 		
 		

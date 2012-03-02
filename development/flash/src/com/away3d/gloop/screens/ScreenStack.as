@@ -32,6 +32,7 @@ package com.away3d.gloop.screens
 		
 		public function gotoScreen(id : String) : void
 		{
+			trace(id);
 			if (_active_screen) {
 				_active_screen.deactivate();
 				_ctr.removeChild(_active_screen);

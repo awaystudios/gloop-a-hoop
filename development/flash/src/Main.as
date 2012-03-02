@@ -31,6 +31,7 @@ package
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.SettingsLoader;
+	import com.away3d.gloop.utils.StateSaveManager;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -53,6 +54,8 @@ package
 		private var _settings:SettingsLoader;
 		
 		private var _view : View3D;
+		
+		protected var _stateMgr : StateSaveManager;
 
 		public function Main()
 		{
@@ -81,6 +84,9 @@ package
 			_view.height = _h;
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			// Should be reset to other state manager by AIR app
+			_stateMgr = new StateSaveManager();
 
 			initSettings();
 			initDb();
@@ -107,7 +113,7 @@ package
 			_stack = new ScreenStack(_w, _h, this );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
-			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_stack) );
+			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_stack, _stateMgr) );
 			_stack.addScreen( Screens.GAME, new GameScreen( _db, _view ) );
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db, _stack ) );
@@ -116,17 +122,15 @@ package
 		
 		
 		
-		protected function loadState(db : LevelDatabase) : void
+		private function loadState(db : LevelDatabase) : void
 		{
-			// To be overridden in AIR version.
+			_stateMgr.loadState(db);
 		}
 		
 		
-		protected function saveState(xml : XML) : void
+		private function saveState(xml : XML) : void
 		{
-			// To be overridden in AIR version and 
-			// saved to device storage
-			trace(xml.toXMLString());
+			_stateMgr.saveState(xml);
 		}
 		
 		
