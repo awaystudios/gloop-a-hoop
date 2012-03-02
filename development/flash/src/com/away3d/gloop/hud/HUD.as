@@ -10,6 +10,7 @@ package com.away3d.gloop.hud
 	import com.away3d.gloop.level.LevelProxy;
 	
 	import flash.display.Sprite;
+	import flash.events.Event;
 
 	public class HUD extends Sprite
 	{
@@ -20,7 +21,6 @@ package com.away3d.gloop.hud
 		
 		private var _stars : Vector.<StarIcon>;
 		private var _inventory : InventoryDrawer;
-		private var _inventoryButtons : Vector.<InventoryItemButton>;
 		
 		public function HUD(w : Number, h : Number)
 		{
@@ -50,9 +50,8 @@ package com.away3d.gloop.hud
 			
 			_inventory = new InventoryDrawer(_h - 200);
 			_inventory.y = 100;
+			_inventory.addEventListener(Event.SELECT, onInventorySelect);
 			addChild(_inventory);
-			
-			_inventoryButtons = new Vector.<InventoryItemButton>();
 		}
 		
 		
@@ -83,39 +82,17 @@ package com.away3d.gloop.hud
 			
 			len = _levelProxy.inventory.items.length;
 			for (i=0; i<len; i++) {
-				var btn : InventoryItemButton;
 				var item : LevelInventoryItem;
 				
 				item = _levelProxy.inventory.items[i];
-				btn = new InventoryItemButton(item);
-				btn.x = i*60;
-				btn.mouseEnabled = true;
-				btn.addEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
-				
-				addChild(btn);
-				_inventoryButtons.push(btn);
+				_inventory.addItem(item);
 			}
 		}
 		
 		
 		private function clear() : void
 		{
-			var btn : InventoryItemButton;
-			
-			while (btn = _inventoryButtons.pop()) {
-				btn.removeEventListener(MouseEvent3D.CLICK, onInventoryButtonClick);
-				removeChild(btn);
-			}
-		}
-		
-		
-		private function onInventoryButtonClick(ev : MouseEvent3D) : void
-		{
-			var btn : InventoryItemButton;
-			
-			btn = InventoryItemButton(ev.currentTarget);
-			
-			_levelProxy.inventory.select(btn.inventoryItem);
+			_inventory.clear();
 		}
 		
 		
@@ -129,6 +106,11 @@ package com.away3d.gloop.hud
 			for (i=0; i<len; i++) {
 				_stars[i].visible = true;
 			}
+		}
+			
+		private function onInventorySelect(ev : Event) : void
+		{
+			_levelProxy.inventory.select(_inventory.selectedItem);
 		}
 	}
 }
