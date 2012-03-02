@@ -17,7 +17,6 @@ package com.away3d.gloop.screens.settings
 	{
 		private var _stack : ScreenStack;
 		
-		private var _backBtn : BackButton;
 		private var _aboutBtn : AboutButton;
 		private var _clearBtn : ClearStateButton;
 		
@@ -26,7 +25,7 @@ package com.away3d.gloop.screens.settings
 		
 		public function SettingsScreen(stack : ScreenStack)
 		{
-			super();
+			super(true, true);
 			
 			_stack = stack;
 		}
@@ -34,11 +33,7 @@ package com.away3d.gloop.screens.settings
 		
 		protected override function initScreen():void
 		{
-			_backBtn = new BackButton();
-			_backBtn.x = 20;
-			_backBtn.y = 20;
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
-			addChild(_backBtn);
 			
 			_soundBtn = new ToggleButton(new SoundOnBitmap(), new SoundOffBitmap());
 			_soundBtn.x = _w/2 - 100;

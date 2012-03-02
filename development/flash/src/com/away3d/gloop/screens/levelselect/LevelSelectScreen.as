@@ -2,21 +2,26 @@ package com.away3d.gloop.screens.levelselect
 {
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelProxy;
+	import com.away3d.gloop.lib.buttons.BackButton;
 	import com.away3d.gloop.screens.ScreenBase;
+	import com.away3d.gloop.screens.ScreenStack;
+	import com.away3d.gloop.screens.Screens;
 	
 	import flash.events.MouseEvent;
 
 	public class LevelSelectScreen extends ScreenBase
 	{
 		private var _db : LevelDatabase;
+		private var _stack : ScreenStack;
 		
 		private var _thumbs : Vector.<LevelThumb>;
 		
-		public function LevelSelectScreen(db : LevelDatabase)
+		public function LevelSelectScreen(db : LevelDatabase, stack : ScreenStack)
 		{
-			super();
+			super(true, true);
 			
 			_db = db;
+			_stack = stack;
 		}
 		
 		
@@ -52,6 +57,8 @@ package com.away3d.gloop.screens.levelselect
 				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
 				addChild(thumb);
 			}
+			
+			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
 		}
 		
 		
@@ -61,6 +68,12 @@ package com.away3d.gloop.screens.levelselect
 			
 			thumb = LevelThumb(ev.currentTarget);
 			_db.selectLevel(thumb.levelProxy);
+		}
+		
+		
+		private function onBackBtnClick(ev : MouseEvent) : void
+		{
+			_stack.gotoScreen(Screens.CHAPTERS);
 		}
 	}
 }

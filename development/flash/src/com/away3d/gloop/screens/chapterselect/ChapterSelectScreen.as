@@ -27,13 +27,11 @@ package com.away3d.gloop.screens.chapterselect
 		private var _targetX : Number;
 		private var _centerX : Number;
 		private var _mouseDownX : Number;
-			
-		private var _backBtn : SimpleButton;
 		
 		
 		public function ChapterSelectScreen(db : LevelDatabase, stack : ScreenStack)
 		{
-			super();
+			super(true, true);
 			
 			_db = db;
 			_stack = stack;
@@ -67,11 +65,7 @@ package com.away3d.gloop.screens.chapterselect
 			
 			_curPosterIdx = 0;
 			
-			_backBtn = new BackButton();
-			_backBtn.x = 20;
-			_backBtn.y = 20;
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
-			addChild(_backBtn);
 		}
 		
 		

@@ -1,29 +1,34 @@
 package com.away3d.gloop.screens
 {
 	import com.away3d.gloop.lib.BackgroundBitmap;
-	import flash.display.Shape;
-	import flash.events.Event;
-	import flash.utils.getTimer;
+	import com.away3d.gloop.lib.buttons.BackButton;
 	
 	import flash.display.BitmapData;
+	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Matrix;
+	import flash.utils.getTimer;
 	
 	public class ScreenBase extends Sprite
 	{
 		protected var _w : Number;
 		protected var _h : Number;
 		
+		protected var _backBtn : BackButton;
+		
 		private var _drawBg : Boolean;
+		private var _useBackBtn : Boolean;
 		private var _initialized : Boolean;
 		
 		private var _background : Shape;
 		
-		public function ScreenBase(drawBackground : Boolean = true)
+		public function ScreenBase(drawBackground : Boolean = true, useBackButton : Boolean = false)
 		{
 			super();
 			
 			_drawBg = drawBackground;
+			_useBackBtn = useBackButton;
 		}
 		
 		
@@ -54,6 +59,13 @@ package com.away3d.gloop.screens
 					_background.y = _h / 2;
 					
 					addChild(_background);
+				}
+				
+				if (_useBackBtn) {
+					_backBtn = new BackButton();
+					_backBtn.x = 20;
+					_backBtn.y = 20;
+					addChild(_backBtn);
 				}
 				
 				initScreen();
