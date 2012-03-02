@@ -4,16 +4,19 @@ package com.away3d.gloop.gameobjects
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.primitives.CylinderGeometry;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.greensock.TweenLite;
 	
 	public class Button extends DefaultGameObject
 	{
 		private var _pressed : Boolean;
 		private var _btnGroup : uint;
+		private var _buttonMesh : Mesh;
 		
 		private var _controllables : Vector.<IButtonControllable>;
 		
@@ -24,18 +27,39 @@ package com.away3d.gloop.gameobjects
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.rotation = rotation;
-			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
-			
 			_physics.setStatic();
-			
-			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('Button_geom')), new ColorMaterial(debugColor1));
 			
 			_btnGroup = btnGroup;
 			
 			_controllables = new Vector.<IButtonControllable>();
+			
+			initVisual();
+		}
+		
+		
+		private function initVisual() : void
+		{
+			var buttonMat : ColorMaterial;
+			var plateMat : ColorMaterial;
+			
+			plateMat = new ColorMaterial(0xcccccc);
+			
+			_meshComponent = new MeshComponent();
+			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('ButtonPlate_geom')), plateMat);
+			
+			buttonMat = new ColorMaterial(0xde6a14);
+			
+			_buttonMesh = new Mesh(Geometry(AssetLibrary.getAsset('Button_geom')), buttonMat);
+			_meshComponent.mesh.addChild(_buttonMesh);
+		}
+		
+		
+		public override function setLightPicker(picker:LightPickerBase):void
+		{
+			super.setLightPicker(picker);
+			_buttonMesh.material.lightPicker = picker;
 		}
 		
 		override public function reset():void 
@@ -61,14 +85,21 @@ package com.away3d.gloop.gameobjects
 		{
 			_pressed = !_pressed;
 			
-			if (_pressed) toggleOn();
-			else toggleOff();
+			if (_pressed) toggleOn(true);
+			else toggleOff(true);
 		}
 		
 		
-		private function toggleOn() : void
+		private function toggleOn(animate : Boolean = false) : void
 		{
 			var i : uint;
+			
+			if (animate) {
+				TweenLite.to(_buttonMesh, 0.5, { y: -10 });
+			}
+			else {
+				_buttonMesh.y = -10;
+			}
 			
 			_pressed = true;
 			
@@ -78,10 +109,18 @@ package com.away3d.gloop.gameobjects
 		}
 		
 		
-		private function toggleOff() : void
+		private function toggleOff(animate : Boolean = false) : void
 		{
 			var i : uint;
 			
+			if (animate) {
+				TweenLite.to(_buttonMesh, 0.5, { y: 0 });
+			}
+			else {
+				_buttonMesh.y = 0;
+			}
+			
+		
 			_pressed = false;
 			
 			for (i=0; i<_controllables.length; i++) {
