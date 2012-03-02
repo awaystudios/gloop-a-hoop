@@ -41,5 +41,8 @@ package com.away3d.gloop.utils
 		
 		[Embed("/../assets/props/button/button.3ds", mimeType="application/octet-stream")]
 		public static var Button3DSAsset : Class;
+		
+		[Embed("/../assets/props/star/star.3ds", mimeType="application/octet-stream")]
+		public static var Star3DSAsset : Class;
 	}
 }

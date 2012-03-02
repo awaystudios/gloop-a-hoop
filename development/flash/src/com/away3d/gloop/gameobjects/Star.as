@@ -1,19 +1,23 @@
 package com.away3d.gloop.gameobjects
 {
+	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
+	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CylinderGeometry;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	
 	public class Star extends DefaultGameObject
 	{
-		
+		private var _animComponent:VertexAnimationComponent;
 		private var _touched:Boolean = false;
+		private var _randomRotation : Number;
 		
 		public function Star(worldX:Number = 0, worldY:Number = 0)
 		{
@@ -23,15 +27,45 @@ package com.away3d.gloop.gameobjects
 			_physics.applyGravity = false;
 			_physics.isSensor = true;
 			
+			initVisual();
+		}
+		
+		private function initVisual() : void
+		{
+			var geom : Geometry;
+			var mat : ColorMaterial;
+			
+			geom = Geometry(AssetLibrary.getAsset('StarFrame0_geom')).clone();
+			mat = new ColorMaterial(0xccff00);
+			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(new CylinderGeometry(Settings.STAR_RADIUS, Settings.STAR_RADIUS, 5), new ColorMaterial(debugColor1));
-			_meshComponent.mesh.rotationX = 90;
+			_meshComponent.mesh = new Mesh(geom, mat);
+			
+			_animComponent = new VertexAnimationComponent(_meshComponent.mesh);
+			_animComponent.addSequence('seq', [
+				Geometry(AssetLibrary.getAsset('StarFrame0_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame1_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame2_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame3_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame4_geom')),
+			], 600);
+			_animComponent.play('seq');
+			
 		}
 		
 		override public function reset():void {
 			super.reset();
 			_touched = false;
 			_meshComponent.mesh.visible = true;
+			
+			_randomRotation = Math.random() * 360;
+		}
+		
+		override public function update(dt:Number):void
+		{
+			super.update(dt);
+			
+			_meshComponent.mesh.rotationZ = _randomRotation;
 		}
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {
