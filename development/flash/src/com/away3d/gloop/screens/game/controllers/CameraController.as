@@ -144,7 +144,7 @@ package com.away3d.gloop.screens.game.controllers
 				if (_finishMode) {
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
 					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
-//					targetPosition.z = _boundsMaxZ;
+					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}
 				else {
