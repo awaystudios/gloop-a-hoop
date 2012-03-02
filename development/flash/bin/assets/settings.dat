@@ -11,11 +11,11 @@ CANNON_BASE_Y                 -35
 CANNON_PHYSICS_DELAY          8    # the time to wait before enabling gloop/cannon collisions after launching, in updates
 
 FAN_AREA_HEIGHT               200
-FAN_AREA_WIDTH                50
+FAN_AREA_WIDTH                100
 FAN_BODY_HEIGHT               5
 FAN_BODY_WIDTH                50
 FAN_ON_OFF_TIME               0.4
-FAN_POWER                     0.05
+FAN_POWER                     0.03
 
 GLOOP_ANGULAR_DAMPING         1
 GLOOP_DECAL_LIMIT_PER_HIT     20
