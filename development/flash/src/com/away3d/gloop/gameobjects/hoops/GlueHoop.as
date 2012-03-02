@@ -18,7 +18,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function GlueHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
-			super(worldX, worldY, rotation);
+			super(0xffbe3f, worldX, worldY, rotation);
 			_rotatable = false;
 			_launcher = new GloopLauncherComponent(this);
 		}

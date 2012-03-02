@@ -9,7 +9,7 @@ package com.away3d.gloop.gameobjects.hoops {
 	public class RocketHoop extends Hoop {
 		
 		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0) {
-			super(worldX, worldY, rotation);
+			super(0x3f7fff, worldX, worldY, rotation);
 		}
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop):void {

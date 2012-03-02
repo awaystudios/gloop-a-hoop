@@ -25,6 +25,7 @@ package com.away3d.gloop.gameobjects.hoops
 	 */
 	public class Hoop extends DefaultGameObject implements IMouseInteractive
 	{
+		private var _color : uint;
 		
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
@@ -41,13 +42,14 @@ package com.away3d.gloop.gameobjects.hoops
 		private var _material:ColorMaterial;
 		private var _material_invalid:ColorMaterial;
 		
-		public function Hoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
+		public function Hoop(color : uint, worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
+			_color = color;
+			
 			_physics = new HoopPhysicsComponent(this);
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.rotation = rotation;
-			
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
 			
@@ -59,7 +61,7 @@ package com.away3d.gloop.gameobjects.hoops
 		{
 			var geom : Geometry;
 			
-			_material = new ColorMaterial(debugColor1);
+			_material = new ColorMaterial(_color);
 			_material_invalid = new ColorMaterial(0xff0000);
 			
 			geom = Geometry(AssetLibrary.getAsset('Hoop_geom'));
