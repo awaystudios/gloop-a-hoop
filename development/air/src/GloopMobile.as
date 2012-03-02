@@ -7,7 +7,7 @@ package
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	
-	[SWF(frameRate="60")]
+	[SWF(width="1024", heigth="768", frameRate="30")]
 	public class GloopMobile extends Main
 	{
 		private static const STATE_XML_PATH : String = 'savedstate.xml';
