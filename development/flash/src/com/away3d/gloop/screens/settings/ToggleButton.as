@@ -3,6 +3,7 @@ package com.away3d.gloop.screens.settings
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	public class ToggleButton extends Sprite
@@ -44,6 +45,8 @@ package com.away3d.gloop.screens.settings
 		{
 			_toggled = !_toggled;
 			redraw();
+			
+			dispatchEvent(new Event(Event.CHANGE));
 		}
 		
 		

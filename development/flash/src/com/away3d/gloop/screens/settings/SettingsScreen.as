@@ -12,6 +12,7 @@ package com.away3d.gloop.screens.settings
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.utils.StateSaveManager;
 	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	public class SettingsScreen extends ScreenBase
@@ -41,11 +42,13 @@ package com.away3d.gloop.screens.settings
 			_soundBtn = new ToggleButton(new SoundOnBitmap(), new SoundOffBitmap());
 			_soundBtn.x = _w/2 - 100;
 			_soundBtn.y = 0.4* _h;
+			_soundBtn.addEventListener(Event.CHANGE, onSoundToggleChange);
 			addChild(_soundBtn);
 			
 			_musicBtn = new ToggleButton(new MusicOnBitmap(), new MusicOffBitmap());
 			_musicBtn.x = _w/2 + 100;
 			_musicBtn.y = _soundBtn.y;
+			_musicBtn.addEventListener(Event.CHANGE, onMusicToggleChange);
 			addChild(_musicBtn);
 			
 			_clearBtn = new ClearStateButton();
@@ -60,6 +63,18 @@ package com.away3d.gloop.screens.settings
 			_aboutBtn.y = _clearBtn.y + 140;
 			addChild(_aboutBtn);
 			*/
+		}
+		
+		
+		private function onMusicToggleChange(ev : Event) : void
+		{
+			trace('music', _musicBtn.toggledOn);
+		}
+		
+		
+		private function onSoundToggleChange(ev : Event) : void
+		{
+			trace('sound', _soundBtn.toggledOn);
 		}
 		
 		
