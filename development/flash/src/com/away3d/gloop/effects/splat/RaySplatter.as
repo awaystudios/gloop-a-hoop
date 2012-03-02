@@ -66,7 +66,6 @@ package com.away3d.gloop.effects.splat
 					var distance:Number = position.subtract( sourcePosition ).length;
 					if( distance > maxDistance ) continue;
 					var scale:Number = _maxScale - distance * _deltaScale / maxDistance;
-					trace( "placing decal - distance: " + distance + ", scale: " + scale );
 					placeDecalAt( position, scale );
 				}
 			}
