@@ -69,6 +69,7 @@ package com.away3d.gloop.hud
 			_pauseBtn = new PauseButton();
 			_pauseBtn.x = _w - 50;
 			_pauseBtn.y = _restartBtn.y;
+			_pauseBtn.addEventListener(MouseEvent.CLICK, onPauseBtnClick);
 			addChild(_pauseBtn);
 		}
 		
@@ -131,6 +132,11 @@ package com.away3d.gloop.hud
 			_levelProxy.inventory.select(_inventory.selectedItem);
 		}
 		
+		
+		private function onPauseBtnClick(ev : MouseEvent) : void
+		{
+			_levelProxy.pause();
+		}
 		
 		private function onRestartBtnClick(ev : MouseEvent) : void
 		{

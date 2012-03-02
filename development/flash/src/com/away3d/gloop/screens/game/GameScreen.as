@@ -35,6 +35,9 @@ package com.away3d.gloop.screens.game
 		private var _level : Level;
 		private var _levelProxy:LevelProxy;
 		
+		private var _paused : Boolean;
+		private var _pauseOverlay : PauseOverlay;
+		
 		private var _cameraController : CameraController;
 		private var _editController : LevelEditController;
 
@@ -83,6 +86,8 @@ package com.away3d.gloop.screens.game
 		{
 			_hud = new HUD(_w, _h);
 			addChild(_hud);
+			
+			_pauseOverlay = new PauseOverlay(_w, _h);
 		}
 		
 		
@@ -112,7 +117,8 @@ package com.away3d.gloop.screens.game
 			_levelProxy = _db.selectedLevelProxy;
 			_level = _levelProxy.level;
 			
-			_levelProxy.addEventListener( GameEvent.LEVEL_RESET, onLevelReset )
+			_levelProxy.addEventListener(GameEvent.LEVEL_RESET, onLevelReset);
+			_levelProxy.addEventListener(GameEvent.GAME_PAUSE, onLevelProxyPause);
 				
 			_doc.addChild( _level.world );
 			_view.scene = _level.scene;
@@ -161,6 +167,9 @@ package com.away3d.gloop.screens.game
 			_inputManager.deactivate();
 			_editController.deactivate();
 			
+			_levelProxy.removeEventListener(GameEvent.LEVEL_RESET, onLevelReset);
+			_levelProxy.removeEventListener(GameEvent.GAME_PAUSE, onLevelProxyPause);
+			
 			_view.scene = new Scene3D();
 		}
 		
@@ -186,6 +195,13 @@ package com.away3d.gloop.screens.game
 		{
 			reset();
 		}
+		
+		
+		private function onLevelProxyPause(ev : GameEvent) : void
+		{
+			_paused = true;
+			addChild(_pauseOverlay);
+		}
 
 		private function reset():void
 		{
@@ -203,19 +219,22 @@ package com.away3d.gloop.screens.game
 		}
 		
 
-		override protected function update():void {
-			_timestep.tick();
-			var updates:int = _timestep.steps;
-			
-			while (updates-- > 0) {
-				if( _level ) _level.update();
-				_cameraController.update();
-			}
-			
-			if (_level) {
-				_level.camLightX = _view.camera.x;
-				_level.camLightY = _view.camera.y;
-				_level.camLightZ = _view.camera.z;
+		override protected function update():void
+		{
+			if (!_paused) {
+				_timestep.tick();
+				var updates:int = _timestep.steps;
+				
+				while (updates-- > 0) {
+					if( _level ) _level.update();
+					_cameraController.update();
+				}
+				
+				if (_level) {
+					_level.camLightX = _view.camera.x;
+					_level.camLightY = _view.camera.y;
+					_level.camLightZ = _view.camera.z;
+				}
 			}
 		}
 	}

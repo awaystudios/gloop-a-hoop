@@ -4,6 +4,9 @@ package com.away3d.gloop.events
 
 	public class GameEvent extends Event
 	{
+		public static const GAME_PAUSE : String = 'gamePause';
+		public static const GAME_RESUME : String = 'gameResume';
+		
 		public static const LEVEL_WIN : String = 'levelWin';
 		public static const LEVEL_LOSE : String = 'levelLose';
 		public static const LEVEL_LOAD : String = 'levelLoad';

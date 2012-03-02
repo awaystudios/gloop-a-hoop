@@ -79,6 +79,12 @@ package
 			_w = sim? stage.stageWidth : stage.fullScreenWidth;
 			_h = sim? stage.stageHeight : stage.fullScreenHeight;
 			
+			if (_h > _w) {
+				var tmp : Number = _w;
+				_w = _h;
+				_h = tmp;
+			}
+			
 			_view = new View3D();
 			_view.width = _w;
 			_view.height = _h;

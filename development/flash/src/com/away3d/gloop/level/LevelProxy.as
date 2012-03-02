@@ -131,6 +131,18 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function pause() : void
+		{
+			dispatchEvent(new GameEvent(GameEvent.GAME_PAUSE));
+		}
+		
+		
+		public function resume() : void
+		{
+			dispatchEvent(new GameEvent(GameEvent.GAME_RESUME));
+		}
+		
+		
 		public function reset() : void
 		{
 			_level.reset();
