@@ -3,13 +3,14 @@ package com.away3d.gloop.hud
 	import away3d.events.MouseEvent3D;
 	
 	import com.away3d.gloop.events.GameEvent;
-	import com.away3d.gloop.hud.elements.HUDElement;
 	import com.away3d.gloop.hud.elements.InventoryButton;
 	import com.away3d.gloop.hud.elements.StarIcon;
 	import com.away3d.gloop.level.LevelInventoryItem;
 	import com.away3d.gloop.level.LevelProxy;
+	
+	import flash.display.Sprite;
 
-	public class HUD extends HUDElement
+	public class HUD extends Sprite
 	{
 		private var _levelProxy : LevelProxy;
 		

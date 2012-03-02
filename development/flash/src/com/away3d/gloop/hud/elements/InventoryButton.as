@@ -4,8 +4,10 @@ package com.away3d.gloop.hud.elements
 	
 	import com.away3d.gloop.events.InventoryEvent;
 	import com.away3d.gloop.level.LevelInventoryItem;
+	
+	import flash.display.Sprite;
 
-	public class InventoryButton extends HUDElement
+	public class InventoryButton extends Sprite
 	{
 		private var _item : LevelInventoryItem;
 		
@@ -16,9 +18,8 @@ package com.away3d.gloop.hud.elements
 			_item = item;
 			_item.addEventListener(InventoryEvent.ITEM_CHANGE, onItemChange);
 			
-			drawRect(0, 0, 50, 50, 0, 0, 0, 0);
-			
-			material = new ColorMaterial(0xffcc00);
+			graphics.beginFill(0xff0000);
+			graphics.drawRect(0, 0, 50, 50);
 		}
 		
 		
