@@ -12,6 +12,7 @@ package com.away3d.gloop.sound
 		private static var _enabled:Boolean = true;
 		private static var _theme:Sound;
 		private static var _currentThemeId:String;
+		private static var _pausedThemeId:String;
 
 		private static function init():void {
 			if( !_initialized ) {
@@ -36,6 +37,17 @@ package com.away3d.gloop.sound
 			init();
 			_themes[id] = sound;
 		}
+		
+		public static function pause() : void
+		{
+			_pausedThemeId = _currentThemeId;
+			stop();
+		}
+		
+		public static function resume() : void
+		{
+			play(_pausedThemeId);
+		}
 
 		public static function playInGameTheme():void {
 			play( Themes.IN_GAME_THEME );
@@ -49,6 +61,7 @@ package com.away3d.gloop.sound
 			if( _soundChannel ) {
 				_soundChannel.stop();
 			}
+			_currentThemeId = null;
 		}
 
 		public static function play( id:String ):void {

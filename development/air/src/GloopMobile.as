@@ -1,6 +1,9 @@
 package
 {
+	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.utils.FileStateSaveManager;
+	
+	import flash.events.Event;
 	
 	[SWF(width="1024", heigth="768", frameRate="30")]
 	public class GloopMobile extends Main
@@ -12,6 +15,21 @@ package
 			super();
 			
 			_stateMgr = new FileStateSaveManager(STATE_XML_PATH);
+			
+			stage.addEventListener(Event.ACTIVATE, onStageActivate);
+			stage.addEventListener(Event.DEACTIVATE, onStageDeactivate);
+		}
+		
+		
+		private function onStageActivate(ev : Event) : void
+		{
+			MusicManager.resume();
+		}
+		
+		
+		private function onStageDeactivate(ev : Event) : void
+		{
+			MusicManager.pause();
 		}
 	}
 }
