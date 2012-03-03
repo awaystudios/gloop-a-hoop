@@ -1,5 +1,7 @@
 package com.away3d.gloop.screens
 {
+	import com.away3d.gloop.sound.MusicManager;
+	
 	import flash.display.Sprite;
 
 	public class ScreenStack
@@ -32,7 +34,6 @@ package com.away3d.gloop.screens
 		
 		public function gotoScreen(id : String) : void
 		{
-			trace(id);
 			if (_active_screen) {
 				_active_screen.deactivate();
 				_ctr.removeChild(_active_screen);
@@ -41,6 +42,9 @@ package com.away3d.gloop.screens
 			
 			_active_screen = _screens_by_id[id];
 			_active_screen.init(_w, _h);
+			
+			if (_active_screen.musicTheme)
+				MusicManager.play(_active_screen.musicTheme);
 			
 			_ctr.addChild(_active_screen);
 			_active_screen.activate();

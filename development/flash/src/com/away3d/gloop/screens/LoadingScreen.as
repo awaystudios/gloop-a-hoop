@@ -11,6 +11,8 @@ package com.away3d.gloop.screens
 		public function LoadingScreen()
 		{
 			super();
+			
+			_musicTheme = null;
 		}
 		
 		

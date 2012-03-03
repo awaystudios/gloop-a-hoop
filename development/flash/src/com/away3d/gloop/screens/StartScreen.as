@@ -28,11 +28,6 @@ package com.away3d.gloop.screens
 			_stack = stack;
 		}
 
-		public override function init( w:Number, h:Number ):void {
-			super.init( w, h );
-			MusicManager.playMainTheme();
-		}
-		
 		protected override function initScreen():void
 		{
 			super.initScreen();

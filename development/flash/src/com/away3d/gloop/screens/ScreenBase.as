@@ -2,6 +2,8 @@ package com.away3d.gloop.screens
 {
 	import com.away3d.gloop.lib.BackgroundBitmap;
 	import com.away3d.gloop.lib.buttons.BackButton;
+	import com.away3d.gloop.sound.MusicManager;
+	import com.away3d.gloop.sound.Themes;
 	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -14,6 +16,8 @@ package com.away3d.gloop.screens
 	{
 		protected var _w : Number;
 		protected var _h : Number;
+		
+		protected var _musicTheme : String;
 		
 		protected var _backBtn : BackButton;
 		
@@ -28,6 +32,8 @@ package com.away3d.gloop.screens
 		public function ScreenBase(drawBackground : Boolean = true, useBackButton : Boolean = false)
 		{
 			super();
+			
+			_musicTheme = Themes.MAIN_THEME;
 			
 			_drawBg = drawBackground;
 			_useBackBtn = useBackButton;
@@ -97,6 +103,12 @@ package com.away3d.gloop.screens
 				_background.rotation = Math.sin(t / 600) * 3;
 				*/
 			}
+		}
+		
+		
+		public function get musicTheme() : String
+		{
+			return _musicTheme;
 		}
 		
 		public function get screenWidth() : Number
