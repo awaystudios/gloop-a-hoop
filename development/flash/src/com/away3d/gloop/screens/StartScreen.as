@@ -38,29 +38,36 @@ package com.away3d.gloop.screens
 			logoBmp.y = -logoBmp.height / 2;
 			
 			_logo = new Sprite();
-			_logo.x = _w / 2;
-			
 			_logo.addChild(logoBmp);
-			addChild(_logo);
+			_ctr.addChild(_logo);
 			
 			_playBtn = new PlayButton();
-			_playBtn.x = _w/2 - _playBtn.width/2;
-			_playBtn.y = 0.4 * _h;
+			_playBtn.x = - _playBtn.width/2;
+			_playBtn.y = -0.1 * _h;
 			_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
-			addChild(_playBtn);
+			_ctr.addChild(_playBtn);
 			
 			_settingsBtn = new SettingsButton();
-			_settingsBtn.x = _w/2 - _settingsBtn.width/2;
+			_settingsBtn.x = - _settingsBtn.width/2;
 			_settingsBtn.y = _playBtn.y + 140;
 			_settingsBtn.addEventListener(MouseEvent.CLICK, onSettingsBtnClick);
-			addChild(_settingsBtn);
+			_ctr.addChild(_settingsBtn);
+		}
+		
+		public override function activate():void
+		{
+			super.activate();
+			
+			// Call update before being added to stage
+			// to prevent logo from jumping on first frame
+			update();
 		}
 		
 		override protected function update():void {
 			var t:Number = getTimer();
 			_logo.rotation = Math.sin(t / 300) * 1.5;
 			_logo.scaleX = 1.0 + Math.cos(t / 150) * .025;
-			_logo.y = 0.23 * _h + Math.cos(t / 300) * 7;
+			_logo.y = -200 + Math.cos(t / 300) * 7;
 		}
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void

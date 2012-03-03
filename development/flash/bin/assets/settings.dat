@@ -59,8 +59,8 @@ ROCKET_POWER                  100.8
 SCORE_BULLSEYE_MULTIPLIER     2
 SCORE_STAR_VALUE              350
 
-SHOW_COLLISION_WALLS          true
-SHOW_COSMETIC_MESHES          false
+SHOW_COLLISION_WALLS          false
+SHOW_COSMETIC_MESHES          true
 
 STAR_RADIUS                   30
 

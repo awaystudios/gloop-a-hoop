@@ -17,9 +17,9 @@ package com.away3d.gloop.screens
 		protected override function initScreen() : void
 		{
 			_bmp = new Bitmap(new LoadingBitmap());
-			_bmp.x = _w/2 - _bmp.width/2;
-			_bmp.y = _h/2 - _bmp.height/2;
-			addChild(_bmp);
+			_bmp.x = -_bmp.width/2;
+			_bmp.y = -_bmp.height/2;
+			_ctr.addChild(_bmp);
 		}
 	}
 }

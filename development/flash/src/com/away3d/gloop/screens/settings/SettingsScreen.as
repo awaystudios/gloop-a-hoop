@@ -42,22 +42,22 @@ package com.away3d.gloop.screens.settings
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
 			
 			_soundBtn = new ToggleButton(new SoundOnBitmap(), new SoundOffBitmap());
-			_soundBtn.x = _w/2 - 100;
-			_soundBtn.y = 0.4* _h;
+			_soundBtn.x = -100;
+			_soundBtn.y = -80;
 			_soundBtn.addEventListener(Event.CHANGE, onSoundToggleChange);
-			addChild(_soundBtn);
+			_ctr.addChild(_soundBtn);
 			
 			_musicBtn = new ToggleButton(new MusicOnBitmap(), new MusicOffBitmap());
-			_musicBtn.x = _w/2 + 100;
+			_musicBtn.x = 100;
 			_musicBtn.y = _soundBtn.y;
 			_musicBtn.addEventListener(Event.CHANGE, onMusicToggleChange);
-			addChild(_musicBtn);
+			_ctr.addChild(_musicBtn);
 			
 			_clearBtn = new ClearStateButton();
-			_clearBtn.x = _w/2 - _clearBtn.width/2;
-			_clearBtn.y = 0.5 * _h;
+			_clearBtn.x = -_clearBtn.width/2;
+			_clearBtn.y = 0;
 			_clearBtn.addEventListener(MouseEvent.CLICK, onClearBtnClick);
-			addChild(_clearBtn);
+			_ctr.addChild(_clearBtn);
 			
 			/* Add this when necessary
 			_aboutBtn = new AboutButton();

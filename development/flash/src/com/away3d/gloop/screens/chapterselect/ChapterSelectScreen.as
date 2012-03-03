@@ -45,7 +45,7 @@ package com.away3d.gloop.screens.chapterselect
 			var i : uint;
 			var len : uint;
 			
-			_centerX = _w/2;
+			_centerX = 0;
 			_targetX = _centerX;
 			
 			_posters = new Vector.<ChapterPoster>();
@@ -58,9 +58,8 @@ package com.away3d.gloop.screens.chapterselect
 				chapter = _db.chapters[i];
 				poster = new ChapterPoster(chapter);
 				poster.x = _centerX + _w * i;
-				poster.y = _h/2;
 				poster.addEventListener(MouseEvent.CLICK, onPosterClick);
-				addChild(poster);
+				_ctr.addChild(poster);
 				
 				_posters.push(poster);
 			}

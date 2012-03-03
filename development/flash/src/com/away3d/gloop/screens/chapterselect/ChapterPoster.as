@@ -29,6 +29,7 @@ package com.away3d.gloop.screens.chapterselect
 			_bmp = new Bitmap(_data.posterBitmap);
 			_bmp.x = -(_bmp.width/2);
 			_bmp.y = -(_bmp.height/2);
+			_bmp.smoothing = true;
 			addChild(_bmp);
 			
 			_ui = new ChapterPosterUI();

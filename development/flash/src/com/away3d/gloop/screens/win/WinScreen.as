@@ -34,9 +34,8 @@ package com.away3d.gloop.screens.win
 		protected override function initScreen():void
 		{
 			_ui = new WinScreenUI();
-			_ui.x = _w/2;
-			_ui.y = _h/2.5;
-			addChild(_ui);
+			_ui.y = -100;
+			_ctr.addChild(_ui);
 			
 			_ui.replayButton.addEventListener(MouseEvent.CLICK, onButtonClick);
 			_ui.menuButton.addEventListener(MouseEvent.CLICK, onButtonClick);

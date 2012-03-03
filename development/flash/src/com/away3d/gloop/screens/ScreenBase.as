@@ -17,6 +17,8 @@ package com.away3d.gloop.screens
 		
 		protected var _backBtn : BackButton;
 		
+		protected var _ctr : Sprite;
+		
 		private var _drawBg : Boolean;
 		private var _useBackBtn : Boolean;
 		private var _initialized : Boolean;
@@ -38,6 +40,12 @@ package com.away3d.gloop.screens
 			_h = h;
 			
 			if (!_initialized) {
+				var masterScale : Number;
+				
+				// Based on 1024x768 which was the
+				// template for the design
+				masterScale = _h/768;
+				
 				if (_drawBg) {
 					var bmp : BitmapData;
 					var scale : Number;
@@ -63,10 +71,18 @@ package com.away3d.gloop.screens
 				
 				if (_useBackBtn) {
 					_backBtn = new BackButton();
-					_backBtn.x = 20;
-					_backBtn.y = 20;
+					_backBtn.x = masterScale * 20;
+					_backBtn.y = masterScale * 20;
+					_backBtn.scaleX = masterScale;
+					_backBtn.scaleY = masterScale;
 					addChild(_backBtn);
 				}
+				
+				_ctr = new Sprite();
+				_ctr.x = _w/2;
+				_ctr.y = _h/2;
+				_ctr.scaleX = _ctr.scaleY = masterScale;
+				addChild(_ctr);
 				
 				initScreen();
 				_initialized = true;
