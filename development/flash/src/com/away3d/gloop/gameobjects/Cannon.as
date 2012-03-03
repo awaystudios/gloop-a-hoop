@@ -113,8 +113,13 @@ package com.away3d.gloop.gameobjects
 			_launcher.updateAim();
 		}
 		
-		public function catchGloop(gloop:Gloop):void {
+		public function spawnGloop(gloop:Gloop, angle : Number = NaN):void {
 			_launcher.catchGloop(gloop);	
+			
+			if (!isNaN(angle)) {
+				_physics.rotation = angle;
+				updateCannonOrientation();
+			}
 		}
 		
 		
@@ -128,7 +133,6 @@ package com.away3d.gloop.gameobjects
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (_launcher.gloop) {
-				var rot : Number;
 				var pow : Number;
 				
 				_launcher.onDragUpdate(mouseX, mouseY);
@@ -138,11 +142,7 @@ package com.away3d.gloop.gameobjects
 				_animState.weights[1] = pow;
 				_animState.invalidateState();
 				
-				rot = _cannonBody.rotationZ + 90;
-				if (rot > 180) rot -= 360;
-				
-				_cannonBody.scaleY = (rot < 0)? -1 : 1;
-				_cannonBody.scaleZ = _cannonBody.scaleY;
+				updateCannonOrientation();
 			}
 		}
 		
@@ -182,6 +182,18 @@ package com.away3d.gloop.gameobjects
 				}
 			}
 			
+		}
+		
+		
+		private function updateCannonOrientation() : void
+		{
+			var rot : Number;
+			
+			rot = _cannonBody.rotationZ + 90;
+			if (rot > 180) rot -= 360;
+				
+			_cannonBody.scaleY = (rot < 0)? -1 : 1;
+			_cannonBody.scaleZ = _cannonBody.scaleY;
 		}
 	}
 }

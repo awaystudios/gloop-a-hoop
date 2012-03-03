@@ -36,6 +36,8 @@ package com.away3d.gloop.level
 		private var _world : World;
 		
 		private var _spawn_point :Point;
+		private var _spawnDir : Number;
+		
 		private var _all_objects : Vector.<DefaultGameObject>;
 		
 		private var _targetRotation : Number;
@@ -154,6 +156,15 @@ package com.away3d.gloop.level
 		public function get spawnPoint() : Point
 		{
 			return _spawn_point;
+		}
+		
+		public function get spawnAngle() : Number
+		{
+			return _spawnDir;
+		}
+		public function set spawnAngle(val : Number) : void
+		{
+			_spawnDir = val;
 		}
 		
 		public function get scene() : Scene3D

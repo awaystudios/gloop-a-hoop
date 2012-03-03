@@ -103,6 +103,7 @@ package com.away3d.gloop.level
 		{
 			_level.spawnPoint.x = obj.x * _scale;
 			_level.spawnPoint.y = -obj.y * _scale;
+			_level.spawnAngle = parseFloat(obj.extra['gah_spawn_angle']) || 0;
 		}
 		
 		

@@ -159,7 +159,7 @@ package com.away3d.gloop.screens.game
 			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
 			setTimeout(function():void {
 				_level.add(_gloop);
-				_cannon.catchGloop(_gloop);
+				_cannon.spawnGloop(_gloop);
 				_levelProxy.reset();			
 
 				// Apply nice lighting.
@@ -250,7 +250,7 @@ package com.away3d.gloop.screens.game
 			
 			_hud.reset(_levelProxy);
 			
-			_cannon.catchGloop(_gloop);
+			_cannon.spawnGloop(_gloop, _level.spawnAngle);
 			
 			_cameraController.setGloopIdle();
 			_cameraController.resetOrientation();
