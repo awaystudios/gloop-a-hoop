@@ -56,6 +56,10 @@ package com.away3d.gloop.level
 		{
 			var item_xml : XML;
 			
+			// No inventory?
+			if (!xml)
+				return;
+			
 			for each (item_xml in xml.children()) {
 				var item : LevelInventoryItem;
 				var count : uint;
