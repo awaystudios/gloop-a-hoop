@@ -19,6 +19,8 @@ package
 	import com.away3d.gloop.lib.sounds.game.SplatSound;
 	import com.away3d.gloop.lib.sounds.game.StarSound;
 	import com.away3d.gloop.lib.sounds.menu.MenuButtonSound;
+	import com.away3d.gloop.lib.sounds.music.InGameMusicSound;
+	import com.away3d.gloop.lib.sounds.music.ThemeMusicSound;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
@@ -28,8 +30,10 @@ package
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.settings.SettingsScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
+	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
+	import com.away3d.gloop.sound.Themes;
 	import com.away3d.gloop.utils.AssetLoaderQueue;
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.SettingsLoader;
@@ -100,7 +104,8 @@ package
 			initDb();
 			initStack();
 			initSound();
-			
+			initMusic();
+
 			loadAssets();
 		}
 		
@@ -140,7 +145,12 @@ package
 			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
 		}
 		
-		
+
+		private function initMusic():void {
+			MusicManager.addTheme( Themes.IN_GAME_THEME, new InGameMusicSound() );
+			MusicManager.addTheme( Themes.MAIN_THEME, new ThemeMusicSound() );
+		}
+
 		
 		private function loadState(db : LevelDatabase) : void
 		{

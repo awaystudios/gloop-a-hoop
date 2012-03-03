@@ -21,6 +21,7 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
+	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.HierarchyTool;
@@ -75,7 +76,10 @@ package com.away3d.gloop.screens.game
 			initControllers();
 		}
 
-		
+		public override function init( w:Number, h:Number ):void {
+			super.init( w, h );
+			MusicManager.playInGameTheme();
+		}
 		
 		private function initWorld() : void
 		{
