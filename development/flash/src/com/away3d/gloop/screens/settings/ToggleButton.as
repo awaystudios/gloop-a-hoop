@@ -53,6 +53,7 @@ package com.away3d.gloop.screens.settings
 		private function redraw() : void
 		{
 			_bmp.bitmapData = _toggled? _onBmp : _offBmp;
+			_bmp.smoothing = true;
 		}
 	}
 }
