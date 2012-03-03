@@ -4,14 +4,10 @@ package com.away3d.gloop.screens.game.controllers
 	import away3d.arcane;
 	import away3d.cameras.Camera3D;
 	import away3d.cameras.lenses.PerspectiveLens;
-	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.PlaneGeometry;
-	
+
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
-	
-	import flash.geom.Point;
+
 	import flash.geom.Vector3D;
 
 	use namespace arcane;
@@ -39,8 +35,6 @@ package com.away3d.gloop.screens.game.controllers
 		
 		private var _gloopIsFlying : Boolean;
 		private var _interactedSinceGloopWasFired:Boolean;
-
-		private var _containVector:Point = new Point();
 
 		private var _cameraHorizontalFovFactor:Number;
 		private var _cameraVerticalFovFactor:Number;
@@ -169,17 +163,6 @@ package com.away3d.gloop.screens.game.controllers
 			else {
 				lookAtGloop = false;
 
-				if( !_inputManager.interacting ) {
-					if( _containVector.x != 0 ) {
-						_inputManager.panX += 0.25 * _containVector.x;
-						_inputManager.applyImpulse( 0.05 * _containVector.x, 0 );
-					}
-					if( _containVector.y != 0 ) {
-						_inputManager.panY += 0.25 * _containVector.y;
-						_inputManager.applyImpulse( 0, 0.05 * _containVector.y );
-					}
-				}
-
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
@@ -208,21 +191,6 @@ package com.away3d.gloop.screens.game.controllers
 					_inputManager.panY = targetPosition.y = _boundsMinY + verticalVisibleHalfRange;
 				}
 			}
-
-			// soft XY containment
-			_containVector.x = 0; // TODO: if soft containment is not picked, remove all related logic
-			_containVector.y = 0;
-			/*if( panRightDistance < 0 ) {
-				_containVector.x = panRightDistance;
-			} else if( panLeftDistance < 0 ) {
-				_containVector.x = -panLeftDistance;
-			}
-			if( panUpDistance < 0 ) {
-				_containVector.y = panUpDistance;
-			} else if( panDownDistance < 0 ) {
-				_containVector.y = -panDownDistance;
-			}*/
-			
 
 			// hard containment for zoom
 			if( targetPosition.z > _boundsMaxZ ) {
