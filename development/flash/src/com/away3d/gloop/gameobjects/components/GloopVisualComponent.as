@@ -135,7 +135,7 @@ package com.away3d.gloop.gameobjects.components
 			
 			_splatAnim.play('splat');
 			
-			_splatAngle = angle;
+			_splatAngle = 180-angle;
 			_splatting = true;
 		}
 		

@@ -152,7 +152,7 @@ package com.away3d.gloop.screens.game.controllers
 				if (_finishMode) {
 					lookAtGloop = true;
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
-					targetPosition.y += 150 * Math.cos(_finishTargetRotation);
+					targetPosition.y += -150 * Math.cos(_finishTargetRotation);
 					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}
@@ -191,15 +191,17 @@ package com.away3d.gloop.screens.game.controllers
 			var panDownDistance:Number = ( _inputManager.panY - verticalVisibleHalfRange ) - _boundsMinY;
 
 			// hard XY containment
-			if( panRightDistance < 0 ) {
-				_inputManager.panX = targetPosition.x = _boundsMaxX - horizontalVisibleHalfRange;
-			} else if( panLeftDistance < 0 ) {
-				_inputManager.panX = targetPosition.x = _boundsMinX + horizontalVisibleHalfRange;
-			}
-			if( panUpDistance < 0 ) {
-				_inputManager.panY = targetPosition.y = _boundsMaxY - verticalVisibleHalfRange;
-			} else if( panDownDistance < 0 ) {
-				_inputManager.panY = targetPosition.y = _boundsMinY + verticalVisibleHalfRange;
+			if (!_finishMode) {
+				if( panRightDistance < 0 ) {
+					_inputManager.panX = targetPosition.x = _boundsMaxX - horizontalVisibleHalfRange;
+				} else if( panLeftDistance < 0 ) {
+					_inputManager.panX = targetPosition.x = _boundsMinX + horizontalVisibleHalfRange;
+				}
+				if( panUpDistance < 0 ) {
+					_inputManager.panY = targetPosition.y = _boundsMaxY - verticalVisibleHalfRange;
+				} else if( panDownDistance < 0 ) {
+					_inputManager.panY = targetPosition.y = _boundsMinY + verticalVisibleHalfRange;
+				}
 			}
 
 			// soft XY containment
