@@ -23,7 +23,7 @@ package com.away3d.gloop.screens.levelselect
 		private function init() : void
 		{
 			_ui = new LevelThumbUI();
-			_ui.indexTextfield.text = _proxy.indexInChapter.toString();
+			_ui.indexTextfield.text = (_proxy.indexInChapter+1).toString();
 			_ui.blob0.visible = (_proxy.bestStarsCollected > 0);
 			_ui.blob1.visible = (_proxy.bestStarsCollected > 1);
 			_ui.blob2.visible = (_proxy.bestStarsCollected > 2);

@@ -72,7 +72,7 @@ package com.away3d.gloop.level
 			_title = xml.title.toString();
 			_posterUrl = xml.@poster.toString();
 			
-			idx = 1;
+			idx = 0;
 			
 			for each (level_xml in xml.level) {
 				var level : LevelProxy;

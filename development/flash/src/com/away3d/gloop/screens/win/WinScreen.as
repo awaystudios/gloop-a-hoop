@@ -50,6 +50,8 @@ package com.away3d.gloop.screens.win
 		public override function activate() : void
 		{
 			var proxy : LevelProxy;
+			var nextIdx : uint;
+			
 			
 			proxy = _db.selectedLevelProxy;
 			
@@ -57,11 +59,16 @@ package com.away3d.gloop.screens.win
 			_ui.blob0.transform.colorTransform = (proxy.starsCollected > 0) ? _normalCtf : _dimCtf;
 			_ui.blob1.transform.colorTransform = (proxy.starsCollected > 1) ? _normalCtf : _dimCtf;
 			_ui.blob2.transform.colorTransform = (_db.selectedLevelProxy.starsCollected > 2) ? _normalCtf : _dimCtf;
+			
+			nextIdx = _db.selectedLevelProxy.indexInChapter + 1;
+			_ui.nextButton.visible = (nextIdx < _db.selectedChapter.levels.length);
 		}
 		
 		
 		private function onButtonClick(ev : MouseEvent) : void
 		{
+			var nextIdx : uint;
+			
 			SoundManager.play(Sounds.MENU_BUTTON);
 			
 			switch (ev.currentTarget) {
@@ -72,7 +79,8 @@ package com.away3d.gloop.screens.win
 					_stack.gotoScreen(Screens.START);
 					break;
 				case _ui.nextButton:
-					// TODO: Implement this
+					nextIdx = _db.selectedLevelProxy.indexInChapter + 1;
+					_db.selectLevel(_db.selectedChapter.levels[nextIdx]);
 					break;
 			}
 		}
