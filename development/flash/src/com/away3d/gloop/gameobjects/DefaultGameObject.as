@@ -1,5 +1,8 @@
 package com.away3d.gloop.gameobjects
 {
+
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.materials.lightpickers.LightPickerBase;
 	
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
@@ -40,6 +43,10 @@ package com.away3d.gloop.gameobjects
 		
 		public function onCollidingWithGloopEnd(gloop:Gloop):void {
 			
+		}
+
+		public function onCollidingWithGloopPreSolve( gloop:Gloop, event:ContactEvent = null ):void {
+
 		}
 		
 		public function setLightPicker(picker : LightPickerBase) : void

@@ -24,10 +24,12 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject = gameObject;
 			reportBeginContact = true;
 			reportEndContact = true;
+			reportPreSolve = true;
 			addEventListener(ContactEvent.BEGIN_CONTACT, onBeginContact);
 			addEventListener(ContactEvent.END_CONTACT, onEndContact);
+			addEventListener(ContactEvent.PRE_SOLVE, onPreSolveContact);
 		}
-		
+
 		public function setStatic(static : Boolean = true) : void
 		{
 			if (static)
@@ -118,6 +120,12 @@ package com.away3d.gloop.gameobjects.components
 			var gloop:Gloop = getGloop(e.other);
 			if (!gloop) return;
 			_gameObject.onCollidingWithGloopEnd(gloop);
+		}
+
+		private function onPreSolveContact( e:ContactEvent ):void {
+			var gloop:Gloop = getGloop(e.other);
+			if( !gloop ) return;
+			_gameObject.onCollidingWithGloopPreSolve( gloop, e );
 		}
 		
 		public function getGloop(fixture:b2Fixture):Gloop {
