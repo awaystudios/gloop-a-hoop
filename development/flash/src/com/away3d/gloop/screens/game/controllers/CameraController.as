@@ -45,6 +45,8 @@ package com.away3d.gloop.screens.game.controllers
 		private var _cameraHorizontalFovFactor:Number;
 		private var _cameraVerticalFovFactor:Number;
 		private var _levelVisibleHalfRange:Number;
+
+		private var _cameraPosition:Vector3D;
 		
 		public function CameraController(inputManager : InputManager, camera : Camera3D, gloop : Gloop)
 		{
@@ -62,8 +64,8 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.rotationY *= 0.9;
 			_camera.rotationZ *= 0.9;
 			
-			_lookAtTarget.x = _camera.x;
-			_lookAtTarget.y = _camera.y;
+			_lookAtTarget.x = _cameraPosition.x;
+			_lookAtTarget.y = _cameraPosition.y;
 		}
 		
 		
@@ -118,7 +120,10 @@ package com.away3d.gloop.screens.game.controllers
 			var maxHorizontalZ:Number = halfRangeX / _cameraHorizontalFovFactor;
 			var maxVerticalZ:Number = halfRangeY / _cameraVerticalFovFactor;
 			var maxTotalZ:Number = Math.min( maxHorizontalZ, maxVerticalZ );
+			_camera.x = 0;
+			_camera.y = 0;
 			_camera.z = -maxTotalZ;
+			_cameraPosition = _camera.position.clone();
 			_inputManager.zoom = _boundsMinZ = ( -maxTotalZ + 1000 ) / 200;
 
 			// uncomment to trace pan containment values from level.
@@ -183,8 +188,8 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			// evaluate containment
-			var horizontalVisibleHalfRange:Number = -_camera.z * _cameraHorizontalFovFactor;
-			var verticalVisibleHalfRange:Number = -_camera.z * _cameraVerticalFovFactor;
+			var horizontalVisibleHalfRange:Number = -_cameraPosition.z * _cameraHorizontalFovFactor;
+			var verticalVisibleHalfRange:Number = -_cameraPosition.z * _cameraVerticalFovFactor;
 			var panRightDistance:Number = _boundsMaxX - ( _inputManager.panX + horizontalVisibleHalfRange );
 			var panLeftDistance:Number = ( _inputManager.panX - horizontalVisibleHalfRange ) - _boundsMinX;
 			var panUpDistance:Number = _boundsMaxY - ( _inputManager.panY + verticalVisibleHalfRange );
@@ -229,19 +234,23 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			// ease camera towards target position
-			_camera.x += (targetPosition.x - _camera.x) * ease;
-			_camera.y += (targetPosition.y - _camera.y) * ease;
-			_camera.z += ( ( targetPosition.z * 200 - 1000 ) - _camera.z) * ease;
+			_cameraPosition.x += (targetPosition.x - _cameraPosition.x) * ease;
+			_cameraPosition.y += (targetPosition.y - _cameraPosition.y) * ease;
+			_cameraPosition.z += ( ( targetPosition.z * 200 - 1000 ) - _cameraPosition.z) * ease;
 			
 			if (lookAtGloop) {
 				_lookAtTarget.x += (_gloop.meshComponent.mesh.x - _lookAtTarget.x) * ease;
 				_lookAtTarget.y += (_gloop.meshComponent.mesh.y - _lookAtTarget.y) * ease;
 			}
 			else {
-				_lookAtTarget.x += (_camera.x - _lookAtTarget.x) * ease;
-				_lookAtTarget.y += (_camera.y - _lookAtTarget.y) * ease;
+				_lookAtTarget.x += (_cameraPosition.x - _lookAtTarget.x) * ease;
+				_lookAtTarget.y += (_cameraPosition.y - _lookAtTarget.y) * ease;
 			}
-			
+
+			_camera.x = _cameraPosition.x;
+			_camera.y = _cameraPosition.y + 200; // TODO: move to settings
+			_camera.z = _cameraPosition.z;
+
 			_camera.lookAt(_lookAtTarget);
 		}
 	}
