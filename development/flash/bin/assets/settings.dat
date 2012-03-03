@@ -45,8 +45,8 @@ INPUT_PICK_DISTANCE           50    # the maximum distance a hoops centerpoint c
 
 LAUNCHER_DRAG_MAX             195     # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_DRAG_MIN             40      # dragging a distance shorter than this cancels the launch
-LAUNCHER_POWER_BASE           .15     # the value remaining is scaled by this multiplier before being applied to gloop
-LAUNCHER_POWER_VARIATION      2.5
+LAUNCHER_POWER_BASE           .0     # the value remaining is scaled by this multiplier before being applied to gloop
+LAUNCHER_POWER_VARIATION      2
 
 PHYSICS_GRAVITY_Y             2
 PHYSICS_POSITION_ITERATIONS   5
