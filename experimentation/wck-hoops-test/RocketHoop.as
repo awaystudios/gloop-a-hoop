@@ -31,9 +31,19 @@ package
 		public function handleContact( e:ContactEvent ):void {
 			var body:BodyShape = e.other.m_userData;
 			if( body ) {
-				body.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
-				var impulse:V2 = b2body.GetWorldVector( new V2( 0, -impulseSpeed ) );
-				body.b2body.ApplyImpulse( impulse, body.b2body.GetWorldCenter() ); // apply up impulse
+				var collisionValid:Boolean = true;
+				if( e.normal ) {
+					var localSpaceNormal:V2 = b2body.GetLocalVector( e.normal );
+					trace( "collision local normal: " + localSpaceNormal  );
+					if( Math.abs( localSpaceNormal.x ) > 0.01 ) collisionValid = false; // no hits from the sides
+					if( localSpaceNormal.y > 0 ) collisionValid = false; // no hits from the back
+					if( collisionValid ) {
+						trace( "COLLISION VALID" );
+						body.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
+						var impulse:V2 = b2body.GetWorldVector( new V2( 0, -impulseSpeed ) );
+						body.b2body.ApplyImpulse( impulse, body.b2body.GetWorldCenter() ); // apply up impulse
+					}
+				}
 			}
 		}
 	}
