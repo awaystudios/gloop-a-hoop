@@ -95,7 +95,8 @@ package com.away3d.gloop.screens.game.controllers
 			_finishMode = false;
 			_gloopIsFlying = false;
 		}
-
+		
+		
 		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, maxZoom : Number ) : void
 		{
 			_boundsMinX = minX;

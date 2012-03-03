@@ -140,13 +140,6 @@ package com.away3d.gloop.screens.game
 			
 			_editController.activate(_levelProxy);
 
-			_cameraController.setBounds(
-				_level.bounds.left,
-				_level.bounds.right,
-				_level.bounds.top,
-				_level.bounds.bottom,
-				3 ); // TODO: Move these to settings
-			
 			_inputManager.reset(_level);
 			_inputManager.activate();
 			
@@ -157,6 +150,14 @@ package com.away3d.gloop.screens.game
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splatComponent.splattables = _level.splattableMeshes;
 
+			_cameraController.setBounds(
+				_level.bounds.left,
+				_level.bounds.right,
+				_level.bounds.top,
+				_level.bounds.bottom,
+				3 ); 
+			_cameraController.setGloopIdle();
+			
 			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
 			setTimeout(function():void {
 				_level.add(_gloop);
