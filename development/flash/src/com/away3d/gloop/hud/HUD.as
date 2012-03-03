@@ -23,7 +23,7 @@ package com.away3d.gloop.hud
 		private var _levelProxy : LevelProxy;
 		
 		private var _stars : Vector.<StarIcon>;
-		private var _inventory : InventoryDrawer;
+		//private var _inventory : InventoryDrawer;
 		
 		private var _restartBtn : RestartButton;
 		private var _pauseBtn : PauseButton;
@@ -55,10 +55,12 @@ package com.away3d.gloop.hud
 			_stars[2].y = _stars[0].y;
 			addChild(_stars[2]);
 			
+			/*
 			_inventory = new InventoryDrawer(_h - 200);
 			_inventory.y = 100;
 			_inventory.addEventListener(Event.SELECT, onInventorySelect);
 			addChild(_inventory);
+			*/
 			
 			_restartBtn = new RestartButton();
 			_restartBtn.x = _w - 120;
@@ -96,6 +98,7 @@ package com.away3d.gloop.hud
 		
 		private function draw() : void
 		{
+			/*
 			var i : uint;
 			var len : uint;
 			
@@ -106,12 +109,13 @@ package com.away3d.gloop.hud
 				item = _levelProxy.inventory.items[i];
 				_inventory.addItem(item);
 			}
+			*/
 		}
 		
 		
 		private function clear() : void
 		{
-			_inventory.clear();
+			//_inventory.clear();
 		}
 		
 		
@@ -127,10 +131,12 @@ package com.away3d.gloop.hud
 			}
 		}
 			
+		/*
 		private function onInventorySelect(ev : Event) : void
 		{
 			_levelProxy.inventory.select(_inventory.selectedItem);
 		}
+		*/
 		
 		
 		private function onPauseBtnClick(ev : MouseEvent) : void
