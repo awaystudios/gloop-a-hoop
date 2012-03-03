@@ -19,8 +19,5 @@
 
         <level id="6" awd="assets/levels/006.awd">
         </level>
-
-        <level id="999" awd="assets/levels/testlevel.awd">
-        </level>
     </chapter>
 </levels>
