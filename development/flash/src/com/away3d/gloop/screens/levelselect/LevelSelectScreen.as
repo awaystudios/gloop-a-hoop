@@ -37,8 +37,8 @@ package com.away3d.gloop.screens.levelselect
 			var tly : Number;
 			
 			len = _db.selectedChapter.levels.length;
-			rows = Math.ceil(len / 5);
-			cols = (len < 5)? len : 5;
+			rows = Math.ceil(len / 4);
+			cols = (len < 4)? len : 4;
 			
 			tlx = _w/2 - cols * 70;
 			tly = _h/2 - rows * 75;
