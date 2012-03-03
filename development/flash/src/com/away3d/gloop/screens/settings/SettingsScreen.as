@@ -10,6 +10,7 @@ package com.away3d.gloop.screens.settings
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
+	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.StateSaveManager;
@@ -44,12 +45,14 @@ package com.away3d.gloop.screens.settings
 			_soundBtn = new ToggleButton(new SoundOnBitmap(), new SoundOffBitmap());
 			_soundBtn.x = -100;
 			_soundBtn.y = -80;
+			_soundBtn.toggledOn = true;
 			_soundBtn.addEventListener(Event.CHANGE, onSoundToggleChange);
 			_ctr.addChild(_soundBtn);
 			
 			_musicBtn = new ToggleButton(new MusicOnBitmap(), new MusicOffBitmap());
 			_musicBtn.x = 100;
 			_musicBtn.y = _soundBtn.y;
+			_musicBtn.toggledOn = true;
 			_musicBtn.addEventListener(Event.CHANGE, onMusicToggleChange);
 			_ctr.addChild(_musicBtn);
 			
@@ -70,15 +73,17 @@ package com.away3d.gloop.screens.settings
 		
 		private function onMusicToggleChange(ev : Event) : void
 		{
-			trace('music', _musicBtn.toggledOn);
 			SoundManager.play(Sounds.MENU_BUTTON);
+			MusicManager.enabled = _musicBtn.toggledOn;
 		}
 		
 		
 		private function onSoundToggleChange(ev : Event) : void
 		{
-			trace('sound', _soundBtn.toggledOn);
+			SoundManager.enabled = true;
 			SoundManager.play(Sounds.MENU_BUTTON);
+
+			SoundManager.enabled = _soundBtn.toggledOn;
 		}
 		
 		

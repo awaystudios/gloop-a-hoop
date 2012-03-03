@@ -6,6 +6,7 @@ package com.away3d.gloop.sound
 	{
 		private static var _sounds : Object;
 		private static var _initialized : Boolean;
+		private static var _enabled:Boolean = true;
 		
 		private static function init() : void
 		{
@@ -26,12 +27,19 @@ package com.away3d.gloop.sound
 		
 		public static function play(id : String) : void
 		{
+			if( !_enabled ) return;
 			var sound : Sound;
-			
 			init();
-			
 			sound = _sounds[id];
 			sound.play();
+		}
+
+		public static function get enabled():Boolean {
+			return _enabled;
+		}
+
+		public static function set enabled( value:Boolean ):void {
+			_enabled = value;
 		}
 	}
 }

@@ -3,6 +3,7 @@ package com.away3d.gloop.screens
 	import com.away3d.gloop.lib.LogoBitmap;
 	import com.away3d.gloop.lib.buttons.PlayButton;
 	import com.away3d.gloop.lib.buttons.SettingsButton;
+	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	
@@ -26,7 +27,11 @@ package com.away3d.gloop.screens
 			super();
 			_stack = stack;
 		}
-		
+
+		public override function init( w:Number, h:Number ):void {
+			super.init( w, h );
+			MusicManager.playMainTheme();
+		}
 		
 		protected override function initScreen():void
 		{
