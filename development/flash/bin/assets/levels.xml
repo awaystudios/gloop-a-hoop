@@ -19,5 +19,11 @@
 
         <level id="6" awd="assets/levels/006.awd">
         </level>
+
+        <level id="7" awd="assets/levels/007.awd">
+        </level>
+
+        <level id="8" awd="assets/levels/008.awd">
+        </level>
     </chapter>
 </levels>
