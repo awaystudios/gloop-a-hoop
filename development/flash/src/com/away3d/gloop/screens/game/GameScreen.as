@@ -153,6 +153,7 @@ package com.away3d.gloop.screens.game
 			_cannon.physics.moveTo(_level.spawnPoint.x, _level.spawnPoint.y, false);
 			_level.add(_cannon);
 
+			_gloop.traceComponent.pathTracer.reset();
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splatComponent.splattables = _level.splattableMeshes;
 

@@ -73,6 +73,9 @@ package com.away3d.gloop.input
 			_panY = 300;
 			_panVelocityX = 0;
 			_panVelocityY = 0;
+			
+			_touch1.id = -1;
+			_touch2.id = -1;
 		}
 		
 		override public function activate() : void
