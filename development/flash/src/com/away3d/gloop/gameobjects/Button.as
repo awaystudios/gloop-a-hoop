@@ -1,5 +1,8 @@
 package com.away3d.gloop.gameobjects
 {
+
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -82,7 +85,7 @@ package com.away3d.gloop.gameobjects
 		}
 		
 		
-		public override function onCollidingWithGloopStart(gloop : Gloop) : void
+		public override function onCollidingWithGloopStart( gloop : Gloop, event:ContactEvent = null ) : void
 		{
 			_pressed = !_pressed;
 			

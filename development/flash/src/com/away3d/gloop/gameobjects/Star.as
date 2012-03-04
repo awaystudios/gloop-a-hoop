@@ -1,5 +1,8 @@
 package com.away3d.gloop.gameobjects
 {
+
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -67,7 +70,7 @@ package com.away3d.gloop.gameobjects
 			_meshComponent.mesh.rotationZ = _randomRotation;
 		}
 		
-		override public function onCollidingWithGloopStart(gloop:Gloop):void {
+		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
 			super.onCollidingWithGloopStart(gloop);
 			if (_touched) return;
 			_touched = true;

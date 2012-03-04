@@ -30,17 +30,44 @@ package com.away3d.gloop.gameobjects.components
 
 		public function enableReportBeginContact():void {
 			reportBeginContact = true;
-			addEventListener(ContactEvent.BEGIN_CONTACT, onBeginContact);
+			if( !hasEventListener( ContactEvent.BEGIN_CONTACT ) ) {
+				addEventListener( ContactEvent.BEGIN_CONTACT, onBeginContact );
+			}
 		}
 
 		public function enableReportEndContact():void {
 			reportEndContact = true;
-			addEventListener(ContactEvent.END_CONTACT, onEndContact);
+			if( !hasEventListener( ContactEvent.END_CONTACT ) ) {
+				addEventListener(ContactEvent.END_CONTACT, onEndContact);
+			}
 		}
 
 		public function enableReportPreSolveContact():void {
 			reportPreSolve = true;
-			addEventListener(ContactEvent.PRE_SOLVE, onPreSolveContact);
+			if( !hasEventListener( ContactEvent.PRE_SOLVE ) ) {
+				addEventListener(ContactEvent.PRE_SOLVE, onPreSolveContact);
+			}
+		}
+
+		public function disableReportBeginContact():void {
+			reportBeginContact = false;
+			if( hasEventListener( ContactEvent.BEGIN_CONTACT ) ) {
+				removeEventListener( ContactEvent.BEGIN_CONTACT, onBeginContact );
+			}
+		}
+
+		public function disableReportEndContact():void {
+			reportEndContact = false;
+			if( hasEventListener( ContactEvent.END_CONTACT ) ) {
+				removeEventListener(ContactEvent.END_CONTACT, onEndContact);
+			}
+		}
+
+		public function disableReportPreSolveContact():void {
+			reportPreSolve = false;
+			if( hasEventListener( ContactEvent.PRE_SOLVE ) ) {
+				removeEventListener(ContactEvent.PRE_SOLVE, onPreSolveContact);
+			}
 		}
 
 		public function setStatic(static : Boolean = true) : void

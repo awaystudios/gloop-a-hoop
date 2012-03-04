@@ -37,11 +37,11 @@ package com.away3d.gloop.gameobjects
 			
 		}
 		
-		public function onCollidingWithGloopStart(gloop:Gloop):void {
+		public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null ):void {
 			
 		}
 		
-		public function onCollidingWithGloopEnd(gloop:Gloop):void {
+		public function onCollidingWithGloopEnd(gloop:Gloop, event:ContactEvent = null ):void {
 			
 		}
 
