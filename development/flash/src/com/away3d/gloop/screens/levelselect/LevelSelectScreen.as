@@ -66,8 +66,8 @@ package com.away3d.gloop.screens.levelselect
 			}
 			
 			_totalStars = new StarTotal(_db);
-			_totalStars.x = _w/2 - 140;
-			_totalStars.y = -_h/2 + 20;
+			_totalStars.x = 372;
+			_totalStars.y = -360;
 			_ctr.addChild(_totalStars);
 			
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
