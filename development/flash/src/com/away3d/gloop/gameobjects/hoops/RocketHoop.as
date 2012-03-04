@@ -18,19 +18,12 @@ package com.away3d.gloop.gameobjects.hoops {
 			super(0x3f7fff, worldX, worldY, rotation);
 		}
 		
-		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
-
+		override public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null):void {
 			super.onCollidingWithGloopStart(gloop);
-
-			if( event.normal ) {
-				var localSpaceNormal:V2 = _physics.b2body.GetLocalVector( event.normal );
-				if( !( Math.abs( localSpaceNormal.x ) > 0.01 ) ) { // if not hit from the sides
-					gloop.physics.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
-					var normalComponent:Number = localSpaceNormal.y > 0 ? 1 : -1;
-					var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -normalComponent * Settings.ROCKET_POWER ) );
-					gloop.physics.b2body.ApplyImpulse( impulse, _physics.b2body.GetWorldCenter() ); // apply up impulse
-				}
-			}
+			
+			gloop.physics.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
+			var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -Settings.ROCKET_POWER ) );
+			gloop.physics.b2body.ApplyImpulse( impulse, _physics.b2body.GetWorldCenter() ); // apply up impulse
 		}
 		
 		protected override function getIconGeometry() : Geometry
