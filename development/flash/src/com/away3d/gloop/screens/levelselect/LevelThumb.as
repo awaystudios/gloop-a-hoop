@@ -24,9 +24,6 @@ package com.away3d.gloop.screens.levelselect
 		{
 			_ui = new LevelThumbUI();
 			_ui.indexTextfield.text = (_proxy.indexInChapter+1).toString();
-			_ui.blob0.visible = (_proxy.bestStarsCollected > 0);
-			_ui.blob1.visible = (_proxy.bestStarsCollected > 1);
-			_ui.blob2.visible = (_proxy.bestStarsCollected > 2);
 			addChild(_ui);
 		}
 		
@@ -39,6 +36,9 @@ package com.away3d.gloop.screens.levelselect
 		
 		public function redraw() : void
 		{
+			_ui.blob0.visible = (_proxy.bestStarsCollected > 0);
+			_ui.blob1.visible = (_proxy.bestStarsCollected > 1);
+			_ui.blob2.visible = (_proxy.bestStarsCollected > 2);
 			_ui.padlock.visible = _proxy.locked;
 		}
 	}
