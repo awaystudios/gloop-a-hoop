@@ -22,6 +22,7 @@ package com.away3d.gloop.gameobjects.components
 		public function PhysicsComponent(gameObject : DefaultGameObject)
 		{
 			_gameObject = gameObject;
+			allowDragging = false;
 		}
 
 		public function enableReportBeginContact():void {
