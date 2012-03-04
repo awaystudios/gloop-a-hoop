@@ -1,5 +1,6 @@
 package com.away3d.gloop.screens.settings
 {
+	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.lib.buttons.AboutButton;
 	import com.away3d.gloop.lib.buttons.BackButton;
 	import com.away3d.gloop.lib.buttons.ClearStateButton;
@@ -20,6 +21,7 @@ package com.away3d.gloop.screens.settings
 	
 	public class SettingsScreen extends ScreenBase
 	{
+		private var _db : LevelDatabase;
 		private var _stack : ScreenStack;
 		private var _stateMgr : StateSaveManager;
 		
@@ -29,10 +31,11 @@ package com.away3d.gloop.screens.settings
 		private var _soundBtn : ToggleButton;
 		private var _musicBtn : ToggleButton;
 		
-		public function SettingsScreen(stack : ScreenStack, stateMgr : StateSaveManager)
+		public function SettingsScreen(db : LevelDatabase, stack : ScreenStack, stateMgr : StateSaveManager)
 		{
 			super(true, true);
 			
+			_db = db;
 			_stack = stack;
 			_stateMgr = stateMgr;
 		}
@@ -90,6 +93,7 @@ package com.away3d.gloop.screens.settings
 		private function onClearBtnClick(ev : MouseEvent) : void
 		{
 			SoundManager.play(Sounds.MENU_BUTTON);
+			_db.clearState();
 			_stateMgr.clearState();
 		}
 		

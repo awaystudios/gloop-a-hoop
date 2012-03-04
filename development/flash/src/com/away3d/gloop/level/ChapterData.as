@@ -81,6 +81,20 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function clearState() : void
+		{
+			var i : uint;
+			
+			for (i=0; i<_levels.length; i++) {
+				_levels[i].locked = true;
+				_levels[i].clearState();
+			}
+			
+			if (_levels.length > 0)
+				_levels[0].locked = false;
+		}
+		
+		
 		public function parseXml(xml : XML) : void
 		{
 			var idx : uint;

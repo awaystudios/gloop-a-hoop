@@ -100,6 +100,16 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function clearState() : void
+		{
+			var i : uint;
+			
+			for (i=0; i<_chapters.length; i++) {
+				_chapters[i].clearState();
+			}
+		}
+		
+		
 		public function loadXml(url : String) : void
 		{
 			var xml_loader : URLLoader;

@@ -166,6 +166,13 @@ package com.away3d.gloop.level
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_RESET));
 		}
 		
+		
+		public function clearState() : void
+		{
+			_best_num_stars = 0;
+			_completed = false;
+		}
+		
 		private function onLevelComplete(ev : Event) : void
 		{
 			var loader : LevelLoader;
