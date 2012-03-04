@@ -1,6 +1,6 @@
 <levels>
     <chapter poster="assets/chapters/01.png">
-        <title>Chapter 1</title>
+        <title>Welcome to the lab</title>
 
         <level id="1" awd="assets/levels/001.awd">
         </level>
