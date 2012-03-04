@@ -14,6 +14,7 @@ package com.away3d.gloop.level
 		private var _awd_url : String;
 		private var _level : Level;
 		
+		private var _locked : Boolean;
 		private var _completed : Boolean;
 		
 		// Best star result and stars collected this round
@@ -68,6 +69,18 @@ package com.away3d.gloop.level
 		public function get completed() : Boolean
 		{
 			return _completed;
+		}
+		
+		
+		public function get locked() : Boolean
+		{
+			return _locked;
+		}
+		public function set locked(val : Boolean) : void
+		{
+			if (val != _locked) {
+				_locked = val;
+			}
 		}
 		
 		

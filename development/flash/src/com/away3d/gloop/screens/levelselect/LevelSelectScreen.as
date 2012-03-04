@@ -43,6 +43,8 @@ package com.away3d.gloop.screens.levelselect
 			tlx = _w/2 - cols * 70;
 			tly = _h/2 - rows * 75;
 			
+			_thumbs = new Vector.<LevelThumb>();
+			
 			for (i=0; i<len; i++) {
 				var thumb : LevelThumb;
 				var level : LevelProxy;
@@ -57,10 +59,26 @@ package com.away3d.gloop.screens.levelselect
 				thumb.x = tlx + col * 140;
 				thumb.y = tly + row * 150;
 				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
+				
 				addChild(thumb);
+				_thumbs.push(thumb);
 			}
 			
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
+		}
+		
+		
+		public override function activate() : void
+		{
+			var i : uint;
+			var len : uint;
+			
+			super.activate();
+			
+			len = _thumbs.length;
+			for (i=0; i<len; i++) {
+				_thumbs[i].redraw();
+			}
 		}
 		
 		
@@ -68,9 +86,13 @@ package com.away3d.gloop.screens.levelselect
 		{
 			var thumb : LevelThumb;
 			
-			SoundManager.play(Sounds.MENU_BUTTON);
-				
 			thumb = LevelThumb(ev.currentTarget);
+			
+			// Don't allow selection of locked levels
+			if (thumb.levelProxy.locked)
+				return;
+			
+			SoundManager.play(Sounds.MENU_BUTTON);
 			_db.selectLevel(thumb.levelProxy);
 		}
 		

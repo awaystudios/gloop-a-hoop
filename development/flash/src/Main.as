@@ -229,7 +229,15 @@ package
 		
 		private function onDbLevelWin(ev : Event) : void
 		{
+			var idx : uint;
+			
 			saveState( _db.getStateXml() );
+			
+			// Unlock next level
+			idx = _db.selectedLevelProxy.indexInChapter + 1;
+			if (idx < _db.selectedChapter.levels.length) {
+				_db.selectedChapter.levels[idx].locked = false;
+			}
 			
 			_stack.gotoScreen(Screens.WIN);
 		}

@@ -68,19 +68,24 @@ package com.away3d.gloop.level
 		{
 			var idx : uint;
 			var level_xml : XML;
+			var prevCompleted : Boolean;
 			
 			_title = xml.title.toString();
 			_posterUrl = xml.@poster.toString();
 			
 			idx = 0;
+			prevCompleted = true;
 			
 			for each (level_xml in xml.level) {
 				var level : LevelProxy;
 				
 				level = new LevelProxy(idx++);
 				level.parseXml(level_xml);
+				level.locked = !prevCompleted;
 				
 				_levels.push(level);
+				
+				prevCompleted = level.completed;
 			}
 		}
 		

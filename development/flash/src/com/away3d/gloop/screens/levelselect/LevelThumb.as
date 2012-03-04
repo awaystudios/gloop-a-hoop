@@ -35,5 +35,11 @@ package com.away3d.gloop.screens.levelselect
 		{
 			return _proxy;
 		}
+		
+		
+		public function redraw() : void
+		{
+			_ui.padlock.visible = _proxy.locked;
+		}
 	}
 }
