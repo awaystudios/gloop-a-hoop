@@ -189,7 +189,7 @@ package com.away3d.gloop.gameobjects
 		{
 			var rot : Number;
 			
-			rot = _cannonBody.rotationZ + 90;
+			rot = physics.rotation;
 			if (rot > 180) rot -= 360;
 				
 			_cannonBody.scaleY = (rot < 0)? -1 : 1;

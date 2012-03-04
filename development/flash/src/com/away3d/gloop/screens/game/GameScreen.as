@@ -59,6 +59,8 @@ package com.away3d.gloop.screens.game
 		private var _hud : HUD;
 		private var _timestep:Timestep;
 		
+		private var _firstReset : Boolean;
+		
 
 		public function GameScreen( db:LevelDatabase, stack : ScreenStack, view : View3D ) {
 			super( false );
@@ -160,10 +162,11 @@ package com.away3d.gloop.screens.game
 				3 ); 
 			_cameraController.setGloopIdle();
 			
+			_firstReset = true;
+			
 			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
 			setTimeout(function():void {
 				_level.add(_gloop);
-				_cannon.spawnGloop(_gloop);
 				_levelProxy.reset();			
 
 				// Apply nice lighting.
@@ -254,7 +257,15 @@ package com.away3d.gloop.screens.game
 			
 			_hud.reset(_levelProxy);
 			
-			_cannon.spawnGloop(_gloop, _level.spawnAngle);
+			if (_firstReset) {
+				// Reset both position and cannon aim angle
+				_cannon.spawnGloop(_gloop, _level.spawnAngle);
+				_firstReset = false;
+			}
+			else {
+				// Start back in cannon, but don't change it's angle
+				_cannon.spawnGloop(_gloop);
+			}
 			
 			_cameraController.setGloopIdle();
 			_cameraController.resetOrientation();
