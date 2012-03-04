@@ -4,14 +4,10 @@ package com.away3d.gloop.gameobjects
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
-	import away3d.primitives.CylinderGeometry;
-	
-	import com.away3d.gloop.Settings;
+
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	
@@ -28,6 +24,7 @@ package com.away3d.gloop.gameobjects
 			_physics.y = worldY;
 			_physics.applyGravity = false;
 			_physics.isSensor = true;
+			_physics.enableReportBeginContact();
 			
 			initVisual();
 		}

@@ -55,6 +55,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.rotation = rotation;
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
+			_physics.enableReportBeginContact();
 			
 			initVisual()
 		}

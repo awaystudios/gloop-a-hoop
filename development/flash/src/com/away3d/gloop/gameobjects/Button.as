@@ -29,12 +29,13 @@ package com.away3d.gloop.gameobjects
 			_physics.rotation = rotation;
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
+			_physics.enableReportBeginContact();
 			_physics.setStatic();
 			
 			_btnGroup = btnGroup;
 			
 			_controllables = new Vector.<IButtonControllable>();
-			
+
 			initVisual();
 		}
 		

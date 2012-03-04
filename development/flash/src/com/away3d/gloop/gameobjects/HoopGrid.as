@@ -1,7 +1,6 @@
 package com.away3d.gloop.gameobjects
 {
 	import away3d.entities.Mesh;
-	import away3d.materials.BitmapMaterial;
 	import away3d.materials.TextureMaterial;
 	import away3d.primitives.PlaneGeometry;
 	import away3d.textures.BitmapTexture;

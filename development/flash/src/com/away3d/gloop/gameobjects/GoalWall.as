@@ -33,6 +33,7 @@ package com.away3d.gloop.gameobjects {
 			_height = height;
 			_width = width;
 			_physics = new GoalWallPhysicsComponent(this, offsetX, offsetY, width, height);
+			_physics.enableReportBeginContact();
 			super(offsetX, offsetY, width, height, worldX, worldY);
 			
 			initVisual();

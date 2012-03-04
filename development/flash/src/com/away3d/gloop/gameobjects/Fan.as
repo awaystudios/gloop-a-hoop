@@ -30,6 +30,8 @@ package com.away3d.gloop.gameobjects
 			_physics = new FanPhysicsComponent( this );
 			_physics.x = worldX;
 			_physics.y = worldY;
+			_physics.enableReportBeginContact();
+			_physics.enableReportEndContact();
 			_physics.rotation = rotation;
 
 			_physics.fixedRotation = true;
