@@ -23,6 +23,7 @@ package com.away3d.gloop.gameobjects.components
 		{
 			_gameObject = gameObject;
 			allowDragging = false;
+			awake = false;
 		}
 
 		public function enableReportBeginContact():void {
