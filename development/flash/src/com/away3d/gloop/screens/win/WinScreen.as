@@ -28,6 +28,8 @@ package com.away3d.gloop.screens.win
 			
 			_db = db;
 			_stack = stack;
+			
+			_musicTheme = null;
 		}
 		
 		
