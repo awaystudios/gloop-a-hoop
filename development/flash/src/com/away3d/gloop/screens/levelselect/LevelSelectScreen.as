@@ -16,6 +16,7 @@ package com.away3d.gloop.screens.levelselect
 		private var _db : LevelDatabase;
 		private var _stack : ScreenStack;
 		
+		private var _totalStars : StarTotal;
 		private var _thumbs : Vector.<LevelThumb>;
 		
 		public function LevelSelectScreen(db : LevelDatabase, stack : ScreenStack)
@@ -64,6 +65,11 @@ package com.away3d.gloop.screens.levelselect
 				_thumbs.push(thumb);
 			}
 			
+			_totalStars = new StarTotal(_db);
+			_totalStars.x = _w/2 - 140;
+			_totalStars.y = -_h/2 + 20;
+			_ctr.addChild(_totalStars);
+			
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
 		}
 		
@@ -79,6 +85,8 @@ package com.away3d.gloop.screens.levelselect
 			for (i=0; i<len; i++) {
 				_thumbs[i].redraw();
 			}
+			
+			_totalStars.redraw();
 		}
 		
 		

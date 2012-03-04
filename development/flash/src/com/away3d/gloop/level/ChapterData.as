@@ -64,6 +64,23 @@ package com.away3d.gloop.level
 		}
 		
 		
+		public function calcTotalStarsCollected() : uint
+		{
+			var i : uint;
+			var len : uint;
+			var stars : uint;
+			
+			len = _levels.length;
+			stars = 0;
+			
+			for (i=0; i<len; i++) {
+				stars += _levels[i].bestStarsCollected;
+			}
+			
+			return stars;
+		}
+		
+		
 		public function parseXml(xml : XML) : void
 		{
 			var idx : uint;
