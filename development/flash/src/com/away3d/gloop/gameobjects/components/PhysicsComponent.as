@@ -24,6 +24,8 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject = gameObject;
 			allowDragging = false;
 			awake = false;
+			applyGravity = false;
+			autoSleep = true;
 		}
 
 		public function enableReportBeginContact():void {

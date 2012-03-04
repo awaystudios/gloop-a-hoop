@@ -51,7 +51,7 @@ package com.away3d.gloop.gameobjects
 			_physics.friction = Settings.GLOOP_FRICTION;
 			_physics.restitution = Settings.GLOOP_RESTITUTION;
 			_physics.linearDamping = Settings.GLOOP_LINEAR_DAMPING;
-
+			_physics.applyGravity = true;
 			_physics.reportPostSolve = true;
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
 			
