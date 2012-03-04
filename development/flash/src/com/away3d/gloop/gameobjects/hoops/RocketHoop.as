@@ -1,6 +1,7 @@
 package com.away3d.gloop.gameobjects.hoops {
 	import Box2DAS.Common.V2;
-	
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.core.base.Geometry;
 	import away3d.library.AssetLibrary;
 	
@@ -17,9 +18,10 @@ package com.away3d.gloop.gameobjects.hoops {
 			super(0x3f7fff, worldX, worldY, rotation);
 		}
 		
-		override public function onCollidingWithGloopStart(gloop:Gloop):void {
+		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
+
 			super.onCollidingWithGloopStart(gloop);
-			
+
 			gloop.physics.b2body.SetLinearVelocity( new V2( 0, 0 ) ); // kill incident velocity
 			var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -Settings.ROCKET_POWER ) );
 			gloop.physics.b2body.ApplyImpulse( impulse, _physics.b2body.GetWorldCenter() ); // apply up impulse

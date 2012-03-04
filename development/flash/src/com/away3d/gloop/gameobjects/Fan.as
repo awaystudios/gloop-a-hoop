@@ -1,6 +1,8 @@
 package com.away3d.gloop.gameobjects
 {
 
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -68,12 +70,12 @@ package com.away3d.gloop.gameobjects
 			}
 		}
 		
-		override public function onCollidingWithGloopStart(gloop:Gloop):void {
+		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
 			super.onCollidingWithGloopStart(gloop);
 			_gloop = gloop;
 		}
 		
-		override public function onCollidingWithGloopEnd(gloop:Gloop):void {
+		override public function onCollidingWithGloopEnd( gloop:Gloop, event:ContactEvent = null ):void {
 			super.onCollidingWithGloopEnd(gloop);
 			_gloop = null;
 		}

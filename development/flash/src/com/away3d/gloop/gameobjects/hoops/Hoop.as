@@ -1,6 +1,7 @@
 package com.away3d.gloop.gameobjects.hoops
 {
 	import Box2DAS.Common.V2;
+	import Box2DAS.Dynamics.ContactEvent;
 	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
 	
 	import away3d.core.base.Geometry;
@@ -163,7 +164,7 @@ package com.away3d.gloop.gameobjects.hoops
 			return false;
 		}
 		
-		public override function onCollidingWithGloopStart(gloop:Gloop):void
+		public override function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void
 		{
 			super.onCollidingWithGloopStart(gloop);
 			

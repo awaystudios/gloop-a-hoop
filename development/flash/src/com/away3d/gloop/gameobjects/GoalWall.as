@@ -62,7 +62,7 @@ package com.away3d.gloop.gameobjects {
 			_splatDistance = 1;
 		}
 		
-		override public function onCollidingWithGloopStart(gloop:Gloop):void {
+		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
 			super.onCollidingWithGloopStart(gloop);
 			
 			var gloopCenter:V2 = gloop.physics.b2body.GetWorldCenter();
