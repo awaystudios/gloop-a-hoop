@@ -123,6 +123,7 @@ package com.away3d.gloop.level
 		private function deselectCurrentLevel() : void
 		{
 			if (_selectedLevelProxy) {
+				_selectedLevelProxy.dispose();
 				_selectedLevelProxy.removeEventListener(GameEvent.LEVEL_LOSE, onSelectedGameEvent);
 				_selectedLevelProxy.removeEventListener(GameEvent.LEVEL_WIN, onSelectedGameEvent);
 			}

@@ -173,6 +173,17 @@ package com.away3d.gloop.level
 			_completed = false;
 		}
 		
+		public function dispose() : void
+		{
+			if (_level) {
+				_level.dispose();
+				_level.removeEventListener(GameEvent.LEVEL_LOSE, onLevelLose);
+				_level.removeEventListener(GameEvent.LEVEL_WIN, onLevelWin);
+				_level.removeEventListener(GameEvent.LEVEL_STAR_COLLECT, onLevelStarCollect);
+				_level = null;
+			}
+		}
+		
 		private function onLevelComplete(ev : Event) : void
 		{
 			var loader : LevelLoader;
