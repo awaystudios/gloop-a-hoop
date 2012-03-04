@@ -41,7 +41,7 @@ HOOP_ROTATION_STEP            45
 
 INPUT_CLICK_TIME              250    # the maximum time in milliseconds between down and up events to consider the input a click
 INPUT_DRAG_THRESHOLD_SQUARED  100    # the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)
-INPUT_PICK_DISTANCE           50    # the maximum distance a hoops centerpoint can be from the click to be considered hit
+INPUT_PICK_DISTANCE           100    # the maximum distance a hoops centerpoint can be from the click to be considered hit
 
 LAUNCHER_DRAG_MAX             195     # the drag distance is capped to this value, dragging longer won't make a difference
 LAUNCHER_DRAG_MIN             40      # dragging a distance shorter than this cancels the launch
