@@ -159,6 +159,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
+			super.onViewMouseDown(e);
+
 			_isClick = true;
 			_panning = false;
 			_zooming = false;
@@ -173,7 +175,7 @@ package com.away3d.gloop.input
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 
-			super.onViewMouseDown(e);
+			update();
 		}
 
 		override protected function onViewMouseUp(e : Event) : void
