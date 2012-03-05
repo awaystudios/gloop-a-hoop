@@ -159,8 +159,6 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
-			super.onViewMouseDown(e);
-
 			_isClick = true;
 			_panning = false;
 			_zooming = false;
@@ -174,6 +172,8 @@ package com.away3d.gloop.input
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
+
+			super.onViewMouseDown(e);
 		}
 
 		override protected function onViewMouseUp(e : Event) : void
@@ -206,7 +206,7 @@ package com.away3d.gloop.input
 				_panVelocityX = _interactionDeltaX;
 				_panVelocityY = _interactionDeltaY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed > 5 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
+				if( speed > 1 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
 					_onPanImpulse = true;
 					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
 					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
