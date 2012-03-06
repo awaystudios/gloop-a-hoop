@@ -73,12 +73,23 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, _material);
-			
+
 			_iconMesh = new Mesh(getIconGeometry(), _material);
 			_meshComponent.mesh.addChild(_iconMesh);
+
+			createPole();
 		}
-		
-		
+
+		private function createPole():void {
+			var poleLength:Number = 500;
+			var poleRadius:Number = 3;
+			var hoopRadius:Number = _meshComponent.mesh.scaleX * ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
+			var pole:Mesh = new Mesh( new CylinderGeometry( poleRadius, poleRadius, poleLength ), _material );
+			pole.z = poleLength / 2 + hoopRadius;
+			pole.rotationX = 90;
+			_meshComponent.mesh.addChild( pole );
+		}
+
 		protected function getIconGeometry() : Geometry
 		{
 			// To be overridden
