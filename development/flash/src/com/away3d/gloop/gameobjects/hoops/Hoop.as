@@ -45,7 +45,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private var _material:ColorMaterial;
 		private var _material_invalid:ColorMaterial;
-		
+
 		public function Hoop(color : uint, worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
 			_color = color;
@@ -70,12 +70,14 @@ package com.away3d.gloop.gameobjects.hoops
 			_material_invalid = new ColorMaterial(0xff0000);
 			
 			geom = Geometry(AssetLibrary.getAsset('Hoop_geom'));
-			
+
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, _material);
 
 			_iconMesh = new Mesh(getIconGeometry(), _material);
 			_meshComponent.mesh.addChild(_iconMesh);
+
+			_meshComponent.mesh.scale( Settings.HOOP_SCALE );
 
 			createPole();
 		}
@@ -83,7 +85,7 @@ package com.away3d.gloop.gameobjects.hoops
 		private function createPole():void {
 			var poleLength:Number = 500;
 			var poleRadius:Number = 3;
-			var hoopRadius:Number = _meshComponent.mesh.scaleX * ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
+			var hoopRadius:Number = ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
 			var pole:Mesh = new Mesh( new CylinderGeometry( poleRadius, poleRadius, poleLength ), _material );
 			pole.z = poleLength / 2 + hoopRadius;
 			pole.rotationX = 90;
@@ -181,20 +183,20 @@ package com.away3d.gloop.gameobjects.hoops
 		{
 			super.onCollidingWithGloopStart(gloop);
 			
-			_meshComponent.mesh.scaleX = 1.1;
-			_meshComponent.mesh.scaleY = 1.1;
-			_meshComponent.mesh.scaleZ = 1.1;
+			_meshComponent.mesh.scaleX = 1.1 * Settings.HOOP_SCALE;
+			_meshComponent.mesh.scaleY = 1.1 * Settings.HOOP_SCALE;
+			_meshComponent.mesh.scaleZ = 1.1 * Settings.HOOP_SCALE;
 		}
 		
 		public override function update(dt:Number):void
 		{
 			super.update(dt);
 
-			if( _meshComponent.mesh.scaleX > 1.01 ) {
+			if( _meshComponent.mesh.scaleX > 1.01 * Settings.HOOP_SCALE ) {
 				_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
 			}
 			else {
-				_meshComponent.mesh.scaleX = 1;
+				_meshComponent.mesh.scaleX = Settings.HOOP_SCALE;
 			}
 
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
@@ -255,23 +257,24 @@ class HoopPhysicsComponent extends PhysicsComponent
 	{
 		super(gameObject);
 		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawCircle(0, 0, Settings.HOOP_RADIUS * .8);
+		graphics.drawCircle(0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8);
 		graphics.beginFill(gameObject.debugColor2);
-		graphics.drawRect( -Settings.HOOP_RADIUS, -Settings.HOOP_RADIUS / 6, Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
+		graphics.drawRect( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6,
+				Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
 		
 		graphics.beginFill(gameObject.debugColor2);
-		graphics.moveTo( 0, -Settings.HOOP_RADIUS / 2);
-		graphics.lineTo( -Settings.HOOP_RADIUS / 2, 0);
-		graphics.lineTo( Settings.HOOP_RADIUS / 2, 0);
+		graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2);
+		graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
+		graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
 	}
 	
 	public override function shapes() : void
 	{
 		// used for gloop collision
-		box(Settings.HOOP_RADIUS * 2, Settings.HOOP_RADIUS / 3);
+		box( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
 		
 		// used for collision with the world
-		circle(Settings.HOOP_RADIUS * .8);
+		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8 );
 	}
 	
 	override public function create():void {

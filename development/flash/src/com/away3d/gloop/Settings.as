@@ -44,6 +44,7 @@ package com.away3d.gloop
 		static public var GLOOP_MAX_SPEED : Number = 5.5;
 		
 		static public const HOOP_RADIUS : Number = GRID_SIZE / 1.8;
+		static public const HOOP_SCALE:Number = 1.5;
 		
 		static public var SCORE_BULLSEYE_MULTIPLIER : Number = 2;
 		static public var SCORE_STAR_VALUE : Number = 350;
