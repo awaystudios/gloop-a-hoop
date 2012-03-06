@@ -189,8 +189,14 @@ package com.away3d.gloop.gameobjects.hoops
 		public override function update(dt:Number):void
 		{
 			super.update(dt);
-			
-			_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
+
+			if( _meshComponent.mesh.scaleX > 1.01 ) {
+				_meshComponent.mesh.scaleX += (1 - _meshComponent.mesh.scaleX) * 0.2;
+			}
+			else {
+				_meshComponent.mesh.scaleX = 1;
+			}
+
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
 			_meshComponent.mesh.scaleZ = _meshComponent.mesh.scaleX;
 			
