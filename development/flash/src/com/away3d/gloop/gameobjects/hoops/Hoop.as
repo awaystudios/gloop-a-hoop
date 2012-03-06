@@ -113,10 +113,12 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
-			
-			var posX:int = snapToHoopGrid(mouseX);
-			var posY:int = snapToHoopGrid(mouseY);
-			
+
+//			var posY:int = snapToHoopGrid(mouseY);
+//			var posX:int = snapToHoopGrid(mouseX);
+			var posX:int = mouseX;
+			var posY:int = mouseY;
+
 			if (posX != _lastPositionX || posY != _lastPositionY) {
 				_physics.moveTo(posX, posY, false);
 				_lastPositionX = posX;
