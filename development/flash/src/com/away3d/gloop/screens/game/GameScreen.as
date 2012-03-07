@@ -70,6 +70,24 @@ package com.away3d.gloop.screens.game
 			_view = view;
 			
 			_musicTheme = Themes.IN_GAME_THEME;
+
+			addEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
+		}
+
+		private function stageInitHandler(evt:Event):void
+		{
+		    removeEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
+			stage.addEventListener( KeyboardEvent.KEY_DOWN, stageKeyDownHandler );
+		}
+
+		private function stageKeyDownHandler( event:KeyboardEvent ):void {
+			switch( event.keyCode ) {
+				case Keyboard.SPACE :
+
+					_levelProxy.reset();
+
+					break;
+			}
 		}
 
 
