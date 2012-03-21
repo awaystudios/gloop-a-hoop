@@ -1,5 +1,7 @@
 package com.away3d.gloop.screens.levelselect
 {
+
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelProxy;
 	import com.away3d.gloop.lib.buttons.BackButton;
@@ -97,8 +99,10 @@ package com.away3d.gloop.screens.levelselect
 			thumb = LevelThumb(ev.currentTarget);
 			
 			// Don't allow selection of locked levels
-			if (thumb.levelProxy.locked)
-				return;
+			if( !Settings.DEV_MODE ) {
+				if( thumb.levelProxy.locked )
+					return;
+			}
 			
 			SoundManager.play(Sounds.MENU_BUTTON);
 			_db.selectLevel(thumb.levelProxy);
