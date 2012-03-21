@@ -1,7 +1,9 @@
 package com.away3d.gloop.gameobjects.components
 {
 	import Box2DAS.Common.V2;
-	
+
+	import away3d.containers.View3D;
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -32,14 +34,13 @@ package com.away3d.gloop.gameobjects.components
 		
 		private var _splatAngle : Number;
 		private var _splatting : Boolean;
-		
-		
+
 		public function GloopVisualComponent(physics : PhysicsComponent)
 		{
 			super();
 			
 			_physics = physics;
-			
+
 			init();
 		}
 		

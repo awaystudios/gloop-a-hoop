@@ -3,7 +3,9 @@ package com.away3d.gloop.gameobjects
 
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-	
+
+	import away3d.containers.View3D;
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -34,13 +36,13 @@ package com.away3d.gloop.gameobjects
 		private var _didHit : Boolean;
 		
 		private var _avgSpeed:Number = 0;
-		
-		public function Gloop( spawnX:Number, spawnY:Number, traceSpr:Sprite ) {
+
+		public function Gloop( spawnX:Number, spawnY:Number ) {
 			super();
 
 			_spawnX = spawnX;
 			_spawnY = spawnY;
-			
+
 			init();
 		}
 

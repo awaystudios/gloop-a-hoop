@@ -111,8 +111,6 @@ package
 
 			if( Settings.DEV_MODE ) {
 				_stats = new AwayStats( _view );
-				_stats.x = stage.stageWidth - _stats.width;
-				_stats.y = stage.stageHeight - _stats.height;
 				addChild( _stats );
 			}
 

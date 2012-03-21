@@ -60,7 +60,8 @@ package com.away3d.gloop.screens.game
 		private var _timestep:Timestep;
 		
 		private var _firstReset : Boolean;
-		
+
+		private static var _instance:GameScreen;
 
 		public function GameScreen( db:LevelDatabase, stack : ScreenStack, view : View3D ) {
 			super( false );
@@ -72,6 +73,8 @@ package com.away3d.gloop.screens.game
 			_musicTheme = Themes.IN_GAME_THEME;
 
 			addEventListener( Event.ADDED_TO_STAGE, stageInitHandler );
+
+			_instance = this;
 		}
 
 		private function stageInitHandler(evt:Event):void
@@ -125,7 +128,7 @@ package com.away3d.gloop.screens.game
 		
 		private function initPersistantObjects() : void
 		{
-			_gloop = new Gloop(0, 0, this);
+			_gloop = new Gloop(0, 0);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_APPROACH_GOAL_WALL, onGloopApproachGoalWall);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_MISSED_GOAL_WALL, onGloopMissedGoalWall);
 			_gloop.addEventListener( GameObjectEvent.GLOOP_FIRED, onGloopFired );
@@ -315,6 +318,14 @@ package com.away3d.gloop.screens.game
 					_level.camLightZ = _view.camera.z;
 				}
 			}
+		}
+
+		public static function get instance():GameScreen {
+			return _instance;
+		}
+
+		public function get view():View3D {
+			return _view;
 		}
 	}
 }
