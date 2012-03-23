@@ -2,7 +2,7 @@
     <chapter poster="assets/chapters/01.png">
         <title>Welcome to the lab</title>
 
-        <level id="1" awd="assets/levels/001.awd">
+        <level id="1" awd="assets/levels/010.awd">
         </level>
 
         <level id="2" awd="assets/levels/002.awd">
