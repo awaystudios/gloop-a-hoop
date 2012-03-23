@@ -142,21 +142,6 @@ package com.away3d.gloop.input
 			}
 		}
 
-		private function onMouseWheel(e : MouseEvent) : void
-		{
-			_zoom += e.delta * 0.01;
-		}
-
-		private function onMouseMove( event:MouseEvent ):void {
-			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
-			if( _view.mouseX > 0 && _view.mouseX < 100000 ) {
-				_interactionPointX = _view.mouseX;
-			}
-			if( _view.mouseY > 0 && _view.mouseY < 100000 ) {
-				_interactionPointY = _view.mouseY;
-			}
-		}
-
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
 			super.onViewMouseDown(e);
@@ -181,6 +166,7 @@ package com.away3d.gloop.input
 		override protected function onViewMouseUp(e : Event) : void
 		{
 			super.onViewMouseUp(e);
+
 			var clickDuration : Number = getTimer() - _mouseDownTime;
 			if (clickDuration > Settings.INPUT_CLICK_TIME) _isClick = false;
 
@@ -208,7 +194,7 @@ package com.away3d.gloop.input
 				_panVelocityX = _interactionDeltaX;
 				_panVelocityY = _interactionDeltaY;
 				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed > 1 ) { // TODO: impulse not working well on touch, perhaps its just a parameter thing...
+				if( speed > 1 ) { // TODO: impulse not working well on touch, review...
 					_onPanImpulse = true;
 					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
 					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
@@ -216,6 +202,9 @@ package com.away3d.gloop.input
 					_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
 				}
 			}
+
+			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
+			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 		}
 
 		public function applyImpulse( x:Number, y:Number ):void {
@@ -267,6 +256,21 @@ package com.away3d.gloop.input
 			}
 			else {
 				_interacting = false;
+			}
+		}
+
+		private function onMouseWheel(e : MouseEvent) : void
+		{
+			_zoom += e.delta * 0.01;
+		}
+
+		private function onMouseMove( event:MouseEvent ):void {
+			// contained because of an AIR 3.2 bug with quick touch events generating nonsense mouse move values
+			if( _view.mouseX > 0 && _view.mouseX < 100000 ) {
+				_interactionPointX = _view.mouseX;
+			}
+			if( _view.mouseY > 0 && _view.mouseY < 100000 ) {
+				_interactionPointY = _view.mouseY;
 			}
 		}
 

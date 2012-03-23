@@ -1,6 +1,7 @@
 package com.away3d.gloop.gameobjects
 {
 	import away3d.animators.data.VertexAnimationState;
+	import away3d.containers.View3D;
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -32,11 +33,11 @@ package com.away3d.gloop.gameobjects
 		private var _animState : VertexAnimationState;
 		
 		private var _timeSinceLaunch : Number = 0;
-		
+
 		public function Cannon()
 		{
 			super();
-			
+
 			init();
 		}
 		

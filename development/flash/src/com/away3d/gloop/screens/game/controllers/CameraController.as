@@ -93,8 +93,7 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
-		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, maxZoom : Number ) : void
-		{
+		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, maxZoom : Number ) : void {
 			_boundsMinX = minX;
 			_boundsMaxX = maxX;
 			_boundsMinY = minY;
@@ -105,10 +104,11 @@ package com.away3d.gloop.screens.game.controllers
 			var halfRangeX:Number = ( _boundsMaxX - _boundsMinX ) / 2;
 			var halfRangeY:Number = ( _boundsMaxY - _boundsMinY ) / 2;
 			_levelVisibleHalfRange = Math.min( halfRangeX, halfRangeY );
-			var hViewAngle:Number = PerspectiveLens( _camera.lens ).fieldOfView / 2;
-			_cameraHorizontalFovFactor = Math.tan( hViewAngle * Math.PI / 180 );
-			var vViewAngle:Number = hViewAngle / _camera.lens.aspectRatio;
+			var vViewAngle:Number = PerspectiveLens( _camera.lens ).fieldOfView / 2;
 			_cameraVerticalFovFactor = Math.tan( vViewAngle * Math.PI / 180 );
+			var cameraFocalLength:Number = 1 / Math.tan( vViewAngle * Math.PI / 180 );
+			var hViewAngle:Number = Math.atan( PerspectiveLens( _camera.lens ).aspectRatio / cameraFocalLength ) * 180 / Math.PI;
+			_cameraHorizontalFovFactor = Math.tan( hViewAngle * Math.PI / 180 );
 
 			// evaluate and set min zoom
 			var maxHorizontalZ:Number = halfRangeX / _cameraHorizontalFovFactor;
@@ -118,12 +118,12 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.y = 0;
 			_camera.z = -maxTotalZ;
 			_cameraPosition = _camera.position.clone();
-			_inputManager.zoom = _boundsMinZ = ( -maxTotalZ + 1000 ) / 200;
+			_boundsMinZ = ( -maxTotalZ + 1000 ) / 200;
 
 			// uncomment to trace pan containment values from level.
-//			var tracePlane:Mesh = new Mesh( new PlaneGeometry( 2 * halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
-//			tracePlane.rotationX = -90;
-//			_camera.scene.addChild( tracePlane );
+			/*var tracePlane:Mesh = new Mesh( new PlaneGeometry( 2 * halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
+			 tracePlane.rotationX = -90;
+			 _camera.scene.addChild( tracePlane );*/
 		}
 
 		public function update() : void

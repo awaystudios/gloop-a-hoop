@@ -1,6 +1,8 @@
 package com.away3d.gloop.sound
 {
 
+	import com.away3d.gloop.Settings;
+
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 
@@ -67,6 +69,8 @@ package com.away3d.gloop.sound
 		public static function play( id:String ):void {
 
 			if( !_enabled ) return;
+
+			if( Settings.DEV_MODE ) return; // stop developers from becoming insane by the tune
 
 			init();
 

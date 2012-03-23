@@ -8,6 +8,8 @@ package com.away3d.gloop
 	 */
 	public class Settings
 	{
+		static public var DEV_MODE:Boolean = true;
+
 		static public var GRID_SIZE : Number = 100;
 		
 		static public var CANNON_BASE_X : Number = 0;

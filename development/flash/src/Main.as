@@ -2,6 +2,7 @@ package
 {
 
 	import away3d.containers.View3D;
+	import away3d.debug.AwayStats;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.library.assets.AssetType;
@@ -58,6 +59,8 @@ package
 		private var _db:LevelDatabase;
 		private var _stack:ScreenStack;
 		private var _settings:SettingsLoader;
+		private var _stats:AwayStats;
+		private var _stackHolder:Sprite;
 		
 		private var _view : View3D;
 		
@@ -96,7 +99,7 @@ package
 			_view.height = _h;
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
+
 			// Should be reset to other state manager by AIR app
 			_stateMgr = new StateSaveManager();
 
@@ -105,6 +108,11 @@ package
 			initStack();
 			initSound();
 			initMusic();
+
+			if( Settings.DEV_MODE ) {
+				_stats = new AwayStats( _view );
+				addChild( _stats );
+			}
 
 			loadAssets();
 		}
@@ -124,7 +132,9 @@ package
 
 
 		private function initStack():void {
-			_stack = new ScreenStack(_w, _h, this );
+			_stackHolder = new Sprite();
+			addChild( _stackHolder );
+			_stack = new ScreenStack(_w, _h, _stackHolder );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
 			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_db, _stack, _stateMgr) );
