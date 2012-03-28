@@ -41,17 +41,17 @@ package com.away3d.gloop.screens.levelselect
 			
 			len = _db.selectedChapter.levels.length;
 
-			if( len < 4 ) {
-				cols = len;
-			}
-			else if( len <= 16 ) {
+			if( len < 9 ) {
 				cols = 4;
 			}
-			else if( len <= 20 ) {
+			else if( len < 16 ) {
 				cols = 5;
 			}
-			else {
+			else if( len < 25 ) {
 				cols = 6;
+			}
+			else {
+				cols = 7;
 			}
 
 			rows = Math.ceil(len / cols);
