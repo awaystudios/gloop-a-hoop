@@ -40,9 +40,22 @@ package com.away3d.gloop.screens.levelselect
 			var tly : Number;
 			
 			len = _db.selectedChapter.levels.length;
-			rows = Math.ceil(len / 4);
-			cols = (len < 4)? len : 4;
-			
+
+			if( len < 4 ) {
+				cols = len;
+			}
+			else if( len <= 16 ) {
+				cols = 4;
+			}
+			else if( len <= 20 ) {
+				cols = 5;
+			}
+			else {
+				cols = 6;
+			}
+
+			rows = Math.ceil(len / cols);
+
 			tlx = _w/2 - cols * 70;
 			tly = _h/2 - rows * 75;
 			
