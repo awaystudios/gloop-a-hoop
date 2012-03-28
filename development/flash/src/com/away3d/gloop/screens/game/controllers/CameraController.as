@@ -141,7 +141,9 @@ package com.away3d.gloop.screens.game.controllers
 			 _camera.scene.addChild( tracePlane );*/
 		}
 
-		private const FIRST_SHOT_ZOOM_IN:Number = 200;
+		private const FIRST_SHOT_ZOOM_IN:Number = 20;
+		private const FIRST_SHOT_ZOOM_MAX:Number = -600;
+		
 		public function update() : void
 		{
 			var ease : Number;
@@ -169,7 +171,7 @@ package com.away3d.gloop.screens.game.controllers
 				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 
-				if( _autoZoomIn ) {
+				if( _autoZoomIn && _inputManager.zoom < FIRST_SHOT_ZOOM_MAX ) {
 					_inputManager.zoom += FIRST_SHOT_ZOOM_IN;
 				}
 				
