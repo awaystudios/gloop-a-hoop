@@ -179,8 +179,7 @@ package com.away3d.gloop.screens.game
 				_level.bounds.left,
 				_level.bounds.right,
 				_level.bounds.top,
-				_level.bounds.bottom,
-				3 ); 
+				_level.bounds.bottom);
 			_cameraController.setGloopIdle();
 			
 			_firstReset = true;
@@ -198,6 +197,34 @@ package com.away3d.gloop.screens.game
 				}
 				*/
 			}, 200);
+		}
+
+		private function reset():void
+		{
+			_gloop.meshComponent.mesh.visible = false;
+
+			_hud.reset(_levelProxy);
+
+			_cameraController.setGloopIdle();
+			_cameraController.resetOrientation();
+			_inputManager.reset(_level);
+
+			if (_firstReset) {
+				// Reset both position and cannon aim angle
+				_cannon.spawnGloop(_gloop, _level.spawnAngle);
+				_firstReset = false;
+			}
+			else {
+				// Start back in cannon, but don't change it's angle
+				_cannon.spawnGloop(_gloop);
+				_inputManager.panX = _gloop.physics.x;
+				_inputManager.panY = -_gloop.physics.y;
+			}
+
+			if (_paused) {
+				_paused = false;
+				removeChild(_pauseOverlay);
+			}
 		}
 
 		public override function deactivate():void
@@ -269,35 +296,6 @@ package com.away3d.gloop.screens.game
 		{
 			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.LEVELS);
-		}
-		
-
-		private function reset():void
-		{
-			_gloop.meshComponent.mesh.visible = false;
-			
-			_hud.reset(_levelProxy);
-			
-			if (_firstReset) {
-				// Reset both position and cannon aim angle
-				_cannon.spawnGloop(_gloop, _level.spawnAngle);
-				_firstReset = false;
-			}
-			else {
-				// Start back in cannon, but don't change it's angle
-				_cannon.spawnGloop(_gloop);
-			}
-			
-			_cameraController.setGloopIdle();
-			_cameraController.resetOrientation();
-			_inputManager.reset(_level);
-			_inputManager.panX = _gloop.physics.x;
-			_inputManager.panY = -_gloop.physics.y;
-			
-			if (_paused) {
-				_paused = false;
-				removeChild(_pauseOverlay);
-			}
 		}
 		
 

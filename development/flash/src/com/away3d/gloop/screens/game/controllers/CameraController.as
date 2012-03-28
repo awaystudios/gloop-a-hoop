@@ -93,17 +93,15 @@ package com.away3d.gloop.screens.game.controllers
 		}
 		
 		
-		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number, maxZoom : Number ) : void {
+		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number ) : void {
+
 			_boundsMinX = minX;
 			_boundsMaxX = maxX;
 			_boundsMinY = minY;
 			_boundsMaxY = maxY;
-			_boundsMaxZ = maxZoom;
+			_boundsMaxZ = -400;
 
-			// evaluate camera z factor ( relates pan limits to camera z )
-			var halfRangeX:Number = ( _boundsMaxX - _boundsMinX ) / 2;
-			var halfRangeY:Number = ( _boundsMaxY - _boundsMinY ) / 2;
-			_levelVisibleHalfRange = Math.min( halfRangeX, halfRangeY );
+			// evaluate camera fov factors
 			var vViewAngle:Number = PerspectiveLens( _camera.lens ).fieldOfView / 2;
 			_cameraVerticalFovFactor = Math.tan( vViewAngle * Math.PI / 180 );
 			var cameraFocalLength:Number = 1 / Math.tan( vViewAngle * Math.PI / 180 );
@@ -111,14 +109,16 @@ package com.away3d.gloop.screens.game.controllers
 			_cameraHorizontalFovFactor = Math.tan( hViewAngle * Math.PI / 180 );
 
 			// evaluate and set min zoom
+			var halfRangeX:Number = ( _boundsMaxX - _boundsMinX ) / 2;
+			var halfRangeY:Number = ( _boundsMaxY - _boundsMinY ) / 2;
 			var maxHorizontalZ:Number = halfRangeX / _cameraHorizontalFovFactor;
 			var maxVerticalZ:Number = halfRangeY / _cameraVerticalFovFactor;
-			var maxTotalZ:Number = Math.min( maxHorizontalZ, maxVerticalZ );
-			_camera.x = 0;
-			_camera.y = 0;
-			_camera.z = -maxTotalZ;
+			_boundsMinZ = -Math.min( maxHorizontalZ, maxVerticalZ ); // the furthest you can get
+
+			_inputManager.panX = _camera.x = 0;
+			_inputManager.panY = _camera.y = 0;
+			_inputManager.zoom = _camera.z = _boundsMinZ * 0.85;
 			_cameraPosition = _camera.position.clone();
-			_boundsMinZ = ( -maxTotalZ + 1000 ) / 200;
 
 			// uncomment to trace pan containment values from level.
 			/*var tracePlane:Mesh = new Mesh( new PlaneGeometry( 2 * halfRangeX, 2 * halfRangeY ), new ColorMaterial( 0x00FF00, 0.5 ) );
@@ -139,7 +139,9 @@ package com.away3d.gloop.screens.game.controllers
 
 			// evaluate target camera position
 			// TODO: confirmed, _interactedSinceGloopWasFired is not working on mobile
-			if( !_interactedSinceGloopWasFired && _gloopIsFlying ) {
+			var followMode:Boolean = !_interactedSinceGloopWasFired && _gloopIsFlying;
+			if( followMode ) {
+
 				_offX *= 0.9;
 				_offY *= 0.9;
 				targetPosition.x = _gloop.physics.x + _offX;
@@ -170,29 +172,45 @@ package com.away3d.gloop.screens.game.controllers
 				resetOrientation();
 			}
 
-			// evaluate containment
-			var horizontalVisibleHalfRange:Number = -_cameraPosition.z * _cameraHorizontalFovFactor;
-			var verticalVisibleHalfRange:Number = -_cameraPosition.z * _cameraVerticalFovFactor;
-			var panRightDistance:Number = _boundsMaxX - ( _inputManager.panX + horizontalVisibleHalfRange );
-			var panLeftDistance:Number = ( _inputManager.panX - horizontalVisibleHalfRange ) - _boundsMinX;
-			var panUpDistance:Number = _boundsMaxY - ( _inputManager.panY + verticalVisibleHalfRange );
-			var panDownDistance:Number = ( _inputManager.panY - verticalVisibleHalfRange ) - _boundsMinY;
+			var containmentTolerance:Number = followMode ? 1 : 1.25;
 
-			// hard XY containment
-			if (!_finishMode) {
-				if( panRightDistance < 0 ) {
-					_inputManager.panX = targetPosition.x = _boundsMaxX - horizontalVisibleHalfRange;
-				} else if( panLeftDistance < 0 ) {
-					_inputManager.panX = targetPosition.x = _boundsMinX + horizontalVisibleHalfRange;
+			// evaluate containment
+			var horizontalVisibleHalfDistance:Number = -_camera.z * _cameraHorizontalFovFactor;
+			var verticalVisibleHalfDistance:Number = -_camera.z * _cameraVerticalFovFactor;
+			var availablePanLeftDistance:Number = -(_boundsMinX * containmentTolerance) + targetPosition.x - horizontalVisibleHalfDistance;
+			var availablePanRightDistance:Number = (_boundsMaxX * containmentTolerance) - targetPosition.x - horizontalVisibleHalfDistance;
+			var availablePanDownDistance:Number = -(_boundsMinY * containmentTolerance) + targetPosition.y - verticalVisibleHalfDistance;
+			var availablePanUpDistance:Number = (_boundsMaxY * containmentTolerance) - targetPosition.y - verticalVisibleHalfDistance;
+
+			// contain X
+			if( !_finishMode ) {
+				var containmentStrength:Number = followMode ? 1 : 0.025;
+				if( availablePanLeftDistance < 0 && availablePanRightDistance < 0 ) {
+					_inputManager.panX = targetPosition.x = 0;
 				}
-				if( panUpDistance < 0 ) {
-					_inputManager.panY = targetPosition.y = _boundsMaxY - verticalVisibleHalfRange;
-				} else if( panDownDistance < 0 ) {
-					_inputManager.panY = targetPosition.y = _boundsMinY + verticalVisibleHalfRange;
+				else if( availablePanRightDistance < 0 ) {
+					targetPosition.x += containmentStrength * availablePanRightDistance;
+					_inputManager.panX = targetPosition.x;
+				}
+				else if( availablePanLeftDistance < 0 ) {
+					targetPosition.x -= containmentStrength * availablePanLeftDistance;
+					_inputManager.panX = targetPosition.x;
+				}
+
+				// contain Y
+				if( availablePanUpDistance < 0 && availablePanDownDistance < 0 ) {
+					_inputManager.panY = targetPosition.y = 0;
+				}
+				else if( availablePanUpDistance < 0 ) {
+					targetPosition.y += containmentStrength * availablePanUpDistance;
+					_inputManager.panY = targetPosition.y;
+				} else if( availablePanDownDistance < 0 ) {
+					_inputManager.panY = targetPosition.y -= containmentStrength * availablePanDownDistance;
+					_inputManager.panY = targetPosition.y;
 				}
 			}
 
-			// hard containment for zoom
+			// contain Z
 			if( targetPosition.z > _boundsMaxZ ) {
 				targetPosition.z = _boundsMaxZ;
 				_inputManager.zoom = _boundsMaxZ;
@@ -204,7 +222,7 @@ package com.away3d.gloop.screens.game.controllers
 			// ease camera towards target position
 			_cameraPosition.x += (targetPosition.x - _cameraPosition.x) * ease;
 			_cameraPosition.y += (targetPosition.y - _cameraPosition.y) * ease;
-			_cameraPosition.z += ( ( targetPosition.z * 200 - 1000 ) - _cameraPosition.z) * ease;
+			_cameraPosition.z += (targetPosition.z - _cameraPosition.z) * ease;
 			
 			if (lookAtGloop) {
 				_lookAtTarget.x += (_gloop.meshComponent.mesh.x - _lookAtTarget.x) * ease;
@@ -216,7 +234,7 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			_camera.x = _cameraPosition.x;
-			_camera.y = _cameraPosition.y + 200; // TODO: move to settings
+			_camera.y = _cameraPosition.y + 0; // TODO: move to settings
 			_camera.z = _cameraPosition.z;
 
 			_camera.lookAt(_lookAtTarget);
