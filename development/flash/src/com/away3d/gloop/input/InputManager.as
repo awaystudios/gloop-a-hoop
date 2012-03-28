@@ -51,14 +51,7 @@ package com.away3d.gloop.input
 		private var _touchDistance:Number = 0;
 		private var _lastTouchDistance:Number = 0;
 
-		private var _panVelocityX:Number = 0;
-		private var _panVelocityY:Number = 0;
-
 		private var _interacting:Boolean;
-
-		private var _onPanImpulse:Boolean;
-
-		private const MAX_IMPULSE:Number = 50;
 
 		public function InputManager(view : View3D)
 		{
@@ -71,9 +64,7 @@ package com.away3d.gloop.input
 			_zoom = 1;
 			_panX = 0;
 			_panY = 300;
-			_panVelocityX = 0;
-			_panVelocityY = 0;
-			
+
 			_touch1.id = -1;
 			_touch2.id = -1;
 		}
@@ -105,15 +96,6 @@ package com.away3d.gloop.input
 			_prevInteractionPointX = _interactionPointX;
 			_prevInteractionPointY = _interactionPointY;
 			
-			if( _onPanImpulse ) {
-				_panVelocityX *= 0.9;
-				_panVelocityY *= 0.9;
-				_panX += _panVelocityX;
-				_panY += _panVelocityY;
-				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed < 0.1 ) _onPanImpulse = false;
-			}
-
 			if( !_mouseDown ) {
 				return; // if there's no touch, there's no sense in updating
 			}
@@ -190,27 +172,8 @@ package com.away3d.gloop.input
 			_zooming = false;
 			_interacting = false;
 
-			if( !_isClick ) {
-				_panVelocityX = _interactionDeltaX;
-				_panVelocityY = _interactionDeltaY;
-				var speed:Number = Math.sqrt( _panVelocityX * _panVelocityX + _panVelocityY * _panVelocityY );
-				if( speed > 1 ) { // TODO: impulse not working well on touch, review...
-					_onPanImpulse = true;
-					_panVelocityX = _panVelocityX > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityX;
-					_panVelocityX = _panVelocityX < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityX;
-					_panVelocityY = _panVelocityY > MAX_IMPULSE ? MAX_IMPULSE : _panVelocityY;
-					_panVelocityY = _panVelocityY < -MAX_IMPULSE ? -MAX_IMPULSE : _panVelocityY;
-				}
-			}
-
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
-		}
-
-		public function applyImpulse( x:Number, y:Number ):void {
-			_onPanImpulse = true;
-			_panVelocityX += x;
-			_panVelocityY += y;
 		}
 
 		private function onTouch( event:TouchEvent ):void {
