@@ -209,6 +209,7 @@ package com.away3d.gloop.screens.game
 				// Reset both position and cannon aim angle
 				_cannon.spawnGloop(_gloop, _level.spawnAngle);
 				_firstReset = false;
+				_cameraController.firstReset();
 			}
 			else {
 				// Start back in cannon, but don't change it's angle

@@ -4,6 +4,9 @@ package com.away3d.gloop.screens.game.controllers
 	import away3d.arcane;
 	import away3d.cameras.Camera3D;
 	import away3d.cameras.lenses.PerspectiveLens;
+	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.PlaneGeometry;
 
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
@@ -49,11 +52,17 @@ package com.away3d.gloop.screens.game.controllers
 			
 			_lookAtTarget = new Vector3D();
 		}
-		
+
+		private var _onFirstShot:Boolean;
+		public function firstReset():void {
+			_onFirstShot = true;
+			reset();
+		}
 
 		public function reset():void {
 			trace( "reset: " + _inputManager.interacting );
 			if( !_inputManager.interacting ) {
+				trace( "centering at gloop" );
 				_inputManager.panX = _gloop.physics.x;
 				_inputManager.panY = -_gloop.physics.y;
 			}
@@ -68,7 +77,6 @@ package com.away3d.gloop.screens.game.controllers
 			_lookAtTarget.x = _cameraPosition.x;
 			_lookAtTarget.y = _cameraPosition.y;
 		}
-		
 		
 		public function setGloopFired(offX : Number, offY : Number) : void
 		{
@@ -122,8 +130,8 @@ package com.away3d.gloop.screens.game.controllers
 			var maxVerticalZ:Number = halfRangeY / _cameraVerticalFovFactor;
 			_boundsMinZ = -Math.min( maxHorizontalZ, maxVerticalZ ); // the furthest you can get
 
-			_inputManager.panX = _camera.x = 0;
-			_inputManager.panY = _camera.y = 0;
+			_inputManager.panX = _camera.x =  _gloop.physics.x;
+			_inputManager.panY = _camera.y = -_gloop.physics.y;
 			_inputManager.zoom = _camera.z = _boundsMinZ * 0.85;
 			_cameraPosition = _camera.position.clone();
 
@@ -156,6 +164,11 @@ package com.away3d.gloop.screens.game.controllers
 				_inputManager.panX = targetPosition.x;
 				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
+
+				if( _onFirstShot ) {
+					_inputManager.zoom += 200;
+					_onFirstShot = false;
+				}
 				
 				if (_finishMode) {
 					lookAtGloop = true;
@@ -179,7 +192,7 @@ package com.away3d.gloop.screens.game.controllers
 				resetOrientation();
 			}
 
-			var containmentTolerance:Number = followMode ? 1 : 1.25;
+			var containmentTolerance:Number = 1;
 
 			// evaluate containment
 			var horizontalVisibleHalfDistance:Number = -_camera.z * _cameraHorizontalFovFactor;
@@ -191,11 +204,11 @@ package com.away3d.gloop.screens.game.controllers
 
 			// contain X
 			if( !_finishMode ) {
-				var containmentStrength:Number = followMode ? 1 : 0.025;
-				if( availablePanLeftDistance < 0 && availablePanRightDistance < 0 ) {
+				var containmentStrength:Number = 1;
+				/*if( availablePanLeftDistance < 0 && availablePanRightDistance < 0 ) {
 					_inputManager.panX = targetPosition.x = 0;
 				}
-				else if( availablePanRightDistance < 0 ) {
+				else */if( availablePanRightDistance < 0 ) {
 					targetPosition.x += containmentStrength * availablePanRightDistance;
 					_inputManager.panX = targetPosition.x;
 				}
@@ -205,10 +218,10 @@ package com.away3d.gloop.screens.game.controllers
 				}
 
 				// contain Y
-				if( availablePanUpDistance < 0 && availablePanDownDistance < 0 ) {
+				/*if( availablePanUpDistance < 0 && availablePanDownDistance < 0 ) {
 					_inputManager.panY = targetPosition.y = 0;
 				}
-				else if( availablePanUpDistance < 0 ) {
+				else */if( availablePanUpDistance < 0 ) {
 					targetPosition.y += containmentStrength * availablePanUpDistance;
 					_inputManager.panY = targetPosition.y;
 				} else if( availablePanDownDistance < 0 ) {
@@ -241,7 +254,7 @@ package com.away3d.gloop.screens.game.controllers
 			}
 
 			_camera.x = _cameraPosition.x;
-			_camera.y = _cameraPosition.y + 0; // TODO: move to settings
+			_camera.y = _cameraPosition.y + 150; // TODO: move to settings
 			_camera.z = _cameraPosition.z;
 
 			if( !followMode ) {

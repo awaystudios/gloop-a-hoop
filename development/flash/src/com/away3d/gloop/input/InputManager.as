@@ -62,8 +62,8 @@ package com.away3d.gloop.input
 		{
 			_level = level;
 //			_zoom = 1;
-			_panX = 0;
-			_panY = 0;
+//			_panX = 0;
+//			_panY = 0;
 
 			_touch1.id = -1;
 			_touch2.id = -1;
@@ -213,7 +213,7 @@ package com.away3d.gloop.input
 				var dy:Number = _touch1.y - _touch2.y;
 				_touchDistance = Math.sqrt( dx * dx + dy * dy );
 				if( _lastTouchDistance != 0 ) {
-					_zoom += ( _touchDistance - _lastTouchDistance ) * 0.1;
+					_zoom += ( _touchDistance - _lastTouchDistance ) * 1;
 				}
 				_lastTouchDistance = _touchDistance;
 			}
