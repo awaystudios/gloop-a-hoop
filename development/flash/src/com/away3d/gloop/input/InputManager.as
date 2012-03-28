@@ -51,8 +51,6 @@ package com.away3d.gloop.input
 		private var _touchDistance:Number = 0;
 		private var _lastTouchDistance:Number = 0;
 
-		private var _interacting:Boolean;
-
 		public function InputManager(view : View3D)
 		{
 			super(view);
@@ -121,7 +119,15 @@ package com.away3d.gloop.input
 			if( _panning && !_zooming ) {
 				_panX += _interactionDeltaX;
 				_panY += _interactionDeltaY;
+				_panInternallyChanged = true;
 			}
+		}
+
+		private var _panInternallyChanged:Boolean;
+		private var _zoomInternallyChanged:Boolean;
+		public function resetInternalChanges():void {
+			_panInternallyChanged = false;
+			_zoomInternallyChanged = false;
 		}
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
@@ -131,7 +137,6 @@ package com.away3d.gloop.input
 			_isClick = true;
 			_panning = false;
 			_zooming = false;
-			_interacting = true;
 			_mouseDownTime = getTimer();
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
@@ -170,7 +175,6 @@ package com.away3d.gloop.input
 			_targetObject = null;
 			_panning = false;
 			_zooming = false;
-			_interacting = false;
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
@@ -204,7 +208,6 @@ package com.away3d.gloop.input
 			}
 
 			if( _touch1.id >= 0 && _touch2.id >= 0 ) {
-				_interacting = true;
 				// update mouse position
 				_interactionPointX = _touch1.x;
 				_interactionPointY = _touch1.y;
@@ -214,17 +217,16 @@ package com.away3d.gloop.input
 				_touchDistance = Math.sqrt( dx * dx + dy * dy );
 				if( _lastTouchDistance != 0 ) {
 					_zoom += ( _touchDistance - _lastTouchDistance ) * 1;
+					_zoomInternallyChanged = true;
 				}
 				_lastTouchDistance = _touchDistance;
-			}
-			else {
-				_interacting = false;
 			}
 		}
 
 		private function onMouseWheel(e : MouseEvent) : void
 		{
 			_zoom += e.delta;
+			_zoomInternallyChanged = true;
 		}
 
 		private function onMouseMove( event:MouseEvent ):void {
@@ -261,8 +263,12 @@ package com.away3d.gloop.input
 			return _zoom;
 		}
 
-		public function get interacting():Boolean {
-			return _interacting;
+		public function get panInternallyChanged():Boolean {
+			return _panInternallyChanged;
+		}
+
+		public function get zoomInternallyChanged():Boolean {
+			return _zoomInternallyChanged;
 		}
 	}
 

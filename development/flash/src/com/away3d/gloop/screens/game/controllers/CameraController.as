@@ -53,16 +53,14 @@ package com.away3d.gloop.screens.game.controllers
 			_lookAtTarget = new Vector3D();
 		}
 
-		private var _onFirstShot:Boolean;
+		private var _autoZoomIn:Boolean;
 		public function firstReset():void {
-			_onFirstShot = true;
+			_autoZoomIn = true;
 			reset();
 		}
 
 		public function reset():void {
-			trace( "reset: " + _inputManager.interacting );
-			if( !_inputManager.interacting ) {
-				trace( "centering at gloop" );
+			if( !_inputManager.panInternallyChanged ) {
 				_inputManager.panX = _gloop.physics.x;
 				_inputManager.panY = -_gloop.physics.y;
 			}
@@ -77,13 +75,15 @@ package com.away3d.gloop.screens.game.controllers
 			_lookAtTarget.x = _cameraPosition.x;
 			_lookAtTarget.y = _cameraPosition.y;
 		}
-		
+
 		public function setGloopFired(offX : Number, offY : Number) : void
 		{
 			_gloopIsFlying = true;
 			_offX = offX;
 			_offY = offY;
 			_interactedSinceGloopWasFired = false;
+			_inputManager.resetInternalChanges();
+
 		}
 		
 		
@@ -141,19 +141,23 @@ package com.away3d.gloop.screens.game.controllers
 			 _camera.scene.addChild( tracePlane );*/
 		}
 
+		private const FIRST_SHOT_ZOOM_IN:Number = 200;
 		public function update() : void
 		{
 			var ease : Number;
 			var lookAtGloop : Boolean;
 			var targetPosition:Vector3D = new Vector3D( 0, 0, 1 );
 
-			if( _inputManager.interacting ) _interactedSinceGloopWasFired = true;
-			
+			_interactedSinceGloopWasFired = _inputManager.panInternallyChanged;
+
+			if( _autoZoomIn && _inputManager.zoomInternallyChanged ) {
+				_autoZoomIn = false
+			}
+
 			// Default easing
 			ease = 0.4;
 
 			// evaluate target camera position
-			// TODO: confirmed, _interactedSinceGloopWasFired is not working on mobile
 			var followMode:Boolean = !_interactedSinceGloopWasFired && _gloopIsFlying;
 			if( followMode ) {
 
@@ -165,9 +169,8 @@ package com.away3d.gloop.screens.game.controllers
 				_inputManager.panY = targetPosition.y;
 				_camera.lookAt( new Vector3D( targetPosition.x, targetPosition.y, 0 ) );
 
-				if( _onFirstShot ) {
-					_inputManager.zoom += 200;
-					_onFirstShot = false;
+				if( _autoZoomIn ) {
+					_inputManager.zoom += FIRST_SHOT_ZOOM_IN;
 				}
 				
 				if (_finishMode) {
@@ -184,12 +187,15 @@ package com.away3d.gloop.screens.game.controllers
 			}
 			else {
 				lookAtGloop = false;
-
 				_inputManager.update();
 				targetPosition.x = _inputManager.panX;
 				targetPosition.y = _inputManager.panY;
 				targetPosition.z = _inputManager.zoom;
 				resetOrientation();
+
+				if( _autoZoomIn ) {
+					_inputManager.zoom -= FIRST_SHOT_ZOOM_IN;
+				}
 			}
 
 			var containmentTolerance:Number = 1;
