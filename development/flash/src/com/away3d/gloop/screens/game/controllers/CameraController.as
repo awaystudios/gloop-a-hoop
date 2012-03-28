@@ -38,7 +38,6 @@ package com.away3d.gloop.screens.game.controllers
 
 		private var _cameraHorizontalFovFactor:Number;
 		private var _cameraVerticalFovFactor:Number;
-		private var _levelVisibleHalfRange:Number;
 
 		private var _cameraPosition:Vector3D;
 		
@@ -51,7 +50,15 @@ package com.away3d.gloop.screens.game.controllers
 			_lookAtTarget = new Vector3D();
 		}
 		
-		
+
+		public function reset():void {
+			trace( "reset: " + _inputManager.interacting );
+			if( !_inputManager.interacting ) {
+				_inputManager.panX = _gloop.physics.x;
+				_inputManager.panY = -_gloop.physics.y;
+			}
+		}
+
 		public function resetOrientation() : void
 		{
 			_camera.rotationX *= 0.9;
@@ -236,6 +243,11 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.x = _cameraPosition.x;
 			_camera.y = _cameraPosition.y + 0; // TODO: move to settings
 			_camera.z = _cameraPosition.z;
+
+			if( !followMode ) {
+				_inputManager.panX = targetPosition.x;
+				_inputManager.panY = targetPosition.y;
+			}
 
 			_camera.lookAt(_lookAtTarget);
 		}
