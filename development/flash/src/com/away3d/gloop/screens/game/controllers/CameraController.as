@@ -132,7 +132,7 @@ package com.away3d.gloop.screens.game.controllers
 
 			_inputManager.panX = _camera.x =  _gloop.physics.x;
 			_inputManager.panY = _camera.y = -_gloop.physics.y;
-			_inputManager.zoom = _camera.z = _boundsMinZ * 0.85;
+			_inputManager.zoom = _camera.z = _boundsMinZ;
 			_cameraPosition = _camera.position.clone();
 
 			// uncomment to trace pan containment values from level.
