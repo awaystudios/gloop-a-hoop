@@ -38,6 +38,15 @@ package com.away3d.gloop.screens.levelselect
 			var cols : uint;
 			var tlx : Number;
 			var tly : Number;
+			var masterScaleY : Number;
+			var masterScaleX : Number;
+			var masterScale : Number;
+			
+			// Based on 1024x768 which was the
+			// template for the design
+			masterScaleX = _w/1024;
+			masterScaleY = _h/768;
+			masterScale = (masterScaleX + masterScaleY)/2
 			
 			len = _db.selectedChapter.levels.length;
 
@@ -56,8 +65,8 @@ package com.away3d.gloop.screens.levelselect
 
 			rows = Math.ceil(len / cols);
 
-			tlx = _w/2 - cols * 70;
-			tly = _h/2 - rows * 75;
+			tlx = _w/2 - cols * 70 * masterScale;
+			tly = _h/2 - rows * 75 * masterScale + 40 * masterScaleY;
 			
 			_thumbs = new Vector.<LevelThumb>();
 			
@@ -72,8 +81,10 @@ package com.away3d.gloop.screens.levelselect
 				
 				level = _db.selectedChapter.levels[i];
 				thumb = new LevelThumb(level);
-				thumb.x = tlx + col * 140;
-				thumb.y = tly + row * 150;
+				thumb.x = tlx + col * 140 * masterScale;
+				thumb.y = tly + row * 150 * masterScale;
+				thumb.scaleX = masterScaleX;
+				thumb.scaleY = masterScaleX;
 				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
 				
 				addChild(thumb);
@@ -81,9 +92,11 @@ package com.away3d.gloop.screens.levelselect
 			}
 			
 			_totalStars = new StarTotal(_db);
-			_totalStars.x = 372;
-			_totalStars.y = -360;
-			_ctr.addChild(_totalStars);
+			_totalStars.x = _w - 140 * masterScaleY;
+			_totalStars.y = 24 * masterScaleY;
+			_totalStars.scaleX = masterScaleY;
+			_totalStars.scaleY = masterScaleY;
+			addChild(_totalStars);
 			
 			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
 		}
