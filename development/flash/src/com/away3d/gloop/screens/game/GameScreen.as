@@ -106,7 +106,7 @@ package com.away3d.gloop.screens.game
 		{
 			_doc = new WCK();
 			_doc.x = 220;
-			_doc.y = 220;
+			_doc.y = 520;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
 			_doc.visible = Settings.DEV_MODE;
