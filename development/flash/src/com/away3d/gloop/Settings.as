@@ -8,6 +8,7 @@ package com.away3d.gloop
 	 */
 	public class Settings
 	{
+		static public var STU_MODE:Boolean = false;
 		static public var DEV_MODE:Boolean = true;
 
 		static public var GRID_SIZE : Number = 100;

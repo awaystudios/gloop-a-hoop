@@ -7,10 +7,11 @@ package com.away3d.gloop.screens.game.controllers
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.PlaneGeometry;
-
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
-
+	
 	import flash.geom.Vector3D;
 
 	use namespace arcane;
@@ -109,11 +110,13 @@ package com.away3d.gloop.screens.game.controllers
 		
 		
 		public function setBounds(minX : Number, maxX : Number, minY : Number, maxY : Number ) : void {
-
-			_boundsMinX = minX;
-			_boundsMaxX = maxX;
-			_boundsMinY = minY;
-			_boundsMaxY = maxY;
+			
+			var pad:Number = Settings.STU_MODE? 100 : 0;
+			
+			_boundsMinX = minX - pad;
+			_boundsMaxX = maxX + pad;
+			_boundsMinY = minY - pad;
+			_boundsMaxY = maxY + pad;
 			_boundsMaxZ = -400;
 
 			// evaluate camera fov factors
@@ -128,7 +131,11 @@ package com.away3d.gloop.screens.game.controllers
 			var halfRangeY:Number = ( _boundsMaxY - _boundsMinY ) / 2;
 			var maxHorizontalZ:Number = halfRangeX / _cameraHorizontalFovFactor;
 			var maxVerticalZ:Number = halfRangeY / _cameraVerticalFovFactor;
-			_boundsMinZ = -Math.min( maxHorizontalZ, maxVerticalZ ); // the furthest you can get
+			
+			if (Settings.STU_MODE)
+				_boundsMinZ = -Math.max( maxHorizontalZ, maxVerticalZ ); // the furthest you can get
+			else
+				_boundsMinZ = -Math.min( maxHorizontalZ, maxVerticalZ ); // the furthest you can get
 
 			_inputManager.panX = _camera.x =  _gloop.physics.x;
 			_inputManager.panY = _camera.y = -_gloop.physics.y;
@@ -211,7 +218,7 @@ package com.away3d.gloop.screens.game.controllers
 			var availablePanUpDistance:Number = (_boundsMaxY * containmentTolerance) - targetPosition.y - verticalVisibleHalfDistance;
 
 			// contain X
-			if( !_finishMode ) {
+			if( !_finishMode && !Settings.STU_MODE) {
 				var containmentStrength:Number = 1;
 				/*if( availablePanLeftDistance < 0 && availablePanRightDistance < 0 ) {
 					_inputManager.panX = targetPosition.x = 0;

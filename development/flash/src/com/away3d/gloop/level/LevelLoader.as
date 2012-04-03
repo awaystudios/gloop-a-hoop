@@ -9,6 +9,8 @@ package com.away3d.gloop.level
 	import away3d.loaders.AssetLoader;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
+	import away3d.materials.TextureMaterial;
+	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Button;
@@ -23,6 +25,7 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	
+	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Vector3D;
@@ -34,10 +37,12 @@ package com.away3d.gloop.level
 	{
 		private var _scale : Number;
 		private var _level : Level;
+		private var _greyMat:TextureMaterial;
 		
 		public function LevelLoader(scale : Number = 1)
 		{
 			_scale = scale;
+			_greyMat = new TextureMaterial(new BitmapTexture(new BitmapData(512, 512, false, 0x666666)));
 		}
 		
 		
@@ -253,6 +258,9 @@ package com.away3d.gloop.level
 				mesh = obj as Mesh;
 				if (mesh) {
 					var mat : DefaultMaterialBase;
+					
+					if (Settings.STU_MODE)
+						mesh.material = _greyMat;
 					
 					mat = DefaultMaterialBase(mesh.material);
 					mat.repeat = true;
