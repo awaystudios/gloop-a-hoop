@@ -105,11 +105,11 @@ package com.away3d.gloop.screens.game
 		private function initWorld() : void
 		{
 			_doc = new WCK();
-			_doc.x = 120;
-			_doc.y = 120;
+			_doc.x = 220;
+			_doc.y = 520;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
-			_doc.visible = false;
+			_doc.visible = Settings.DEV_MODE;
 			addChild( _doc );
 		}
 		

@@ -65,7 +65,7 @@ package com.away3d.gloop.gameobjects
 			
 			if(_isOn && _gloop){
 				var distanceToFan:Number = _gloop.physics.b2body.GetWorldCenter().subtract( _physics.b2body.GetWorldCenter() ).length();
-				var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -Settings.FAN_POWER * ( 1 / distanceToFan + 1 ) * dt ) );
+				var impulse:V2 = _physics.b2body.GetWorldVector( new V2( 0, -3 * Settings.FAN_POWER * ( 1 / distanceToFan + 1 ) * dt ) );
 				_gloop.physics.b2body.ApplyImpulse( impulse, _gloop.physics.b2body.GetWorldCenter() ); // apply up impulse
 			}
 		}
