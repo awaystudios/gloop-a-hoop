@@ -116,6 +116,10 @@ package com.away3d.gloop.gameobjects.hoops
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode || !draggable) return;
 
+
+
+			return;
+
 //			var posY:int = snapToHoopGrid(mouseY);
 //			var posX:int = snapToHoopGrid(mouseX);
 			var posX:int = mouseX;
@@ -205,7 +209,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
 			_iconMesh.rotationY += 0.5;
 			
-			if (_needsPositionValidation) validatePosition();
+//			if (_needsPositionValidation) validatePosition();
 		}
 		
 		override public function setMode(value:Boolean):void {
@@ -288,9 +292,11 @@ class HoopPhysicsComponent extends PhysicsComponent
 		_mode = mode;
 		if (!b2body) return;
 		if (mode == Level.EDIT_MODE) {
-			b2fixtures[0].SetSensor(true);
-			b2fixtures[1].SetSensor(true);
+			allowDragging = true;
+			b2fixtures[0].SetSensor(false);
+			b2fixtures[1].SetSensor(false);
 		} else {
+			allowDragging = false;
 			if (Hoop(gameObject).resolveGloopCollisions == false) {
 				b2fixtures[0].SetSensor(true);
 			} else {
