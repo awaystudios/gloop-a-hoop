@@ -111,8 +111,6 @@ package com.away3d.gloop.gameobjects.hoops
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode) return;
 			_physics.setStatic(false);
-
-
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
