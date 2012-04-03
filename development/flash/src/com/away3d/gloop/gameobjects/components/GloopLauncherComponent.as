@@ -90,7 +90,7 @@ package com.away3d.gloop.gameobjects.components {
 		}
 		
 		public function get shotPower():Number {
-			return 4 * ( Settings.LAUNCHER_POWER_BASE + shotPowerNormalized * Settings.LAUNCHER_POWER_VARIATION );
+			return ( Settings.LAUNCHER_POWER_BASE + shotPowerNormalized * Settings.LAUNCHER_POWER_VARIATION );
 		}
 		
 		public function get gloop():Gloop {

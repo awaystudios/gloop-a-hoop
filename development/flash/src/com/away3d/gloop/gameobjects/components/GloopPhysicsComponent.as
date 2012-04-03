@@ -2,8 +2,7 @@ package com.away3d.gloop.gameobjects.components
 {
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
-	
+
 	public class GloopPhysicsComponent extends PhysicsComponent
 	{
 		public function GloopPhysicsComponent( gameObject:DefaultGameObject ) {
@@ -13,6 +12,8 @@ package com.away3d.gloop.gameobjects.components
 			graphics.drawCircle( 0, 0, 2 * Settings.GLOOP_RADIUS );
 			graphics.beginFill( gameObject.debugColor2 );
 			graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
+
+			density = 0.25; // should make a gloop of twice the radius have the same mass as before
 		}
 		
 		public override function shapes():void {
