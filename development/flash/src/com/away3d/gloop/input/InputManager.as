@@ -7,10 +7,13 @@ package com.away3d.gloop.input
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.level.Level;
 
+	import flash.display.DisplayObject;
+
 	import flash.events.Event;
 
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
+	import flash.geom.Point;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.getTimer;
@@ -107,14 +110,15 @@ package com.away3d.gloop.input
 			if( _isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED ) {
 				_isClick = false;
 				if( _targetObject ) {
-					_targetObject.onDragStart( projectedMouseX, projectedMouseY );
+//					_targetObject.onDragStart( projectedMouseX, projectedMouseY );
 				} else {
 					_panning = true;
 				}
 			}
 
-			if( _targetObject && !_isClick )
-				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
+			if( _targetObject && !_isClick ) {
+//				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
+			}
 
 			if( _panning && !_zooming ) {
 				_panX += _interactionDeltaX;
@@ -123,11 +127,19 @@ package com.away3d.gloop.input
 			}
 		}
 
-		private var _panInternallyChanged:Boolean;
-		private var _zoomInternallyChanged:Boolean;
-		public function resetInternalChanges():void {
-			_panInternallyChanged = false;
-			_zoomInternallyChanged = false;
+		protected function startDrag( event:MouseEvent ):void {
+			trace( "dragging" );
+			// find mouse event's display object
+			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
+			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
+			if( objectsUnderPoint.length == 0 ) return;
+			var displayObject:DisplayObject = objectsUnderPoint[ 0 ] as DisplayObject;
+			// produce new mouse event
+			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
+			event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
+			physicsEvent.displayObject = displayObject;
+			// channel mouse event to physics
+			_level.world.handleDragStart( physicsEvent );
 		}
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
@@ -141,7 +153,8 @@ package com.away3d.gloop.input
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
-				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
+				startDrag( e );
+//				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
 			}
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
@@ -178,6 +191,13 @@ package com.away3d.gloop.input
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
+		}
+
+		private var _panInternallyChanged:Boolean;
+		private var _zoomInternallyChanged:Boolean;
+		public function resetInternalChanges():void {
+			_panInternallyChanged = false;
+			_zoomInternallyChanged = false;
 		}
 
 		private function onTouch( event:TouchEvent ):void {
