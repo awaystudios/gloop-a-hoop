@@ -100,6 +100,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
+			trace( "onClick" );
 			if (inEditMode && rotatable) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
@@ -109,6 +110,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
+			trace( "dragStart" );
 			if (!inEditMode) return;
 			_physics.setStatic(false);
 
@@ -116,6 +118,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			trace( "dragUpdate" );
 			if (!inEditMode || !draggable) return;
 
 
@@ -141,6 +144,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			trace( "dragEnd" );
 			_needsPositionValidation = true;
 		}
 		
@@ -274,8 +278,8 @@ class HoopPhysicsComponent extends PhysicsComponent
 		graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
 
 		allowDragging = true;
-		linearDamping = 999999;
-		angularDamping = 999999;
+		linearDamping = 9999999;
+		angularDamping = 9999999;
 		density = 9999;
 		restitution = 0;
 	}

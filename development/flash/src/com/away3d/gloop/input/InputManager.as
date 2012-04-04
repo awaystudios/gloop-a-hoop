@@ -41,6 +41,9 @@ package com.away3d.gloop.input
 		
 		private var _startInteractionPointX : Number = 0;
 		private var _startInteractionPointY : Number = 0;
+
+		private var _panInternallyChanged:Boolean;
+		private var _zoomInternallyChanged:Boolean;
 		
 		private var _panX : Number;
 		private var _panY : Number;
@@ -94,18 +97,15 @@ package com.away3d.gloop.input
 		protected function startDrag( event:MouseEvent ):void {
 			// find mouse event's display object
 			trace( "drag start --------------" );
-			trace( "projected position: " + projectedMousePosition );
 			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
-			trace( "pointInStage: " + pointInStage );
 			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
-			trace( "objects: " + objectsUnderPoint );
 			if( objectsUnderPoint.length == 0 ) return;
 			var displayObject:DisplayObject = objectsUnderPoint[ 0 ] as DisplayObject;
-			displayObject.x += 50;
 			// produce new mouse event
 			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
 					event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
 			physicsEvent.displayObject = displayObject;
+			physicsEvent.body = _targetObject.physics.body;
 			// channel mouse event to physics
 			_level.world.handleDragStart( physicsEvent );
 		}
@@ -152,6 +152,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
+			trace( "mouse down ------" );
+
 			super.onViewMouseDown(e);
 
 			_isClick = true;
@@ -162,7 +164,9 @@ package com.away3d.gloop.input
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
+				trace( "target: " + _targetObject );
 				if( _targetObject && !( _targetObject is Cannon ) ) {
+					trace( "is not cannon" );
 					startDrag( e );
 				}
 			}
@@ -175,6 +179,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseUp(e : Event) : void
 		{
+			trace( "mouse up ------" );
+
 			super.onViewMouseUp(e);
 
 			var clickDuration : Number = getTimer() - _mouseDownTime;
@@ -184,7 +190,7 @@ package com.away3d.gloop.input
 				_level.placeQueuedHoop(projectedMouseX, projectedMouseY);
 			}
 
-			if (_targetObject && _targetObject is Cannon) {
+			if (_targetObject) {
 				// deal with click if duration was short enough
 				if (_isClick) {
 					_targetObject.onClick(projectedMouseX, projectedMouseY);
@@ -203,8 +209,6 @@ package com.away3d.gloop.input
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
 		}
 
-		private var _panInternallyChanged:Boolean;
-		private var _zoomInternallyChanged:Boolean;
 		public function resetInternalChanges():void {
 			_panInternallyChanged = false;
 			_zoomInternallyChanged = false;

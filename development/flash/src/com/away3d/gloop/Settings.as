@@ -10,6 +10,7 @@ package com.away3d.gloop
 	{
 		static public var STU_MODE:Boolean = false;
 		static public var DEV_MODE:Boolean = true;
+		static public var SHOW_PHYSICS:Boolean = false;
 
 		static public var GRID_SIZE : Number = 100;
 		
