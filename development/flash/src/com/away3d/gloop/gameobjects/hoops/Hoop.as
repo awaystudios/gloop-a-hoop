@@ -272,6 +272,12 @@ class HoopPhysicsComponent extends PhysicsComponent
 		graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2);
 		graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
 		graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
+
+		allowDragging = true;
+		linearDamping = 999999;
+		angularDamping = 999999;
+		density = 9999;
+		restitution = 0;
 	}
 	
 	public override function shapes() : void
@@ -291,6 +297,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 	}
 	
 	public function setMode(mode:Boolean):void {
+		trace( "SETTING MODE: " + mode );
 		_mode = mode;
 		if (!b2body) return;
 		if (mode == Level.EDIT_MODE) {

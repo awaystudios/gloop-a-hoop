@@ -56,7 +56,7 @@ package com.away3d.gloop.input
 			_intersection.y = rayPosition.y + t * rayDirection.y;
 			_intersection.z = rayPosition.z + t * rayDirection.z;
 			_intersectionPoint.x = _intersection.x;
-			_intersectionPoint.y = _intersection.y;
+			_intersectionPoint.y = -_intersection.y;
 		}
 
 		protected function onViewMouseDown(e:MouseEvent):void {
