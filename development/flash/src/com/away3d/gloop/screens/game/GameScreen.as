@@ -109,7 +109,7 @@ package com.away3d.gloop.screens.game
 			_doc.y = 520;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
-			_doc.visible = Settings.DEV_MODE;
+			_doc.visible = Settings.SHOW_PHYSICS;
 			addChild( _doc );
 		}
 		

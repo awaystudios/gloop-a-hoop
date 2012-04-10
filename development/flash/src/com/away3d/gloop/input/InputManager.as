@@ -4,13 +4,17 @@ package com.away3d.gloop.input
 	import away3d.containers.View3D;
 
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.level.Level;
+
+	import flash.display.DisplayObject;
 
 	import flash.events.Event;
 
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
+	import flash.geom.Point;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.getTimer;
@@ -37,6 +41,9 @@ package com.away3d.gloop.input
 		
 		private var _startInteractionPointX : Number = 0;
 		private var _startInteractionPointY : Number = 0;
+
+		private var _panInternallyChanged:Boolean;
+		private var _zoomInternallyChanged:Boolean;
 		
 		private var _panX : Number;
 		private var _panY : Number;
@@ -87,18 +94,35 @@ package com.away3d.gloop.input
 			_view.stage.removeEventListener( MouseEvent.MOUSE_WHEEL, onMouseWheel );
 		}
 
+		protected function startDrag( event:MouseEvent ):void {
+			// find mouse event's display object
+			trace( "drag start --------------" );
+			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
+			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
+			if( objectsUnderPoint.length == 0 ) return;
+			var displayObject:DisplayObject = objectsUnderPoint[ 0 ] as DisplayObject;
+			// produce new mouse event
+			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
+					event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
+			physicsEvent.displayObject = displayObject;
+			physicsEvent.body = _targetObject.physics.body;
+			// channel mouse event to physics
+			_level.world.handleDragStart( physicsEvent );
+		}
+
 		override public function update():void {
 
 			_interactionDeltaX = -(_interactionPointX - _prevInteractionPointX);
 			_interactionDeltaY = (_interactionPointY - _prevInteractionPointY);
 			_prevInteractionPointX = _interactionPointX;
 			_prevInteractionPointY = _interactionPointY;
-			
+
 			if( !_mouseDown ) {
 				return; // if there's no touch, there's no sense in updating
 			}
 
 			super.update();
+			_level.world.projectedMousePosition = projectedMousePosition;
 
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startInteractionPointX - _interactionPointX) * (_startInteractionPointX - _interactionPointX) + (_startInteractionPointY - _interactionPointY) * (_startInteractionPointY - _interactionPointY);
@@ -107,14 +131,17 @@ package com.away3d.gloop.input
 			if( _isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED ) {
 				_isClick = false;
 				if( _targetObject ) {
-					_targetObject.onDragStart( projectedMouseX, projectedMouseY );
+					if( _targetObject is Cannon ) {
+						_targetObject.onDragStart( projectedMouseX, projectedMouseY );
+					}
 				} else {
 					_panning = true;
 				}
 			}
 
-			if( _targetObject && !_isClick )
+			if( _targetObject && _targetObject is Cannon && !_isClick ) {
 				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
+			}
 
 			if( _panning && !_zooming ) {
 				_panX += _interactionDeltaX;
@@ -123,15 +150,10 @@ package com.away3d.gloop.input
 			}
 		}
 
-		private var _panInternallyChanged:Boolean;
-		private var _zoomInternallyChanged:Boolean;
-		public function resetInternalChanges():void {
-			_panInternallyChanged = false;
-			_zoomInternallyChanged = false;
-		}
-
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
+			trace( "mouse down ------" );
+
 			super.onViewMouseDown(e);
 
 			_isClick = true;
@@ -142,6 +164,11 @@ package com.away3d.gloop.input
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
+				trace( "target: " + _targetObject );
+				if( _targetObject && !( _targetObject is Cannon ) ) {
+					trace( "is not cannon" );
+					startDrag( e );
+				}
 			}
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
@@ -152,6 +179,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseUp(e : Event) : void
 		{
+			trace( "mouse up ------" );
+
 			super.onViewMouseUp(e);
 
 			var clickDuration : Number = getTimer() - _mouseDownTime;
@@ -178,6 +207,11 @@ package com.away3d.gloop.input
 
 			_interactionPointX = _startInteractionPointX = _prevInteractionPointX = _view.mouseX;
 			_interactionPointY = _startInteractionPointY = _prevInteractionPointY = _view.mouseY;
+		}
+
+		public function resetInternalChanges():void {
+			_panInternallyChanged = false;
+			_zoomInternallyChanged = false;
 		}
 
 		private function onTouch( event:TouchEvent ):void {

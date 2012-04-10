@@ -100,6 +100,7 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
+			trace( "onClick" );
 			if (inEditMode && rotatable) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
@@ -109,12 +110,18 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
+			trace( "dragStart" );
 			if (!inEditMode) return;
 			_physics.setStatic(false);
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
+			trace( "dragUpdate" );
 			if (!inEditMode || !draggable) return;
+
+
+
+			return;
 
 //			var posY:int = snapToHoopGrid(mouseY);
 //			var posX:int = snapToHoopGrid(mouseX);
@@ -135,6 +142,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
+			trace( "dragEnd" );
 			_needsPositionValidation = true;
 		}
 		
@@ -205,7 +213,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
 			_iconMesh.rotationY += 0.5;
 			
-			if (_needsPositionValidation) validatePosition();
+//			if (_needsPositionValidation) validatePosition();
 		}
 		
 		override public function setMode(value:Boolean):void {
@@ -266,6 +274,12 @@ class HoopPhysicsComponent extends PhysicsComponent
 		graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2);
 		graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
 		graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
+
+		allowDragging = true;
+		linearDamping = 9999999;
+		angularDamping = 9999999;
+		density = 9999;
+		restitution = 0;
 	}
 	
 	public override function shapes() : void
@@ -285,12 +299,15 @@ class HoopPhysicsComponent extends PhysicsComponent
 	}
 	
 	public function setMode(mode:Boolean):void {
+		trace( "SETTING MODE: " + mode );
 		_mode = mode;
 		if (!b2body) return;
 		if (mode == Level.EDIT_MODE) {
-			b2fixtures[0].SetSensor(true);
-			b2fixtures[1].SetSensor(true);
+			allowDragging = true;
+			b2fixtures[0].SetSensor(false);
+			b2fixtures[1].SetSensor(false);
 		} else {
+			allowDragging = false;
 			if (Hoop(gameObject).resolveGloopCollisions == false) {
 				b2fixtures[0].SetSensor(true);
 			} else {
