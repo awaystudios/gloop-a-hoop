@@ -96,7 +96,6 @@ package com.away3d.gloop.input
 
 		protected function startDrag( event:MouseEvent ):void {
 			// find mouse event's display object
-			trace( "drag start --------------" );
 			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
 			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
 			if( objectsUnderPoint.length == 0 ) return;
@@ -152,8 +151,6 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
-			trace( "mouse down ------" );
-
 			super.onViewMouseDown(e);
 
 			_isClick = true;
@@ -164,9 +161,7 @@ package com.away3d.gloop.input
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
-				trace( "target: " + _targetObject );
 				if( _targetObject && !( _targetObject is Cannon ) ) {
-					trace( "is not cannon" );
 					startDrag( e );
 				}
 			}
@@ -179,8 +174,6 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseUp(e : Event) : void
 		{
-			trace( "mouse up ------" );
-
 			super.onViewMouseUp(e);
 
 			var clickDuration : Number = getTimer() - _mouseDownTime;

@@ -13,15 +13,19 @@ package com.away3d.gloop.gameobjects.components
 			graphics.beginFill( gameObject.debugColor2 );
 			graphics.drawRect( -Settings.GLOOP_RADIUS / 2, -Settings.GLOOP_RADIUS / 2, Settings.GLOOP_RADIUS, Settings.GLOOP_RADIUS );
 
-			density = 0.25; // should make a gloop of twice the radius have the same mass as before
+			density = 0.25;
 		}
 		
 		public override function shapes():void {
+
 			circle( 2 * Settings.GLOOP_RADIUS );
+
 		}
 		
 		override public function create():void {
+
 			super.create();
+
 			autoSleep = false;
 			setCollisionGroup( GLOOP );
 		}
