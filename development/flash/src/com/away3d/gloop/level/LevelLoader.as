@@ -116,10 +116,8 @@ package com.away3d.gloop.level
 		{
 			var hoop : Hoop;
 
-//			var movable:Boolean = obj.extra['gah_movable'] == "1" ? true : false;
-			var movable:Boolean = true;
-//			var rotatable:Boolean = obj.extra['gah_rotatable'] == "1" ? true : false;
-			var rotatable:Boolean = false;
+			var movable:Boolean = obj.extra['gah_movable'] == "1" ? true : false;
+			var rotatable:Boolean = obj.extra['gah_rotatable'] == "1" ? true : false;
 
 			switch (obj.extra['gah_hoop']) {
 				case HoopType.TRAMPOLINE:
