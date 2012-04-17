@@ -118,11 +118,11 @@ package com.away3d.gloop.level
 			
 			switch (obj.extra['gah_hoop']) {
 				case HoopType.TRAMPOLINE:
-					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, obj.rotationZ);
+					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ);
 					break;
 				
 				case HoopType.ROCKET:
-					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, obj.rotationZ);
+					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ);
 					break;
 			}
 			
