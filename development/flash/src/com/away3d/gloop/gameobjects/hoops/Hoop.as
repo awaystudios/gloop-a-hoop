@@ -58,6 +58,8 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.applyGravity = false;
 			_physics.enableReportBeginContact();
 			
+			_physics.setStatic(true);
+			
 			initVisual()
 		}
 		
@@ -144,6 +146,7 @@ package com.away3d.gloop.gameobjects.hoops
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
 			trace( "dragEnd" );
 			_needsPositionValidation = true;
+			_physics.setStatic(true);
 		}
 		
 		private function validatePosition():void {

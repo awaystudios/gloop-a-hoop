@@ -105,6 +105,9 @@ package com.away3d.gloop.input
 					event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
 			physicsEvent.displayObject = displayObject;
 			physicsEvent.body = _targetObject.physics.body;
+			
+			_targetObject.onDragStart(projectedMouseX, projectedMouseY);
+			
 			// channel mouse event to physics
 			_level.world.handleDragStart( physicsEvent );
 		}
