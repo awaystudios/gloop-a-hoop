@@ -14,8 +14,8 @@ package com.away3d.gloop.gameobjects.hoops {
 	 */
 	public class RocketHoop extends Hoop {
 
-		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0) {
-			super(0x3f7fff, worldX, worldY, rotation);
+		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, movable:Boolean = true) {
+			super(0x3f7fff, worldX, worldY, rotation, movable);
 			_physics.enableReportPreSolveContact();
 			_resolveGloopCollisions = true;
 			_physics.restitution = 0;

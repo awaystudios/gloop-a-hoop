@@ -8,6 +8,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
+	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 
 	import com.away3d.gloop.Settings;
@@ -31,10 +32,12 @@ package com.away3d.gloop.gameobjects.hoops
 		protected var _resolveGloopCollisions:Boolean = false;
 		
 		private var _material:ColorMaterial;
+		private var _movable:Boolean;
 
-		public function Hoop(color : uint, worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
+		public function Hoop(color : uint, worldX : Number = 0, worldY : Number = 0, rotation : Number = 0, movable:Boolean = true)
 		{
 			_color = color;
+			_movable = movable;
 			
 			_physics = new HoopPhysicsComponent(this);
 			_physics.x = worldX;
@@ -44,10 +47,8 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.applyGravity = false;
 			_physics.enableReportBeginContact();
 
-			trace( "Hoop initialized with rotation: " + rotation );
-
 			_physics.setStatic(true);
-			
+
 			initVisual()
 		}
 		
@@ -65,6 +66,13 @@ package com.away3d.gloop.gameobjects.hoops
 
 			_iconMesh = new Mesh(getIconGeometry(), _material);
 			_meshComponent.mesh.addChild(_iconMesh);
+
+			if( _movable ) { // TODO: use cloned mesh from asset library
+				var cube:Mesh = new Mesh( new CubeGeometry(), new ColorMaterial( 0xFF0000 ) );
+				cube.scale( 0.15 );
+				cube.z = 100;
+				_meshComponent.mesh.addChild( cube );
+			}
 
 			_meshComponent.mesh.scale( Settings.HOOP_SCALE );
 
