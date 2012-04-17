@@ -175,7 +175,10 @@ package com.away3d.gloop.gameobjects.hoops
 			// then offset by half a grid to align to the center of grid "boxes" not the intersections
 			return Math.floor(value / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
 		}
-	
+
+		public function get movable():Boolean {
+			return _movable;
+		}
 	}
 
 }
