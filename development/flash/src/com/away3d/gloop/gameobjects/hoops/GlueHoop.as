@@ -1,7 +1,8 @@
 package com.away3d.gloop.gameobjects.hoops
 {
 	import Box2DAS.Common.V2;
-	
+	import Box2DAS.Dynamics.ContactEvent;
+
 	import away3d.core.base.Geometry;
 	import away3d.library.AssetLibrary;
 	
@@ -21,9 +22,9 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private var _launcher:GloopLauncherComponent;
 		
-		public function GlueHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
+		public function GlueHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0, movable:Boolean = true)
 		{
-			super(0xffbe3f, worldX, worldY, rotation);
+			super(0xffbe3f, worldX, worldY, rotation, movable);
 			_rotatable = false;
 			_launcher = new GloopLauncherComponent(this);
 		}
@@ -33,7 +34,7 @@ package com.away3d.gloop.gameobjects.hoops
 			_launcher.reset();
 		}
 		
-		public override function onCollidingWithGloopStart(gloop : Gloop) : void
+		public override function onCollidingWithGloopStart(gloop : Gloop, event:ContactEvent = null) : void
 		{
 			super.onCollidingWithGloopStart(gloop);
 			_launcher.catchGloop(gloop);

@@ -38,7 +38,7 @@ package com.away3d.gloop.gameobjects
 			var mat : ColorMaterial;
 			
 			geom = Geometry(AssetLibrary.getAsset('StarFrame0_geom')).clone();
-			mat = new ColorMaterial(0xccff00);
+			mat = new ColorMaterial(0xccff00); // TODO: use clone materials?
 			
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, mat);

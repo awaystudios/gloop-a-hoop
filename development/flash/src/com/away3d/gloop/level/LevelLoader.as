@@ -115,14 +115,17 @@ package com.away3d.gloop.level
 		private function parseHoop(obj : ObjectContainer3D) : void
 		{
 			var hoop : Hoop;
-			
+
+			var movable:Boolean = obj.extra['gah_movable'] == "true" ? true : false;
+//			var movable:Boolean = true;
+
 			switch (obj.extra['gah_hoop']) {
 				case HoopType.TRAMPOLINE:
-					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ);
+					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable);
 					break;
 				
 				case HoopType.ROCKET:
-					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ);
+					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable);
 					break;
 			}
 			
