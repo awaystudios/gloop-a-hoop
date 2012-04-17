@@ -95,7 +95,7 @@ package com.away3d.gloop.input
 			_view.stage.removeEventListener( MouseEvent.MOUSE_WHEEL, onMouseWheel );
 		}
 
-		protected function startDrag( event:MouseEvent ):void {
+		private function startDrag( event:MouseEvent ):void {
 			// find mouse event's display object
 			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
 			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
@@ -163,15 +163,10 @@ package com.away3d.gloop.input
 			_mouseDownTime = getTimer();
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
-			var allowDrag:Boolean = true;
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
 				if( _targetObject ) {
-
-					if( _targetObject is Cannon ) allowDrag = false;
-					if( _targetObject is Hoop && !Hoop( _targetObject ).movable ) allowDrag = false;
-					if( allowDrag ) startDrag( e );
-
+					if( _targetObject.draggable ) startDrag( e );
 				}
 			}
 

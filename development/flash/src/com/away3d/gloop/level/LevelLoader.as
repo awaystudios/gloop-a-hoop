@@ -116,15 +116,18 @@ package com.away3d.gloop.level
 		{
 			var hoop : Hoop;
 
-			var movable:Boolean = obj.extra['gah_movable'] == "1" ? true : false;
+//			var movable:Boolean = obj.extra['gah_movable'] == "1" ? true : false;
+			var movable:Boolean = true;
+//			var rotatable:Boolean = obj.extra['gah_rotatable'] == "1" ? true : false;
+			var rotatable:Boolean = false;
 
 			switch (obj.extra['gah_hoop']) {
 				case HoopType.TRAMPOLINE:
-					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable);
+					hoop = new TrampolineHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable, rotatable);
 					break;
 				
 				case HoopType.ROCKET:
-					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable);
+					hoop = new RocketHoop(obj.x * _scale, -obj.y * _scale, -obj.rotationZ, movable, rotatable);
 					break;
 			}
 			

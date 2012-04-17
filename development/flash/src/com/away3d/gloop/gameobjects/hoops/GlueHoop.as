@@ -22,9 +22,9 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		private var _launcher:GloopLauncherComponent;
 		
-		public function GlueHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0, movable:Boolean = true)
+		public function GlueHoop(worldX : Number = 0, worldY : Number = 0, rotation : Number = 0, movable:Boolean = true, rotatable:Boolean = true)
 		{
-			super(0xffbe3f, worldX, worldY, rotation, movable);
+			super(0xffbe3f, worldX, worldY, rotation, movable, rotatable);
 			_rotatable = false;
 			_launcher = new GloopLauncherComponent(this);
 		}

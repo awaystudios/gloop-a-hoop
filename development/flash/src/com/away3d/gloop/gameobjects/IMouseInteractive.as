@@ -12,6 +12,8 @@ package com.away3d.gloop.gameobjects {
 		function onDragStart(mouseX:Number, mouseY:Number):void;
 		function onDragUpdate(mouseX:Number, mouseY:Number):void;
 		function onDragEnd(mouseX:Number, mouseY:Number):void;
+		function get draggable():Boolean;
+		function get rotatable():Boolean;
 	}
 
 }

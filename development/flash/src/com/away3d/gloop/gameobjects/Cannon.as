@@ -34,6 +34,14 @@ package com.away3d.gloop.gameobjects
 		
 		private var _timeSinceLaunch : Number = 0;
 
+		public function get draggable():Boolean {
+			return false;
+		}
+
+		public function get rotatable():Boolean {
+			return false;
+		}
+
 		public function Cannon()
 		{
 			super();
