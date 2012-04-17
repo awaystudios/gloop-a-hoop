@@ -1,26 +1,21 @@
 package com.away3d.gloop.gameobjects.hoops
 {
+
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
-	
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
-	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	
-	
-	
-	
+
 	/**
 	 * ...
 	 * @author Martin Jonasson, m@grapefrukt.com
@@ -35,16 +30,7 @@ package com.away3d.gloop.gameobjects.hoops
 		protected var _draggable:Boolean = true;
 		protected var _resolveGloopCollisions:Boolean = false;
 		
-		protected var _lastPositionX:int = 0;
-		protected var _lastPositionY:int = 0;
-		protected var _lastValidPositionX:int = 0;
-		protected var _lastValidPositionY:int = 0;
-		protected var _needsPositionValidation:Boolean = true;
-		
-		protected var _newlyPlaced:Boolean = true;
-		
 		private var _material:ColorMaterial;
-		private var _material_invalid:ColorMaterial;
 
 		public function Hoop(color : uint, worldX : Number = 0, worldY : Number = 0, rotation : Number = 0)
 		{
@@ -57,7 +43,9 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
 			_physics.enableReportBeginContact();
-			
+
+			trace( "Hoop initialized with rotation: " + rotation );
+
 			_physics.setStatic(true);
 			
 			initVisual()
@@ -69,8 +57,7 @@ package com.away3d.gloop.gameobjects.hoops
 			var geom : Geometry;
 			
 			_material = new ColorMaterial(_color);
-			_material_invalid = new ColorMaterial(0xff0000);
-			
+
 			geom = Geometry(AssetLibrary.getAsset('Hoop_geom'));
 
 			_meshComponent = new MeshComponent();
@@ -102,7 +89,6 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
-			trace( "onClick" );
 			if (inEditMode && rotatable) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
@@ -112,82 +98,16 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
-			trace( "dragStart" );
 			if (!inEditMode) return;
 			_physics.setStatic(false);
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
-			trace( "dragUpdate" );
-			if (!inEditMode || !draggable) return;
 
-
-
-			return;
-
-//			var posY:int = snapToHoopGrid(mouseY);
-//			var posX:int = snapToHoopGrid(mouseX);
-			var posX:int = mouseX;
-			var posY:int = mouseY;
-
-			if (posX != _lastPositionX || posY != _lastPositionY) {
-				_physics.moveTo(posX, posY, false);
-				_lastPositionX = posX;
-				_lastPositionY = posY;
-			} else if (isCollidingWithLevel) {
-				displayAsColliding(true);
-			} else {
-				displayAsColliding(false);
-				_lastValidPositionX = _lastPositionX;
-				_lastValidPositionY = _lastPositionY;
-			}
 		}
-		
+
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
-			trace( "dragEnd" );
-			_needsPositionValidation = true;
 			_physics.setStatic(true);
-		}
-		
-		private function validatePosition():void {
-			if (isCollidingWithLevel) {
-				
-				// if we're inside the wall and the hoop hasn't been validated at all, there's no valid place to go back to
-				// so it has to be removed
-				if (_newlyPlaced) {
-					dispatchEvent(new GameObjectEvent(GameObjectEvent.HOOP_REMOVE, this));
-					
-				// if not, we go back to wherever was the last valid position
-				} else {
-					_physics.moveTo(_lastValidPositionX, _lastValidPositionY, true);
-				}
-			}
-			_newlyPlaced = false;
-			_physics.setStatic(true);
-			displayAsColliding(false);
-			_needsPositionValidation = false;
-		}
-		
-		private function displayAsColliding(value:Boolean):void {
-			if (value) {
-				_meshComponent.mesh.material = _material_invalid;
-			} else {
-				_meshComponent.mesh.material = _material;
-			}
-		}
-		
-		private function get isCollidingWithLevel():Boolean {
-			var contacts:b2ContactEdge = _physics.b2body.GetContactList();
-			
-			while (contacts) {
-				//PhysicsComponent(contacts.contact.GetFixtureA().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
-				//PhysicsComponent(contacts.contact.GetFixtureB().GetUserData()).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
-
-				if (contacts.contact.IsTouching()) return true;
-				contacts = contacts.next;
-			}
-			
-			return false;
 		}
 		
 		public override function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void
@@ -215,8 +135,6 @@ package com.away3d.gloop.gameobjects.hoops
 			
 			_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
 			_iconMesh.rotationY += 0.5;
-			
-//			if (_needsPositionValidation) validatePosition();
 		}
 		
 		override public function setMode(value:Boolean):void {
@@ -254,11 +172,11 @@ package com.away3d.gloop.gameobjects.hoops
 
 }
 
-import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+import com.away3d.gloop.Settings;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
+import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.hoops.Hoop;
 import com.away3d.gloop.level.Level;
-import com.away3d.gloop.Settings;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
