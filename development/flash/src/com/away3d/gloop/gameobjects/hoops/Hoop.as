@@ -270,10 +270,10 @@ class HoopPhysicsComponent extends PhysicsComponent
 		graphics.drawRect( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6,
 				Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
 		
-		graphics.beginFill(gameObject.debugColor2);
-		graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2);
-		graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
-		graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 2, 0);
+		//graphics.beginFill(0x0);
+		//graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
+		//graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
+		//graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
 
 		allowDragging = true;
 		linearDamping = 9999999;

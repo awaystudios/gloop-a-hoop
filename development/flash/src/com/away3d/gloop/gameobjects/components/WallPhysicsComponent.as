@@ -5,8 +5,10 @@ package com.away3d.gloop.gameobjects.components
 	 * @author Martin Jonasson, m@grapefrukt.com
 	 */
 	import Box2DAS.Common.V2;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+	
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
+	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	
 	public class WallPhysicsComponent extends PhysicsComponent
 	{
@@ -19,10 +21,10 @@ package com.away3d.gloop.gameobjects.components
 		public function WallPhysicsComponent(gameObject : DefaultGameObject, offsetX : Number, offsetY : Number, width : Number, height : Number)
 		{
 			super(gameObject);
-			_offsetX = offsetX;
-			_offsetY = offsetY;
-			_width = width;
-			_height = height;
+			_offsetX = offsetX-Settings.WALL_PADDING;
+			_offsetY = offsetY-Settings.WALL_PADDING;
+			_width = width+2*Settings.WALL_PADDING;
+			_height = height+2*Settings.WALL_PADDING;
 			graphics.beginFill(gameObject.debugColor1);
 			graphics.drawRect(_offsetX, _offsetY, _width, _height);
 		}

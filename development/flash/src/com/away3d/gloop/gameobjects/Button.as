@@ -2,7 +2,7 @@ package com.away3d.gloop.gameobjects
 {
 
 	import Box2DAS.Dynamics.ContactEvent;
-
+	
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -27,8 +27,8 @@ package com.away3d.gloop.gameobjects
 		public function Button(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup : uint = 0)
 		{
 			_physics = new ButtonPhysicsComponent(this);
-			_physics.x = worldX;
-			_physics.y = worldY;
+			_physics.x = worldX + Settings.WALL_PADDING*Math.sin(rotation*Math.PI/180);
+			_physics.y = worldY - Settings.WALL_PADDING*Math.cos(rotation*Math.PI/180);
 			_physics.rotation = rotation;
 			_physics.fixedRotation = true;
 			_physics.applyGravity = false;
@@ -154,10 +154,10 @@ class ButtonPhysicsComponent extends PhysicsComponent
 		graphics.beginFill(gameObject.debugColor1);
 		graphics.drawRect( -Settings.BUTTON_RADIUS, -Settings.BUTTON_RADIUS / 6, Settings.BUTTON_RADIUS * 2, Settings.BUTTON_RADIUS / 3);
 		
-		graphics.beginFill(gameObject.debugColor1);
-		graphics.moveTo( 0, -Settings.BUTTON_RADIUS / 2);
-		graphics.lineTo( -Settings.BUTTON_RADIUS / 2, 0);
-		graphics.lineTo( Settings.BUTTON_RADIUS / 2, 0);
+		//graphics.beginFill(0x0);
+		//graphics.moveTo( 0, -Settings.BUTTON_RADIUS / 6);
+		//graphics.lineTo( -Settings.BUTTON_RADIUS / 3, Settings.BUTTON_RADIUS / 6);
+		//graphics.lineTo( Settings.BUTTON_RADIUS / 3, Settings.BUTTON_RADIUS / 6);
 	}
 	
 	public override function shapes() : void

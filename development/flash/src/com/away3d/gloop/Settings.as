@@ -10,7 +10,7 @@ package com.away3d.gloop
 	{
 		static public var STU_MODE:Boolean = false;
 		static public var DEV_MODE:Boolean = true;
-		static public var SHOW_PHYSICS:Boolean = false;
+		static public var SHOW_PHYSICS:Boolean = true;
 
 		static public var GRID_SIZE : Number = 100;
 		
@@ -26,7 +26,10 @@ package com.away3d.gloop
 		
 		[comment("the time to wait before enabling gloop/cannon collisions after launching, in updates")]
 		static public var CANNON_PHYSICS_DELAY:Number = 8;
-
+		
+		static public var WALL_PADDING : Number = 8;
+		
+		
 		static public var GLOOP_RADIUS : Number = 50;
 		static public var GLOOP_ANGULAR_DAMPING : Number = 0;
 		static public var GLOOP_FRICTION : Number = 1;

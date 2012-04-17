@@ -15,6 +15,10 @@ package com.away3d.gloop.gameobjects.components {
 		public function GoalWallPhysicsComponent(gameObject:DefaultGameObject, offsetX:Number, offsetY:Number, width:Number, height:Number) {
 			graphics.beginFill(gameObject.debugColor2);
 			graphics.drawRect(offsetX, offsetY, width + Settings.GOALWALL_DETECTOR_WIDTH, height + Settings.GOALWALL_DETECTOR_HEIGHT);
+			offsetX += Settings.WALL_PADDING;
+			offsetY += Settings.WALL_PADDING;
+			width -= 2*Settings.WALL_PADDING;
+			height -= 2*Settings.WALL_PADDING;
 			super(gameObject, offsetX, offsetY, width, height);
 		}
 		
