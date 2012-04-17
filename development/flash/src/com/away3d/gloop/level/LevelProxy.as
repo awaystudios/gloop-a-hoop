@@ -135,7 +135,7 @@ package com.away3d.gloop.level
 				
 				loader = new LevelLoader(Settings.GRID_SIZE);
 				loader.addEventListener(Event.COMPLETE, onLevelComplete);
-				loader.load(new URLRequest(_awd_url));
+				loader.load(new URLRequest(Settings.ROB_PATH? "../bin/" + _awd_url : _awd_url));
 			}
 			else 
 			{
