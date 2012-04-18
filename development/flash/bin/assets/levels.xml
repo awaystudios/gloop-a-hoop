@@ -53,5 +53,17 @@
         <level id="17" awd="assets/levels/011.awd">
         </level>
 
+        <level id="18" awd="assets/levels/020.awd">
+        </level>
+
+        <level id="19" awd="assets/levels/021.awd">
+        </level>
+ 
+        <level id="20" awd="assets/levels/022.awd">
+        </level>
+        
+        <level id="21" awd="assets/levels/023.awd">
+        </level>
+                       
     </chapter>
 </levels>
