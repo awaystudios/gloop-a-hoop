@@ -211,7 +211,7 @@ package
 			}
 			
 			// Load levels
-			_db.loadXml( 'assets/levels.xml' );
+			_db.loadXml(Settings.ROB_PATH? "../bin/assets/levels.xml" : "assets/levels.xml" );
 		}
 		
 
