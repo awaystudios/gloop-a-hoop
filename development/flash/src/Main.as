@@ -48,7 +48,7 @@ package
 	import flash.system.Capabilities;
 	import flash.ui.Keyboard;
 
-	[SWF(width="1024", height="768", frameRate="30")]
+	[SWF(width="1024", height="768", frameRate="60")]
 	public class Main extends Sprite
 	{
 		private var _w : Number;
