@@ -3,9 +3,7 @@ package com.away3d.gloop.screens.game
 
 	import away3d.containers.Scene3D;
 	import away3d.containers.View3D;
-	import away3d.lights.PointLight;
-	import away3d.materials.lightpickers.StaticLightPicker;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
@@ -21,19 +19,17 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
-	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.sound.Themes;
-	import com.away3d.gloop.utils.HierarchyTool;
 	import com.away3d.gloop.utils.Timestep;
-	
+
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
-	
+
 	import wck.WCK;
 
 	public class GameScreen extends ScreenBase
