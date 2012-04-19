@@ -4,10 +4,7 @@ package com.away3d.gloop.screens.game.controllers
 	import away3d.arcane;
 	import away3d.cameras.Camera3D;
 	import away3d.cameras.lenses.PerspectiveLens;
-	import away3d.entities.Mesh;
-	import away3d.materials.ColorMaterial;
-	import away3d.primitives.PlaneGeometry;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.input.InputManager;
@@ -21,6 +18,7 @@ package com.away3d.gloop.screens.game.controllers
 		private var _inputManager : InputManager;
 		private var _camera : Camera3D;
 		private var _gloop : Gloop;
+		private var _autoZoomIn:Boolean;
 		
 		private var _lookAtTarget : Vector3D;
 		
@@ -54,9 +52,9 @@ package com.away3d.gloop.screens.game.controllers
 			_lookAtTarget = new Vector3D();
 		}
 
-		private var _autoZoomIn:Boolean;
 		public function firstReset():void {
 			_autoZoomIn = true;
+			_inputManager.resetInternalChanges();
 			reset();
 		}
 
@@ -64,6 +62,7 @@ package com.away3d.gloop.screens.game.controllers
 			if( !_inputManager.panInternallyChanged ) {
 				_inputManager.panX = _gloop.physics.x;
 				_inputManager.panY = -_gloop.physics.y;
+				trace( "resetting camera to: " + _inputManager.panX, _inputManager.panY );
 			}
 		}
 
@@ -72,7 +71,6 @@ package com.away3d.gloop.screens.game.controllers
 			_camera.rotationX *= 0.9;
 			_camera.rotationY *= 0.9;
 			_camera.rotationZ *= 0.9;
-			
 			_lookAtTarget.x = _cameraPosition.x;
 			_lookAtTarget.y = _cameraPosition.y;
 		}
@@ -84,7 +82,6 @@ package com.away3d.gloop.screens.game.controllers
 			_offY = offY;
 			_interactedSinceGloopWasFired = false;
 			_inputManager.resetInternalChanges();
-
 		}
 		
 		
