@@ -20,6 +20,9 @@ package com.away3d.gloop.screens.levelselect
 		
 		private var _totalStars : StarTotal;
 		private var _thumbs : Vector.<LevelThumb>;
+		private var _masterScaleY : Number;
+		private var _masterScaleX : Number;
+		private var _masterScale : Number;
 		
 		public function LevelSelectScreen(db : LevelDatabase, stack : ScreenStack)
 		{
@@ -34,22 +37,44 @@ package com.away3d.gloop.screens.levelselect
 		{
 			var i : uint;
 			var len : uint;
-			var rows : uint;
-			var cols : uint;
-			var tlx : Number;
-			var tly : Number;
-			var masterScaleY : Number;
-			var masterScaleX : Number;
-			var masterScale : Number;
-			
 			// Based on 1024x768 which was the
 			// template for the design
-			masterScaleX = _w/1024;
-			masterScaleY = _h/768;
-			masterScale = (masterScaleX + masterScaleY)/2
+			_masterScaleX = _w/1024;
+			_masterScaleY = _h/768;
+			_masterScale = (_masterScaleX + _masterScaleY)/2
+			
+			_thumbs = new Vector.<LevelThumb>();
+			
+			_totalStars = new StarTotal(_db);
+			_totalStars.x = _w - 140 * _masterScaleY;
+			_totalStars.y = 24 * _masterScaleY;
+			_totalStars.scaleX = _masterScaleY;
+			_totalStars.scaleY = _masterScaleY;
+			addChild(_totalStars);
+			
+			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
+		}
+		
+		
+		public override function activate() : void
+		{
+			var i : uint;
+			var len : uint;
+			var cols : uint;
+			var rows : uint;
+			var tlx : Number;
+			var tly : Number;
+			
+			super.activate();
+				
+			len = _thumbs.length;
+			
+			for (i=0; i<len; i++)
+				if (_thumbs[i].parent == this)
+					removeChild(_thumbs[i]);
 			
 			len = _db.selectedChapter.levels.length;
-
+			
 			if( len < 9 ) {
 				cols = 4;
 			}
@@ -62,13 +87,12 @@ package com.away3d.gloop.screens.levelselect
 			else {
 				cols = 7;
 			}
-
-			rows = Math.ceil(len / cols);
-
-			tlx = _w/2 - cols * 70 * masterScale;
-			tly = _h/2 - rows * 75 * masterScale + 40 * masterScaleY;
 			
-			_thumbs = new Vector.<LevelThumb>();
+			rows = Math.ceil(len / cols);
+			
+			tlx = _w/2 - cols * 70 * _masterScale;
+			tly = _h/2 - rows * 75 * _masterScale + 40 * _masterScaleY;
+			
 			
 			for (i=0; i<len; i++) {
 				var thumb : LevelThumb;
@@ -80,34 +104,22 @@ package com.away3d.gloop.screens.levelselect
 				col = i % cols;
 				
 				level = _db.selectedChapter.levels[i];
-				thumb = new LevelThumb(level);
-				thumb.x = tlx + col * 140 * masterScale;
-				thumb.y = tly + row * 150 * masterScale;
-				thumb.scaleX = masterScaleX;
-				thumb.scaleY = masterScaleX;
-				thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
+				
+				if (_thumbs.length == i) {
+					_thumbs.push(thumb = new LevelThumb(level));
+					thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
+				} else {
+					thumb = _thumbs[i];
+					thumb.levelProxy = level;
+				}
+				
+				thumb.x = tlx + col * 140 * _masterScale;
+				thumb.y = tly + row * 150 * _masterScale;
+				thumb.scaleX = _masterScaleX;
+				thumb.scaleY = _masterScaleX;
 				
 				addChild(thumb);
-				_thumbs.push(thumb);
 			}
-			
-			_totalStars = new StarTotal(_db);
-			_totalStars.x = _w - 140 * masterScaleY;
-			_totalStars.y = 24 * masterScaleY;
-			_totalStars.scaleX = masterScaleY;
-			_totalStars.scaleY = masterScaleY;
-			addChild(_totalStars);
-			
-			_backBtn.addEventListener(MouseEvent.CLICK, onBackBtnClick);
-		}
-		
-		
-		public override function activate() : void
-		{
-			var i : uint;
-			var len : uint;
-			
-			super.activate();
 			
 			len = _thumbs.length;
 			for (i=0; i<len; i++) {

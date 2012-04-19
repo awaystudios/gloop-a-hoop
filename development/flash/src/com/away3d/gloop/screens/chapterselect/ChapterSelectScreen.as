@@ -57,7 +57,7 @@ package com.away3d.gloop.screens.chapterselect
 				
 				chapter = _db.chapters[i];
 				poster = new ChapterPoster(chapter);
-				poster.x = _centerX + _w * i;
+				poster.x = _centerX + _w * i/2;
 				poster.addEventListener(MouseEvent.CLICK, onPosterClick);
 				_ctr.addChild(poster);
 				
@@ -99,9 +99,9 @@ package com.away3d.gloop.screens.chapterselect
 			_curPoster.x += (_targetX - _curPoster.x) * 0.2;
 			
 			if (_prevPoster)
-				_prevPoster.x = _curPoster.x - _w;
+				_prevPoster.x = _curPoster.x - _w/2;
 			if (_nextPoster)
-				_nextPoster.x = _curPoster.x + _w;
+				_nextPoster.x = _curPoster.x + _w/2;
 		}
 		
 		
@@ -143,10 +143,10 @@ package com.away3d.gloop.screens.chapterselect
 		{
 			endDrag();
 			
-			if (_targetX < 0.25*_w && _curPosterIdx < _posters.length-1) {
+			if (_targetX < -0.25*_w && _curPosterIdx < _posters.length-1) {
 				_curPosterIdx++;
 			}
-			else if (_targetX > 0.75*_w && _curPosterIdx > 0) {
+			else if (_targetX > 0.25*_w && _curPosterIdx > 0) {
 				_curPosterIdx--;
 			}
 			

@@ -14,16 +14,16 @@ package com.away3d.gloop.screens.levelselect
 		{
 			super();
 			
-			_proxy = proxy;
+			_ui = new LevelThumbUI();
+			addChild(_ui);
 			
-			init();
+			levelProxy = proxy;
 		}
 		
 		
 		private function init() : void
 		{
 			_ui = new LevelThumbUI();
-			_ui.indexTextfield.text = (_proxy.indexInChapter+1).toString();
 			addChild(_ui);
 		}
 		
@@ -31,6 +31,12 @@ package com.away3d.gloop.screens.levelselect
 		public function get levelProxy() : LevelProxy
 		{
 			return _proxy;
+		}
+		
+		public function set levelProxy( val : LevelProxy ) : void
+		{
+			_proxy = val;
+			_ui.indexTextfield.text = (_proxy.indexInChapter+1).toString();
 		}
 		
 		

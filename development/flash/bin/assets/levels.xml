@@ -74,4 +74,10 @@
         <level id="24" awd="assets/levels/026.awd">
         </level>                                       
     </chapter>
+    <chapter poster="assets/chapters/01.png">
+        <title>Next levels</title>
+                
+        <level id="1" awd="assets/levels/027.awd">
+        </level>
+    </chapter>
 </levels>
