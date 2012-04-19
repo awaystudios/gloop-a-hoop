@@ -132,16 +132,21 @@ package com.away3d.gloop.input
 
 			// if we still might be clicking and the player has moved far enough, start the dragging
 			if( _isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED ) {
+
 				_isClick = false;
+
 				if( _targetObject ) {
 					if( _targetObject is Cannon ) {
 						_targetObject.onDragStart( projectedMouseX, projectedMouseY );
 					}
-				} else {
+				}
+
+				if( !_targetObject || !_targetObject.draggable ) {
 					_panning = true;
 				}
 			}
 
+			// Cannon drag update
 			if( _targetObject && _targetObject is Cannon && !_isClick ) {
 				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
 			}
