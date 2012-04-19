@@ -67,10 +67,6 @@ package com.away3d.gloop.input
 		public function reset(level : Level) : void
 		{
 			_level = level;
-//			_zoom = 1;
-//			_panX = 0;
-//			_panY = 0;
-
 			_touch1.id = -1;
 			_touch2.id = -1;
 		}
@@ -130,24 +126,31 @@ package com.away3d.gloop.input
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startInteractionPointX - _interactionPointX) * (_startInteractionPointX - _interactionPointX) + (_startInteractionPointY - _interactionPointY) * (_startInteractionPointY - _interactionPointY);
 
+			var targetIsCannon:Boolean = false;
+			if( _targetObject && _targetObject is Cannon ) {
+				targetIsCannon = true;
+			}
+
 			// if we still might be clicking and the player has moved far enough, start the dragging
 			if( _isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED ) {
 
 				_isClick = false;
 
 				if( _targetObject ) {
-					if( _targetObject is Cannon ) {
+					if( targetIsCannon ) {
 						_targetObject.onDragStart( projectedMouseX, projectedMouseY );
 					}
 				}
 
 				if( !_targetObject || !_targetObject.draggable ) {
-					_panning = true;
+					if( !targetIsCannon ) {
+						_panning = true;
+					}
 				}
 			}
 
 			// Cannon drag update
-			if( _targetObject && _targetObject is Cannon && !_isClick ) {
+			if( _targetObject && targetIsCannon && !_isClick ) {
 				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
 			}
 
