@@ -5,7 +5,7 @@ package
 	
 	import flash.events.Event;
 	
-	[SWF(width="1024", heigth="768", frameRate="30")]
+	[SWF(width="1024", heigth="768", frameRate="60")]
 	public class GloopMobile extends Main
 	{
 		private static const STATE_XML_PATH : String = 'savedstate.xml';
