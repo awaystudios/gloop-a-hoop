@@ -11,7 +11,9 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.materials.lightpickers.LightPickerBase;
 	import away3d.primitives.CubeGeometry;
 	import away3d.textures.BitmapTexture;
-	
+
+	import com.away3d.gloop.Settings;
+
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
@@ -106,7 +108,7 @@ package com.away3d.gloop.gameobjects.components
 			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
 			
 			_splatMesh = new Mesh(geom, mat);
-			_splatMesh.y = -10;
+			_splatMesh.y = -Settings.GLOOP_RADIUS - 5;
 			mesh.addChild(_splatMesh);
 			
 			_splatAnim = new VertexAnimationComponent(_splatMesh);
