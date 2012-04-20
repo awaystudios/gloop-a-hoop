@@ -72,7 +72,6 @@ package com.away3d.gloop.level
 			_world.timeStep = Settings.PHYSICS_TIME_STEP;
 			_world.velocityIterations = Settings.PHYSICS_VELOCITY_ITERATIONS;
 			_world.positionIterations = Settings.PHYSICS_POSITION_ITERATIONS;
-			trace( "grav: " + Settings.PHYSICS_GRAVITY_Y );
 			_world.gravityY = Settings.PHYSICS_GRAVITY_Y;
 			_spawn_point = new Point();
 			_all_objects = new Vector.<DefaultGameObject>();
@@ -95,7 +94,7 @@ package com.away3d.gloop.level
 		public function setMode(value:Boolean, force:Boolean = false):void {
 			if (!force && value == _mode) return;
 			
-			trace("Level, set mode: " + (value ? "play" : "edit"));
+//			trace("Level, set mode: " + (value ? "play" : "edit"));
 			_mode = value;
 			for each(var object:DefaultGameObject in _all_objects) {
 				object.setMode(value);
@@ -358,7 +357,7 @@ package com.away3d.gloop.level
 		}
 		
 		private function onHoopRemove(e:GameObjectEvent):void {
-			trace("New hoop placed inside wall, removing it");
+//			trace("New hoop placed inside wall, removing it");
 			remove(e.gameObject);
 		}
 		
