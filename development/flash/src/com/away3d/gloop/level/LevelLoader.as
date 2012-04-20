@@ -13,6 +13,7 @@ package com.away3d.gloop.level
 	import away3d.textures.BitmapTexture;
 	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.Box;
 	import com.away3d.gloop.gameobjects.Button;
 	import com.away3d.gloop.gameobjects.Fan;
 	import com.away3d.gloop.gameobjects.GameObjectType;
@@ -82,8 +83,7 @@ package com.away3d.gloop.level
 		{
 			_level = new Level();
 		}
-		
-		
+
 		private function parseWall(obj : ObjectContainer3D) : void
 		{
 			var mesh : Mesh;
@@ -117,7 +117,9 @@ package com.away3d.gloop.level
 			var hoop : Hoop;
 
 			var movable:Boolean = obj.extra['gah_movable'] == "1" ? true : false;
+//			var movable:Boolean = true;
 			var rotatable:Boolean = obj.extra['gah_rotatable'] == "1" ? true : false;
+//			var rotatable:Boolean = true;
 
 			switch (obj.extra['gah_hoop']) {
 				case HoopType.TRAMPOLINE:
@@ -132,7 +134,12 @@ package com.away3d.gloop.level
 			_level.add(hoop);
 		}
 		
-		
+		private function parseBox( obj:ObjectContainer3D ):void {
+			var box:Box;
+			box = new Box( obj.x * _scale, -obj.y * _scale );
+			_level.add( box );
+		}
+
 		private function parseStar(obj : ObjectContainer3D) : void
 		{
 			var star : Star;
@@ -206,8 +213,15 @@ package com.away3d.gloop.level
 				// Assume non-visual object, might be overrided
 				// by concrete types in switch below.
 				visual = false;
+
+//				trace( "parsing scene object - type: " + obj.extra['gah_type'] );
 				
 				switch (obj.extra['gah_type']) {
+
+					case GameObjectType.BOX:
+						parseBox( obj );
+						break;
+
 					case GameObjectType.WALL:
 						parseWall(obj);
 						break;

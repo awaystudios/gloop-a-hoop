@@ -102,7 +102,7 @@ package com.away3d.gloop.screens.game
 		{
 			_doc = new WCK();
 			_doc.x = 120;
-			_doc.y = 120;
+			_doc.y = 220;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
 			_doc.visible = Settings.SHOW_PHYSICS;

@@ -70,4 +70,7 @@ TRACE_MIN_DTIME               1
 TRACE_MIN_SCALE               0.3
 TRACE_NUM_POINTS              200
 
+BOX_SIZE                      100
+BOX_DENSITY                   0.01
+
 TRAMPOLINE_RESTITUTION        1.25

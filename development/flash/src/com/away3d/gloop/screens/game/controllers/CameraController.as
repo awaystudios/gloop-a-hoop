@@ -62,7 +62,6 @@ package com.away3d.gloop.screens.game.controllers
 			if( !_inputManager.panInternallyChanged ) {
 				_inputManager.panX = _gloop.physics.x;
 				_inputManager.panY = -_gloop.physics.y;
-				trace( "resetting camera to: " + _inputManager.panX, _inputManager.panY );
 			}
 		}
 

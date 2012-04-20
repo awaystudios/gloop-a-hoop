@@ -1,5 +1,7 @@
 package com.away3d.gloop.utils
 {
+
+	import away3d.events.AssetEvent;
 	import away3d.events.LoaderEvent;
 	import away3d.library.AssetLibrary;
 	
@@ -31,8 +33,13 @@ package com.away3d.gloop.utils
 			_nextResIdx = 0;
 			
 			AssetLibrary.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceComplete);
-			
+//			AssetLibrary.addEventListener(AssetEvent.ASSET_COMPLETE, onAssetComplete); // just for tracing out asset names
+
 			loadNext();
+		}
+
+		private function onAssetComplete( event:AssetEvent ):void {
+			trace( "loaded resource: " + event.asset.name );
 		}
 		
 		

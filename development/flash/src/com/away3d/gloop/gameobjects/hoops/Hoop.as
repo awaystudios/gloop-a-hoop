@@ -235,7 +235,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 	}
 	
 	public function setMode(mode:Boolean):void {
-		trace( "SETTING MODE: " + mode );
+//		trace( "SETTING MODE: " + mode );
 		_mode = mode;
 		if (!b2body) return;
 		if (mode == Level.EDIT_MODE) {
