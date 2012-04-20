@@ -82,8 +82,11 @@ package com.away3d.gloop.level
 		{
 			_level = new Level();
 		}
-		
-		
+
+		private function parseBox( obj:ObjectContainer3D ):void {
+			// TODO
+		}
+
 		private function parseWall(obj : ObjectContainer3D) : void
 		{
 			var mesh : Mesh;
@@ -206,8 +209,15 @@ package com.away3d.gloop.level
 				// Assume non-visual object, might be overrided
 				// by concrete types in switch below.
 				visual = false;
+
+				trace( "parsing scene object - type: " + obj.extra['gah_type'] );
 				
 				switch (obj.extra['gah_type']) {
+
+					case GameObjectType.BOX:
+						parseBox( obj );
+						break;
+
 					case GameObjectType.WALL:
 						parseWall(obj);
 						break;
