@@ -79,5 +79,17 @@
                 
         <level id="1" awd="assets/levels/027.awd">
         </level>
+        
+        <level id="2" awd="assets/levels/028.awd">
+        </level>
+                
+        <level id="3" awd="assets/levels/029.awd">
+        </level>
+                        
+        <level id="4" awd="assets/levels/030.awd">
+        </level>
+                                
+        <level id="5" awd="assets/levels/031.awd">
+        </level>
     </chapter>
 </levels>
