@@ -47,5 +47,8 @@ package com.away3d.gloop.utils
 		
 		[Embed("/../assets/props/hoop/hoop.3ds", mimeType="application/octet-stream")]
 		public static var Hoop3DSAsset : Class;
+		
+		[Embed("/../assets/props/box/box.awd", mimeType="application/octet-stream")]
+		public static var BoxAWDAsset : Class;
 	}
 }
