@@ -33,6 +33,14 @@ package com.away3d.gloop.utils
 		
 		[Embed("/../assets/props/target/diff.png")]
 		public static var TargetDiffusePNGAsset : Class;
+
+
+		// Boxes
+		[Embed("/../assets/props/box/box.awd", mimeType="application/octet-stream")]
+		public static var Box3DSAsset : Class;
+
+		[Embed("/../assets/props/box/BOX-DM.png")]
+		public static var BoxDiffusePNGAsset : Class;
 		
 		
 		// Misc props
