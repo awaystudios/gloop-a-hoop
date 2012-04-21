@@ -60,8 +60,13 @@ package com.away3d.gloop.gameobjects
 			_physics.b2body.SetLinearVelocity( new V2() );
 			_physics.b2body.SetAngularVelocity( 0 );
 			_physics.b2body.SetTransform( new V2( _initialX / Settings.PHYSICS_SCALE, _initialY / Settings.PHYSICS_SCALE ), 0 );
-			_physics.updateBodyMatrix( null );
 			_physics.b2body.SetAwake( false );
+			_physics.updateBodyMatrix( null );
+		}
+
+		override public function setMode( playMode:Boolean ):void {
+			super.setMode( playMode );
+			BoxPhysicsComponent( _physics ).setMode( playMode );
 		}
 	}
 }
@@ -84,7 +89,18 @@ class BoxPhysicsComponent extends PhysicsComponent {
 
 	override public function create():void {
 		super.create();
-		setCollisionGroup( GLOOP );
+	}
+
+	public function setMode( playMode:Boolean ):void {
+		if( playMode ) {
+			b2fixtures[0].SetSensor( false );
+			applyGravity = true;
+		}
+		else {
+			b2fixtures[0].SetSensor( true );
+			b2body.SetAwake( false );
+			applyGravity = false;
+		}
 	}
 
 }

@@ -11,10 +11,12 @@ package com.away3d.gloop.gameobjects
 
 	public class DefaultGameObject extends GameObject
 	{
-		private var _mode:Boolean;
+		protected var _mode:Boolean;
 		protected var _meshComponent : MeshComponent;
 		protected var _physics : PhysicsComponent;
-		
+		protected var _allowMeshUpdateX:Boolean = true;
+		protected var _allowMeshUpdateY:Boolean = true;
+
 		public function DefaultGameObject()
 		{
 			super();
@@ -23,8 +25,12 @@ package com.away3d.gloop.gameobjects
 		public override function update(dt:Number):void
 		{
 			if (_meshComponent && _physics) {
-				_meshComponent.mesh.x = _physics.x;
-				_meshComponent.mesh.y = -_physics.y;
+				if( _allowMeshUpdateX ) {
+					_meshComponent.mesh.x = _physics.x;
+				}
+				if( _allowMeshUpdateY ) {
+					_meshComponent.mesh.y = -_physics.y;
+				}
 				_meshComponent.mesh.rotationZ = -physics.rotation;
 			}
 		}
@@ -36,9 +42,21 @@ package com.away3d.gloop.gameobjects
 		public function reset():void {
 			
 		}
+
+		public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+
+		}
+
+		public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
+
+		}
 		
+		public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
+
+		}
+
 		public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null ):void {
-			
+
 		}
 		
 		public function onCollidingWithGloopEnd(gloop:Gloop, event:ContactEvent = null ):void {

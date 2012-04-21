@@ -90,9 +90,15 @@ package com.away3d.gloop.screens
 				_ctr.scaleX = _ctr.scaleY = masterScale;
 				addChild(_ctr);
 				
-				initScreen();
 				_initialized = true;
+
+				addEventListener(Event.ADDED_TO_STAGE, stageInitHandler);
 			}
+		}
+
+		private function stageInitHandler( event:Event ):void {
+			removeEventListener(Event.ADDED_TO_STAGE, stageInitHandler);
+			initScreen();
 		}
 		
 		private function onEnterFrame(e:Event):void {

@@ -108,6 +108,5 @@ class StarPhysicsComponent extends PhysicsComponent
 	
 	override public function create():void {
 		super.create();
-		setCollisionGroup(GLOOP_SENSOR);
 	}
 }

@@ -1,8 +1,12 @@
 package com.away3d.gloop.gameobjects.hoops
 {
 
+	import Box2DAS.Collision.b2WorldManifold;
+	import Box2DAS.Collision.b2WorldManifold;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
+	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
+	import Box2DAS.Dynamics.b2ContactImpulse;
 
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
@@ -13,10 +17,15 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.primitives.SphereGeometry;
 
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.Box;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
+	import com.away3d.gloop.level.Level;
+
+	import mx.events.CollectionEvent;
 
 	/**
 	 * ...
@@ -44,11 +53,6 @@ package com.away3d.gloop.gameobjects.hoops
 			_physics.x = worldX;
 			_physics.y = worldY;
 			_physics.rotation = rotation;
-			_physics.fixedRotation = true;
-			_physics.applyGravity = false;
-			_physics.enableReportBeginContact();
-
-			_physics.setStatic(true);
 
 			initVisual()
 		}
@@ -114,8 +118,12 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
-			if (!inEditMode) return;
-			_physics.setStatic(false);
+
+			if (!inEditMode) {
+				return;
+			}
+
+			_physics.setStatic( false );
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
@@ -123,7 +131,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
-			_physics.setStatic(true);
+			_physics.setStatic( true );
 		}
 		
 		public override function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void
@@ -177,9 +185,39 @@ package com.away3d.gloop.gameobjects.hoops
 		public function get draggable():Boolean {
 			return _draggable;
 		}
+
+		// treat collision with boxes in edit mode
+		private var _numCollidingBoxes:int = 0;
+		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+			if( _mode != Level.EDIT_MODE ) return;
+			var collidingBox:Box = getCollidingBox( event );
+			if( collidingBox == null ) return;
+			_numCollidingBoxes++;
+			_allowMeshUpdateX =_allowMeshUpdateY = false;
+		}
+		override public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
+			if( _mode != Level.EDIT_MODE ) return;
+			var collidingBox:Box = getCollidingBox( event );
+			if( collidingBox == null ) return;
+			_numCollidingBoxes--;
+			if( _numCollidingBoxes == 0 ) {
+				_allowMeshUpdateX = true;
+				_allowMeshUpdateY = true;
+			}
+		}
+
+		private function getCollidingBox( event:ContactEvent ):Box {
+			var otherPhysics:PhysicsComponent = event.other.m_userData as PhysicsComponent;
+			if( !otherPhysics ) return null;
+			var box:Box = otherPhysics.gameObject as Box;
+			if( !box ) return null;
+			return box;
+		}
 	}
 
 }
+
+import Box2DAS.Common.V2;
 
 import com.away3d.gloop.Settings;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
@@ -189,61 +227,52 @@ import com.away3d.gloop.level.Level;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
-	private var _mode:Boolean = Level.EDIT_MODE;
-	
+	private var _inPlayMode:Boolean = Level.EDIT_MODE;
+
 	public function HoopPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);
-		graphics.beginFill(gameObject.debugColor1);
-		graphics.drawCircle(0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8);
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6,
 				Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
 		
-		//graphics.beginFill(0x0);
-		//graphics.moveTo( 0, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
-		//graphics.lineTo( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
-		//graphics.lineTo( Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6);
-
 		allowDragging = true;
 		linearDamping = 9999999;
 		angularDamping = 9999999;
 		density = 9999;
 		restitution = 0;
+		fixedRotation = true;
+		applyGravity = false;
+		enableReportBeginContact();
+		enableReportEndContact();
 	}
-	
+
 	public override function shapes() : void
 	{
-		// used for gloop collision
 		box( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
-		
-		// used for collision with the world
-		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8 );
 	}
 	
 	override public function create():void {
 		super.create();
-		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
-		setCollisionGroup(HOOP, b2fixtures[1]);
-		setMode(_mode);
+		setMode( _inPlayMode );
+		setStatic( true );
 	}
 	
-	public function setMode(mode:Boolean):void {
-//		trace( "SETTING MODE: " + mode );
-		_mode = mode;
-		if (!b2body) return;
-		if (mode == Level.EDIT_MODE) {
+	public function setMode(playMode:Boolean):void {
+
+		_inPlayMode = playMode;
+
+		if (!b2body) {
+			return;
+		}
+
+		if( playMode == Level.EDIT_MODE ) {
 			allowDragging = true;
-			b2fixtures[0].SetSensor(false);
-			b2fixtures[1].SetSensor(false);
+			b2body.SetLinearVelocity( new V2() );
+			b2body.SetAngularVelocity( 0 );
 		} else {
 			allowDragging = false;
-			if (Hoop(gameObject).resolveGloopCollisions == false) {
-				b2fixtures[0].SetSensor(true);
-			} else {
-				b2fixtures[0].SetSensor(false);
-			}
-			b2fixtures[1].SetSensor(false);
+			b2fixtures[0].SetSensor( !Hoop( gameObject ).resolveGloopCollisions );
 		}
 	}
 }

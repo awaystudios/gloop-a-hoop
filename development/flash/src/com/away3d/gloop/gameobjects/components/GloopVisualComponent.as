@@ -40,7 +40,7 @@ package com.away3d.gloop.gameobjects.components
 		public function GloopVisualComponent(physics : PhysicsComponent)
 		{
 			super();
-			
+
 			_physics = physics;
 
 			init();
@@ -145,6 +145,8 @@ package com.away3d.gloop.gameobjects.components
 		
 		public function reset() : void
 		{
+			_splatAnim.stop();
+
 			_splatMesh.visible = false;
 			_stdMesh.visible = true;
 			

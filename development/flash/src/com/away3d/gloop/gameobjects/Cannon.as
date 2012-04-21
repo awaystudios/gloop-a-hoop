@@ -237,9 +237,7 @@ class CannonPhysicsComponent extends PhysicsComponent
 	
 	override public function create():void {
 		super.create();
-		setCollisionGroup(GLOOP_SENSOR, b2fixtures[0]);
-		//setCollisionGroup(GLOOP_SENSOR, b2fixtures[1]);
-		
+
 		b2fixtures[0].SetSensor(true);
 		//b2fixtures[1].SetSensor(true);
 		
