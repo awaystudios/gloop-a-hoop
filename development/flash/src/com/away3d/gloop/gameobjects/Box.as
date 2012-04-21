@@ -46,7 +46,7 @@ package com.away3d.gloop.gameobjects
 
 //			geom = new CubeGeometry();
 			geom = Geometry( AssetLibrary.getAsset( 'BOX' ) ).clone();
-			geom.scale( 0.33 );
+			geom.scale( 0.33*0.9 );
 
 			_meshComponent.mesh = new Mesh( geom, mat );
 
@@ -56,8 +56,11 @@ package com.away3d.gloop.gameobjects
 			super.reset();
 			_physics.b2body.SetLinearVelocity( new V2() );
 			_physics.b2body.SetAngularVelocity( 0 );
-			_physics.b2body.SetAwake( false );
+			_physics.b2body.SetAwake( true );
 			_physics.rotation = 0;
+			_physics.restitution = 0.5;
+			_physics.friction = 0.8;
+			_physics.inertiaScale = 2;
 			_physics.moveTo( _initialX, _initialY, false );
 		}
 	}

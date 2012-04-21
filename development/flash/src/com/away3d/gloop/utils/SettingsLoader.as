@@ -1,4 +1,6 @@
 package com.away3d.gloop.utils {
+	import com.away3d.gloop.Settings;
+	
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -7,6 +9,7 @@ package com.away3d.gloop.utils {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.describeType;
+
 	/**
 	 * ...
 	 * @author Martin Jonasson (m@grapefrukt.com)
@@ -32,7 +35,7 @@ package com.away3d.gloop.utils {
 		}
 		
 		public function reload():void {
-			_loader.load(new URLRequest("assets/settings.dat?" + Math.random()));
+			_loader.load(new URLRequest((Settings.ROB_PATH? "../bin/assets/settings.dat?" : "assets/settings.dat?") + Math.random()));
 		}
 		
 		private function handleSecurityError(e:SecurityErrorEvent):void {

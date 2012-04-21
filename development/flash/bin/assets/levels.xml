@@ -92,7 +92,10 @@
         <level id="5" awd="assets/levels/031.awd">
         </level>
                                         
-        <level id="6" awd="assets/levels/033.awd">
+        <level id="6" awd="assets/levels/032.awd">
+        </level>
+                                                
+        <level id="7" awd="assets/levels/033.awd">
         </level>
     </chapter>
 </levels>
