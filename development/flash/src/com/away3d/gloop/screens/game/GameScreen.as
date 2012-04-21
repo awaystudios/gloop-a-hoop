@@ -101,15 +101,22 @@ package com.away3d.gloop.screens.game
 		private function initWorld() : void
 		{
 			_doc = new WCK();
-			_doc.x = 120;
-			_doc.y = 220;
 			_doc.scaleX = 0.2;
 			_doc.scaleY = 0.2;
 			_doc.visible = Settings.SHOW_PHYSICS;
+			_doc.addEventListener( MouseEvent.MOUSE_DOWN, docMouseDownHandler );
+			_doc.addEventListener( MouseEvent.MOUSE_UP, docMouseUpHandler );
 			addChild( _doc );
 		}
-		
-		
+
+		private function docMouseUpHandler( event:MouseEvent ):void {
+			_doc.stopDrag();
+		}
+
+		private function docMouseDownHandler( event:MouseEvent ):void {
+			_doc.startDrag();
+		}
+
 		private function initHUD() : void
 		{
 			_hud = new HUD(_w, _h);
@@ -153,6 +160,9 @@ package com.away3d.gloop.screens.game
 			_levelProxy.addEventListener(GameEvent.GAME_RESUME, onLevelProxyResume);
 				
 			_doc.addChild( _level.world );
+			_doc.x = _doc.width / 2;
+			_doc.y = stage.stageHeight - _doc.height / 2;
+
 			_view.scene = _level.scene;
 			
 			// Camera must be in scene since it needs to update
