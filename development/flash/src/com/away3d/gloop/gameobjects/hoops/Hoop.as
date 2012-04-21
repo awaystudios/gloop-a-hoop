@@ -177,12 +177,6 @@ package com.away3d.gloop.gameobjects.hoops
 		public function get draggable():Boolean {
 			return _draggable;
 		}
-		
-		public static function snapToHoopGrid(value:Number):int {
-			// floor to the nearest whole grid
-			// then offset by half a grid to align to the center of grid "boxes" not the intersections
-			return Math.floor(value / Settings.GRID_SIZE) * Settings.GRID_SIZE + Settings.GRID_SIZE / 2;
-		}
 	}
 
 }

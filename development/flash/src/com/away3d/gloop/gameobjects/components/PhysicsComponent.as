@@ -6,7 +6,6 @@ package com.away3d.gloop.gameobjects.components
 	import Box2DAS.Dynamics.ContactEvent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.Settings;
 	import wck.BodyShape;
 	
@@ -82,13 +81,8 @@ package com.away3d.gloop.gameobjects.components
 			}
 		}
 		
-		public function moveTo(worldX:Number, worldY:Number, snapToGrid:Boolean ):void {
+		public function moveTo(worldX:Number, worldY:Number ):void {
 			var pos:V2 = new V2(worldX, worldY);
-			
-			if (snapToGrid) {
-				pos.x = Hoop.snapToHoopGrid(pos.x);
-				pos.y = Hoop.snapToHoopGrid(pos.y);
-			}
 			
 			// physics are not intialized, we can set them on the visual object and wck will read them from here
 			if (!b2body) {
