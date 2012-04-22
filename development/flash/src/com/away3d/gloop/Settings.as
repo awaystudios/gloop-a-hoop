@@ -105,8 +105,8 @@ package com.away3d.gloop
 		static public var TRACE_MIN_SCALE : Number = 0.3;
 		static public var TRACE_MAX_SCALE : Number = 0.7;
 
-		static public var BOX_SIZE:Number = 100;
-		static public var BOX_DENSITY:Number = 0.01;
+		static public var BOX_SIZE:Number = 90;
+		static public var BOX_DENSITY:Number = 0.1;
 		
 		[comment("the maximum time in milliseconds between down and up events to consider the input a click")]
 		static public var INPUT_CLICK_TIME : uint = 250;

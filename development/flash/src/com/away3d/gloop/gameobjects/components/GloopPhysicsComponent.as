@@ -25,7 +25,6 @@ package com.away3d.gloop.gameobjects.components
 			super.create();
 
 			autoSleep = false;
-			setCollisionGroup( GLOOP );
 		}
 	}
 }

@@ -92,20 +92,23 @@ package com.away3d.gloop.input
 		}
 
 		private function startDrag( event:MouseEvent ):void {
+
 			// find mouse event's display object
 			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
 			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
 			if( objectsUnderPoint.length == 0 ) return;
 			var displayObject:DisplayObject = objectsUnderPoint[ 0 ] as DisplayObject;
+
 			// produce new mouse event
 			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
 					event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
 			physicsEvent.displayObject = displayObject;
 			physicsEvent.body = _targetObject.physics.body;
-			
+
+			// report drag start on object
 			_targetObject.onDragStart(projectedMouseX, projectedMouseY);
 			
-			// channel mouse event to physics
+			// start drag
 			_level.world.handleDragStart( physicsEvent );
 		}
 
@@ -163,7 +166,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
-			super.onViewMouseDown(e);
+			_mouseDown = true;
+			super.update();
 
 			_isClick = true;
 			_panning = false;
@@ -173,8 +177,8 @@ package com.away3d.gloop.input
 			// if the level has a unplaced hoop, don't pick any hoops from the level
 			if (_level.unplacedHoop == null) {
 				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
-				if( _targetObject ) {
-					if( _targetObject.draggable ) startDrag( e );
+				if( _targetObject && _targetObject.draggable ) {
+					startDrag( e );
 				}
 			}
 

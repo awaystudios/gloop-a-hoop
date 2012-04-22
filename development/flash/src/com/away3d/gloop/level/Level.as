@@ -107,7 +107,7 @@ package com.away3d.gloop.level
 		
 		public function placeQueuedHoop(worldX:Number, worldY:Number):void {
 			add(_unplacedHoop);
-			_unplacedHoop.physics.moveTo(worldX, worldY, true);
+			_unplacedHoop.physics.moveTo(worldX, worldY);
 			_unplacedHoop = null;
 		}
 		

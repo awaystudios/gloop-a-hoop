@@ -25,9 +25,12 @@ package com.away3d.gloop.gameobjects
 			super();
 
 			_physics = new BoxPhysicsComponent( this );
-			_physics.x = _initialX = worldX/* + 700*/;
-			_physics.y = _initialY = worldY/* + 550*/;
+			_physics.x = _initialX = worldX;
+			_physics.y = _initialY = worldY;
 			_physics.applyGravity = true;
+			_physics.restitution = 0.5;
+			_physics.friction = 0.8;
+			_physics.inertiaScale = 2;
 			_physics.density = Settings.BOX_DENSITY;
 
 			initVisual();
@@ -56,12 +59,14 @@ package com.away3d.gloop.gameobjects
 			super.reset();
 			_physics.b2body.SetLinearVelocity( new V2() );
 			_physics.b2body.SetAngularVelocity( 0 );
-			_physics.b2body.SetAwake( true );
-			_physics.rotation = 0;
-			_physics.restitution = 0.5;
-			_physics.friction = 0.8;
-			_physics.inertiaScale = 2;
-			_physics.moveTo( _initialX, _initialY, false );
+			_physics.b2body.SetTransform( new V2( _initialX / Settings.PHYSICS_SCALE, _initialY / Settings.PHYSICS_SCALE ), 0 );
+			_physics.b2body.SetAwake( false );
+			_physics.updateBodyMatrix( null );
+		}
+
+		override public function setMode( playMode:Boolean ):void {
+			super.setMode( playMode );
+			BoxPhysicsComponent( _physics ).setMode( playMode );
 		}
 	}
 }
@@ -84,7 +89,18 @@ class BoxPhysicsComponent extends PhysicsComponent {
 
 	override public function create():void {
 		super.create();
-		setCollisionGroup( GLOOP );
+	}
+
+	public function setMode( playMode:Boolean ):void {
+		if( playMode ) {
+			b2fixtures[0].SetSensor( false );
+			applyGravity = true;
+		}
+		else {
+			b2fixtures[0].SetSensor( true );
+			b2body.SetAwake( false );
+			applyGravity = false;
+		}
 	}
 
 }

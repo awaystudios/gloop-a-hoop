@@ -42,7 +42,6 @@ package com.away3d.gloop.gameobjects.components
 		override public function create() : void
 		{
 			super.create();
-			setCollisionGroup(LEVEL);
 		}
 	
 	}

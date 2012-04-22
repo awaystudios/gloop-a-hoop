@@ -3,6 +3,7 @@ package
 	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.utils.FileStateSaveManager;
 	
+	import flash.display.StageQuality;
 	import flash.events.Event;
 	
 	[SWF(width="1024", heigth="768", frameRate="60")]
@@ -13,6 +14,8 @@ package
 		public function GloopMobile()
 		{
 			super();
+			
+			stage.quality = StageQuality.LOW;
 			
 			_stateMgr = new FileStateSaveManager(STATE_XML_PATH);
 			

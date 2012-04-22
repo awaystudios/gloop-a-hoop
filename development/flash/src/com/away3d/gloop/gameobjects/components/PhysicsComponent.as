@@ -6,18 +6,12 @@ package com.away3d.gloop.gameobjects.components
 	import Box2DAS.Dynamics.ContactEvent;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.Settings;
 	import wck.BodyShape;
 	
 	public class PhysicsComponent extends BodyShape
 	{
 		public var _gameObject : DefaultGameObject;
-		
-		public static const HOOP : int = 1;
-		public static const GLOOP_SENSOR : int = 2;
-		public static const GLOOP : int = 4;
-		public static const LEVEL : int = 8;
 		
 		public function PhysicsComponent(gameObject : DefaultGameObject)
 		{
@@ -82,13 +76,8 @@ package com.away3d.gloop.gameobjects.components
 			}
 		}
 		
-		public function moveTo(worldX:Number, worldY:Number, snapToGrid:Boolean ):void {
+		public function moveTo(worldX:Number, worldY:Number ):void {
 			var pos:V2 = new V2(worldX, worldY);
-			
-			if (snapToGrid) {
-				pos.x = Hoop.snapToHoopGrid(pos.x);
-				pos.y = Hoop.snapToHoopGrid(pos.y);
-			}
 			
 			// physics are not intialized, we can set them on the visual object and wck will read them from here
 			if (!b2body) {
@@ -121,35 +110,9 @@ package com.away3d.gloop.gameobjects.components
 			}
 		}
 		
-		/**
-		 * Defines which other types of objects this fixture will collide with
-		 * @param	group	The group this fixture belongs to. (Note that this is not the group to collide with, that is dealt with internally)
-		 * @param	fixture	The fixture to apply the grouping to.
-		 */
-		protected function setCollisionGroup(group : int, fixture : b2Fixture = null) : void
-		{
-			fixture ||= b2fixtures[0];
-			
-			switch (group)
-			{
-				case HOOP: 
-					fixture.SetFilterData({categoryBits: HOOP, maskBits: LEVEL | HOOP, groupIndex: 0});
-					break;
-				case GLOOP_SENSOR: 
-					fixture.SetFilterData({categoryBits: GLOOP_SENSOR, maskBits: GLOOP, groupIndex: 0});
-					break;
-				case GLOOP: 
-					fixture.SetFilterData({categoryBits: GLOOP, maskBits: LEVEL | GLOOP | GLOOP_SENSOR, groupIndex: 0});
-					break;
-				case LEVEL: 
-					fixture.SetFilterData({categoryBits: LEVEL, maskBits: GLOOP | HOOP | LEVEL, groupIndex: 0});
-					break;
-			}
-		
-		}
-		
 		protected function onBeginContact(e : ContactEvent) : void
 		{
+			_gameObject.onCollidingWithSomethingStart( e );
 			var gloop:Gloop = getGloop(e.other);
 			if (!gloop) return;
 			_gameObject.onCollidingWithGloopStart(gloop);
@@ -157,12 +120,14 @@ package com.away3d.gloop.gameobjects.components
 		
 		protected function onEndContact(e : ContactEvent ) : void
 		{
+			_gameObject.onCollidingWithSomethingEnd( e );
 			var gloop:Gloop = getGloop(e.other);
 			if (!gloop) return;
 			_gameObject.onCollidingWithGloopEnd(gloop);
 		}
 
 		private function onPreSolveContact( e:ContactEvent ):void {
+			_gameObject.onCollidingWithSomethingPreSolve( e );
 			var gloop:Gloop = getGloop(e.other);
 			if( !gloop ) return;
 			_gameObject.onCollidingWithGloopPreSolve( gloop, e );
