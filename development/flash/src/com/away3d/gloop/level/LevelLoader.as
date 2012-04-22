@@ -276,7 +276,8 @@ package com.away3d.gloop.level
 				if (mesh) {
 					var mat : DefaultMaterialBase;
 					
-					if (Settings.STU_MODE || !mesh.material)
+					//if (Settings.STU_MODE || !mesh.material)
+					if (!mesh.material)
 						mesh.material = _greyMat;
 					
 					mat = DefaultMaterialBase(mesh.material);

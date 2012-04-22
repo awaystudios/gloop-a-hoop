@@ -228,8 +228,8 @@ package com.away3d.gloop.level
 		{
 			if (obj is Mesh) {
 				var mesh : Mesh = Mesh(obj);
-				if (mesh.material)
-					mesh.material.lightPicker = _sceneLightPicker;
+				//if (mesh.material)
+				//	mesh.material.lightPicker = _sceneLightPicker;
 			}
 			
 			_scene.addChild(obj);
