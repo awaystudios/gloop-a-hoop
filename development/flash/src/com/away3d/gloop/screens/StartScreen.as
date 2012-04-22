@@ -8,10 +8,12 @@ package com.away3d.gloop.screens
 	import com.away3d.gloop.sound.Sounds;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.utils.getTimer;
 
 	public class StartScreen extends ScreenBase
@@ -30,12 +32,20 @@ package com.away3d.gloop.screens
 
 		protected override function initScreen():void
 		{
-			super.initScreen();
+			var logoBitmap:Bitmap = new Bitmap(new LogoBitmap(), "auto", true);
+			var logoBmp:Bitmap;
 			
-			var logoBmp:Bitmap = new Bitmap(new LogoBitmap);
-			logoBmp.smoothing = true;
-			logoBmp.x = -logoBmp.width / 2;
-			logoBmp.y = -logoBmp.height / 2;
+			//if (_masterScaleY > 1) {
+			//	logoBmp = logoBitmap;
+			//	logoBmp.scaleX = _masterScaleY;
+			//	logoBmp.scaleY = _masterScaleY;
+			//} else {
+				logoBmp = new Bitmap(new BitmapData(logoBitmap.width*_masterScaleY, logoBitmap.height*_masterScaleY, true, 0x0), "auto", true);
+				logoBmp.bitmapData.draw(logoBitmap, new Matrix(_masterScaleY, 0, 0, _masterScaleY));
+			//}
+			
+			logoBmp.x = -(logoBmp.width/2);
+			logoBmp.y = -(logoBmp.height/2);
 			
 			_logo = new Sprite();
 			_logo.addChild(logoBmp);
@@ -67,7 +77,7 @@ package com.away3d.gloop.screens
 			var t:Number = getTimer();
 			_logo.rotation = Math.sin(t / 300) * 1.5;
 			_logo.scaleX = 1.0 + Math.cos(t / 150) * .025;
-			_logo.y = -200 + Math.cos(t / 300) * 7;
+			_logo.y = -(200 + Math.cos(t / 300) * 7)*_masterScaleY;
 		}
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void

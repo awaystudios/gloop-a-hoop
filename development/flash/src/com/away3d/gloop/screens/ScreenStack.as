@@ -41,12 +41,12 @@ package com.away3d.gloop.screens
 			}
 			
 			_active_screen = _screens_by_id[id];
+			_ctr.addChild(_active_screen);
 			_active_screen.init(_w, _h);
 			
 			if (_active_screen.musicTheme)
 				MusicManager.play(_active_screen.musicTheme);
 			
-			_ctr.addChild(_active_screen);
 			_active_screen.activate();
 		}
 	}

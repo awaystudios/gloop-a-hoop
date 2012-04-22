@@ -20,9 +20,6 @@ package com.away3d.gloop.screens.levelselect
 		
 		private var _totalStars : StarTotal;
 		private var _thumbs : Vector.<LevelThumb>;
-		private var _masterScaleY : Number;
-		private var _masterScaleX : Number;
-		private var _masterScale : Number;
 		
 		public function LevelSelectScreen(db : LevelDatabase, stack : ScreenStack)
 		{
@@ -37,11 +34,6 @@ package com.away3d.gloop.screens.levelselect
 		{
 			var i : uint;
 			var len : uint;
-			// Based on 1024x768 which was the
-			// template for the design
-			_masterScaleX = _w/1024;
-			_masterScaleY = _h/768;
-			_masterScale = (_masterScaleX + _masterScaleY)/2
 			
 			_thumbs = new Vector.<LevelThumb>();
 			

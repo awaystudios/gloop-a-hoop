@@ -56,7 +56,7 @@ package com.away3d.gloop.screens.chapterselect
 				var poster : ChapterPoster;
 				
 				chapter = _db.chapters[i];
-				poster = new ChapterPoster(chapter);
+				poster = new ChapterPoster(_w, _h, chapter);
 				poster.x = _centerX + _w * i/2;
 				poster.addEventListener(MouseEvent.CLICK, onPosterClick);
 				_ctr.addChild(poster);

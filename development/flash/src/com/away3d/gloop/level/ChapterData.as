@@ -6,6 +6,7 @@ package com.away3d.gloop.level
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 
 	public class ChapterData extends EventDispatcher
@@ -13,7 +14,7 @@ package com.away3d.gloop.level
 		private var _title : String;
 		private var _posterUrl : String;
 		
-		private var _poster : BitmapData;
+		private var _posterBitmap : Bitmap;
 		
 		private var _levels : Vector.<LevelProxy>;
 		
@@ -35,9 +36,9 @@ package com.away3d.gloop.level
 		}
 		
 		
-		public function get posterBitmap() : BitmapData
+		public function get posterBitmap() : Bitmap
 		{
-			return _poster;
+			return _posterBitmap
 		}
 		
 		
@@ -128,7 +129,8 @@ package com.away3d.gloop.level
 			info = LoaderInfo(ev.currentTarget);
 			info.removeEventListener(Event.COMPLETE, onLoaderComplete);
 			
-			_poster = Bitmap(info.content).bitmapData;
+			_posterBitmap = Bitmap(info.content);
+			_posterBitmap.smoothing = true;
 			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
