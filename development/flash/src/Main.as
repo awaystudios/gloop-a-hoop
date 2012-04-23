@@ -99,6 +99,7 @@ package
 			_view.height = _h;
 			_view.backgroundColor = 0x000000;
 			addChild(_view);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			// Should be reset to other state manager by AIR app
 			_stateMgr = new StateSaveManager();
@@ -288,6 +289,18 @@ package
 			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
 			if (ev.keyCode == Keyboard.F5) _db.selectedLevelProxy.level.queueHoopForPlacement(new RocketHoop);
+		}
+
+		private function onEnterFrame(ev : Event) : void {
+			_view.render();
+//			stall(); // uncomment to simulate slower performance
+		}
+
+		private function stall():void {
+			for( var i:uint; i < 1000000; ++i ) {
+				var dummy:Number = Math.random();
+//				trace( "Main.as - stalling..." );
+			}
 		}
 	}
 }

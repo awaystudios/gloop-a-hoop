@@ -166,7 +166,7 @@ package com.away3d.gloop.screens.game
 			_doc.x = _doc.width / 2;
 			_doc.y = stage.stageHeight - _doc.height / 2;
 
-			_view.scene = _level.scene;
+			_view.scene = new Scene3D(); // inser a dummy visual scene while level is being built
 			
 			// Camera must be in scene since it needs to update
 			// for the HUD to update accordingly.
@@ -209,6 +209,11 @@ package com.away3d.gloop.screens.game
 				}
 				*/
 			}, 200);
+
+			// wait a bit to allow scene rendering ( while level is being built )
+			setTimeout( function():void {
+				_view.scene = _level.scene;
+			}, 500 )
 		}
 
 		private function reset():void
@@ -317,8 +322,6 @@ package com.away3d.gloop.screens.game
 				_timestep.tick();
 				var updates:int = _timestep.steps;
 
-				_view.render();
-				
 				while (updates-- > 0) {
 					if( _level ) _level.update();
 					_cameraController.update();
