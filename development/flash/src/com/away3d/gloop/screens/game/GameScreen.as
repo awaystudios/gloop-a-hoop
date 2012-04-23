@@ -149,6 +149,8 @@ package com.away3d.gloop.screens.game
 		
 		public override function activate():void {
 			super.activate();
+
+			_view.render();
 			
 			_timestep = new Timestep( 60 );
 
@@ -314,6 +316,8 @@ package com.away3d.gloop.screens.game
 			if (!_paused) {
 				_timestep.tick();
 				var updates:int = _timestep.steps;
+
+				_view.render();
 				
 				while (updates-- > 0) {
 					if( _level ) _level.update();

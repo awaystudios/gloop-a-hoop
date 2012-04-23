@@ -48,7 +48,7 @@ package
 	import flash.system.Capabilities;
 	import flash.ui.Keyboard;
 
-	[SWF(width="1024", height="768", frameRate="60")]
+	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#000000")]
 	public class Main extends Sprite
 	{
 		private var _w : Number;
@@ -97,8 +97,8 @@ package
 			_view = new View3D();
 			_view.width = _w;
 			_view.height = _h;
+			_view.backgroundColor = 0x000000;
 			addChild(_view);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			// Should be reset to other state manager by AIR app
 			_stateMgr = new StateSaveManager();
@@ -288,12 +288,6 @@ package
 			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
 			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
 			if (ev.keyCode == Keyboard.F5) _db.selectedLevelProxy.level.queueHoopForPlacement(new RocketHoop);
-		}
-		
-		
-		private function onEnterFrame(ev : Event) : void
-		{
-			_view.render();
 		}
 	}
 }
