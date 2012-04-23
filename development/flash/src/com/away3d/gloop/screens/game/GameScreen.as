@@ -8,6 +8,7 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.gameobjects.MouseDummy;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.hud.HUD;
 	import com.away3d.gloop.input.InputManager;
@@ -89,7 +90,6 @@ package com.away3d.gloop.screens.game
 			}
 		}
 
-
 		protected override function initScreen():void
 		{
 			initWorld();
@@ -153,6 +153,7 @@ package com.away3d.gloop.screens.game
 			_timestep = new Timestep( 60 );
 
 			_levelProxy = _db.selectedLevelProxy;
+
 			_level = _levelProxy.level;
 			
 			_levelProxy.addEventListener(GameEvent.LEVEL_RESET, onLevelReset);
@@ -177,6 +178,9 @@ package com.away3d.gloop.screens.game
 			_cannon.physics.moveTo(_level.spawnPoint.x, _level.spawnPoint.y);
 			_level.add(_cannon);
 
+			_inputManager.mouseDummy.resetColliders();
+			_level.add( _inputManager.mouseDummy );
+
 			_gloop.traceComponent.pathTracer.reset();
 			_gloop.setSpawn( _level.spawnPoint.x, _level.spawnPoint.y );
 			_gloop.splatComponent.splattables = _level.splattableMeshes;
@@ -187,13 +191,13 @@ package com.away3d.gloop.screens.game
 				_level.bounds.top,
 				_level.bounds.bottom);
 			_cameraController.setGloopIdle();
-			
+
 			_firstReset = true;
 			
 			// TODO : This is a hack to not make the launcher collide with gloop on spawn (and thus remove itself). I'll fix this later /Martin
 			setTimeout(function():void {
 				_level.add(_gloop);
-				_levelProxy.reset();			
+				_levelProxy.reset();
 
 				// Apply nice lighting.
 				// TODO: Don't affect HUD

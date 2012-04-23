@@ -14,8 +14,6 @@ package com.away3d.gloop.gameobjects
 		protected var _mode:Boolean;
 		protected var _meshComponent : MeshComponent;
 		protected var _physics : PhysicsComponent;
-		protected var _allowMeshUpdateX:Boolean = true;
-		protected var _allowMeshUpdateY:Boolean = true;
 
 		public function DefaultGameObject()
 		{
@@ -25,46 +23,14 @@ package com.away3d.gloop.gameobjects
 		public override function update(dt:Number):void
 		{
 			if (_meshComponent && _physics) {
-				if( _allowMeshUpdateX ) {
-					_meshComponent.mesh.x = _physics.x;
-				}
-				if( _allowMeshUpdateY ) {
-					_meshComponent.mesh.y = -_physics.y;
-				}
+				_meshComponent.mesh.x = _physics.x;
+				_meshComponent.mesh.y = -_physics.y;
 				_meshComponent.mesh.rotationZ = -physics.rotation;
 			}
 		}
 		
 		public function setMode(value:Boolean):void {
 			_mode = value;
-		}
-		
-		public function reset():void {
-			
-		}
-
-		public function onCollidingWithSomethingStart( event:ContactEvent ):void {
-
-		}
-
-		public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
-
-		}
-		
-		public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
-
-		}
-
-		public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null ):void {
-
-		}
-		
-		public function onCollidingWithGloopEnd(gloop:Gloop, event:ContactEvent = null ):void {
-			
-		}
-
-		public function onCollidingWithGloopPreSolve( gloop:Gloop, event:ContactEvent = null ):void {
-
 		}
 		
 		public function setLightPicker(picker : LightPickerBase) : void
@@ -91,6 +57,34 @@ package com.away3d.gloop.gameobjects
 		
 		public function get inEditMode():Boolean {
 			return _mode == Level.EDIT_MODE;
+		}
+
+		public function reset():void {
+
+		}
+
+		public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+
+		}
+
+		public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
+
+		}
+
+		public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
+
+		}
+
+		public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null ):void {
+
+		}
+
+		public function onCollidingWithGloopEnd(gloop:Gloop, event:ContactEvent = null ):void {
+
+		}
+
+		public function onCollidingWithGloopPreSolve( gloop:Gloop, event:ContactEvent = null ):void {
+
 		}
 	}
 }
