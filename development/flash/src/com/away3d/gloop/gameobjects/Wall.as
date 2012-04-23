@@ -19,8 +19,7 @@ package com.away3d.gloop.gameobjects {
 			if(!_physics) _physics = new WallPhysicsComponent(this, offsetX, offsetY, width, height);
 			_physics.x = worldX;
 			_physics.y = worldY;
-			_physics.setStatic(true);
-			
+
 			if (Settings.SHOW_COLLISION_WALLS){
 				var material:ColorMaterial = new ColorMaterial(debugColor1);
 				_meshComponent = new MeshComponent();

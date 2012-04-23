@@ -1,18 +1,18 @@
 package com.away3d.gloop.input
 {
 
+	import Box2DAS.Common.V2;
+
 	import away3d.containers.View3D;
 
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
-	import com.away3d.gloop.gameobjects.hoops.Hoop;
+	import com.away3d.gloop.gameobjects.MouseDummy;
 	import com.away3d.gloop.level.Level;
 
 	import flash.display.DisplayObject;
-
 	import flash.events.Event;
-
 	import flash.events.MouseEvent;
 	import flash.events.TouchEvent;
 	import flash.geom.Point;
@@ -59,11 +59,15 @@ package com.away3d.gloop.input
 		private var _touchDistance:Number = 0;
 		private var _lastTouchDistance:Number = 0;
 
+		private var _mouseDummy:MouseDummy;
+
 		public function InputManager(view : View3D)
 		{
 			super(view);
+
+			_mouseDummy = new MouseDummy();
 		}
-		
+
 		public function reset(level : Level) : void
 		{
 			_level = level;
@@ -126,6 +130,8 @@ package com.away3d.gloop.input
 			super.update();
 			_level.world.projectedMousePosition = projectedMousePosition;
 
+			_mouseDummy.physics.moveTo( projectedMousePosition.x, projectedMousePosition.y );
+
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startInteractionPointX - _interactionPointX) * (_startInteractionPointX - _interactionPointX) + (_startInteractionPointY - _interactionPointY) * (_startInteractionPointY - _interactionPointY);
 
@@ -152,9 +158,18 @@ package com.away3d.gloop.input
 				}
 			}
 
-			// Cannon drag update
-			if( _targetObject && targetIsCannon && !_isClick ) {
-				_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
+			// drag update
+			if( _targetObject && !_isClick ) {
+				if( targetIsCannon ) {
+					_targetObject.onDragUpdate( projectedMouseX, projectedMouseY );
+				}
+				else {
+					if( _targetObject.draggable ) {
+						if( !_mouseDummy.isColliding ) {
+							_targetObject.physics.moveTo( _mouseDummy.physics.x, _mouseDummy.physics.y );
+						}
+					}
+				}
 			}
 
 			if( _panning && !_zooming ) {
@@ -175,9 +190,10 @@ package com.away3d.gloop.input
 			_mouseDownTime = getTimer();
 
 			// if the level has a unplaced hoop, don't pick any hoops from the level
-			if (_level.unplacedHoop == null) {
-				_targetObject = _level.getNearestIMouseInteractive(projectedMouseX, projectedMouseY);
+			if( _level.unplacedHoop == null ) {
+				_targetObject = _level.getNearestIMouseInteractive( projectedMouseX, projectedMouseY );
 				if( _targetObject && _targetObject.draggable ) {
+					// TODO: update mouse dummy shape here? it appears that body shapes cannot change, but perhaps a compound body with 4 shapes could be used
 					startDrag( e );
 				}
 			}
@@ -312,6 +328,10 @@ package com.away3d.gloop.input
 
 		public function get zoomInternallyChanged():Boolean {
 			return _zoomInternallyChanged;
+		}
+
+		public function get mouseDummy():MouseDummy {
+			return _mouseDummy;
 		}
 	}
 

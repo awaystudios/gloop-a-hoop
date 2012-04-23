@@ -92,14 +92,17 @@ class BoxPhysicsComponent extends PhysicsComponent {
 	}
 
 	public function setMode( playMode:Boolean ):void {
+
+		if( !b2body ) return;
+
 		if( playMode ) {
-			b2fixtures[0].SetSensor( false );
+			setStatic( false );
 			applyGravity = true;
 		}
 		else {
-			b2fixtures[0].SetSensor( true );
-			b2body.SetAwake( false );
+			setStatic( true );
 			applyGravity = false;
+//			b2body.SetAwake( false );
 		}
 	}
 

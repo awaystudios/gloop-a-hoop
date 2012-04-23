@@ -73,6 +73,7 @@ package com.away3d.gloop.level
 			_world.velocityIterations = Settings.PHYSICS_VELOCITY_ITERATIONS;
 			_world.positionIterations = Settings.PHYSICS_POSITION_ITERATIONS;
 			_world.gravityY = Settings.PHYSICS_GRAVITY_Y;
+//			_world.dragMethod = 'Kinematic';
 			_spawn_point = new Point();
 			_all_objects = new Vector.<DefaultGameObject>();
 			_btn_controllables = new Vector.<IButtonControllable>();

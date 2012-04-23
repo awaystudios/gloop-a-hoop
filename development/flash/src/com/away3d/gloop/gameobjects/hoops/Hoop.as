@@ -186,32 +186,10 @@ package com.away3d.gloop.gameobjects.hoops
 			return _draggable;
 		}
 
-		// treat collision with boxes in edit mode
-		private var _numCollidingBoxes:int = 0;
-		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
-			if( _mode != Level.EDIT_MODE ) return;
-			var collidingBox:Box = getCollidingBox( event );
-			if( collidingBox == null ) return;
-			_numCollidingBoxes++;
-			_allowMeshUpdateX =_allowMeshUpdateY = false;
-		}
-		override public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
-			if( _mode != Level.EDIT_MODE ) return;
-			var collidingBox:Box = getCollidingBox( event );
-			if( collidingBox == null ) return;
-			_numCollidingBoxes--;
-			if( _numCollidingBoxes == 0 ) {
-				_allowMeshUpdateX = true;
-				_allowMeshUpdateY = true;
+		override public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
+			if( _mode == Level.EDIT_MODE ) {
+				_physics.b2body.SetLinearVelocity( new V2() );
 			}
-		}
-
-		private function getCollidingBox( event:ContactEvent ):Box {
-			var otherPhysics:PhysicsComponent = event.other.m_userData as PhysicsComponent;
-			if( !otherPhysics ) return null;
-			var box:Box = otherPhysics.gameObject as Box;
-			if( !box ) return null;
-			return box;
 		}
 	}
 
@@ -268,8 +246,6 @@ class HoopPhysicsComponent extends PhysicsComponent
 
 		if( playMode == Level.EDIT_MODE ) {
 			allowDragging = true;
-			b2body.SetLinearVelocity( new V2() );
-			b2body.SetAngularVelocity( 0 );
 		} else {
 			allowDragging = false;
 			b2fixtures[0].SetSensor( !Hoop( gameObject ).resolveGloopCollisions );
