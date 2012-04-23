@@ -23,14 +23,14 @@ package com.away3d.gloop.gameobjects
 		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
 			if( validateCollider( event.other ) ) {
 				_numColliders++;
-				_isColliding = _numColliders > 1;
+				_isColliding = _numColliders > 0;
 			}
 		}
 
 		override public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
 			if( validateCollider( event.other ) ) {
 				_numColliders--;
-				_isColliding = _numColliders > 1;
+				_isColliding = _numColliders > 0;
 			}
 		}
 
@@ -39,11 +39,16 @@ package com.away3d.gloop.gameobjects
 		}
 
 		private function validateCollider( fixture:b2Fixture ):Boolean {
-			var otherPhysics:PhysicsComponent = fixture.m_userData as PhysicsComponent;
-			if( otherPhysics.gameObject is Star ) return false;
-			else if( otherPhysics.gameObject is Fan ) return false;
-			else if( otherPhysics.gameObject is GoalWall ) return false;
+			var otherGO:DefaultGameObject = getGameObject( fixture );
+			if( otherGO is Star ) return false;
+			else if( otherGO is Fan ) return false;
+			else if( otherGO is GoalWall ) return false;
 			return true;
+		}
+
+		private function getGameObject( fixture:b2Fixture ):DefaultGameObject {
+			var otherPhysics:PhysicsComponent = fixture.m_userData as PhysicsComponent;
+			return otherPhysics.gameObject;
 		}
 	}
 }
