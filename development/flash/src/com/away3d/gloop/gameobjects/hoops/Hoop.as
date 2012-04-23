@@ -118,12 +118,11 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
-
 			if (!inEditMode) {
 				return;
 			}
 
-			_physics.setStatic( false );
+			HoopPhysicsComponent( _physics ).beingDragged = true;
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
@@ -131,7 +130,7 @@ package com.away3d.gloop.gameobjects.hoops
 		}
 
 		public function onDragEnd(mouseX:Number, mouseY:Number):void {
-			_physics.setStatic( true );
+			HoopPhysicsComponent( _physics ).beingDragged = false;
 		}
 		
 		public override function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void
@@ -165,7 +164,7 @@ package com.away3d.gloop.gameobjects.hoops
 			super.setMode(value);
 			HoopPhysicsComponent(_physics).setMode(value);
 		}
-		
+
 		public function get resolveGloopCollisions():Boolean {
 			return _resolveGloopCollisions;
 		}
@@ -205,15 +204,20 @@ import com.away3d.gloop.level.Level;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
-	private var _inPlayMode:Boolean = Level.EDIT_MODE;
+	private var _beingDragged:Boolean;
 
 	public function HoopPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);
+
+		graphics.beginFill( gameObject.debugColor1 );
+		graphics.drawCircle( 0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
+		graphics.endFill();
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6,
 				Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
-		
+		graphics.endFill();
+
 		allowDragging = true;
 		linearDamping = 9999999;
 		angularDamping = 9999999;
@@ -228,27 +232,33 @@ class HoopPhysicsComponent extends PhysicsComponent
 	public override function shapes() : void
 	{
 		box( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
+		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
 	}
 	
 	override public function create():void {
 		super.create();
-		setMode( _inPlayMode );
 		setStatic( true );
 	}
 	
-	public function setMode(playMode:Boolean):void {
-
-		_inPlayMode = playMode;
-
-		if (!b2body) {
-			return;
-		}
-
-		if( playMode == Level.EDIT_MODE ) {
+	public function set beingDragged( value:Boolean ):void {
+		if (!b2body) return;
+		if( value ) {
 			allowDragging = true;
+			setStatic( false );
 		} else {
 			allowDragging = false;
 			b2fixtures[0].SetSensor( !Hoop( gameObject ).resolveGloopCollisions );
+			setStatic( true );
+		}
+	}
+
+	public function setMode( playMode:Boolean ):void {
+		if (!b2body) return;
+		if( !playMode ) {
+			b2fixtures[1].SetSensor( false );
+		}
+		else {
+			b2fixtures[1].SetSensor( true );
 		}
 	}
 }

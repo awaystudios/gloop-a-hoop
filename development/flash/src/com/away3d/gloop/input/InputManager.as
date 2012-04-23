@@ -73,6 +73,7 @@ package com.away3d.gloop.input
 			_level = level;
 			_touch1.id = -1;
 			_touch2.id = -1;
+			_targetObject = null;
 		}
 		
 		override public function activate() : void
@@ -95,27 +96,6 @@ package com.away3d.gloop.input
 			_view.stage.removeEventListener( MouseEvent.MOUSE_WHEEL, onMouseWheel );
 		}
 
-		private function startDrag( event:MouseEvent ):void {
-
-			// find mouse event's display object
-			var pointInStage:Point = _level.world.localToGlobal( projectedMousePosition );
-			var objectsUnderPoint:Array = _level.world.stage.getObjectsUnderPoint( pointInStage );
-			if( objectsUnderPoint.length == 0 ) return;
-			var displayObject:DisplayObject = objectsUnderPoint[ 0 ] as DisplayObject;
-
-			// produce new mouse event
-			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
-					event.localX, event.localY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
-			physicsEvent.displayObject = displayObject;
-			physicsEvent.body = _targetObject.physics.body;
-
-			// report drag start on object
-			_targetObject.onDragStart(projectedMouseX, projectedMouseY);
-			
-			// start drag
-			_level.world.handleDragStart( physicsEvent );
-		}
-
 		override public function update():void {
 
 			_interactionDeltaX = -(_interactionPointX - _prevInteractionPointX);
@@ -130,7 +110,8 @@ package com.away3d.gloop.input
 			super.update();
 			_level.world.projectedMousePosition = projectedMousePosition;
 
-			_mouseDummy.physics.moveTo( projectedMousePosition.x, projectedMousePosition.y );
+			// update mouse dummy for warping
+			_mouseDummy.physics.moveTo( projectedMouseX, projectedMouseY );
 
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startInteractionPointX - _interactionPointX) * (_startInteractionPointX - _interactionPointX) + (_startInteractionPointY - _interactionPointY) * (_startInteractionPointY - _interactionPointY);
@@ -166,7 +147,7 @@ package com.away3d.gloop.input
 				else {
 					if( _targetObject.draggable ) {
 						if( !_mouseDummy.isColliding ) {
-							_targetObject.physics.moveTo( _mouseDummy.physics.x, _mouseDummy.physics.y );
+							_targetObject.physics.moveTo( projectedMouseX, projectedMouseY ); // warp?
 						}
 					}
 				}
@@ -177,6 +158,23 @@ package com.away3d.gloop.input
 				_panY += _interactionDeltaY;
 				_panInternallyChanged = true;
 			}
+		}
+
+		private function startDrag( event:MouseEvent ):void {
+
+			_level.world.projectedMousePosition = projectedMousePosition;
+
+			// find mouse event's display object
+			var displayObject:DisplayObject = _targetObject.physics;
+
+			// produce new mouse event
+			var physicsEvent:PhysicsMouseEvent = new PhysicsMouseEvent( PhysicsMouseEvent.PHYSICS_MOUSE_EVENT, event.bubbles, event.cancelable,
+					displayObject.stage.mouseX, displayObject.stage.mouseY, event.relatedObject, event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta );
+			physicsEvent.displayObject = displayObject;
+			physicsEvent.body = _targetObject.physics;
+
+			// start drag
+			_level.world.handleDragStart( physicsEvent );
 		}
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
@@ -193,7 +191,7 @@ package com.away3d.gloop.input
 			if( _level.unplacedHoop == null ) {
 				_targetObject = _level.getNearestIMouseInteractive( projectedMouseX, projectedMouseY );
 				if( _targetObject && _targetObject.draggable ) {
-					// TODO: update mouse dummy shape here? it appears that body shapes cannot change, but perhaps a compound body with 4 shapes could be used
+					_targetObject.onDragStart( projectedMouseX, projectedMouseY );
 					startDrag( e );
 				}
 			}
@@ -218,11 +216,10 @@ package com.away3d.gloop.input
 			if (_targetObject) {
 				// deal with click if duration was short enough
 				if (_isClick) {
-					_targetObject.onClick(projectedMouseX, projectedMouseY);
-
-				// else, end dragging
+					_targetObject.onClick( projectedMouseX, projectedMouseY );
+					// else, end dragging
 				} else {
-					_targetObject.onDragEnd(projectedMouseX, projectedMouseY);
+					_targetObject.onDragEnd( projectedMouseX, projectedMouseY );
 				}
 			}
 

@@ -53,6 +53,7 @@ package com.away3d.gloop.gameobjects
 	}
 }
 
+import com.away3d.gloop.Settings;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 
@@ -62,14 +63,14 @@ class MouseDummyPhysicsComponent extends PhysicsComponent {
 		super( gameObject );
 
 		graphics.beginFill( 0x00FF00, 0.5 );
-		graphics.drawCircle( 0, 0, 100 );
+		graphics.drawCircle( 0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
 
 		enableReportBeginContact();
 		enableReportEndContact();
 	}
 
 	public override function shapes():void {
-		circle( 100 );
+		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
 	}
 
 	override public function create():void {
