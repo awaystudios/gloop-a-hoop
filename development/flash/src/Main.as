@@ -22,6 +22,7 @@ package
 	import com.away3d.gloop.lib.sounds.menu.MenuButtonSound;
 	import com.away3d.gloop.lib.sounds.music.InGameMusicSound;
 	import com.away3d.gloop.lib.sounds.music.ThemeMusicSound;
+	import com.away3d.gloop.screens.AssetInitializeScreen;
 	import com.away3d.gloop.screens.LoadingScreen;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
@@ -139,10 +140,11 @@ package
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );
 			_stack.addScreen( Screens.SETTINGS, new SettingsScreen(_db, _stack, _stateMgr) );
-			_stack.addScreen(Screens.GAME, new GameScreen(_db, _stack, _view));
+			_stack.addScreen( Screens.GAME, new GameScreen(_db, _stack, _view));
 			_stack.addScreen( Screens.CHAPTERS, new ChapterSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_db, _stack) );
+			_stack.addScreen( Screens.ASSET_INITIALIZE, new AssetInitializeScreen( _view ) );
 		}
 		
 		
@@ -152,7 +154,6 @@ package
 			SoundManager.addSound(Sounds.GAME_CANNON, new CannonSound());
 			SoundManager.addSound(Sounds.GAME_SPLAT, new SplatSound());
 			SoundManager.addSound(Sounds.GAME_STAR, new StarSound());
-			
 			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
 		}
 		
@@ -211,17 +212,22 @@ package
 				mesh.geometry = null;
 				mesh.dispose();
 			}
-			
+
+			// force animation and asset initialization
+			_stack.getScreenById( Screens.ASSET_INITIALIZE ).addEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
+			_stack.gotoScreen( Screens.ASSET_INITIALIZE );
+			_stack.gotoScreen( Screens.LOADING );
+		}
+
+		private function onGameScreenAnimationsInitialized( event:Event ):void {
+			_stack.getScreenById( Screens.ASSET_INITIALIZE ).removeEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
 			// Load levels
 			_db.loadXml(Settings.ROB_PATH? "../bin/assets/levels.xml" : "assets/levels.xml" );
 		}
-		
 
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
-			
 			_stack.gotoScreen(Screens.START);
-			//_db.selectLevel(_db.chapters[0].levels[0]);
 		}
 		
 		

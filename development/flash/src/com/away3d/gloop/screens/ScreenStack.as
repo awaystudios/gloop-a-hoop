@@ -49,5 +49,9 @@ package com.away3d.gloop.screens
 			
 			_active_screen.activate();
 		}
+
+		public function getScreenById( id:String ):ScreenBase {
+			return _screens_by_id[ id ];
+		}
 	}
 }

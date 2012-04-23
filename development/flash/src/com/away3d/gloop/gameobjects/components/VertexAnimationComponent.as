@@ -58,6 +58,7 @@ package com.away3d.gloop.gameobjects.components
 				// avoid hick ups during game play ( assumes 1 subgeom per geom )
 //				var vertexDummy:VertexBuffer3D = frame.subGeometries[ 0 ].getVertexBuffer( GameScreen.instance.view.stage3DProxy );
 //				var indexDummy:IndexBuffer3D = frame.subGeometries[ 0 ].getIndexBuffer( GameScreen.instance.view.stage3DProxy );
+//				GameScreen.instance.view.stage3DProxy._context3D.setVertexBufferAt( 0, vertexDummy );
 			}
 			
 			_animator.addSequence(seq);

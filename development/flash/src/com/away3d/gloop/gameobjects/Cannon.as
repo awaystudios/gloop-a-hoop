@@ -15,6 +15,7 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.GloopLauncherComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.VertexAnimationComponent;
+	import com.away3d.gloop.screens.AssetManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.EmbeddedResources;
@@ -62,42 +63,19 @@ package com.away3d.gloop.gameobjects
 		
 		private function initVisual() : void
 		{
-			var tex : BitmapTexture;
-			var bodyMat : DefaultMaterialBase;
-			var footMat : DefaultMaterialBase;
-			var footGeom : Geometry;
-			var bodyGeom : Geometry;
-			
-			tex = new BitmapTexture(Bitmap(new EmbeddedResources.CannonDiffusePNGAsset()).bitmapData);
-			
-			bodyMat = new TextureMaterial(tex);
-			footMat = new TextureMaterial(tex);
-			
-			bodyGeom = Geometry(AssetLibrary.getAsset('CannonFrame0_geom')).clone();
-			footGeom = Geometry(AssetLibrary.getAsset('CannonFoot_geom'));
-			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(footGeom, footMat);
-			
-			_cannonBody = new Mesh(bodyGeom, bodyMat);
+			_meshComponent.mesh = AssetManager.instance.cannonMesh;
+			_cannonBody = AssetManager.instance.cannonBody;
 			_meshComponent.mesh.addChild(_cannonBody);
 		}
 		
 		
 		private function initAnim() : void
 		{
-			_frame0 = Geometry(AssetLibrary.getAsset('CannonFrame0_geom'));
-			_frame1 = Geometry(AssetLibrary.getAsset('CannonFrame1_geom'));
-			
-			_animComponent = new VertexAnimationComponent(_cannonBody);
-			_animComponent.addSequence('fire', [
-				_frame1,
-				Geometry(AssetLibrary.getAsset('CannonFrame2_geom')),
-				Geometry(AssetLibrary.getAsset('CannonFrame3_geom')),
-				Geometry(AssetLibrary.getAsset('CannonFrame0_geom')),
-			], 50, false);
-			
-			_animState = VertexAnimationState(_cannonBody.animationState);
+			_frame0 = AssetManager.instance.cannonFrame0;
+			_frame1 = AssetManager.instance.cannonFrame1;
+			_animComponent = AssetManager.instance.cannonAnimation;
+			_animState = AssetManager.instance.cannonAnimationState;
 		}
 		
 		public override function setLightPicker(picker:LightPickerBase):void

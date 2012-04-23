@@ -102,6 +102,8 @@ package away3d.materials
 
 			if (_lightPicker)
 				_lightPicker.addEventListener(Event.CHANGE, onLightsChange);
+
+			onLightsChange( null );
 		}
 
 		private function onLightsChange(event : Event) : void

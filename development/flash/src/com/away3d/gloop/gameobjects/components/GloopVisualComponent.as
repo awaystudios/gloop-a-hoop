@@ -13,6 +13,7 @@ package com.away3d.gloop.gameobjects.components
 	import away3d.textures.BitmapTexture;
 
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.screens.AssetManager;
 
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
@@ -60,67 +61,17 @@ package com.away3d.gloop.gameobjects.components
 		
 		private function initStandard() : void
 		{
-			var diff_tex : BitmapTexture;
-			var spec_tex : BitmapTexture;
-			var mat : TextureMaterial;
-			var geom:Geometry;
-			
-			diff_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffusePNGAsset).bitmapData);
-			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
-			
-			mat = new TextureMaterial(diff_tex);
-			mat.animateUVs = true;
-			mat.specularMap = spec_tex;
-
-			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
-			
-			_stdMesh = new Mesh(geom, mat);
-			_stdMesh.subMeshes[0].scaleU = 0.5;
-			_stdMesh.subMeshes[0].scaleV = 0.5;
+			_stdMesh = AssetManager.instance.gloopStdAnimMesh;
+			_stdAnim = AssetManager.instance.gloopStdAnimation;
 			mesh.addChild(_stdMesh);
-			
-			// TODO: Replace with nicer texture animations.
-			mat.repeat = true;
-			setInterval(function() : void {
-				_stdMesh.subMeshes[0].offsetU += 0.5;
-			}, 300);
-			
-			_stdAnim = new VertexAnimationComponent( _stdMesh );
-			_stdAnim.addSequence( 'fly', [
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame1Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame2Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame3Geom' ) ),
-				Geometry( AssetLibrary.getAsset( 'GloopFlyFrame4Geom' ) )
-			] );
 		}
 		
 		
 		private function initSplat() : void
 		{
-			var tex : BitmapTexture;
-			var mat : TextureMaterial;
-			var geom : Geometry;
-			
-			tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSplatDiffusePNGAsset).bitmapData);
-			mat = new TextureMaterial(tex);
-			
-			geom = Geometry(AssetLibrary.getAsset('GlSplatFr0_geom'));
-			
-			_splatMesh = new Mesh(geom, mat);
-			_splatMesh.y = -Settings.GLOOP_RADIUS - 5;
-			mesh.addChild(_splatMesh);
-			
-			_splatAnim = new VertexAnimationComponent(_splatMesh);
-			_splatAnim.addSequence( 'splat', [
-				Geometry(AssetLibrary.getAsset('GlSplatFr0_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr1_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr2_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr3_geom')),
-				Geometry(AssetLibrary.getAsset('GlSplatFr4_geom'))
-			], 100, false);
+			_splatMesh = AssetManager.instance.gloopSplatAnimMesh;
+			_splatAnim = AssetManager.instance.gloopSplatAnimation;
+			mesh.addChild( _splatMesh );
 		}
 		
 		

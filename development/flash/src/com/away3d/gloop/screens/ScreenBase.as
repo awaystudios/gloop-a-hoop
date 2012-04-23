@@ -74,7 +74,7 @@ package com.away3d.gloop.screens
 				mtx = new Matrix(scale, 0, 0, scale);
 				mtx.translate( -bgWidth / 2, -bgHeight / 2);
 				
-				_background = new Shape;
+				_background = new Shape();
 				_background.graphics.beginBitmapFill(bmp, mtx, false, true);
 				_background.graphics.drawRect( -bgWidth / 2, -bgHeight / 2, bgWidth, bgHeight);
 				_background.x = _w / 2;
@@ -154,6 +154,10 @@ package com.away3d.gloop.screens
 		
 		protected function update():void {
 			// To be overridden
+		}
+
+		public function get background():Shape {
+			return _background;
 		}
 	}
 }

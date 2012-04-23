@@ -36,13 +36,19 @@ package com.away3d.gloop.gameobjects
 		{
 			var geom : Geometry;
 			var mat : ColorMaterial;
-			
+
 			geom = Geometry(AssetLibrary.getAsset('StarFrame0_geom')).clone();
-			mat = new ColorMaterial(0xccff00); // TODO: use clone materials?
-			
+			mat = new ColorMaterial(0xccff00);
+			/* TODO: share materials?
+			cannot share materials between differently animated entities ( would need to improve Away3D for this )
+			dave says that you actually can
+			David Lenaerts: you can, you just need to be sure that you don't assign the material when either of the targets still has a differeny animation
+			David Lenaerts: easiest thing to do is to decouple the material until everything else is set
+			* */
+
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, mat);
-			
+
 			_animComponent = new VertexAnimationComponent(_meshComponent.mesh);
 			_animComponent.addSequence('seq', [
 				Geometry(AssetLibrary.getAsset('StarFrame0_geom')),
@@ -52,7 +58,7 @@ package com.away3d.gloop.gameobjects
 				Geometry(AssetLibrary.getAsset('StarFrame4_geom')),
 			], 600);
 			_animComponent.play('seq');
-			
+
 		}
 		
 		override public function reset():void {

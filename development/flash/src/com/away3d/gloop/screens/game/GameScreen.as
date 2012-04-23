@@ -20,6 +20,7 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
+	import com.away3d.gloop.screens.AssetManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.sound.Themes;
@@ -166,7 +167,7 @@ package com.away3d.gloop.screens.game
 			_doc.x = _doc.width / 2;
 			_doc.y = stage.stageHeight - _doc.height / 2;
 
-			_view.scene = new Scene3D(); // inser a dummy visual scene while level is being built
+			_view.scene = new Scene3D(); // insert a dummy visual scene while level is being built
 			
 			// Camera must be in scene since it needs to update
 			// for the HUD to update accordingly.
