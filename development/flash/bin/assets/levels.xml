@@ -2,100 +2,103 @@
     <chapter poster="assets/chapters/01.png">
         <title>Welcome to the lab</title>
 
-        <level id="1" awd="assets/levels/001.awd">
+        <level id="1" name="From here to there" awd="assets/levels/001.awd">
         </level>
 
-        <level id="2" awd="assets/levels/019.awd">
+        <level id="2" name="Parkour 101" awd="assets/levels/019.awd">
         </level>
 
-        <level id="3" awd="assets/levels/018.awd">
+        <level id="3" name="Towering infernal" awd="assets/levels/018.awd">
         </level>
 
-        <level id="4" awd="assets/levels/002.awd">
+        <level id="4" name="Sharp right" awd="assets/levels/002.awd">
         </level>
 
-        <level id="5" awd="assets/levels/009.awd">
+        <level id="5" name="Lily pad hop" awd="assets/levels/009.awd">
         </level>
 
-        <level id="6" awd="assets/levels/014.awd">
+        <level id="6" name="High jump" awd="assets/levels/014.awd">
         </level>
 
-        <level id="7" awd="assets/levels/004.awd">
+        <level id="7" name="Firing line" awd="assets/levels/004.awd">
         </level>
 
-        <level id="8" awd="assets/levels/015.awd">
+        <level id="8" name="Going down" awd="assets/levels/015.awd">
         </level>
 
-        <level id="9" awd="assets/levels/016.awd">
+        <level id="9" name="The winds of change" awd="assets/levels/016.awd">
         </level>
 
-        <level id="10" awd="assets/levels/003.awd">
+        <level id="10" name="Z if for Zorro" awd="assets/levels/003.awd">
         </level>
 
-        <level id="11" awd="assets/levels/006.awd">
+        <level id="11" name="Floating in space" awd="assets/levels/006.awd">
         </level>
 
-        <level id="12" awd="assets/levels/010.awd">
+        <level id="12" name="The bishop manouvere" awd="assets/levels/010.awd">
         </level>
 
-        <level id="13" awd="assets/levels/005.awd">
+        <level id="13" name="Target practice" awd="assets/levels/005.awd">
         </level>
 
-        <level id="14" awd="assets/levels/012.awd">
+        <level id="14" name="Going down 2" awd="assets/levels/012.awd">
         </level>
 
-        <level id="15" awd="assets/levels/013.awd">
+        <level id="15" name="Piledriver" awd="assets/levels/013.awd">
         </level>
 
-        <level id="16" awd="assets/levels/017.awd">
+        <level id="16" name="Rubix clock" awd="assets/levels/017.awd">
         </level>
 
-        <level id="17" awd="assets/levels/011.awd">
+        <level id="17" name="Slide rule" awd="assets/levels/011.awd">
         </level>
 
-        <level id="18" awd="assets/levels/020.awd">
+        <level id="18" name="Dropping in" awd="assets/levels/020.awd">
         </level>
 
-        <level id="19" awd="assets/levels/021.awd">
+        <level id="19" name="" awd="assets/levels/021.awd">
         </level>
  
-        <level id="20" awd="assets/levels/022.awd">
+        <level id="20" name="The accelerator" awd="assets/levels/022.awd">
         </level>
         
-        <level id="21" awd="assets/levels/023.awd">
+        <level id="21" name="Round the bend" awd="assets/levels/023.awd">
         </level>
         
-        <level id="22" awd="assets/levels/024.awd">
+        <level id="22" name="Elevator pitch" awd="assets/levels/024.awd">
         </level>
         
-        <level id="23" awd="assets/levels/025.awd">
+        <level id="23" name="" awd="assets/levels/025.awd">
         </level>
         
-        <level id="24" awd="assets/levels/026.awd">
+        <level id="24" name="Pendulum" awd="assets/levels/026.awd">
         </level>                                       
     </chapter>
     <chapter poster="assets/chapters/01.png">
         <title>Next levels</title>
                 
-        <level id="1" awd="assets/levels/027.awd">
+        <level id="1" name="Bending the rules" awd="assets/levels/027.awd">
         </level>
         
-        <level id="2" awd="assets/levels/028.awd">
+        <level id="2" name="The trebuchet" awd="assets/levels/028.awd">
         </level>
                 
-        <level id="3" awd="assets/levels/029.awd">
+        <level id="3" name="Hoops in a row" awd="assets/levels/029.awd">
         </level>
                         
-        <level id="4" awd="assets/levels/030.awd">
+        <level id="4" name="" awd="assets/levels/030.awd">
         </level>
                                 
-        <level id="5" awd="assets/levels/031.awd">
+        <level id="5" name="The cube" awd="assets/levels/031.awd">
         </level>
                                         
-        <level id="6" awd="assets/levels/032.awd">
+        <level id="6" name="Levitation" awd="assets/levels/032.awd">
         </level>
                                                 
-        <level id="7" awd="assets/levels/033.awd">
+        <level id="7" name="Break on through" awd="assets/levels/033.awd">
+        </level>
+                                                        
+        <level id="8" name="Ressurection" awd="assets/levels/034.awd">
         </level>
     </chapter>
 </levels>
