@@ -100,5 +100,8 @@
                                                         
         <level id="8" name="Ressurection" awd="assets/levels/034.awd">
         </level>
+                                                                
+        <level id="9" name="The drawbridge" awd="assets/levels/035.awd">
+        </level>
     </chapter>
 </levels>
