@@ -10,7 +10,7 @@ package com.away3d.gloop
 	{
 		static public var STU_MODE:Boolean = false;
 		static public var DEV_MODE:Boolean = true;
-		static public var SHOW_PHYSICS:Boolean = true;
+		static public var SHOW_PHYSICS:Boolean = false;
 		static public var ROB_PATH:Boolean = false;
 		
 		static public var GRID_SIZE : Number = 100;
@@ -26,7 +26,7 @@ package com.away3d.gloop
 		static public var CANNON_BARREL_H : Number = 100;
 		
 		[comment("the time to wait before enabling gloop/cannon collisions after launching, in updates")]
-		static public var CANNON_PHYSICS_DELAY:Number = 8;
+		static public var CANNON_PHYSICS_DELAY:Number = 16;
 		
 		static public var WALL_PADDING : Number = 8;
 		
@@ -68,13 +68,13 @@ package com.away3d.gloop
 		static public var BUTTON_RADIUS : Number = 60;
 
 		[comment("dragging a distance shorter than this cancels the launch")]
-		static public var LAUNCHER_DRAG_MIN : Number = 30;
+		static public var LAUNCHER_DRAG_MIN : Number = 70;
 		[comment("the drag distance is capped to this value, dragging longer won't make a difference")]
-		static public var LAUNCHER_DRAG_MAX : Number = 200;
+		static public var LAUNCHER_DRAG_MAX : Number = 120;
 		[comment("this is the minimal force applied when launched")]
-		static public var LAUNCHER_POWER_BASE : Number = 1;
+		static public var LAUNCHER_POWER_BASE : Number = 0.7;
 		[comment("a shot at 100% power will be the sum of the base and this value")]
-		static public var LAUNCHER_POWER_VARIATION : Number = 2;
+		static public var LAUNCHER_POWER_VARIATION : Number = 1.3;
 
 		static public var ROCKET_POWER : Number = 15;
 
@@ -112,6 +112,10 @@ package com.away3d.gloop
 		static public var INPUT_CLICK_TIME : uint = 250;
 		[comment("the maximum distance a hoops centerpoint can be from the click to be considered hit")]
 		static public var INPUT_PICK_DISTANCE : uint = 50;
+		[comment("the maximum distance the cannon pin centerpoint can be from the click to be considered hit")]
+		static public var INPUT_CANNON_DISTANCE : uint = 30;
+		[comment("the length of cannon pin")]
+		static public var INPUT_CANNON_LENGTH : uint = 60;
 		[comment("the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)")]
 		static public var INPUT_DRAG_THRESHOLD_SQUARED : uint = 100;
 		

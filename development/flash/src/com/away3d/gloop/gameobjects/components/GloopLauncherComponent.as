@@ -86,7 +86,8 @@ package com.away3d.gloop.gameobjects.components {
 		public function get shotPowerNormalized():Number {
 			var power:Number = Math.min(_aim.length, Settings.LAUNCHER_DRAG_MAX);
 			power = Math.max(0, (power - Settings.LAUNCHER_DRAG_MIN) / (Settings.LAUNCHER_DRAG_MAX - Settings.LAUNCHER_DRAG_MIN));
-			return Quad.easeIn(power, 0, 1, 1);
+			return power;
+			//return Quad.easeIn(power, 0, 1, 1);
 		}
 		
 		public function get shotPower():Number {

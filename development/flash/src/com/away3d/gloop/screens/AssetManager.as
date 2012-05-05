@@ -84,9 +84,16 @@ package com.away3d.gloop.screens
 			footMat = new TextureMaterial( tex );
 
 			bodyGeom = Geometry( AssetLibrary.getAsset( 'CannonFrame0_geom' ) ).clone();
+			bodyGeom.scale(100);
+			Geometry(AssetLibrary.getAsset('CannonFrame0_geom')).scale(100);
+			Geometry(AssetLibrary.getAsset('CannonFrame1_geom')).scale(100);
+			Geometry(AssetLibrary.getAsset('CannonFrame2_geom')).scale(100);
+			Geometry(AssetLibrary.getAsset('CannonFrame3_geom')).scale(100);
+			
 			footGeom = Geometry( AssetLibrary.getAsset( 'CannonFoot_geom' ) );
-
+			footGeom.scale(100);
 			cannonMesh = new Mesh( footGeom, footMat );
+			cannonMesh.z = 150;
 			cannonBody = new Mesh( bodyGeom, bodyMat );
 		}
 

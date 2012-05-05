@@ -157,7 +157,7 @@ package com.away3d.gloop.gameobjects
 			_launcher.update(dt);
 			
 			_meshComponent.mesh.rotationZ = 0;
-			_cannonBody.rotationZ = 90-_physics.rotation;
+			_cannonBody.rotationZ = -90-_physics.rotation;
 			
 			// if the launcher has been fired and we're still a sensor
 			if (_launcher.fired && _physics.isSensor) {
@@ -179,7 +179,8 @@ package com.away3d.gloop.gameobjects
 			rot = physics.rotation;
 			if (rot > 180) rot -= 360;
 				
-			_cannonBody.scaleY = (rot < 0)? -1 : 1;
+			_cannonBody.z = (rot < 0)? 0 : -300;
+			_cannonBody.scaleY = (rot < 0)? 1 : -1;
 			_cannonBody.scaleZ = _cannonBody.scaleY;
 		}
 	}

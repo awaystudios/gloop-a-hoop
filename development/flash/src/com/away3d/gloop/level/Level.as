@@ -11,6 +11,7 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Button;
+	import com.away3d.gloop.gameobjects.Cannon;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.GoalWall;
@@ -132,6 +133,25 @@ package com.away3d.gloop.level
 				object = _all_objects[i] as IMouseInteractive;
 				if (!object)
 					continue;
+				
+				
+				
+				if (object is Cannon)
+				{
+					objectPos.x = object.physics.x + Math.cos((-90+object.physics.rotation)*Math.PI/180)*Settings.INPUT_CANNON_LENGTH;
+					objectPos.y = object.physics.y + Math.sin((-90+object.physics.rotation)*Math.PI/180)*Settings.INPUT_CANNON_LENGTH;
+					
+					dist = Point.distance(mousePos, objectPos);
+					
+					trace("dist", dist);
+					trace("INPUT_CANNON_DISTANCE", Settings.INPUT_CANNON_DISTANCE);
+					if (dist < nearestDist && dist < Settings.INPUT_CANNON_DISTANCE)
+					{
+						nearestDist = dist;
+						nearest = object;
+					}
+					continue;
+				}
 				
 				objectPos.x = object.physics.x;
 				objectPos.y = object.physics.y;
