@@ -29,10 +29,7 @@
         <level id="18" name="Dropping in" awd="assets/levels/020.awd"> <!-- introduce rotation on hoop -->
         </level>
 
-        <level id="10" name="Z if for Zorro" awd="assets/levels/003.awd">
-        </level>
-
-        <level id="24" name="The pendulum" awd="assets/levels/026.awd">
+        <level id="14" name="Going down 2" awd="assets/levels/012.awd">
         </level>
 
         <level id="16" name="Rubix clock" awd="assets/levels/017.awd">
@@ -44,7 +41,7 @@
         <level id="11" name="Floating in space" awd="assets/levels/006.awd">
         </level>
 
-        <level id="14" name="Going down 2" awd="assets/levels/012.awd"> <!-- introduce movable hoops -->
+        <level id="10" name="Z if for Zorro" awd="assets/levels/003.awd"> <!-- introduce movable hoops -->
         </level>
 
         <level id="19" name="Criss cross" awd="assets/levels/021.awd">
@@ -53,10 +50,13 @@
         <level id="12" name="The bishop manouvere" awd="assets/levels/010.awd">
         </level>
 
-        <level id="13" name="Target practice" awd="assets/levels/005.awd">
+        <level id="15" name="Piledriver" awd="assets/levels/013.awd"> <!-- introduce movable but non-rotatable hoops -->
         </level>
 
-        <level id="15" name="Piledriver" awd="assets/levels/013.awd">
+        <level id="24" name="The pendulum" awd="assets/levels/026.awd">
+        </level>
+
+        <level id="13" name="Target practice" awd="assets/levels/005.awd">
         </level>
 
         <level id="17" name="Slide rule" awd="assets/levels/011.awd">
