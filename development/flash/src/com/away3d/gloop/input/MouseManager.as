@@ -33,13 +33,13 @@ package com.away3d.gloop.input
 
 		public function activate():void {
 			_view.addEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
-			_view.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
+			_view.stage.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
 			_view.addEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
 		}
 
 		public function deactivate():void {
 			_view.removeEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
-			_view.removeEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
+			_view.stage.removeEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
 			_view.removeEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
 		}
 
