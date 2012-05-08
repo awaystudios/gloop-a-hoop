@@ -116,13 +116,10 @@ package com.away3d.gloop.input
 			// calculate how far from the origin the players finger has moved
 			var distance:Number = (_startInteractionPointX - _interactionPointX) * (_startInteractionPointX - _interactionPointX) + (_startInteractionPointY - _interactionPointY) * (_startInteractionPointY - _interactionPointY);
 
-			var targetIsCannon:Boolean = false;
-			if( _targetObject && _targetObject is Cannon ) {
-				targetIsCannon = true;
-			}
+			var targetIsCannon:Boolean = ( _targetObject && _targetObject is Cannon )? true : false;
 
 			// if we still might be clicking and the player has moved far enough, start the dragging
-			if( _isClick && distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED ) {
+			if( _isClick && (distance > Settings.INPUT_DRAG_THRESHOLD_SQUARED || targetIsCannon)) {
 
 				_isClick = false;
 

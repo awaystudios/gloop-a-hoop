@@ -93,18 +93,6 @@ package com.away3d.gloop.screens.chapterselect
 			_nextPoster = (_curPosterIdx<_posters.length-1)? _posters[_curPosterIdx+1] : null;
 		}
 		
-		
-		private function updatePosterPositions() : void
-		{
-			_curPoster.x += (_targetX - _curPoster.x) * 0.2;
-			
-			if (_prevPoster)
-				_prevPoster.x = _curPoster.x - _w/2;
-			if (_nextPoster)
-				_nextPoster.x = _curPoster.x + _w/2;
-		}
-		
-		
 		private function endDrag() : void
 		{
 			_dragging = false;
@@ -124,18 +112,6 @@ package com.away3d.gloop.screens.chapterselect
 		
 		private function onStageMouseMove(ev : MouseEvent) : void
 		{
-			var dx : Number;
-			var mul : Number;
-			
-			dx = (stage.mouseX - _mouseDownX);
-			
-			mul = 1;
-			if (dx < 0 && _curPosterIdx == _posters.length-1)
-				mul = 0.5;
-			else if (dx > 0 && _curPosterIdx == 0)
-				mul = 0.5;
-			
-			_targetX = _centerX + dx * mul;
 		}
 		
 		
@@ -179,8 +155,29 @@ package com.away3d.gloop.screens.chapterselect
 		}
 		
 		
-		override protected function update():void {
-			updatePosterPositions();
+		override protected function update():void
+		{
+			if (_dragging) {
+				var dx : Number;
+				var mul : Number;
+				
+				dx = (stage.mouseX - _mouseDownX);
+				
+				mul = 1;
+				if (dx < 0 && _curPosterIdx == _posters.length-1)
+					mul = 0.5;
+				else if (dx > 0 && _curPosterIdx == 0)
+					mul = 0.5;
+				
+				_targetX = _centerX + dx * mul;
+			}
+			
+			_curPoster.x += (_targetX - _curPoster.x) * 0.2;
+			
+			if (_prevPoster)
+				_prevPoster.x = _curPoster.x - _w/2;
+			if (_nextPoster)
+				_nextPoster.x = _curPoster.x + _w/2;
 		}
 	}
 }

@@ -21,6 +21,7 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import flash.utils.setTimeout;
 
 	public class Cannon extends DefaultGameObject implements IMouseInteractive
@@ -34,7 +35,11 @@ package com.away3d.gloop.gameobjects
 		private var _animState : VertexAnimationState;
 		
 		private var _timeSinceLaunch : Number = 0;
-
+		
+		private var _physicsOffset:Number = 0;
+		private var _mouseX:Number;
+		private var _mouseY:Number;
+		
 		public function get draggable():Boolean {
 			return false;
 		}
@@ -114,15 +119,25 @@ package com.away3d.gloop.gameobjects
 			// do nothing
 		}
 		
-		public function onDragStart(mouseX:Number, mouseY:Number):void {
-			// do nothing
+		public function onDragStart(mouseX:Number, mouseY:Number):void
+		{
+			_physicsOffset = Math.sqrt(Math.pow(mouseY - physics.y, 2) + Math.pow(mouseX - physics.x, 2)) - Settings.INPUT_CANNON_LENGTH;
+			_mouseX = physics.x + (_physicsOffset + Settings.INPUT_CANNON_LENGTH)*Math.cos((-90+physics.rotation)*Math.PI/180);
+			_mouseY = physics.y + (_physicsOffset + Settings.INPUT_CANNON_LENGTH)*Math.sin((-90+physics.rotation)*Math.PI/180);
 		}
 		
 		public function onDragUpdate(mouseX:Number, mouseY:Number):void {
 			if (_launcher.gloop) {
-				var pow : Number;
 				
-				_launcher.onDragUpdate(mouseX, mouseY);
+				_mouseX += (mouseX - _mouseX)*0.2;
+				_mouseY += (mouseY - _mouseY)*0.2;
+				
+				var pow : Number;
+				var dist:Point = new Point(_mouseX - physics.x, _mouseY - physics.y);
+				dist.normalize(1);
+				
+					
+				_launcher.onDragUpdate(_mouseX - dist.x*_physicsOffset, _mouseY - dist.y*_physicsOffset);
 				
 				pow = _launcher.shotPowerNormalized;
 				_animState.weights[0] = 1-pow;

@@ -113,9 +113,9 @@ package com.away3d.gloop
 		[comment("the maximum distance a hoops centerpoint can be from the click to be considered hit")]
 		static public var INPUT_PICK_DISTANCE : uint = 50;
 		[comment("the maximum distance the cannon pin centerpoint can be from the click to be considered hit")]
-		static public var INPUT_CANNON_DISTANCE : uint = 30;
+		static public var INPUT_CANNON_DISTANCE : uint = 50;
 		[comment("the length of cannon pin")]
-		static public var INPUT_CANNON_LENGTH : uint = 60;
+		static public var INPUT_CANNON_LENGTH : uint = 70;
 		[comment("the maximum distance the player needs to drag before the actual drag events happen (also disables clicking)")]
 		static public var INPUT_DRAG_THRESHOLD_SQUARED : uint = 100;
 		

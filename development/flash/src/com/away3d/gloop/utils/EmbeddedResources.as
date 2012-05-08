@@ -20,10 +20,10 @@ package com.away3d.gloop.utils
 
 		
 		// Cannon
-		[Embed('/../assets/cannon/cannon2.3ds', mimeType='application/octet-stream')]
+		[Embed('/../assets/cannon/cannon3.3ds', mimeType='application/octet-stream')]
 		public static var Cannon3DSAsset : Class;
 		
-		[Embed("/../assets/cannon/diff2.png")]
+		[Embed("/../assets/cannon/diff3.png")]
 		public static var CannonDiffusePNGAsset : Class;
 		
 		
