@@ -214,9 +214,9 @@ package
 			}
 
 			// force animation and asset initialization
-			_stack.getScreenById( Screens.ASSET_INITIALIZE ).addEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
+//			_stack.getScreenById( Screens.ASSET_INITIALIZE ).addEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
 			_stack.gotoScreen( Screens.ASSET_INITIALIZE );
-			_stack.gotoScreen( Screens.LOADING );
+//			_stack.gotoScreen( Screens.LOADING );
 		}
 
 		private function onGameScreenAnimationsInitialized( event:Event ):void {
@@ -274,6 +274,8 @@ package
 
 
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
+
+			// reset level
 			if( ev.keyCode == Keyboard.R ) {
 				_stack.gotoScreen( Screens.LOADING );
 				_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
