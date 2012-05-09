@@ -14,6 +14,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.SphereGeometry;
+	import away3d.primitives.TorusGeometry;
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Box;
@@ -73,9 +74,12 @@ package com.away3d.gloop.gameobjects.hoops
 
 			if( _draggable ) { // TODO: use cloned mesh from asset library
 				var cylinder:Mesh = new Mesh( new CylinderGeometry(30, 30, 20, 32, 1, true, true, true, false), _material);
-				//cylinder.scale( 0.15 );
 				cylinder.z = 100;
 				_meshComponent.mesh.addChild( cylinder );
+			} else if( _rotatable ) {
+				//var circle:Mesh = new Mesh( new TorusGeometry(30, 2.5, 32, 8, false), _material);
+				//circle.z = 100;
+				//_meshComponent.mesh.addChild( circle );
 			}
 
 			if( _rotatable ) { // TODO: use cloned mesh from asset library
@@ -90,7 +94,7 @@ package com.away3d.gloop.gameobjects.hoops
 
 		private function createPole(offset:Number):void {
 			var poleLength:Number = 500;
-			var poleRadius:Number = 2;
+			var poleRadius:Number = 2.5;
 			var hoopRadius:Number = ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
 			var pole:Mesh = new Mesh( new CylinderGeometry( poleRadius, poleRadius, poleLength ), _material );
 			pole.z = poleLength / 2 + Math.sqrt(hoopRadius*hoopRadius - offset*offset);

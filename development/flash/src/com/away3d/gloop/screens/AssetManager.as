@@ -148,7 +148,7 @@ package com.away3d.gloop.screens
 
 			mat.repeat = true;
 			setInterval(function() : void {
-				gloopStdAnimMesh.subMeshes[0].offsetU += 0.5;
+				gloopStdAnimMesh.subMeshes[0].offsetU = (gloopStdAnimMesh.subMeshes[0].offsetU)? 0 : 0.5;
 			}, 300);
 
 			gloopStdAnimation = new VertexAnimationComponent( gloopStdAnimMesh );
