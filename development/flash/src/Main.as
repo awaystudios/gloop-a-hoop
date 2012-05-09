@@ -80,6 +80,7 @@ package
 			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+//			stage.frameRate = 4;
 			stage.addEventListener( KeyboardEvent.KEY_UP, onStageKeyUp );
 			
 			// Running in simulator?
@@ -214,9 +215,9 @@ package
 			}
 
 			// force animation and asset initialization
-//			_stack.getScreenById( Screens.ASSET_INITIALIZE ).addEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
+			_stack.getScreenById( Screens.ASSET_INITIALIZE ).addEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized ); // uncomment to see 3D asset init screen ( 1/2 )
 			_stack.gotoScreen( Screens.ASSET_INITIALIZE );
-//			_stack.gotoScreen( Screens.LOADING );
+			_stack.gotoScreen( Screens.LOADING ); // uncomment to see 3D asset init screen ( 2/2 )
 		}
 
 		private function onGameScreenAnimationsInitialized( event:Event ):void {

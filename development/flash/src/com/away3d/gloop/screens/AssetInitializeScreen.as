@@ -20,6 +20,7 @@ package com.away3d.gloop.screens
 
 		public override function activate():void {
 			super.activate();
+
 			AssetManager.instance.view = _view;
 			AssetManager.instance.initializeAnimations();
 			AssetManager.instance.addEventListener( Event.COMPLETE, onAnimationsInitialized );

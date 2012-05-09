@@ -7,9 +7,11 @@ package com.away3d.gloop.screens
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
+	import away3d.lights.PointLight;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.DefaultMaterialBase;
 	import away3d.materials.TextureMaterial;
+	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.textures.BitmapTexture;
 
 	import com.away3d.gloop.Settings;
@@ -38,6 +40,8 @@ package com.away3d.gloop.screens
 
 		private var _view:View3D;
 		private var _scene:Scene3D;
+		private var _tempLight:PointLight;
+		private var _tempLightPicker:StaticLightPicker;
 
 		public var gloopSplatAnimMesh:Mesh;
 		public var gloopStdAnimMesh:Mesh;
@@ -61,6 +65,9 @@ package com.away3d.gloop.screens
 			_view.camera.position = new Vector3D( -500, 500, 0 );
 			_view.camera.lookAt( new Vector3D() );
 
+			_tempLight = new PointLight();
+			_tempLightPicker = new StaticLightPicker( [ _tempLight ] );
+
 			addEventListener( Event.ENTER_FRAME, enterframeHandler );
 
 			initializeGloopFly();
@@ -82,6 +89,9 @@ package com.away3d.gloop.screens
 
 			bodyMat = new TextureMaterial( tex );
 			footMat = new TextureMaterial( tex );
+
+			bodyMat.lightPicker = _tempLightPicker;
+			footMat.lightPicker = _tempLightPicker;
 
 			bodyGeom = Geometry( AssetLibrary.getAsset( 'CannonFrame0_geom' ) ).clone();
 			bodyGeom.scale(100);
@@ -125,6 +135,7 @@ package com.away3d.gloop.screens
 			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
 
 			mat = new TextureMaterial(diff_tex);
+			mat.lightPicker = _tempLightPicker;
 			mat.animateUVs = true;
 			mat.specularMap = spec_tex;
 
@@ -133,8 +144,8 @@ package com.away3d.gloop.screens
 			gloopStdAnimMesh = new Mesh(geom, mat);
 			gloopStdAnimMesh.subMeshes[0].scaleU = 0.5;
 			gloopStdAnimMesh.subMeshes[0].scaleV = 0.5;
+			gloopStdAnimMesh.z = -150;
 
-			// TODO: Replace with nicer texture animations.
 			mat.repeat = true;
 			setInterval(function() : void {
 				gloopStdAnimMesh.subMeshes[0].offsetU += 0.5;
@@ -161,6 +172,7 @@ package com.away3d.gloop.screens
 
 			tex = new BitmapTexture( Bitmap( new EmbeddedResources.GloopSplatDiffusePNGAsset ).bitmapData );
 			mat = new TextureMaterial( tex );
+			mat.lightPicker = _tempLightPicker;
 
 			geom = Geometry( AssetLibrary.getAsset( 'GlSplatFr0_geom' ) );
 
@@ -191,8 +203,10 @@ package com.away3d.gloop.screens
 
 		private function doComplete():void {
 			setTimeout( function():void {
+
 				removeEventListener( Event.ENTER_FRAME, enterframeHandler );
 				dispatchEvent( new Event( Event.COMPLETE ) );
+
 			}, 1500 );
 		}
 
