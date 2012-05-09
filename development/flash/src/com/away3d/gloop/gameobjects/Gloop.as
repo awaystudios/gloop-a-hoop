@@ -4,15 +4,8 @@ package com.away3d.gloop.gameobjects
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 
-	import away3d.containers.View3D;
-
-	import away3d.core.base.Geometry;
-	import away3d.entities.Mesh;
-	import away3d.library.AssetLibrary;
-	import away3d.materials.TextureMaterial;
 	import away3d.materials.lightpickers.LightPickerBase;
-	import away3d.textures.BitmapTexture;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
@@ -21,8 +14,6 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
-	
-	import flash.display.Sprite;
 
 	public class Gloop extends DefaultGameObject
 	{
@@ -128,6 +119,7 @@ package com.away3d.gloop.gameobjects
 				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
 
 				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
+					SoundManager.playRandom( Sounds.GLOOP_DIS1, Sounds.GLOOP_DIS2, Sounds.GLOOP_DIS3, Sounds.GLOOP_DIS4 );
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
 				}
 			}
@@ -153,8 +145,9 @@ package com.away3d.gloop.gameobjects
 		
 		public function onMissGoalWall() : void
 		{
-			if (!_didHit)
+			if (!_didHit) {
 				dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_MISSED_GOAL_WALL, this));
+			}
 		}
 		
 		public function splatOnTarget(angle : Number) : void

@@ -7,6 +7,8 @@ package com.away3d.gloop.gameobjects.hoops {
 	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Gloop;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 
 	/**
 	 * ...
@@ -50,6 +52,8 @@ package com.away3d.gloop.gameobjects.hoops {
 		
 		override public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null):void {
 			super.onCollidingWithGloopStart(gloop);
+
+			SoundManager.play( Sounds.GLOOP_CATAPULTED );
 		}
 		
 		protected override function getIconGeometry() : Geometry

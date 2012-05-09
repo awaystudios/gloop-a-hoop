@@ -90,6 +90,7 @@ package com.away3d.gloop.gameobjects
 			_pressed = !_pressed;
 			
 			SoundManager.play(Sounds.GAME_BUTTON);
+			SoundManager.playWithDelay( Sounds.GLOOP_BUTTON_HIT, 0.25 * Math.random() );
 			
 			if (_pressed) toggleOn(true);
 			else toggleOff(true);

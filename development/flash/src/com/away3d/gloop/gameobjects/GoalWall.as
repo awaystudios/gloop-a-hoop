@@ -13,6 +13,8 @@ package com.away3d.gloop.gameobjects {
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.EmbeddedResources;
 	
 	import flash.display.Bitmap;
@@ -78,8 +80,15 @@ package com.away3d.gloop.gameobjects {
 			
 			gloop.splatOnTarget(_physics.rotation);
 			gloop.onHitGoalWall();
+
+			SoundManager.playWithDelay( Sounds.GLOOP_GIGGLE, rand( 0.5, 1 ) );
 			
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
+		}
+
+		private function rand(min:Number, max:Number):Number
+		{
+		    return (max - min)*Math.random() + min;
 		}
 		
 		public function onGloopEnterSensor(gloop:Gloop):void {

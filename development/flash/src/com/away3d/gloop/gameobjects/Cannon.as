@@ -160,6 +160,7 @@ package com.away3d.gloop.gameobjects
 					// if the launcher fired this time, reset the time since launch
 					if (_launcher.fired) {
 						SoundManager.play(Sounds.GAME_CANNON);
+						SoundManager.playWithDelay( Sounds.GLOOP_WOOO, 0.25 * Math.random() );
 						_timeSinceLaunch = 0;
 					}
 				}, 150);

@@ -19,6 +19,19 @@ package
 	import com.away3d.gloop.lib.sounds.game.CannonSound;
 	import com.away3d.gloop.lib.sounds.game.SplatSound;
 	import com.away3d.gloop.lib.sounds.game.StarSound;
+	import com.away3d.gloop.lib.sounds.gloop.GloopButtonHit;
+	import com.away3d.gloop.lib.sounds.gloop.GloopCatapulted;
+	import com.away3d.gloop.lib.sounds.gloop.GloopDis1;
+	import com.away3d.gloop.lib.sounds.gloop.GloopDis2;
+	import com.away3d.gloop.lib.sounds.gloop.GloopDis3;
+	import com.away3d.gloop.lib.sounds.gloop.GloopDis4;
+	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle;
+	import com.away3d.gloop.lib.sounds.gloop.GloopTrampolineHit;
+	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit1;
+	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit2;
+	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit3;
+	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit4;
+	import com.away3d.gloop.lib.sounds.gloop.GloopWoooSound;
 	import com.away3d.gloop.lib.sounds.menu.MenuButtonSound;
 	import com.away3d.gloop.lib.sounds.music.InGameMusicSound;
 	import com.away3d.gloop.lib.sounds.music.ThemeMusicSound;
@@ -156,6 +169,19 @@ package
 			SoundManager.addSound(Sounds.GAME_SPLAT, new SplatSound());
 			SoundManager.addSound(Sounds.GAME_STAR, new StarSound());
 			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
+			SoundManager.addSound(Sounds.GLOOP_WOOO, new GloopWoooSound());
+			SoundManager.addSound(Sounds.GLOOP_WALL_HIT_1, new GloopWallHit1());
+			SoundManager.addSound(Sounds.GLOOP_WALL_HIT_2, new GloopWallHit2());
+			SoundManager.addSound(Sounds.GLOOP_WALL_HIT_3, new GloopWallHit3());
+			SoundManager.addSound(Sounds.GLOOP_WALL_HIT_4, new GloopWallHit4());
+			SoundManager.addSound(Sounds.GLOOP_TRAMPOLINE_HIT, new GloopTrampolineHit());
+			SoundManager.addSound(Sounds.GLOOP_BUTTON_HIT, new GloopButtonHit());
+			SoundManager.addSound(Sounds.GLOOP_CATAPULTED, new GloopCatapulted());
+			SoundManager.addSound(Sounds.GLOOP_GIGGLE, new GloopGiggle());
+			SoundManager.addSound(Sounds.GLOOP_DIS1, new GloopDis1());
+			SoundManager.addSound(Sounds.GLOOP_DIS2, new GloopDis2());
+			SoundManager.addSound(Sounds.GLOOP_DIS3, new GloopDis3());
+			SoundManager.addSound(Sounds.GLOOP_DIS4, new GloopDis4());
 		}
 		
 
