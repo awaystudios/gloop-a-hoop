@@ -143,8 +143,6 @@ package com.away3d.gloop.level
 					
 					dist = Point.distance(mousePos, objectPos);
 					
-					trace("dist", dist);
-					trace("INPUT_CANNON_DISTANCE", Settings.INPUT_CANNON_DISTANCE);
 					if (dist < nearestDist && dist < Settings.INPUT_CANNON_DISTANCE)
 					{
 						nearestDist = dist;
