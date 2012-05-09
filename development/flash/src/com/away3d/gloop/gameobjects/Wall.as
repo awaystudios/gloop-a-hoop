@@ -6,6 +6,8 @@ package com.away3d.gloop.gameobjects {
 	import away3d.entities.Mesh;
 	import away3d.materials.ColorMaterial;
 	import away3d.primitives.CubeGeometry;
+
+	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.gameobjects.components.WallPhysicsComponent;
 	import com.away3d.gloop.Settings;
@@ -47,6 +49,7 @@ package com.away3d.gloop.gameobjects {
 			var speed:Number = gloop.physics.b2body.GetLinearVelocity().length();
 			if( speed > 1 ) {
 				SoundManager.playRandom( Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 );
+				gloop.visualComponent.setFacial( GloopVisualComponent.FACIAL_OUCH );
 			}
 
 		}

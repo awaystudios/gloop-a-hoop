@@ -117,10 +117,18 @@ package com.away3d.gloop.gameobjects
 
 			if (!inEditMode) {
 				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
-
-				if (_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
+				if(_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
 					SoundManager.playRandom( Sounds.GLOOP_DIS1, Sounds.GLOOP_DIS2, Sounds.GLOOP_DIS3, Sounds.GLOOP_DIS4 );
+					_visualComponent.setFacial( GloopVisualComponent.FACIAL_SAD );
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
+				}
+
+				if( _avgSpeed > 5 ) {
+					_visualComponent.setFacial( GloopVisualComponent.FACIAL_YIPPEE );
+				}
+
+				if( _avgSpeed < 1 ) {
+					_visualComponent.setFacial( GloopVisualComponent.FACIAL_SAD );
 				}
 			}
 		}
@@ -159,6 +167,8 @@ package com.away3d.gloop.gameobjects
 		
 		public function onLaunch():void
 		{
+			_visualComponent.setFacial( GloopVisualComponent.FACIAL_SMILE );
+
 			_avgSpeed = 10;
 			
 			_visualComponent.bounceAndFaceDirection(.1);
@@ -182,6 +192,10 @@ package com.away3d.gloop.gameobjects
 
 		public function get splatComponent():SplatComponent {
 			return _splatComponent;
+		}
+
+		public function get visualComponent():GloopVisualComponent {
+			return _visualComponent;
 		}
 	}
 }

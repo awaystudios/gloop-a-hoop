@@ -125,31 +125,47 @@ package com.away3d.gloop.screens
 			cannonAnimation.play( 'fire' );
 		}
 
+		public var smileMat:TextureMaterial;
+		public var sadMat:TextureMaterial;
+		public var ouchMat:TextureMaterial;
+		public var yippeeMat:TextureMaterial;
 		private function initializeGloopFly():void {
-			var diff_tex : BitmapTexture;
-			var spec_tex : BitmapTexture;
-			var mat : TextureMaterial;
+			var smile_grin_tex : BitmapTexture;
+			var sad_tex : BitmapTexture;
+			var ouch_tex : BitmapTexture;
+			var yippee_tex : BitmapTexture;
 			var geom:Geometry;
 
-			diff_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffusePNGAsset).bitmapData);
-			spec_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopSpecularPNGAsset).bitmapData);
+			smile_grin_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffuseSmileGrin).bitmapData);
+			sad_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffuseSad).bitmapData);
+			ouch_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffuseOuch).bitmapData);
+			yippee_tex = new BitmapTexture(Bitmap(new EmbeddedResources.GloopDiffuseYippee).bitmapData);
 
-			mat = new TextureMaterial(diff_tex);
-			mat.lightPicker = _tempLightPicker;
-			mat.animateUVs = true;
-			mat.specularMap = spec_tex;
+			smileMat = new TextureMaterial(smile_grin_tex);
+			sadMat = new TextureMaterial(sad_tex);
+			ouchMat = new TextureMaterial(ouch_tex);
+			yippeeMat = new TextureMaterial(yippee_tex);
+
+			smileMat.lightPicker = _tempLightPicker;
+			sadMat.lightPicker = _tempLightPicker;
+			ouchMat.lightPicker = _tempLightPicker;
+			yippeeMat.lightPicker = _tempLightPicker;
 
 			geom = Geometry( AssetLibrary.getAsset( 'GloopFlyFrame0Geom' ) );
 
-			gloopStdAnimMesh = new Mesh(geom, mat);
-			gloopStdAnimMesh.subMeshes[0].scaleU = 0.5;
-			gloopStdAnimMesh.subMeshes[0].scaleV = 0.5;
+			gloopStdAnimMesh = new Mesh( geom, smileMat );
+//			gloopStdAnimMesh.subMeshes[0].scaleU = 0.5;
+//			gloopStdAnimMesh.subMeshes[0].scaleV = 0.5;
 //			gloopStdAnimMesh.z = -150; // do not leave gloop mesh offsets uncommented
 
-			mat.repeat = true;
-			setInterval(function() : void {
+//			smileMat.repeat = true;
+//			sadMat.repeat = true;
+//			ouchMat.repeat = true;
+//			yippeeMat.repeat = true;
+
+			/*setInterval(function() : void {
 				gloopStdAnimMesh.subMeshes[0].offsetU = (gloopStdAnimMesh.subMeshes[0].offsetU)? 0 : 0.5;
-			}, 300);
+			}, 300);*/
 
 			gloopStdAnimation = new VertexAnimationComponent( gloopStdAnimMesh );
 			gloopStdAnimation.addSequence( 'fly', [

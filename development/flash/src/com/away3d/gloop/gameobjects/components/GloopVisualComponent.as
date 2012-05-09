@@ -19,6 +19,8 @@ package com.away3d.gloop.gameobjects.components
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	import flash.utils.setInterval;
 
 	public class GloopVisualComponent extends MeshComponent
@@ -27,7 +29,12 @@ package com.away3d.gloop.gameobjects.components
 		
 		private var _stdAnim : VertexAnimationComponent;
 		private var _splatAnim : VertexAnimationComponent;
-		
+
+		private var _smileMat:TextureMaterial;
+		private var _sadMat:TextureMaterial;
+		private var _ouchMat:TextureMaterial;
+		private var _yippeeMat:TextureMaterial;
+
 		private var _stdMesh : Mesh;
 		private var _splatMesh : Mesh;
 		
@@ -38,6 +45,59 @@ package com.away3d.gloop.gameobjects.components
 		private var _splatAngle : Number;
 		private var _splatting : Boolean;
 
+		public static const FACIAL_SMILE:uint = 0;
+		public static const FACIAL_SAD:uint = 1;
+		public static const FACIAL_OUCH:uint = 2;
+		public static const FACIAL_YIPPEE:uint = 3;
+
+		private var _currentFacial:uint;
+		private var _facialRestoreTmr:Timer;
+		private var _facialChangeFree:Boolean = true;
+
+		private const FACIAL_EXPRESSION_TIME:uint = 250;
+
+		public function setFacial( expression:uint ):void {
+
+			_facialRestoreTmr.reset();
+			_facialRestoreTmr.start();
+
+			if( !_facialChangeFree || expression == _currentFacial ) {
+				return;
+			}
+
+			_facialChangeFree = false;
+
+			switch( expression ) {
+				case FACIAL_OUCH: {
+					_stdMesh.material = _ouchMat;
+					break;
+				}
+				case FACIAL_SAD:
+				{
+					_stdMesh.material = _sadMat;
+					break;
+				}
+				case FACIAL_SMILE:
+				{
+					_stdMesh.material = _smileMat;
+					break;
+				}
+				case FACIAL_YIPPEE:
+				{
+					_stdMesh.material = _yippeeMat;
+					break;
+				}
+			}
+
+			_currentFacial = expression;
+
+		}
+
+		private function onFacialRestoreTimerComplete( event:TimerEvent ):void {
+			_facialChangeFree = true;
+			setFacial( FACIAL_SMILE );
+		}
+
 		public function GloopVisualComponent(physics : PhysicsComponent)
 		{
 			super();
@@ -45,9 +105,11 @@ package com.away3d.gloop.gameobjects.components
 			_physics = physics;
 
 			init();
+
+			_facialRestoreTmr = new Timer( FACIAL_EXPRESSION_TIME, 1 );
+			_facialRestoreTmr.addEventListener( TimerEvent.TIMER_COMPLETE, onFacialRestoreTimerComplete );
 		}
-		
-		
+
 		private function init() : void
 		{
 			// Will be used as container for either
@@ -63,6 +125,10 @@ package com.away3d.gloop.gameobjects.components
 		{
 			_stdMesh = AssetManager.instance.gloopStdAnimMesh;
 			_stdAnim = AssetManager.instance.gloopStdAnimation;
+			_sadMat = AssetManager.instance.sadMat;
+			_smileMat = AssetManager.instance.smileMat;
+			_ouchMat = AssetManager.instance.ouchMat;
+			_yippeeMat = AssetManager.instance.yippeeMat;
 			mesh.addChild(_stdMesh);
 		}
 		
@@ -79,6 +145,11 @@ package com.away3d.gloop.gameobjects.components
 		{
 			_stdMesh.material.lightPicker = picker;
 			_splatMesh.material.lightPicker = picker;
+
+			_sadMat.lightPicker = picker;
+			_smileMat.lightPicker = picker;
+			_ouchMat.lightPicker = picker;
+			_yippeeMat.lightPicker = picker;
 		}
 		
 		

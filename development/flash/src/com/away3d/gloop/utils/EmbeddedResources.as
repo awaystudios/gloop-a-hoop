@@ -11,12 +11,28 @@ package com.away3d.gloop.utils
 		
 		[Embed('/../assets/gloop/splat/diff.png')]
 		public static var GloopSplatDiffusePNGAsset : Class;
-		
-		[Embed("/../assets/gloop/diff.png")]
-		public static var GloopDiffusePNGAsset : Class;
 
-		[Embed("/../assets/gloop/spec.png")]
-		public static var GloopSpecularPNGAsset : Class;
+		//
+
+		[Embed("/../assets/gloop/snotblob_Smile-Grin.png")]
+		public static var GloopDiffuseSmileGrin:Class;
+
+		[Embed("/../assets/gloop/snotblob_Sad.png")]
+		public static var GloopDiffuseSad:Class;
+
+		[Embed("/../assets/gloop/snotblob_Ouch.png")]
+		public static var GloopDiffuseOuch:Class;
+
+		[Embed("/../assets/gloop/snotblob_Yipeee.png")]
+		public static var GloopDiffuseYippee:Class;
+
+		//
+
+//		[Embed("/../assets/gloop/diff.png")]
+//		public static var GloopDiffusePNGAsset : Class;
+
+//		[Embed("/../assets/gloop/spec.png")]
+//		public static var GloopSpecularPNGAsset : Class;
 
 		
 		// Cannon
