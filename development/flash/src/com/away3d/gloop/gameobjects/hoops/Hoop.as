@@ -2,12 +2,11 @@ package com.away3d.gloop.gameobjects.hoops
 {
 
 	import Box2DAS.Collision.b2WorldManifold;
-	import Box2DAS.Collision.b2WorldManifold;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
 	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
 	import Box2DAS.Dynamics.b2ContactImpulse;
-
+	
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
@@ -15,7 +14,7 @@ package com.away3d.gloop.gameobjects.hoops
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
 	import away3d.primitives.SphereGeometry;
-
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.Box;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
@@ -35,7 +34,7 @@ package com.away3d.gloop.gameobjects.hoops
 	{
 		private var _color : uint;
 		
-		protected var _iconMesh : Mesh;
+		//protected var _iconMesh : Mesh;
 		
 		protected var _rotatable:Boolean = true;
 		protected var _draggable:Boolean = true;
@@ -69,34 +68,33 @@ package com.away3d.gloop.gameobjects.hoops
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(geom, _material);
 
-			_iconMesh = new Mesh(getIconGeometry(), _material);
-			_meshComponent.mesh.addChild(_iconMesh);
+			//_iconMesh = new Mesh(getIconGeometry(), _material);
+			//_meshComponent.mesh.addChild(_iconMesh);
 
 			if( _draggable ) { // TODO: use cloned mesh from asset library
-				var cube:Mesh = new Mesh( new CubeGeometry(), new ColorMaterial( 0xFF0000 ) );
-				cube.scale( 0.15 );
-				cube.z = 100;
-				_meshComponent.mesh.addChild( cube );
+				var cylinder:Mesh = new Mesh( new CylinderGeometry(30, 30, 20, 32, 1, true, true, true, false), _material);
+				//cylinder.scale( 0.15 );
+				cylinder.z = 100;
+				_meshComponent.mesh.addChild( cylinder );
 			}
 
 			if( _rotatable ) { // TODO: use cloned mesh from asset library
-				var sphere:Mesh = new Mesh( new SphereGeometry(), new ColorMaterial( 0x00FF00 ) );
-				sphere.scale( 0.15 );
-				sphere.z = 50;
-				_meshComponent.mesh.addChild( sphere );
+				createPole(0);
+			} else {
+				createPole(20);
+				createPole(-20);
 			}
 
 			_meshComponent.mesh.scale( Settings.HOOP_SCALE );
-
-			createPole();
 		}
 
-		private function createPole():void {
+		private function createPole(offset:Number):void {
 			var poleLength:Number = 500;
-			var poleRadius:Number = 3;
+			var poleRadius:Number = 2;
 			var hoopRadius:Number = ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
 			var pole:Mesh = new Mesh( new CylinderGeometry( poleRadius, poleRadius, poleLength ), _material );
-			pole.z = poleLength / 2 + hoopRadius;
+			pole.z = poleLength / 2 + Math.sqrt(hoopRadius*hoopRadius - offset*offset);
+			pole.x = offset;
 			pole.rotationX = 90;
 			_meshComponent.mesh.addChild( pole );
 		}
@@ -156,8 +154,8 @@ package com.away3d.gloop.gameobjects.hoops
 			_meshComponent.mesh.scaleY = _meshComponent.mesh.scaleX;
 			_meshComponent.mesh.scaleZ = _meshComponent.mesh.scaleX;
 			
-			_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
-			_iconMesh.rotationY += 0.5;
+			//_iconMesh.rotationZ = -_meshComponent.mesh.rotationZ;
+			//_iconMesh.rotationY += 0.5;
 		}
 		
 		override public function setMode(value:Boolean):void {
@@ -211,7 +209,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 		super(gameObject);
 
 		graphics.beginFill( gameObject.debugColor1 );
-		graphics.drawCircle( 0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
+		graphics.drawCircle( 0, 0, Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8);
 		graphics.endFill();
 		graphics.beginFill(gameObject.debugColor2);
 		graphics.drawRect( -Settings.HOOP_SCALE * Settings.HOOP_RADIUS, -Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 6,
@@ -232,7 +230,7 @@ class HoopPhysicsComponent extends PhysicsComponent
 	public override function shapes() : void
 	{
 		box( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * 2, Settings.HOOP_SCALE * Settings.HOOP_RADIUS / 3);
-		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS );
+		circle( Settings.HOOP_SCALE * Settings.HOOP_RADIUS * .8);
 	}
 	
 	override public function create():void {
