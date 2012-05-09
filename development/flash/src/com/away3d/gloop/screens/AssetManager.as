@@ -144,7 +144,7 @@ package com.away3d.gloop.screens
 			gloopStdAnimMesh = new Mesh(geom, mat);
 			gloopStdAnimMesh.subMeshes[0].scaleU = 0.5;
 			gloopStdAnimMesh.subMeshes[0].scaleV = 0.5;
-			gloopStdAnimMesh.z = -150;
+//			gloopStdAnimMesh.z = -150; // do not leave gloop mesh offsets uncommented
 
 			mat.repeat = true;
 			setInterval(function() : void {
