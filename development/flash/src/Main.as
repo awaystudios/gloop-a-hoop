@@ -15,6 +15,7 @@ package
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
+	import com.away3d.gloop.lib.sounds.game.BoingSound;
 	import com.away3d.gloop.lib.sounds.game.ButtonSound;
 	import com.away3d.gloop.lib.sounds.game.CannonSound;
 	import com.away3d.gloop.lib.sounds.game.SplatSound;
@@ -172,6 +173,7 @@ package
 			SoundManager.addSound(Sounds.GAME_CANNON, new CannonSound());
 			SoundManager.addSound(Sounds.GAME_SPLAT, new SplatSound());
 			SoundManager.addSound(Sounds.GAME_STAR, new StarSound());
+			SoundManager.addSound(Sounds.GAME_BOING, new BoingSound());
 			SoundManager.addSound(Sounds.MENU_BUTTON, new MenuButtonSound());
 			SoundManager.addSound(Sounds.GLOOP_WOOO, new GloopWoooSound());
 			SoundManager.addSound(Sounds.GLOOP_WALL_HIT_1, new GloopWallHit1());

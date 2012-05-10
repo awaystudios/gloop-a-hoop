@@ -10,6 +10,7 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.GloopPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
 	import com.away3d.gloop.gameobjects.components.PathTraceComponent;
+	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.sound.SoundManager;
@@ -47,6 +48,7 @@ package com.away3d.gloop.gameobjects
 			_physics.applyGravity = true;
 			_physics.bullet = true;
 			_physics.reportPostSolve = true;
+			_physics.enableReportBeginContact();
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
 			
 			// Create special mesh component and use it as
@@ -56,6 +58,22 @@ package com.away3d.gloop.gameobjects
 
 			_splatComponent = new SplatComponent( _physics );
 			_traceComponent = new PathTraceComponent( _physics );
+		}
+
+		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+
+			var speed:Number = _physics.b2body.GetLinearVelocity().length();
+
+			var otherPhysics:PhysicsComponent = event.other.m_userData as PhysicsComponent;
+			if( !otherPhysics ) return;
+
+			var go:GameObject = otherPhysics.gameObject;
+			if( go is Wall || go is Box ) {
+				if( speed > 1 ) {
+					SoundManager.playRandom( Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 );
+					_visualComponent.setFacial( GloopVisualComponent.FACIAL_OUCH );
+				}
+			}
 		}
 
 		override public function setLightPicker( picker:LightPickerBase ):void {

@@ -2,6 +2,7 @@ package com.away3d.gloop.gameobjects
 {
 
 	import Box2DAS.Common.V2;
+	import Box2DAS.Dynamics.ContactEvent;
 
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
@@ -10,7 +11,10 @@ package com.away3d.gloop.gameobjects
 	import away3d.textures.BitmapTexture;
 
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.GloopVisualComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.EmbeddedResources;
 
 	import flash.display.Bitmap;
@@ -31,9 +35,19 @@ package com.away3d.gloop.gameobjects
 			_physics.restitution = 0.5;
 			_physics.friction = 0.8;
 			_physics.inertiaScale = 2;
+			_physics.enableReportBeginContact();
 			_physics.density = Settings.BOX_DENSITY;
 
 			initVisual();
+		}
+
+		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+
+			var speed:Number = _physics.b2body.GetLinearVelocity().length();
+			if( speed > 1 ) {
+				SoundManager.play( Sounds.GAME_BOING );
+			}
+
 		}
 
 		private function initVisual():void {

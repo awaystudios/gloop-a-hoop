@@ -64,27 +64,27 @@ package com.away3d.gloop.gameobjects
 		}
 
 		public function onCollidingWithSomethingStart( event:ContactEvent ):void {
-
+			// override
 		}
 
 		public function onCollidingWithSomethingEnd( event:ContactEvent ):void {
-
+			// override
 		}
 
 		public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
-
+			// override
 		}
 
 		public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null ):void {
-
+			// override
 		}
 
 		public function onCollidingWithGloopEnd(gloop:Gloop, event:ContactEvent = null ):void {
-
+			// override
 		}
 
 		public function onCollidingWithGloopPreSolve( gloop:Gloop, event:ContactEvent = null ):void {
-
+			// override
 		}
 	}
 }
