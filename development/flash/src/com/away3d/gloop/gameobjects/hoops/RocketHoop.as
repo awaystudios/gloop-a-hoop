@@ -50,12 +50,6 @@ package com.away3d.gloop.gameobjects.hoops {
 			}
 		}
 		
-		override public function onCollidingWithGloopStart(gloop:Gloop, event:ContactEvent = null):void {
-			super.onCollidingWithGloopStart(gloop);
-
-			SoundManager.play( Sounds.GLOOP_CATAPULTED );
-		}
-		
 		protected override function getIconGeometry() : Geometry
 		{
 			return Geometry(AssetLibrary.getAsset('RocketIcon_geom'));

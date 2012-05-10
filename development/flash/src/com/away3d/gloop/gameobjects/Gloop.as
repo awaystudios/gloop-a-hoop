@@ -13,6 +13,8 @@ package com.away3d.gloop.gameobjects
 	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.SplatComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
+	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
+	import com.away3d.gloop.gameobjects.hoops.TrampolineHoop;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 
@@ -68,10 +70,19 @@ package com.away3d.gloop.gameobjects
 			if( !otherPhysics ) return;
 
 			var go:GameObject = otherPhysics.gameObject;
+
 			if( go is Wall || go is Box ) {
 				if( speed > 1 ) {
-					SoundManager.playRandom( Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 );
+					SoundManager.playRandom( [ Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 ], SoundManager.CHANNEL_GLOOP );
 					_visualComponent.setFacial( GloopVisualComponent.FACIAL_OUCH );
+				}
+			}
+			else if( go is RocketHoop ) {
+				SoundManager.play( Sounds.GLOOP_CATAPULTED, SoundManager.CHANNEL_GLOOP );
+			}
+			else if( go is TrampolineHoop ) {
+				if( speed > 1 ) {
+					SoundManager.play( Sounds.GLOOP_TRAMPOLINE_HIT, SoundManager.CHANNEL_GLOOP );
 				}
 			}
 		}
@@ -136,7 +147,7 @@ package com.away3d.gloop.gameobjects
 			if (!inEditMode) {
 				_avgSpeed -= (_avgSpeed - speed) * Settings.GLOOP_MOMENTUM_MULTIPLIER;
 				if(_avgSpeed < Settings.GLOOP_LOST_MOMENTUM_THRESHOLD) {
-					SoundManager.playRandom( Sounds.GLOOP_DIS1, Sounds.GLOOP_DIS2, Sounds.GLOOP_DIS3, Sounds.GLOOP_DIS4 );
+					SoundManager.playRandom( [ Sounds.GLOOP_DIS1, Sounds.GLOOP_DIS2, Sounds.GLOOP_DIS3, Sounds.GLOOP_DIS4 ] );
 					_visualComponent.setFacial( GloopVisualComponent.FACIAL_SAD );
 					dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_LOST_MOMENTUM, this));
 				}
