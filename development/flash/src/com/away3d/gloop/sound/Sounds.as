@@ -8,6 +8,9 @@ package com.away3d.gloop.sound
 		public static const GAME_SPLAT : String = 'gameSplat';
 		public static const GAME_CANNON : String = 'gameCannon';
 		public static const GAME_BOING : String = 'gameBoing';
+		public static const GAME_TRAMPOLINE : String = 'gameTrampoline';
+		public static const GAME_ROCKET : String = 'gameRocket';
+		public static const GAME_FAN : String = 'gameFan';
 
 		// Gloop sounds
 		public static const GLOOP_WOOO : String = 'gloopWooo';

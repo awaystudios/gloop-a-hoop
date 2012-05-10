@@ -18,8 +18,11 @@ package
 	import com.away3d.gloop.lib.sounds.game.BoingSound;
 	import com.away3d.gloop.lib.sounds.game.ButtonSound;
 	import com.away3d.gloop.lib.sounds.game.CannonSound;
+	import com.away3d.gloop.lib.sounds.game.FanSound;
+	import com.away3d.gloop.lib.sounds.game.RocketSound;
 	import com.away3d.gloop.lib.sounds.game.SplatSound;
 	import com.away3d.gloop.lib.sounds.game.StarSound;
+	import com.away3d.gloop.lib.sounds.game.TrampolineSound;
 	import com.away3d.gloop.lib.sounds.gloop.GloopButtonHit;
 	import com.away3d.gloop.lib.sounds.gloop.GloopCatapulted;
 	import com.away3d.gloop.lib.sounds.gloop.GloopDis1;
@@ -192,6 +195,9 @@ package
 			SoundManager.addSound(Sounds.GLOOP_DIS2, new GloopDis2());
 			SoundManager.addSound(Sounds.GLOOP_DIS3, new GloopDis3());
 			SoundManager.addSound(Sounds.GLOOP_DIS4, new GloopDis4());
+			SoundManager.addSound(Sounds.GAME_TRAMPOLINE, new TrampolineSound());
+			SoundManager.addSound(Sounds.GAME_ROCKET, new RocketSound());
+			SoundManager.addSound(Sounds.GAME_FAN, new FanSound());
 		}
 		
 
