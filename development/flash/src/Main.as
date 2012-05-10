@@ -26,6 +26,10 @@ package
 	import com.away3d.gloop.lib.sounds.gloop.GloopDis3;
 	import com.away3d.gloop.lib.sounds.gloop.GloopDis4;
 	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle;
+	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle1;
+	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle2;
+	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle3;
+	import com.away3d.gloop.lib.sounds.gloop.GloopGiggle4;
 	import com.away3d.gloop.lib.sounds.gloop.GloopTrampolineHit;
 	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit1;
 	import com.away3d.gloop.lib.sounds.gloop.GloopWallHit2;
@@ -178,6 +182,10 @@ package
 			SoundManager.addSound(Sounds.GLOOP_BUTTON_HIT, new GloopButtonHit());
 			SoundManager.addSound(Sounds.GLOOP_CATAPULTED, new GloopCatapulted());
 			SoundManager.addSound(Sounds.GLOOP_GIGGLE, new GloopGiggle());
+			SoundManager.addSound(Sounds.GLOOP_GIGGLE1, new GloopGiggle1());
+			SoundManager.addSound(Sounds.GLOOP_GIGGLE2, new GloopGiggle2());
+			SoundManager.addSound(Sounds.GLOOP_GIGGLE3, new GloopGiggle3());
+			SoundManager.addSound(Sounds.GLOOP_GIGGLE4, new GloopGiggle4());
 			SoundManager.addSound(Sounds.GLOOP_DIS1, new GloopDis1());
 			SoundManager.addSound(Sounds.GLOOP_DIS2, new GloopDis2());
 			SoundManager.addSound(Sounds.GLOOP_DIS3, new GloopDis3());

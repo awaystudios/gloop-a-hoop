@@ -51,5 +51,10 @@ package com.away3d.gloop.sound
 			var index:uint = Math.floor( options.length * Math.random() );
 			play( options[ index ] );
 		}
+
+		public static function playRandomWithDelay( options:Array, delay:Number ):void {
+			var index:uint = Math.floor( options.length * Math.random() );
+			playWithDelay( options[ index ], delay );
+		}
 	}
 }

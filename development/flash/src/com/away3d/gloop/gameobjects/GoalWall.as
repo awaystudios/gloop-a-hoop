@@ -81,7 +81,7 @@ package com.away3d.gloop.gameobjects {
 			gloop.splatOnTarget(_physics.rotation);
 			gloop.onHitGoalWall();
 
-			SoundManager.playWithDelay( Sounds.GLOOP_GIGGLE, rand( 0.5, 1 ) );
+			SoundManager.playRandomWithDelay( [ Sounds.GLOOP_GIGGLE, Sounds.GLOOP_GIGGLE1, Sounds.GLOOP_GIGGLE2, Sounds.GLOOP_GIGGLE3, Sounds.GLOOP_GIGGLE4 ], rand( 0.5, 1 ) );
 			
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
 		}

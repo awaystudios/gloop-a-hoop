@@ -18,6 +18,10 @@ package com.away3d.gloop.sound
 		public static const GLOOP_BUTTON_HIT : String = 'gloopButtonHit';
 		public static const GLOOP_CATAPULTED : String = 'gloopCatapulted';
 		public static const GLOOP_GIGGLE: String = 'gloopGiggle';
+		public static const GLOOP_GIGGLE1: String = 'gloopGiggle1';
+		public static const GLOOP_GIGGLE2: String = 'gloopGiggle2';
+		public static const GLOOP_GIGGLE3: String = 'gloopGiggle3';
+		public static const GLOOP_GIGGLE4: String = 'gloopGiggle4';
 		public static const GLOOP_DIS1: String = 'gloopDis1';
 		public static const GLOOP_DIS2: String = 'gloopDis2';
 		public static const GLOOP_DIS3: String = 'gloopDis3';
