@@ -71,12 +71,12 @@ package com.away3d.gloop.sound
 		}
 
 		public static function playWithDelay( id:String, delay:Number, channelId:String = CHANNEL_GLOOP ):void {
-			setTimeout( play, uint( delay * 1000 ), id );
+			setTimeout( play, uint( delay * 1000 ), id, channelId );
 		}
 
 		public static function playRandom( options:Array, channelId:String = CHANNEL_GLOOP ):void {
 			var index:uint = Math.floor( options.length * Math.random() );
-			play( options[ index ] );
+			play( options[ index ], channelId );
 		}
 
 		public static function playRandomWithDelay( options:Array, delay:Number, channelId:String = CHANNEL_GLOOP ):void {
