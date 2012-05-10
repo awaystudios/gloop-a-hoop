@@ -1,28 +1,20 @@
 package com.away3d.gloop.gameobjects.hoops
 {
 
-	import Box2DAS.Collision.b2WorldManifold;
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-	import Box2DAS.Dynamics.Contacts.b2ContactEdge;
-	import Box2DAS.Dynamics.b2ContactImpulse;
-	
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
-	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
-	import away3d.primitives.SphereGeometry;
-	import away3d.primitives.TorusGeometry;
-	
+
 	import com.away3d.gloop.Settings;
-	import com.away3d.gloop.gameobjects.Box;
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.level.Level;
 
 	//import mx.events.CollectionEvent;
@@ -111,19 +103,19 @@ package com.away3d.gloop.gameobjects.hoops
 		
 		
 		public function onClick(mouseX:Number, mouseY:Number):void {
-			if (inEditMode && rotatable) {
+			if( inEditMode && rotatable ) {
 				var pos:V2 = _physics.b2body.GetPosition();
 				var angle:Number = _physics.b2body.GetAngle();
-				_physics.b2body.SetTransform(pos, angle + Settings.HOOP_ROTATION_STEP / 180 * Math.PI);
-				_physics.updateBodyMatrix(null); // updates the 2d view, the 3d will update the next frame
+				_physics.b2body.SetTransform( pos, angle + Settings.HOOP_ROTATION_STEP / 180 * Math.PI );
+				_physics.updateBodyMatrix( null ); // updates the 2d view, the 3d will update the next frame
 			}
+			HoopPhysicsComponent( _physics ).beingDragged = false;
 		}
 		
 		public function onDragStart(mouseX:Number, mouseY:Number):void {
 			if (!inEditMode) {
 				return;
 			}
-
 			HoopPhysicsComponent( _physics ).beingDragged = true;
 		}
 		
@@ -196,18 +188,13 @@ package com.away3d.gloop.gameobjects.hoops
 
 }
 
-import Box2DAS.Common.V2;
-
 import com.away3d.gloop.Settings;
 import com.away3d.gloop.gameobjects.DefaultGameObject;
 import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 import com.away3d.gloop.gameobjects.hoops.Hoop;
-import com.away3d.gloop.level.Level;
 
 class HoopPhysicsComponent extends PhysicsComponent
 {
-	private var _beingDragged:Boolean;
-
 	public function HoopPhysicsComponent(gameObject:DefaultGameObject)
 	{
 		super(gameObject);

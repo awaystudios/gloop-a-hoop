@@ -66,7 +66,7 @@ package com.away3d.gloop.sound
 				_gloopSoundChannel.stop();
 			}
 
-			trace( "playing sound: " + id );
+//			trace( "playing sound: " + id );
 			_channels[ channelId ] = sound.play();
 		}
 
