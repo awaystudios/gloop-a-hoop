@@ -56,12 +56,10 @@ package com.away3d.gloop.sound
 			if( !_channels[ channelId ] ) {
 				throw new Error( "Channel id not identified in SoundManager.as: " + channelId );
 			}
-			trace( "stopping channel: " + channelId, _channels[ channelId ] );
-// _channels[ channelId ].stop();
+//			trace( "stopping channel: " + channelId, _channels[ channelId ] );
 
 			if( _fanPlaying && channelId == CHANNEL_FAN ) {
 				_fanSoundChannel.stop();
-				trace( "fan stop" );
 				_fanPlaying = false;
 			}
 
