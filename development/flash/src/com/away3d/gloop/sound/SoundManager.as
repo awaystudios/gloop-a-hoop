@@ -14,9 +14,11 @@ package com.away3d.gloop.sound
 
 		private static var _mainSoundChannel:SoundChannel;
 		private static var _gloopSoundChannel:SoundChannel;
+		private static var _fanSoundChannel:SoundChannel;
 
 		public static const CHANNEL_MAIN:String = "mainChannel";
 		public static const CHANNEL_GLOOP:String = "gloopChannel";
+		public static const CHANNEL_FAN:String = "fanChannel";
 
 		private static var _channels:Object;
 
@@ -24,9 +26,11 @@ package com.away3d.gloop.sound
 			if( !_initialized ) {
 				_mainSoundChannel = new SoundChannel();
 				_gloopSoundChannel = new SoundChannel();
+				_fanSoundChannel = new SoundChannel();
 				_channels = new Object();
 				_channels[ CHANNEL_MAIN ] = _mainSoundChannel;
 				_channels[ CHANNEL_GLOOP ] = _gloopSoundChannel;
+				_channels[ CHANNEL_FAN ] = _fanSoundChannel;
 				_initialized = true;
 				_sounds = {};
 			}
@@ -46,6 +50,23 @@ package com.away3d.gloop.sound
 			_enabled = value;
 		}
 
+		private static var _fanPlaying:Boolean;
+
+		public static function stop( channelId:String ):void {
+			if( !_channels[ channelId ] ) {
+				throw new Error( "Channel id not identified in SoundManager.as: " + channelId );
+			}
+			trace( "stopping channel: " + channelId, _channels[ channelId ] );
+// _channels[ channelId ].stop();
+
+			if( _fanPlaying && channelId == CHANNEL_FAN ) {
+				_fanSoundChannel.stop();
+				trace( "fan stop" );
+				_fanPlaying = false;
+			}
+
+		}
+
 		public static function play( id:String, channelId:String = CHANNEL_GLOOP ):void {
 
 			if( !_enabled ) return;
@@ -58,12 +79,22 @@ package com.away3d.gloop.sound
 			sound = _sounds[id];
 
 			if( !_channels[ channelId ] ) {
-				throw new Error( "Channel id not identified in SoundManager.as: " + id );
+				throw new Error( "Channel id not identified in SoundManager.as: " + channelId );
 			}
 
-			// gloop only has 1 voice
+			// only has 1 voice
 			if( channelId == CHANNEL_GLOOP ) {
 				_gloopSoundChannel.stop();
+			}
+
+			if( _fanPlaying && channelId == CHANNEL_FAN ) {
+				return;
+			}
+
+			if( channelId == CHANNEL_FAN ) {
+				_fanPlaying = true;
+				_fanSoundChannel = sound.play( 0, 999 );
+				return;
 			}
 
 //			trace( "playing sound: " + id );

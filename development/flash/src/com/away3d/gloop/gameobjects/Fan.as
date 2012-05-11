@@ -12,6 +12,8 @@ package com.away3d.gloop.gameobjects
 	import Box2DAS.Common.V2;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.sound.SoundManager;
+	import com.away3d.gloop.sound.Sounds;
 	import com.greensock.easing.Cubic;
 	import com.greensock.TweenLite;
 	
@@ -85,11 +87,13 @@ package com.away3d.gloop.gameobjects
 			_isOn = true;
 			var d : Number = Math.random() * 0.2;
 			TweenLite.to( _activeFanStrength, Settings.FAN_ON_OFF_TIME, { delay: d, t:1, ease:Cubic.easeIn } );
+			SoundManager.play( Sounds.GAME_FAN, SoundManager.CHANNEL_FAN );
 		}
 
 		public function toggleOff():void {
 			if( !_isOn ) return;
 			TweenLite.to( _activeFanStrength, Settings.FAN_ON_OFF_TIME, { t:0, onComplete:onToggleOffComplete } );
+			SoundManager.stop( SoundManager.CHANNEL_FAN );
 		}
 
 		private function onToggleOffComplete():void {

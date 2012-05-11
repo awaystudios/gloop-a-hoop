@@ -20,7 +20,8 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
-	
+	import com.away3d.gloop.sound.SoundManager;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -338,6 +339,7 @@ package com.away3d.gloop.level
 
 		private function win() : void
 		{
+			SoundManager.stop( SoundManager.CHANNEL_FAN );
 			_running = false;
 			_winDelayTimer.reset();
 			_winDelayTimer.start();
@@ -346,6 +348,7 @@ package com.away3d.gloop.level
 
 		private function lose() : void
 		{
+			SoundManager.stop( SoundManager.CHANNEL_FAN );
 			dispatchEvent(new GameEvent(GameEvent.LEVEL_LOSE));
 		}
 		
