@@ -1,16 +1,15 @@
 package com.away3d.gloop.screens.chapterselect
 {
+
 	import com.away3d.gloop.level.ChapterData;
 	import com.away3d.gloop.lib.ChapterPosterUI;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.SimpleButton;
 	import flash.display.Sprite;
-	import flash.display.StageQuality;
 	import flash.geom.Matrix;
 	import flash.text.TextFieldAutoSize;
-	
+
 	public class ChapterPoster extends Sprite
 	{
 		private var _ui : ChapterPosterUI;
@@ -22,7 +21,7 @@ package com.away3d.gloop.screens.chapterselect
 			
 			_data = data;
 			
-			//calc bitmap scaling basedon screen w & h
+			//calc bitmap scaling based on screen w & h
 			var bitmapScale:Number = h/768;
 			var bmp:Bitmap;
 			

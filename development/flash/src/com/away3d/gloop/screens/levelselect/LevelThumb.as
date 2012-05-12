@@ -46,6 +46,7 @@ package com.away3d.gloop.screens.levelselect
 			_ui.blob1.visible = (_proxy.bestStarsCollected > 1);
 			_ui.blob2.visible = (_proxy.bestStarsCollected > 2);
 			_ui.padlock.visible = _proxy.locked;
+			if( _proxy.completed ) _ui.padlock.visible = false;
 		}
 	}
 }

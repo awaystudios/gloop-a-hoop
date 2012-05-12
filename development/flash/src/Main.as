@@ -9,7 +9,7 @@ package
 	import away3d.library.utils.AssetLibraryIterator;
 	import away3d.loaders.parsers.AWD2Parser;
 	import away3d.loaders.parsers.Max3DSParser;
-	
+
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
@@ -61,7 +61,7 @@ package
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.SettingsLoader;
 	import com.away3d.gloop.utils.StateSaveManager;
-	
+
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -124,7 +124,6 @@ package
 			addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
-			// Should be reset to other state manager by AIR app
 			_stateMgr = new StateSaveManager();
 
 			initSettings();

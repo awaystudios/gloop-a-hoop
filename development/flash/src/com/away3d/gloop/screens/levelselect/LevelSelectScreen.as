@@ -85,7 +85,7 @@ package com.away3d.gloop.screens.levelselect
 			tlx = _w/2 - cols * 70 * _masterScale;
 			tly = _h/2 - rows * 75 * _masterScale + 40 * _masterScaleY;
 			
-			
+			var lastIsCompleted:Boolean;
 			for (i=0; i<len; i++) {
 				var thumb : LevelThumb;
 				var level : LevelProxy;
@@ -96,7 +96,18 @@ package com.away3d.gloop.screens.levelselect
 				col = i % cols;
 				
 				level = _db.selectedChapter.levels[i];
-				
+
+				if( level.completed ) {
+					level.locked = false;
+					lastIsCompleted = true;
+				}
+				else {
+					if( lastIsCompleted ) {
+						level.locked = false;
+					}
+					lastIsCompleted = false;
+				}
+
 				if (_thumbs.length == i) {
 					_thumbs.push(thumb = new LevelThumb(level));
 					thumb.addEventListener(MouseEvent.CLICK, onThumbClick);
