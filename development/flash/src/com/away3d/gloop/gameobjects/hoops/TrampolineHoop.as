@@ -2,6 +2,7 @@ package com.away3d.gloop.gameobjects.hoops {
 
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
+	import Box2DAS.Dynamics.b2Fixture;
 
 	import away3d.core.base.Geometry;
 	import away3d.library.AssetLibrary;
@@ -26,6 +27,9 @@ package com.away3d.gloop.gameobjects.hoops {
 		}
 
 		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null):void {
+
+			var fixture:b2Fixture = event.fixture;
+			if( fixture.IsSensor() ) return;
 
 			var speed:Number = gloop.physics.b2body.GetLinearVelocity().length();
 

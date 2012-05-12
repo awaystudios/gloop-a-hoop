@@ -115,7 +115,7 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject.onCollidingWithSomethingStart( e );
 			var gloop:Gloop = getGloop(e.other);
 			if (!gloop) return;
-			_gameObject.onCollidingWithGloopStart(gloop);
+			_gameObject.onCollidingWithGloopStart(gloop, e);
 		}
 		
 		protected function onEndContact(e : ContactEvent ) : void
@@ -123,7 +123,7 @@ package com.away3d.gloop.gameobjects.components
 			_gameObject.onCollidingWithSomethingEnd( e );
 			var gloop:Gloop = getGloop(e.other);
 			if (!gloop) return;
-			_gameObject.onCollidingWithGloopEnd(gloop);
+			_gameObject.onCollidingWithGloopEnd(gloop, e);
 		}
 
 		private function onPreSolveContact( e:ContactEvent ):void {

@@ -3,6 +3,7 @@ package com.away3d.gloop.gameobjects
 
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
+	import Box2DAS.Dynamics.b2Fixture;
 
 	import away3d.materials.lightpickers.LightPickerBase;
 
@@ -64,12 +65,15 @@ package com.away3d.gloop.gameobjects
 
 		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
 
-			var speed:Number = _physics.b2body.GetLinearVelocity().length();
+			var fixture:b2Fixture = event.other;
 
-			var otherPhysics:PhysicsComponent = event.other.m_userData as PhysicsComponent;
+			if( fixture.IsSensor() ) return;
+
+			var otherPhysics:PhysicsComponent = fixture.m_userData as PhysicsComponent;
 			if( !otherPhysics ) return;
 
 			var go:GameObject = otherPhysics.gameObject;
+			var speed:Number = _physics.b2body.GetLinearVelocity().length();
 
 			if( go is Wall || go is Box ) {
 				if( speed > 1 ) {
