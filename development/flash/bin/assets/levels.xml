@@ -11,7 +11,7 @@
         <level id="3" name="Towering infernal" awd="assets/levels/018.awd"> <!-- introduce point collection of jelly -->
         </level>
 
-        <level id="2" name="High jump" awd="assets/levels/014.awd"> <!-- introduce accuracy of target bonus -->
+        <level id="6" name="High jump" awd="assets/levels/014.awd"> <!-- introduce accuracy of target bonus -->
         </level>
 
         <level id="5" name="Lily pad hop" awd="assets/levels/009.awd"> <!-- introduce trampoline hoop -->
