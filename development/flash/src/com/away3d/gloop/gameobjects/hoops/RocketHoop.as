@@ -18,6 +18,8 @@ package com.away3d.gloop.gameobjects.hoops {
 	 */
 	public class RocketHoop extends Hoop {
 
+		private var _onSideCollision:Boolean = true;
+
 		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, movable:Boolean = true, rotatable:Boolean = true) {
 			super(0x3f7fff, worldX, worldY, rotation, movable, rotatable);
 			_physics.enableReportPreSolveContact();
@@ -31,6 +33,8 @@ package com.away3d.gloop.gameobjects.hoops {
 			var fixture:b2Fixture = event.fixture;
 			if( fixture.IsSensor() ) return;
 
+			if( _onSideCollision ) return;
+
 			SoundManager.play( Sounds.GAME_ROCKET );
 
 		}
@@ -39,6 +43,7 @@ package com.away3d.gloop.gameobjects.hoops {
 
 			var normal:V2 = event.normal;
 
+			_onSideCollision = false;
 			if( normal ) {
 
 				var localSpaceNormal:V2 = _physics.b2body.GetLocalVector( normal );
@@ -46,6 +51,7 @@ package com.away3d.gloop.gameobjects.hoops {
 				// side hits
 				if( ( Math.abs( localSpaceNormal.x ) > 0.01 ) ) {
 					// regular collision
+					_onSideCollision = true;
 					return;
 				}
 
@@ -65,6 +71,10 @@ package com.away3d.gloop.gameobjects.hoops {
 		protected override function getIconGeometry() : Geometry
 		{
 			return Geometry(AssetLibrary.getAsset('RocketIcon_geom'));
+		}
+
+		public function get onSideCollision():Boolean {
+			return _onSideCollision;
 		}
 	}
 

@@ -77,18 +77,34 @@ package com.away3d.gloop.gameobjects
 
 			if( go is Wall || go is Box ) {
 				if( speed > 1 ) {
-					SoundManager.playRandom( [ Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 ], SoundManager.CHANNEL_GLOOP );
+					ouch();
 					_visualComponent.setFacial( GloopVisualComponent.FACIAL_OUCH );
 				}
 			}
 			else if( go is RocketHoop ) {
-				SoundManager.play( Sounds.GLOOP_CATAPULTED, SoundManager.CHANNEL_GLOOP );
-			}
-			else if( go is TrampolineHoop ) {
-				if( speed > 1 ) {
-					SoundManager.play( Sounds.GLOOP_TRAMPOLINE_HIT, SoundManager.CHANNEL_GLOOP );
+				var rocketHoop:RocketHoop = RocketHoop( go );
+				if( !rocketHoop.onSideCollision ) {
+					SoundManager.play( Sounds.GLOOP_CATAPULTED, SoundManager.CHANNEL_GLOOP );
+				}
+				else {
+					ouch();
 				}
 			}
+			else if( go is TrampolineHoop ) {
+				var trampolineHoop:TrampolineHoop = TrampolineHoop( go );
+				if( speed > 1 ) {
+					if( !trampolineHoop.onSideCollision ) {
+						SoundManager.play( Sounds.GLOOP_TRAMPOLINE_HIT, SoundManager.CHANNEL_GLOOP );
+					}
+					else {
+						ouch();
+					}
+				}
+			}
+		}
+
+		private function ouch():void {
+			SoundManager.playRandom( [ Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 ], SoundManager.CHANNEL_GLOOP );
 		}
 
 		override public function setLightPicker( picker:LightPickerBase ):void {
