@@ -241,7 +241,7 @@ package com.away3d.gloop.screens.game
 
 			if (_paused) {
 				_paused = false;
-				removeChild(_pauseOverlay);
+				if( _pauseOverlay.parent == this ) removeChild(_pauseOverlay);
 			}
 		}
 
@@ -308,12 +308,14 @@ package com.away3d.gloop.screens.game
 		{
 			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.START);
+			if( _pauseOverlay.parent == this ) removeChild(_pauseOverlay);
 		}
 		
 		private function onPauseOverlayLevelSelectButtonClick(ev : MouseEvent) : void
 		{
 			SoundManager.play(Sounds.MENU_BUTTON);
 			_stack.gotoScreen(Screens.LEVELS);
+			if( _pauseOverlay.parent == this ) removeChild(_pauseOverlay);
 		}
 		
 
