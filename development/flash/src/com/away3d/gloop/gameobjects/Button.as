@@ -48,12 +48,12 @@ package com.away3d.gloop.gameobjects
 			var buttonMat : ColorMaterial;
 			var plateMat : ColorMaterial;
 			
-			plateMat = new ColorMaterial(0xcccccc);
+			plateMat = new ColorMaterial(0xaf68c2);
 			
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('ButtonPlate_geom')), plateMat);
 			
-			buttonMat = new ColorMaterial(0xde6a14);
+			buttonMat = new ColorMaterial(0x4c0c5d);
 			
 			_buttonMesh = new Mesh(Geometry(AssetLibrary.getAsset('Button_geom')), buttonMat);
 			_meshComponent.mesh.addChild(_buttonMesh);

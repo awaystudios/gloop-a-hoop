@@ -66,6 +66,8 @@ package com.away3d.gloop.screens
 			_view.camera.lookAt( new Vector3D() );
 
 			_tempLight = new PointLight();
+			_tempLight.specular = 0;
+			_tempLight.ambient = 0.4;
 			_tempLightPicker = new StaticLightPicker( [ _tempLight ] );
 
 			addEventListener( Event.ENTER_FRAME, enterframeHandler );

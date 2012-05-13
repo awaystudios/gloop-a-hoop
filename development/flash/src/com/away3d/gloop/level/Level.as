@@ -21,7 +21,7 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.sound.SoundManager;
-
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -86,7 +86,7 @@ package com.away3d.gloop.level
 			_winDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onWinDelayTimerComplete);
 			
 			_cameraPointLight = new PointLight();
-			_cameraPointLight.specular = 0.3;
+			_cameraPointLight.specular = 0;
 			_cameraPointLight.ambient = 0.4;
 
 			_sceneLightPicker = new StaticLightPicker( [ _cameraPointLight ] );
@@ -248,8 +248,8 @@ package com.away3d.gloop.level
 		{
 			if (obj is Mesh) {
 				var mesh : Mesh = Mesh(obj);
-				//if (mesh.material)
-				//	mesh.material.lightPicker = _sceneLightPicker;
+				if (Settings.STU_MODE)
+					mesh.material.lightPicker = _sceneLightPicker;
 			}
 			
 			_scene.addChild(obj);
