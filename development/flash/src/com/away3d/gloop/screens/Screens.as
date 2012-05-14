@@ -11,5 +11,6 @@ package com.away3d.gloop.screens
 		public static const GAME : String = 'game';
 		public static const WIN : String = 'win';
 		public static const ASSET_INITIALIZE : String = 'initialize';
+		public static const GAME_WIN : String = 'gameWin';
 	}
 }

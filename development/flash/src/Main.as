@@ -48,6 +48,7 @@ package
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.StartScreen;
+	import com.away3d.gloop.screens.GameWinScreen;
 	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
@@ -168,6 +169,7 @@ package
 			_stack.addScreen( Screens.LEVELS, new LevelSelectScreen( _db, _stack ) );
 			_stack.addScreen( Screens.WIN, new WinScreen(_db, _stack) );
 			_stack.addScreen( Screens.ASSET_INITIALIZE, new AssetInitializeScreen( _view ) );
+			_stack.addScreen( Screens.GAME_WIN, new GameWinScreen() );
 		}
 		
 		
