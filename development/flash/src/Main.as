@@ -275,6 +275,7 @@ package
 		private function onDbComplete( ev:Event ):void {
 			loadState(_db);
 			_stack.gotoScreen(Screens.START);
+			dispatchEvent( new Event( Event.COMPLETE ) ); // for the wrapper swf
 		}
 		
 		

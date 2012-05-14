@@ -49,6 +49,7 @@ package {
 			_freakishKidLogo = new FreakishKidLogoAsset();
 			_loadingScreen = new LoadingScreenAsset();
 			_loadingScreenTapText = _loadingScreen.getChildByName( "tap" ) as Sprite;
+			_loadingScreenTapText.visible = false;
 			_loadingScreenProgressBar = _loadingScreen.getChildByName( "bar" ) as Sprite;
 
 			// init timer
@@ -108,14 +109,32 @@ package {
 
 		private function onLoaderComplete( event:Event ):void {
 			_loadingScreenProgressBar.visible = false;
-			_phase = 4;
+			startApp();
 		}
 
 		private function startApp():void {
-			// remove active screen from the background
-			removeChild( _activeScreen );
+			_phase = 4;
+			_loader.content.addEventListener( Event.COMPLETE, onAppInitialized );
+			_loader.alpha = 0;
+			_loader.mouseEnabled = _loader.mouseChildren = false;
+			addChild( _loader );
+		}
 
-			// clean up
+		private function onAppInitialized( event:Event ):void {
+			_phase = 5;
+			_loader.content.removeEventListener( Event.COMPLETE, onAppInitialized );
+		}
+
+		private function exposeApp():void {
+			// remove active screen from the background
+			_loadingScreenTapText.visible = true;
+			_loader.mouseEnabled = _loader.mouseChildren = true;
+			_loader.alpha = 1;
+			removeChild( _activeScreen );
+			cleanUp();
+		}
+
+		private function cleanUp():void {
 			_activeScreen = null;
 			_awayMediaLogo = null;
 			_freakishKidLogo = null;
@@ -126,9 +145,6 @@ package {
 			stage.removeEventListener( Event.RESIZE, onStageResize );
 			_screenTmr.removeEventListener( TimerEvent.TIMER, onScreenTimerTick );
 			_screenTmr = null;
-
-			// show content
-			addChild( _loader );
 		}
 
 		private function onLoaderProgress( event:ProgressEvent ):void {
@@ -138,20 +154,17 @@ package {
 
 		private function onStageMouseDown( event:MouseEvent ):void {
 			switch( _phase ) {
-				case 0:
-					// do nothing on init
-					break;
 				case 1:
 					loadFreakishKidScreen();
 					break;
 				case 2:
 					loadApp();
 					break;
-				case 3:
-					// do nothing while app is loading
-					break;
 				case 4:
 					startApp();
+					break;
+				case 5:
+					exposeApp();
 					break;
 			}
 		}
@@ -159,20 +172,8 @@ package {
 		private function onEnterFrame( event:Event ):void {
 			_frameCounter++;
 			switch( _phase ) {
-				case 0:
-					// do nothing on init
-					break;
-				case 1:
-					// do nothing while showing the away media logo
-					break;
-				case 2:
-					// do nothing while showing the freakish kid logo
-					break;
-				case 3:
-					// do nothing while app is loading
-					break;
-				case 4:
-					var mod:Number = _frameCounter % 20;
+				case 5:
+					var mod:Number = _frameCounter % 35;
 					_loadingScreenTapText.visible = mod > 5;
 					break;
 			}
