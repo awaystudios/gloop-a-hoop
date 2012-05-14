@@ -81,7 +81,7 @@ package {
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, onLoaderProgress );
 			_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onLoaderComplete );
-			_loader.load( new URLRequest( "GloopAHoopContent.swf" ) );
+			_loader.load( new URLRequest( "Main.swf" ) );
 
 			// show loading screen
 			displayScreen( _loadingScreen );
