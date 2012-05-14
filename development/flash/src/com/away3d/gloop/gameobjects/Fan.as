@@ -1,21 +1,27 @@
 package com.away3d.gloop.gameobjects
 {
 
+	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-
+	
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.ColorMaterial;
+	import away3d.materials.TextureMaterial;
 	import away3d.primitives.CubeGeometry;
 	import away3d.primitives.CylinderGeometry;
-	import Box2DAS.Common.V2;
-	import com.away3d.gloop.gameobjects.components.MeshComponent;
+	import away3d.textures.BitmapTexture;
+	
 	import com.away3d.gloop.Settings;
+	import com.away3d.gloop.gameobjects.components.MeshComponent;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
-	import com.greensock.easing.Cubic;
+	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.greensock.TweenLite;
+	import com.greensock.easing.Cubic;
+	
+	import flash.display.Bitmap;
 	
 
 	public class Fan extends DefaultGameObject implements IButtonControllable
@@ -55,7 +61,7 @@ package com.away3d.gloop.gameobjects
 			guard = new Mesh(Geometry(AssetLibrary.getAsset('FanGuard_geom')), fanMaterial);
 			_meshComponent.mesh.addChild(guard);
 
-			_blades = new Mesh(Geometry(AssetLibrary.getAsset('FanBlades_geom')), fanMaterial);
+			_blades = new Mesh(Geometry(AssetLibrary.getAsset('FanBlades_geom')), new TextureMaterial(new BitmapTexture( Bitmap( new EmbeddedResources.FanDiffusePNGAsset ).bitmapData)));
 			_meshComponent.mesh.addChild( _blades );
 		}
 

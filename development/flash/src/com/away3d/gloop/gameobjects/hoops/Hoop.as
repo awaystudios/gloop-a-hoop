@@ -86,7 +86,7 @@ package com.away3d.gloop.gameobjects.hoops
 
 		private function createPole(offset:Number):void {
 			var poleLength:Number = 500;
-			var poleRadius:Number = 2.5;
+			var poleRadius:Number = 5;
 			var hoopRadius:Number = ( _meshComponent.mesh.bounds.max.x - _meshComponent.mesh.bounds.min.x ) / 2;
 			var pole:Mesh = new Mesh( new CylinderGeometry( poleRadius, poleRadius, poleLength ), _material );
 			pole.z = poleLength / 2 + Math.sqrt(hoopRadius*hoopRadius - offset*offset);

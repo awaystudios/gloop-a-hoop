@@ -36,10 +36,10 @@ package com.away3d.gloop.utils
 
 		
 		// Cannon
-		[Embed('/../assets/cannon/cannon3.3ds', mimeType='application/octet-stream')]
+		[Embed('/../assets/cannon/cannon4.3ds', mimeType='application/octet-stream')]
 		public static var Cannon3DSAsset : Class;
 		
-		[Embed("/../assets/cannon/diff3.png")]
+		[Embed("/../assets/cannon/diff4.png")]
 		public static var CannonDiffusePNGAsset : Class;
 		
 		
@@ -59,9 +59,20 @@ package com.away3d.gloop.utils
 		public static var BoxDiffusePNGAsset : Class;
 		
 		
+		// Monitor
+		[Embed("/../assets/props/monitor/monitor.3ds", mimeType="application/octet-stream")]
+		public static var Monitor3DSAsset : Class;
+		
+		[Embed("/../assets/props/monitor/MONITORS_1_2_512.png")]
+		public static var MonitorDiffusePNGAsset : Class;
+		
+		
 		// Misc props
 		[Embed("/../assets/props/fan/fan.3ds", mimeType="application/octet-stream")]
 		public static var Fan3DSAsset : Class;
+		
+		[Embed("/../assets/props/fan/PROPELLER_128.png")]
+		public static var FanDiffusePNGAsset : Class;
 		
 		[Embed("/../assets/props/button/button.3ds", mimeType="application/octet-stream")]
 		public static var Button3DSAsset : Class;

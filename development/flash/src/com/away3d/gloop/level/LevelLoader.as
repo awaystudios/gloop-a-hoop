@@ -18,6 +18,7 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.Fan;
 	import com.away3d.gloop.gameobjects.GameObjectType;
 	import com.away3d.gloop.gameobjects.GoalWall;
+	import com.away3d.gloop.gameobjects.Monitor;
 	import com.away3d.gloop.gameobjects.Star;
 	import com.away3d.gloop.gameobjects.Wall;
 	import com.away3d.gloop.gameobjects.hoops.GlueHoop;
@@ -139,6 +140,15 @@ package com.away3d.gloop.level
 			box = new Box( obj.x * _scale, -obj.y * _scale );
 			_level.add( box );
 		}
+		
+		private function parseMonitor( obj:ObjectContainer3D ):void {
+			var monitor:Monitor;
+			var type:String;
+			
+			type = obj.extra['gah_monitor'];
+			monitor = new Monitor( obj.x * _scale, -obj.y * _scale, obj.z * _scale, obj.rotationY, type );
+			_level.add( monitor );
+		}
 
 		private function parseStar(obj : ObjectContainer3D) : void
 		{
@@ -217,9 +227,13 @@ package com.away3d.gloop.level
 //				trace( "parsing scene object - type: " + obj.extra['gah_type'] );
 				
 				switch (obj.extra['gah_type']) {
-
+					
 					case GameObjectType.BOX:
 						parseBox( obj );
+						break;
+					
+					case GameObjectType.MONITOR:
+						parseMonitor( obj );
 						break;
 
 					case GameObjectType.WALL:

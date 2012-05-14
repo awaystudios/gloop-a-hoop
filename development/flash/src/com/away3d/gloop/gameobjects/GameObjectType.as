@@ -3,6 +3,7 @@ package com.away3d.gloop.gameobjects
 	public class GameObjectType
 	{
 		public static const BOX : String = 'box';
+		public static const MONITOR : String = 'monitor';
 		public static const WALL : String = 'wall';
 		public static const SPAWN : String = 'spawn';
 		public static const HOOP : String = 'hoop';

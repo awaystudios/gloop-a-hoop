@@ -1,5 +1,7 @@
 package com.away3d.gloop.level
 {
+	import com.away3d.gloop.Settings;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -48,7 +50,7 @@ package com.away3d.gloop.level
 			
 			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
-			loader.load(new URLRequest(_posterUrl));
+			loader.load(new URLRequest(Settings.ROB_PATH? "../bin/" + _posterUrl : _posterUrl));
 		}
 		
 		

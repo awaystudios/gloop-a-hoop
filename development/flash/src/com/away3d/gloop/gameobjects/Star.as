@@ -38,7 +38,7 @@ package com.away3d.gloop.gameobjects
 			var mat : ColorMaterial;
 
 			geom = Geometry(AssetLibrary.getAsset('StarFrame0_geom')).clone();
-			mat = new ColorMaterial(0xccff00);
+			mat = new ColorMaterial(0x3DF120);
 			/* TODO: share materials?
 			cannot share materials between differently animated entities ( would need to improve Away3D for this )
 			dave says that you actually can

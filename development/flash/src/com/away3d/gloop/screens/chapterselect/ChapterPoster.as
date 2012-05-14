@@ -3,12 +3,13 @@ package com.away3d.gloop.screens.chapterselect
 
 	import com.away3d.gloop.level.ChapterData;
 	import com.away3d.gloop.lib.ChapterPosterUI;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 
 	public class ChapterPoster extends Sprite
 	{
@@ -40,11 +41,12 @@ package com.away3d.gloop.screens.chapterselect
 			
 			_ui = new ChapterPosterUI();
 			_ui.titleTextfield.autoSize = TextFieldAutoSize.LEFT;
+			_ui.titleTextfield.defaultTextFormat = new TextFormat(null, null, null, null, null, null, null, null, "center");
 			_ui.titleTextfield.text = _data.title;
 			_ui.scaleX = bitmapScale;
 			_ui.scaleY = bitmapScale;
 			_ui.x = -(_ui.width/2);
-			_ui.y = bmp.getBounds(this).bottom;
+			_ui.y = bmp.getBounds(this).bottom - 40;
 			addChild(_ui);
 			
 			//enable hardware acceleration on rendering of chapter poster

@@ -74,8 +74,9 @@
         <level id="21" name="Round the bend" awd="assets/levels/023.awd">
         </level>
     </chapter>
-    <chapter poster="assets/chapters/01.png">
-        <title>Next levels</title>
+    <chapter poster="assets/chapters/02.png">
+        <title>Career Promotion
+Coming Soon!</title>
                 
         <level id="1" name="Bending the rules" awd="assets/levels/027.awd">
         </level>
