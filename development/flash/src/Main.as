@@ -90,12 +90,14 @@ package
 
 		public function Main()
 		{
-			init();
+			addEventListener( Event.ADDED_TO_STAGE, init );
 		}
 		
 		
-		private function init() : void
+		private function init( event:Event ) : void
 		{
+			removeEventListener( Event.ADDED_TO_STAGE, init );
+
 			var man : String;
 			var sim : Boolean;
 			
