@@ -86,6 +86,9 @@ package com.away3d.gloop.screens.game
 		}
 
 		private function stageKeyDownHandler( event:KeyboardEvent ):void {
+
+			if( !_active ) return;
+
 			switch( event.keyCode ) {
 				case Keyboard.SPACE :
 

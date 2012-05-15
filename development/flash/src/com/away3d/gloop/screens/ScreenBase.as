@@ -32,7 +32,9 @@ package com.away3d.gloop.screens
 		protected var _initialized : Boolean;
 		
 		private var _background : Shape;
-		
+
+		protected var _active:Boolean;
+
 		public function ScreenBase(drawBackground : Boolean = true, useBackButton : Boolean = false)
 		{
 			super();
@@ -135,6 +137,7 @@ package com.away3d.gloop.screens
 		
 		public function activate() : void
 		{
+			_active = true;
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			// To be overridden
 		}
@@ -142,6 +145,7 @@ package com.away3d.gloop.screens
 		
 		public function deactivate() : void
 		{
+			_active = false;
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			// To be overridden
 		}

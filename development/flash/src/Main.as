@@ -332,28 +332,29 @@ package
 
 		private function onStageKeyUp( ev:KeyboardEvent ):void {
 
-			// reset level
-			if( ev.keyCode == Keyboard.R ) {
-				_stack.gotoScreen( Screens.LOADING );
-				_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
-				_db.selectedLevelProxy.load( true );
-			}
-			
-			// reload settings and restart level
-			if ( ev.keyCode == Keyboard.F1) {
-				_settings.reload();
-				_settings.addEventListener(Event.COMPLETE, function(e:Event):void {
-					_settings.removeEventListener(Event.COMPLETE, arguments.callee);
+			if( Settings.DEV_MODE ) { // reset level
+				if( ev.keyCode == Keyboard.R ) {
 					_stack.gotoScreen( Screens.LOADING );
-					_db.selectedLevelProxy.addEventListener(GameEvent.LEVEL_LOAD, onSelectedLevelLoad);
+					_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
 					_db.selectedLevelProxy.load( true );
-				});
+				}
+
+				// reload settings and restart level
+				if( ev.keyCode == Keyboard.F1 ) {
+					_settings.reload();
+					_settings.addEventListener( Event.COMPLETE, function ( e:Event ):void {
+						_settings.removeEventListener( Event.COMPLETE, arguments.callee );
+						_stack.gotoScreen( Screens.LOADING );
+						_db.selectedLevelProxy.addEventListener( GameEvent.LEVEL_LOAD, onSelectedLevelLoad );
+						_db.selectedLevelProxy.load( true );
+					} );
+				}
+
+				if( ev.keyCode == Keyboard.F2 ) _db.selectedLevelProxy.reset();
+				if( ev.keyCode == Keyboard.F3 ) _db.selectedLevelProxy.level.setMode( Level.EDIT_MODE );
+				if( ev.keyCode == Keyboard.F4 ) _db.selectedLevelProxy.level.setMode( Level.PLAY_MODE );
+				if( ev.keyCode == Keyboard.F5 ) _db.selectedLevelProxy.level.queueHoopForPlacement( new RocketHoop );
 			}
-			
-			if( ev.keyCode == Keyboard.F2) _db.selectedLevelProxy.reset();
-			if( ev.keyCode == Keyboard.F3) _db.selectedLevelProxy.level.setMode(Level.EDIT_MODE);
-			if( ev.keyCode == Keyboard.F4) _db.selectedLevelProxy.level.setMode(Level.PLAY_MODE);
-			if (ev.keyCode == Keyboard.F5) _db.selectedLevelProxy.level.queueHoopForPlacement(new RocketHoop);
 		}
 
 		private function onEnterFrame(ev : Event) : void {
