@@ -109,7 +109,7 @@ package com.away3d.gloop.gameobjects
 			_launcher.catchGloop(gloop);	
 			
 			if (!isNaN(angle)) {
-				trace( "updating cannon orientation" );
+//				trace( "updating cannon orientation" );
 				_physics.rotation = angle;
 				updateCannonOrientation();
 			}

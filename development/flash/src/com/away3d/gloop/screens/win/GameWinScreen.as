@@ -17,7 +17,6 @@ package com.away3d.gloop.screens.win
 	{
 		//private var _container:Sprite;
 		private var _video:MovieClip;
-		private var _active:Boolean;
 		private var _textStuff:Sprite;
 		private var _stack:ScreenStack;
 		private var _videoContainer:Sprite;

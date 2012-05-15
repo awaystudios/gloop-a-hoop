@@ -18,7 +18,7 @@ package com.away3d.gloop.gameobjects.hoops {
 	 */
 	public class TrampolineHoop extends Hoop {
 
-		private var _onSideCollision:Boolean = true;
+		private var _onSideCollision:Boolean = false;
 
 		public function TrampolineHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, movable:Boolean = true, rotatable:Boolean = true) {
 			super(0xe9270e, worldX, worldY, rotation, movable, rotatable);
@@ -36,7 +36,6 @@ package com.away3d.gloop.gameobjects.hoops {
 			if( _onSideCollision ) return;
 
 			var speed:Number = gloop.physics.b2body.GetLinearVelocity().length();
-
 			if( speed > 1 ) {
 				SoundManager.play( Sounds.GAME_TRAMPOLINE );
 			}

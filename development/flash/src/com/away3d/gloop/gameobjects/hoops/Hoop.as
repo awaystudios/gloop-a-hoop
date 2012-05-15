@@ -244,9 +244,11 @@ class HoopPhysicsComponent extends PhysicsComponent
 	public function setMode( playMode:Boolean ):void {
 		if (!b2body) return;
 		if( !playMode ) {
+			b2fixtures[0].SetSensor( true );
 			b2fixtures[1].SetSensor( false );
 		}
 		else {
+			b2fixtures[0].SetSensor( false );
 			b2fixtures[1].SetSensor( true );
 		}
 	}

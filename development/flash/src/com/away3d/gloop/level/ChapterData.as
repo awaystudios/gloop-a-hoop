@@ -57,7 +57,8 @@ package com.away3d.gloop.level
 			
 			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
-			loader.load(new URLRequest(Settings.ROB_PATH? "../bin/" + _posterUrl : _posterUrl));
+			var postUrl:String = _posterUrl + "?" + Settings.GLOOP_VERSION;
+			loader.load(new URLRequest(Settings.ROB_PATH? "../bin/" + postUrl : postUrl));
 		}
 		
 		

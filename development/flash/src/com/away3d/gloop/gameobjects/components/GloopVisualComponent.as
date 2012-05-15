@@ -1,27 +1,16 @@
 package com.away3d.gloop.gameobjects.components
 {
+
 	import Box2DAS.Common.V2;
 
-	import away3d.containers.View3D;
-
-	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
-	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
 	import away3d.materials.lightpickers.LightPickerBase;
-	import away3d.primitives.CubeGeometry;
-	import away3d.textures.BitmapTexture;
 
-	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.screens.AssetManager;
 
-	import com.away3d.gloop.utils.EmbeddedResources;
-	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import flash.utils.setInterval;
 
 	public class GloopVisualComponent extends MeshComponent
 	{
