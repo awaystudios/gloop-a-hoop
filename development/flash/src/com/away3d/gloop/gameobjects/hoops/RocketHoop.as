@@ -18,7 +18,7 @@ package com.away3d.gloop.gameobjects.hoops {
 	 */
 	public class RocketHoop extends Hoop {
 
-		private var _onSideCollision:Boolean = true;
+		private var _onSideCollision:Boolean = false;
 
 		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, movable:Boolean = true, rotatable:Boolean = true) {
 			super(0x3f7fff, worldX, worldY, rotation, movable, rotatable);
