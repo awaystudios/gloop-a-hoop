@@ -26,7 +26,10 @@ package com.away3d.gloop.level
 		{
 			return _chapters;
 		}
-		
+
+		public function isSelectedChapterTheLastOne():Boolean {
+			return _selectedChapter == _chapters[ _chapters.length - 1 ];
+		}
 		
 		public function get selectedChapter() : ChapterData
 		{
