@@ -1,25 +1,21 @@
 package com.away3d.gloop.gameobjects {
+
 	import Box2DAS.Common.V2;
 	import Box2DAS.Dynamics.ContactEvent;
-	import com.away3d.gloop.Settings;
-	
+
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
 	import away3d.materials.TextureMaterial;
 	import away3d.textures.BitmapTexture;
-	
+
+	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.gameobjects.components.GoalWallPhysicsComponent;
 	import com.away3d.gloop.gameobjects.components.MeshComponent;
-	import com.away3d.gloop.gameobjects.components.PhysicsComponent;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
-	import com.away3d.gloop.sound.SoundManager;
-	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.utils.EmbeddedResources;
-	
+
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.events.Event;
 
 	/**
 	 * ...
@@ -83,16 +79,9 @@ package com.away3d.gloop.gameobjects {
 			gloop.splatOnTarget(_physics.rotation);
 			gloop.onHitGoalWall();
 
-			SoundManager.playRandomWithDelay( [ Sounds.GLOOP_GIGGLE, Sounds.GLOOP_GIGGLE1, Sounds.GLOOP_GIGGLE2, Sounds.GLOOP_GIGGLE3, Sounds.GLOOP_GIGGLE4 ], rand( 0.5, 1 ) );
-			
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
 		}
 
-		private function rand(min:Number, max:Number):Number
-		{
-		    return (max - min)*Math.random() + min;
-		}
-		
 		public function onGloopEnterSensor(gloop:Gloop):void {
 			// gloop goes into sensor
 			// TODO: Check that velocity is high enough

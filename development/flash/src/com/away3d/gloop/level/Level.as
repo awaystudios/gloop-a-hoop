@@ -21,7 +21,8 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;
 	import com.away3d.gloop.gameobjects.hoops.Hoop;
 	import com.away3d.gloop.sound.SoundManager;
-	
+	import com.away3d.gloop.sound.Sounds;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -372,10 +373,16 @@ package com.away3d.gloop.level
 			var goalWall:GoalWall = e.target as GoalWall;
 			if (goalWall && goalWall.splatDistance < Settings.GOALWALL_BULLSEYE_THRESHOLD) {
 				_finishedWithBullseye = true;
+				SoundManager.playRandomWithDelay( [ Sounds.GLOOP_GIGGLE, Sounds.GLOOP_GIGGLE1, Sounds.GLOOP_GIGGLE2, Sounds.GLOOP_GIGGLE3, Sounds.GLOOP_GIGGLE4 ], rand( 0.5, 1 ) );
 			} else {
 				_finishedWithBullseye = false;
 			}
 			win();
+		}
+
+		private function rand(min:Number, max:Number):Number
+		{
+			return (max - min)*Math.random() + min;
 		}
 		
 		private function onGloopLostMomentum(e:GameObjectEvent):void {
