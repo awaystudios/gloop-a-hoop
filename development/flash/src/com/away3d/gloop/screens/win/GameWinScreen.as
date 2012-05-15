@@ -96,12 +96,13 @@ package com.away3d.gloop.screens.win
 
 		override public function activate():void {
 
+			_container.visible = true;
 			_container.x = stage.stageWidth / 2;
 			_container.y = stage.stageHeight / 2;
 
 			_active = _justActivated = true;
 
-			_normalVideo.play();
+			_normalVideo.gotoAndPlay( 1 );
 			_normalVideo.visible = true;
 
 			super.activate();
@@ -110,13 +111,15 @@ package com.away3d.gloop.screens.win
 		override public function deactivate():void {
 
 			_normalVideo.visible = false;
-			_normalVideo.stop();
+			_normalVideo.gotoAndStop( 1 );
 
 			_blurredVideo.visible = false;
-			_blurredVideo.stop();
+			_blurredVideo.gotoAndStop( 1 );
 
 			_active = false;
 			_textStuff.visible = false;
+
+			_justActivated = false;
 
 			super.deactivate();
 		}
@@ -134,7 +137,7 @@ package com.away3d.gloop.screens.win
 				_normalVideo.stop();
 				_normalVideo.visible = false;
 
-				_blurredVideo.play();
+				_blurredVideo.gotoAndPlay( 1 );
 				_blurredVideo.visible = true;
 
 				_textStuff.visible = true;
