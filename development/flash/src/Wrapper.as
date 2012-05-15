@@ -26,7 +26,7 @@ package {
 		[Embed(source="../lib-swc/preload.swf", symbol="LoadingScreenAsset")]
 		private var LoadingScreenAsset:Class;
 		
-		[Embed(source="../assets/images/Title Loading Bar Screen.png")]
+		[Embed(source="/../assets/images/Title Loading Bar Screen.png")]
 		private var LoadBarBitmap:Class;
 		
 		private var _loader:Loader;

@@ -3,6 +3,8 @@ package com.away3d.gloop.input
 
 	import away3d.containers.View3D;
 
+	import com.away3d.gloop.utils.PlatformUtil;
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -20,6 +22,8 @@ package com.away3d.gloop.input
 
 		protected var _view:View3D;
 		protected var _mouseDown:Boolean = false;
+		private var _mouseIsOut:Boolean;
+		private var _needMouseLeaveHack:Boolean;
 
 		public const PLANE_POSITION:Vector3D = new Vector3D( 0, 0, 0 );
 
@@ -29,18 +33,34 @@ package com.away3d.gloop.input
 			_planeD = -_planeNormal.dotProduct( PLANE_POSITION );
 			_intersection = new Vector3D();
 			_intersectionPoint = new Point();
+
+			// need mouse leave hack?
+			if( !PlatformUtil.isRunningOnMobile() ) {
+				if( PlatformUtil.isRunningOnSafari() ) {
+					_needMouseLeaveHack = true;
+				}
+			}
+
 		}
 
 		public function activate():void {
 			_view.addEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
 			_view.stage.addEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
-			_view.addEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
+
+			if( _needMouseLeaveHack ) {
+				_view.stage.addEventListener( MouseEvent.MOUSE_MOVE, updateMouseLeave );
+			}
+			_view.stage.addEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
 		}
 
 		public function deactivate():void {
 			_view.removeEventListener( MouseEvent.MOUSE_DOWN, onViewMouseDown );
 			_view.stage.removeEventListener( MouseEvent.MOUSE_UP, onViewMouseUp );
-			_view.removeEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
+
+			if( _needMouseLeaveHack ) {
+				_view.stage.addEventListener( MouseEvent.MOUSE_MOVE, updateMouseLeave );
+			}
+			_view.stage.addEventListener( Event.MOUSE_LEAVE, onViewMouseUp );
 		}
 
 		public function update():void {
@@ -79,6 +99,22 @@ package com.away3d.gloop.input
 
 		public function get projectedMousePosition():Point {
 			return _intersectionPoint;
+		}
+
+		public function updateMouseLeave( event:Event ):void {
+			if( _view.stage.mouseX < 0 ||
+				_view.stage.mouseX > _view.stage.stageWidth ||
+				_view.stage.mouseY < 0 ||
+				_view.stage.mouseY > _view.stage.stageHeight ) {
+				if( !_mouseIsOut ) {
+					_mouseIsOut = true;
+					_view.stage.dispatchEvent( new Event( Event.MOUSE_LEAVE ) );
+				}
+			}
+			else if( _mouseIsOut ) {
+				_mouseIsOut = false;
+				_view.stage.dispatchEvent( new Event( "mouseEnter" ) );
+			}
 		}
 	}
 }
