@@ -195,7 +195,7 @@ package com.away3d.gloop.screens
 			geom = Geometry( AssetLibrary.getAsset( 'GlSplatFr0_geom' ) );
 
 			gloopSplatAnimMesh = new Mesh( geom, mat );
-			gloopSplatAnimMesh.y = -Settings.GLOOP_RADIUS - 5;
+			gloopSplatAnimMesh.y = -Settings.GLOOP_RADIUS - 10;
 
 			gloopSplatAnimation = new VertexAnimationComponent( gloopSplatAnimMesh );
 			gloopSplatAnimation.addSequence( 'splat', [
