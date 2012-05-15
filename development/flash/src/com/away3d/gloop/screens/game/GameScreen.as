@@ -66,7 +66,8 @@ package com.away3d.gloop.screens.game
 
 		public function GameScreen( db:LevelDatabase, stack : ScreenStack, view : View3D ) {
 			super( false );
-
+			mouseEnabled = false;
+			
 			_db = db;
 			_stack = stack;
 			_view = view;
@@ -239,7 +240,7 @@ package com.away3d.gloop.screens.game
 				
 				_panLevel = true;
 				_panTimer = 0;
-				_hud.levelTitles.gotoAndStop(_levelProxy.id);
+				_hud.levelTitles.gotoAndStop(_levelProxy.idx+1);
 			}
 			else {
 				// Start back in cannon, but don't change it's angle
@@ -249,8 +250,8 @@ package com.away3d.gloop.screens.game
 					_inputManager.panY = -_gloop.physics.y;
 				}
 				
-				if (_panTimer < 250)
-					_panTimer = 250;
+				if (_panTimer < 225)
+					_panTimer = 225;
 			}
 
 			_cameraController.setGloopIdle();
@@ -357,28 +358,32 @@ package com.away3d.gloop.screens.game
 				}
 				
 				if (_panLevel) {
-					if (_inputManager.panInternallyChanged && _panTimer < 250) {
-						_panTimer = 250;
+					
+					if (_inputManager.mouseInteracted)
+						_hud.levelTitles.alpha -= 1/25;
+					
+					if (_inputManager.panInternallyChanged && _panTimer < 225) {
+						_panTimer = 225;
 					}
 					
 					_panTimer += 1;
 					
-					if (_panTimer > 300) {
+					if (_panTimer > 250) {
 						_panLevel = false;
 						_hud.levelTitles.visible = false;
-					} else if (_panTimer > 250) {
+					} else if (_panTimer > 225) {
 						//fade out
-						if (_hud.levelTitles.alpha > 1 - (_panTimer - 250)/50)
-							_hud.levelTitles.alpha = 1 - (_panTimer - 250)/50;
-					} else if (_panTimer > 50) {
+						if (_hud.levelTitles.alpha > 1 - (_panTimer - 225)/25)
+							_hud.levelTitles.alpha = 1 - (_panTimer - 225)/25;
+					} else if (_panTimer > 25) {
 						//pan
-						var fract:Number = (_panTimer - 50)/200;
+						var fract:Number = (_panTimer - 25)/200;
 						_inputManager.panX = _level.target.physics.x + fract*(_gloop.physics.x - _level.target.physics.x);
 						_inputManager.panY = -_level.target.physics.y - fract*(_gloop.physics.y - _level.target.physics.y);
 					} else {
 						//fade in
 						_hud.levelTitles.visible = true;
-						_hud.levelTitles.alpha = _panTimer/50;
+						_hud.levelTitles.alpha = _panTimer/25;
 					}
 					
 				}

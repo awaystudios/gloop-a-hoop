@@ -43,6 +43,7 @@ package com.away3d.gloop.input
 		private var _startInteractionPointX : Number = 0;
 		private var _startInteractionPointY : Number = 0;
 
+		private var _mouseInteracted:Boolean;
 		private var _panInternallyChanged:Boolean;
 		private var _zoomInternallyChanged:Boolean;
 		
@@ -176,6 +177,8 @@ package com.away3d.gloop.input
 
 		override protected function onViewMouseDown(e : MouseEvent) : void
 		{
+			_mouseInteracted = true;
+			
 			_mouseDown = true;
 			super.update();
 
@@ -230,6 +233,7 @@ package com.away3d.gloop.input
 
 		public function resetInternalChanges():void {
 			_panInternallyChanged = false;
+			_mouseInteracted = false;
 			_zoomInternallyChanged = false;
 		}
 
@@ -315,7 +319,11 @@ package com.away3d.gloop.input
 		public function get zoom():Number {
 			return _zoom;
 		}
-
+		
+		public function get mouseInteracted():Boolean {
+			return _mouseInteracted;
+		}
+		
 		public function get panInternallyChanged():Boolean {
 			return _panInternallyChanged;
 		}

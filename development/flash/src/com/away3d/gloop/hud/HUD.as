@@ -40,7 +40,7 @@ package com.away3d.gloop.hud
 		{
 			_w = w;
 			_h = h;
-			
+			mouseEnabled = false;
 			init();
 		}
 		
@@ -86,6 +86,8 @@ package com.away3d.gloop.hud
 			_levelTitles.visible = false;
 			_levelTitles.x = _w/2;
 			_levelTitles.y = _h/2;
+			_levelTitles.mouseEnabled = false;
+			_levelTitles.mouseChildren = false;
 			addChild(_levelTitles);
 			
 		}

@@ -159,6 +159,7 @@ package
 
 		private function initStack():void {
 			_stackHolder = new Sprite();
+			_stackHolder.mouseEnabled = false;
 			addChild( _stackHolder );
 			_stack = new ScreenStack(_w, _h, _stackHolder );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
