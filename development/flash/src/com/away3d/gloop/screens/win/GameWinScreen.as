@@ -4,7 +4,6 @@ package com.away3d.gloop.screens.win
 	import com.away3d.gloop.screens.*;
 
 	import com.away3d.gloop.lib.EndVideo;
-	import com.away3d.gloop.lib.EndVideoBlurred;
 	import com.away3d.gloop.lib.GameEndScreen;
 
 	import flash.display.MovieClip;
@@ -17,12 +16,11 @@ package com.away3d.gloop.screens.win
 	public class GameWinScreen extends ScreenBase
 	{
 		private var _container:Sprite;
-		private var _normalVideo:MovieClip;
-		private var _blurredVideo:MovieClip;
+		private var _video:MovieClip;
 		private var _active:Boolean;
-		private var _justActivated:Boolean;
 		private var _textStuff:Sprite;
 		private var _stack:ScreenStack;
+		private var _videoContainer:Sprite;
 
 		public function GameWinScreen( stack:ScreenStack ) {
 			super();
@@ -34,18 +32,11 @@ package com.away3d.gloop.screens.win
 			_container = new Sprite();
 			addChild( _container );
 
-			var videoContainer:Sprite = new Sprite();
-			_container.addChild( videoContainer );
-
-			_normalVideo = new EndVideo();
-			_normalVideo.stop();
-			_normalVideo.visible = false;
-			videoContainer.addChild( _normalVideo );
-
-			_blurredVideo = new EndVideoBlurred();
-			_blurredVideo.stop();
-			_blurredVideo.visible = false;
-			videoContainer.addChild( _blurredVideo );
+			_videoContainer = new Sprite();
+			_video = new EndVideo();
+			_video.stop();
+			_videoContainer.addChild( _video );
+			_container.addChild( _videoContainer );
 
 			stage.addEventListener( MouseEvent.MOUSE_UP, onStageMouseUp );
 
@@ -100,26 +91,19 @@ package com.away3d.gloop.screens.win
 			_container.x = stage.stageWidth / 2;
 			_container.y = stage.stageHeight / 2;
 
-			_active = _justActivated = true;
+			_active = true;
 
-			_normalVideo.gotoAndPlay( 1 );
-			_normalVideo.visible = true;
+			_video.gotoAndPlay( 1 );
 
 			super.activate();
 		}
 
 		override public function deactivate():void {
 
-			_normalVideo.visible = false;
-			_normalVideo.gotoAndStop( 1 );
-
-			_blurredVideo.visible = false;
-			_blurredVideo.gotoAndStop( 1 );
+			_video.gotoAndStop( 1 );
 
 			_active = false;
 			_textStuff.visible = false;
-
-			_justActivated = false;
 
 			super.deactivate();
 		}
@@ -130,17 +114,12 @@ package com.away3d.gloop.screens.win
 				return;
 			}
 
-			if( _justActivated && _normalVideo.currentFrame == 61 ) {
-
-				_justActivated = false;
-
-				_normalVideo.stop();
-				_normalVideo.visible = false;
-
-				_blurredVideo.gotoAndPlay( 1 );
-				_blurredVideo.visible = true;
-
+			if( _video.currentFrame == 61 ) {
 				_textStuff.visible = true;
+			}
+
+			if( _video.currentFrame == 122 ) {
+				_video.gotoAndPlay( 63 );
 			}
 		}
 	}
