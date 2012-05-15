@@ -239,6 +239,7 @@ package com.away3d.gloop.screens.game
 				
 				_panLevel = true;
 				_panTimer = 0;
+				_hud.levelTitles.gotoAndStop(_levelProxy.id);
 			}
 			else {
 				// Start back in cannon, but don't change it's angle
@@ -248,7 +249,8 @@ package com.away3d.gloop.screens.game
 					_inputManager.panY = -_gloop.physics.y;
 				}
 				
-				_panLevel = false;
+				if (_panTimer < 250)
+					_panTimer = 250;
 			}
 
 			_cameraController.setGloopIdle();
@@ -353,7 +355,7 @@ package com.away3d.gloop.screens.game
 				}
 				
 				if (_panLevel) {
-					if (_inputManager.panInternallyChanged) {
+					if (_inputManager.panInternallyChanged && _panTimer < 250) {
 						_panTimer = 250;
 					}
 					
@@ -361,8 +363,11 @@ package com.away3d.gloop.screens.game
 					
 					if (_panTimer > 300) {
 						_panLevel = false;
+						_hud.levelTitles.visible = false;
 					} else if (_panTimer > 250) {
 						//fade out
+						if (_hud.levelTitles.alpha > 1 - (_panTimer - 250)/50)
+							_hud.levelTitles.alpha = 1 - (_panTimer - 250)/50;
 					} else if (_panTimer > 50) {
 						//pan
 						var fract:Number = (_panTimer - 50)/200;
@@ -370,7 +375,8 @@ package com.away3d.gloop.screens.game
 						_inputManager.panY = -_level.target.physics.y - fract*(_gloop.physics.y - _level.target.physics.y);
 					} else {
 						//fade in
-						
+						_hud.levelTitles.visible = true;
+						_hud.levelTitles.alpha = _panTimer/50;
 					}
 					
 				}

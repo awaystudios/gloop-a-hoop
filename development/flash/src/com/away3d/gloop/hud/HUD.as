@@ -23,10 +23,18 @@ package com.away3d.gloop.hud
 		private var _levelProxy : LevelProxy;
 		
 		private var _stars : Vector.<StarIcon>;
+		
+		private var _levelTitles:LevelTitles;
+		
 		//private var _inventory : InventoryDrawer;
 		
 		private var _restartBtn : RestartButton;
 		private var _pauseBtn : PauseButton;
+		
+		public function get levelTitles():LevelTitles
+		{
+			return _levelTitles;
+		}
 		
 		public function HUD(w : Number, h : Number)
 		{
@@ -73,6 +81,13 @@ package com.away3d.gloop.hud
 			_pauseBtn.y = _restartBtn.y;
 			_pauseBtn.addEventListener(MouseEvent.CLICK, onPauseBtnClick);
 			addChild(_pauseBtn);
+			
+			_levelTitles = new LevelTitles();
+			_levelTitles.visible = false;
+			_levelTitles.x = _w/2;
+			_levelTitles.y = _h/2;
+			addChild(_levelTitles);
+			
 		}
 		
 		

@@ -42,6 +42,8 @@ package com.away3d.gloop.level
 		
 		private var _all_objects : Vector.<DefaultGameObject>;
 		
+		private var _target : GoalWall;
+		
 		private var _targetRotation : Number;
 		
 		private var _buttons : Vector.<Button>;
@@ -167,6 +169,11 @@ package com.away3d.gloop.level
 			return nearest;
 		}
 		
+		public function get target() : GoalWall
+		{
+			return _target;
+		}
+		
 		public function get targetRotation() : Number
 		{
 			return _targetRotation;
@@ -230,6 +237,7 @@ package com.away3d.gloop.level
 				_scene.addChild(gloop.traceComponent.pathTracer);
 			}
 			else if (object is GoalWall) {
+				_target = object as GoalWall;
 				_targetRotation = object.physics.rotation;
 			}
 
