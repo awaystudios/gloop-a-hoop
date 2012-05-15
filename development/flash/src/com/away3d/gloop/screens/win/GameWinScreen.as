@@ -22,9 +22,11 @@ package com.away3d.gloop.screens.win
 		private var _active:Boolean;
 		private var _justActivated:Boolean;
 		private var _textStuff:Sprite;
+		private var _stack:ScreenStack;
 
-		public function GameWinScreen() {
+		public function GameWinScreen( stack:ScreenStack ) {
 			super();
+			_stack = stack;
 		}
 
 		override protected function initScreen():void {
@@ -32,15 +34,20 @@ package com.away3d.gloop.screens.win
 			_container = new Sprite();
 			addChild( _container );
 
+			var videoContainer:Sprite = new Sprite();
+			_container.addChild( videoContainer );
+
 			_normalVideo = new EndVideo();
 			_normalVideo.stop();
 			_normalVideo.visible = false;
-			_container.addChild( _normalVideo );
+			videoContainer.addChild( _normalVideo );
 
 			_blurredVideo = new EndVideoBlurred();
 			_blurredVideo.stop();
 			_blurredVideo.visible = false;
-			_container.addChild( _blurredVideo );
+			videoContainer.addChild( _blurredVideo );
+
+			stage.addEventListener( MouseEvent.MOUSE_UP, onStageMouseUp );
 
 			_textStuff = new GameEndScreen();
 			_textStuff.visible = false;
@@ -63,16 +70,28 @@ package com.away3d.gloop.screens.win
 			youtube.addEventListener( MouseEvent.MOUSE_UP, onYoutubeMouseUp );
 		}
 
+		private function onStageMouseUp( event:MouseEvent ):void {
+
+			if( !_active ) {
+				return;
+			}
+
+			if( event.target is GameEndScreen ) {
+				_container.visible = false;
+				_stack.gotoScreen( Screens.START );
+			}
+		}
+
 		private function onYoutubeMouseUp( event:MouseEvent ):void {
-			navigateToURL( new URLRequest( "http://www.youtube.com/gloopahoop" ) );
+			navigateToURL( new URLRequest( "http://www.youtube.com/gloopahoop" ), "_blank" );
 		}
 
 		private function onTwitterMouseUp( event:MouseEvent ):void {
-			navigateToURL( new URLRequest( "http://www.twitter.com/gloopahoop" ) );
+			navigateToURL( new URLRequest( "http://www.twitter.com/gloopahoop" ), "_blank" );
 		}
 
 		private function onFacebookMouseUp( event:MouseEvent ):void {
-			navigateToURL( new URLRequest( "http://www.facebook.com/gloopahoop" ) );
+			navigateToURL( new URLRequest( "http://www.facebook.com/gloopahoop" ), "_blank" );
 		}
 
 		override public function activate():void {

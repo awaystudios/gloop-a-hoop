@@ -21,6 +21,8 @@ package com.away3d.gloop.screens.win
 		
 		private var _dimCtf : ColorTransform;
 		private var _normalCtf : ColorTransform;
+
+		private var _onFinalWin:Boolean;
 		
 		public function WinScreen(db : LevelDatabase, stack : ScreenStack)
 		{
@@ -63,6 +65,15 @@ package com.away3d.gloop.screens.win
 			
 			nextIdx = _db.selectedLevelProxy.indexInChapter + 1;
 			_ui.nextButton.visible = (nextIdx < _db.selectedChapter.levels.length);
+
+			// end screen on next btn click?
+			if( _db.isSelectedChapterTheLastOne() ) { // are we on the last chapter?
+				var idx:uint = _db.selectedLevelProxy.indexInChapter + 1;
+				if( idx >= _db.selectedChapter.levels.length ) { // is there not another level
+					_ui.nextButton.visible = true;
+					_onFinalWin = true;
+				}
+			}
 		}
 		
 		
@@ -80,8 +91,16 @@ package com.away3d.gloop.screens.win
 					_stack.gotoScreen(Screens.START);
 					break;
 				case _ui.nextButton:
-					nextIdx = _db.selectedLevelProxy.indexInChapter + 1;
-					_db.selectLevel(_db.selectedChapter.levels[nextIdx]);
+
+					if( _onFinalWin ) {
+						_stack.gotoScreen(Screens.GAME_WIN);
+						_onFinalWin = false;
+					}
+					else {
+						nextIdx = _db.selectedLevelProxy.indexInChapter + 1;
+						_db.selectLevel(_db.selectedChapter.levels[nextIdx]);
+					}
+
 					break;
 			}
 		}
