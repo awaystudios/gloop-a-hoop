@@ -171,9 +171,7 @@ package com.away3d.gloop.level
 			for each (chapter_xml in xml.chapter) {
 				var chapter : ChapterData;
 				
-				_numChaptersLoading++;
-				
-				chapter = new ChapterData();
+				chapter = new ChapterData(_numChaptersLoading++);
 				chapter.parseXml(chapter_xml);
 				chapter.addEventListener(Event.COMPLETE, onChapterComplete);
 				chapter.loadPoster();

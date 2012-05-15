@@ -138,11 +138,13 @@ package com.away3d.gloop.screens.chapterselect
 			
 			dx = ev.stageX - _mouseDownX;
 			if (dx < 10 && dx > -10) {
-				var poster : ChapterPoster;
+				var poster : ChapterPoster = ChapterPoster(ev.currentTarget);
+				
+				if (poster.chapterData.idx)
+					return;
 				
 				SoundManager.play(Sounds.MENU_BUTTON);
 				
-				poster = ChapterPoster(ev.currentTarget);
 				_db.selectChapter(poster.chapterData);
 			}
 		}

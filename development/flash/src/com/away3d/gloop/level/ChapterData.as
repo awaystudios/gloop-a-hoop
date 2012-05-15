@@ -14,17 +14,24 @@ package com.away3d.gloop.level
 	public class ChapterData extends EventDispatcher
 	{
 		private var _title : String;
+		private var _idx:uint;
 		private var _posterUrl : String;
 		
 		private var _posterBitmap : Bitmap;
 		
 		private var _levels : Vector.<LevelProxy>;
 		
-		public function ChapterData()
+		public function ChapterData(idx:uint)
 		{
+			_idx = idx;
 			_levels = new Vector.<LevelProxy>();
 		}
 		
+		
+		public function get idx() : uint
+		{
+			return _idx;
+		}		
 		
 		public function get levels() : Vector.<LevelProxy>
 		{
