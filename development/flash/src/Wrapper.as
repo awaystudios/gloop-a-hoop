@@ -1,5 +1,8 @@
 package {
 
+	import com.pixelbath.ui.Slice9Bitmap;
+	
+	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -20,9 +23,12 @@ package {
 		[Embed(source="../lib-swc/preload.swf", symbol="FreakishKidLogo")]
 		private var FreakishKidLogoAsset:Class;
 
-		[Embed(source="../lib-swc/preload.swf", symbol="LoadingScreen")]
+		[Embed(source="../lib-swc/preload.swf", symbol="LoadingScreenAsset")]
 		private var LoadingScreenAsset:Class;
-
+		
+		[Embed(source="../assets/images/Title Loading Bar Screen.png")]
+		private var LoadBarBitmap:Class;
+		
 		private var _loader:Loader;
 		private var _awayMediaLogo:Sprite;
 		private var _freakishKidLogo:Sprite;
@@ -32,9 +38,12 @@ package {
 		private var _nextCallback:Function;
 		private var _phase:uint;
 		private var _frameCounter:uint;
+		private var _loadingScreenLoadingText:Sprite;
 		private var _loadingScreenTapText:Sprite;
 		private var _loadingScreenProgressBar:Sprite;
-
+		private var _loadingScreenProgressBarBitmap:Slice9Bitmap;
+		private var _progress:Number = 0;
+		
 		public function Wrapper() {
 			super();
 
@@ -49,10 +58,15 @@ package {
 			_awayMediaLogo = new AwayMediaLogoAsset();
 			_freakishKidLogo = new FreakishKidLogoAsset();
 			_loadingScreen = new LoadingScreenAsset();
+			_loadingScreenLoadingText = _loadingScreen.getChildByName( "loading" ) as Sprite;
 			_loadingScreenTapText = _loadingScreen.getChildByName( "tap" ) as Sprite;
 			_loadingScreenTapText.visible = false;
 			_loadingScreenProgressBar = _loadingScreen.getChildByName( "bar" ) as Sprite;
-
+			var bmp:Bitmap = new LoadBarBitmap();
+			
+			_loadingScreenProgressBar.addChild(_loadingScreenProgressBarBitmap = new Slice9Bitmap(new LoadBarBitmap()));
+			_loadingScreenProgressBar.visible = false;
+			
 			// init timer
 			_screenTmr = new Timer( 2000, 1 );
 			_screenTmr.addEventListener( TimerEvent.TIMER, onScreenTimerTick );
@@ -123,6 +137,7 @@ package {
 
 		private function onAppInitialized( event:Event ):void {
 			_phase = 5;
+			_loadingScreenLoadingText.visible = false;
 			_loader.content.removeEventListener( Event.COMPLETE, onAppInitialized );
 		}
 
@@ -149,8 +164,8 @@ package {
 		}
 
 		private function onLoaderProgress( event:ProgressEvent ):void {
-			var progress:Number = event.bytesLoaded / event.bytesTotal;
-			_loadingScreenProgressBar.scaleX = progress;
+			_progress = event.bytesLoaded / event.bytesTotal;
+			_loadingScreenProgressBar.visible = true;
 		}
 
 		private function onStageMouseDown( event:MouseEvent ):void {
@@ -176,6 +191,9 @@ package {
 				case 5:
 					var mod:Number = _frameCounter % 35;
 					_loadingScreenTapText.visible = mod > 5;
+					break;
+				case 3:
+					_loadingScreenProgressBarBitmap.setSize(uint(595*_progress), 33);
 					break;
 			}
 		}
