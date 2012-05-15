@@ -55,14 +55,6 @@ package com.away3d.gloop.screens.game.controllers
 		public function firstReset():void {
 			_autoZoomIn = true;
 			_inputManager.resetInternalChanges();
-			reset();
-		}
-
-		public function reset():void {
-			if( !_inputManager.panInternallyChanged ) {
-				_inputManager.panX = _gloop.physics.x;
-				_inputManager.panY = -_gloop.physics.y;
-			}
 		}
 
 		public function resetOrientation() : void

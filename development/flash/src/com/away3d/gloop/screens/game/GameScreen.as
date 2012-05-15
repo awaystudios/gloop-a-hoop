@@ -3,7 +3,7 @@ package com.away3d.gloop.screens.game
 
 	import away3d.containers.Scene3D;
 	import away3d.containers.View3D;
-
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.Cannon;
@@ -15,23 +15,24 @@ package com.away3d.gloop.screens.game
 	import com.away3d.gloop.level.Level;
 	import com.away3d.gloop.level.LevelDatabase;
 	import com.away3d.gloop.level.LevelProxy;
+	import com.away3d.gloop.screens.AssetManager;
 	import com.away3d.gloop.screens.ScreenBase;
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.game.controllers.CameraController;
 	import com.away3d.gloop.screens.game.controllers.LevelEditController;
-	import com.away3d.gloop.screens.AssetManager;
 	import com.away3d.gloop.sound.SoundManager;
 	import com.away3d.gloop.sound.Sounds;
 	import com.away3d.gloop.sound.Themes;
 	import com.away3d.gloop.utils.Timestep;
-
+	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
-
+	
 	import wck.WCK;
 
 	public class GameScreen extends ScreenBase
@@ -58,7 +59,9 @@ package com.away3d.gloop.screens.game
 		private var _timestep:Timestep;
 		
 		private var _firstReset : Boolean;
-
+		private var _panLevel:Boolean;
+		private var _panTimer:int;
+		
 		private static var _instance:GameScreen;
 
 		public function GameScreen( db:LevelDatabase, stack : ScreenStack, view : View3D ) {
@@ -228,11 +231,24 @@ package com.away3d.gloop.screens.game
 				_cannon.spawnGloop(_gloop, _level.spawnAngle);
 				_firstReset = false;
 				_cameraController.firstReset();
+				
+				if( !_inputManager.panInternallyChanged ) {
+					_inputManager.panX = _level.target.physics.x;
+					_inputManager.panY = -_level.target.physics.y;
+				}
+				
+				_panLevel = true;
+				_panTimer = 0;
 			}
 			else {
 				// Start back in cannon, but don't change it's angle
 				_cannon.spawnGloop(_gloop);
-				_cameraController.reset();
+				if( !_inputManager.panInternallyChanged ) {
+					_inputManager.panX = _gloop.physics.x;
+					_inputManager.panY = -_gloop.physics.y;
+				}
+				
+				_panLevel = false;
 			}
 
 			_cameraController.setGloopIdle();
@@ -334,6 +350,29 @@ package com.away3d.gloop.screens.game
 					_level.camLightX = _view.camera.x;
 					_level.camLightY = _view.camera.y;
 					_level.camLightZ = _view.camera.z;
+				}
+				
+				if (_panLevel) {
+					if (_inputManager.panInternallyChanged) {
+						_panTimer = 250;
+					}
+					
+					_panTimer += 1;
+					
+					if (_panTimer > 300) {
+						_panLevel = false;
+					} else if (_panTimer > 250) {
+						//fade out
+					} else if (_panTimer > 50) {
+						//pan
+						var fract:Number = (_panTimer - 50)/200;
+						_inputManager.panX = _level.target.physics.x + fract*(_gloop.physics.x - _level.target.physics.x);
+						_inputManager.panY = -_level.target.physics.y - fract*(_gloop.physics.y - _level.target.physics.y);
+					} else {
+						//fade in
+						
+					}
+					
 				}
 			}
 		}
