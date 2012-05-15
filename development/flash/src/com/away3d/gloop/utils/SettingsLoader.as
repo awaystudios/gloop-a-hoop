@@ -35,7 +35,7 @@ package com.away3d.gloop.utils {
 		}
 		
 		public function reload():void {
-			_loader.load(new URLRequest((Settings.ROB_PATH? "../bin/assets/settings.dat?" : "assets/settings.dat?") + Math.random()));
+			_loader.load(new URLRequest( ( Settings.ROB_PATH? "../bin/assets/settings.dat?" : "assets/settings.dat?" ) + Settings.GLOOP_VERSION ) );
 		}
 		
 		private function handleSecurityError(e:SecurityErrorEvent):void {

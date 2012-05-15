@@ -63,6 +63,8 @@ package
 	import com.away3d.gloop.utils.SettingsLoader;
 	import com.away3d.gloop.utils.StateSaveManager;
 
+	import flash.display.LoaderInfo;
+
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -91,6 +93,12 @@ package
 
 		public function Main()
 		{
+			var gloopVersion:String = LoaderInfo( this.root.loaderInfo ).parameters[ "gloopVersion" ];
+			trace( "gloopVersion: " + gloopVersion );
+			if( gloopVersion ) {
+				Settings.GLOOP_VERSION = gloopVersion;
+			}
+
 			addEventListener( Event.ADDED_TO_STAGE, init );
 		}
 		
@@ -270,7 +278,7 @@ package
 		private function onGameScreenAnimationsInitialized( event:Event ):void {
 			_stack.getScreenById( Screens.ASSET_INITIALIZE ).removeEventListener( Event.COMPLETE, onGameScreenAnimationsInitialized );
 			// Load levels
-			_db.loadXml(Settings.ROB_PATH? "../bin/assets/levels.xml" : "assets/levels.xml" );
+			_db.loadXml(Settings.ROB_PATH? "../bin/assets/levels.xml?" + Settings.GLOOP_VERSION : "assets/levels.xml?" + Settings.GLOOP_VERSION );
 		}
 
 		private function onDbComplete( ev:Event ):void {

@@ -8,6 +8,8 @@ package com.away3d.gloop
 	 */
 	public class Settings
 	{
+		static public var GLOOP_VERSION:String = ""; // can be changed by html via flashvars
+
 		static public var STU_MODE:Boolean = false;
 		static public var DEV_MODE:Boolean = true;
 		static public var SHOW_PHYSICS:Boolean = false;
