@@ -10,7 +10,8 @@ package {
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
-
+	
+	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#FFFFFF")]
 	public class Wrapper extends Sprite
 	{
 		[Embed(source="../lib-swc/preload.swf", symbol="AwayMediaLogo")]
