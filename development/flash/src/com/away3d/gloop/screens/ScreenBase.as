@@ -52,8 +52,6 @@ package com.away3d.gloop.screens
 			if (_initialized)
 				return;
 			
-			stage.quality = StageQuality.HIGH;
-			
 			// Based on 1024x768 which was the
 			// template for the design
 			_masterScaleX = _w/1024;
@@ -95,12 +93,10 @@ package com.away3d.gloop.screens
 			_ctr = new Sprite();
 			_ctr.x = _w/2;
 			_ctr.y = _h/2;
-			//_ctr.scaleX = _ctr.scaleY = masterScale;
+			_ctr.scaleX = _ctr.scaleY = _masterScaleX;
 			addChild(_ctr);
 			
 			initScreen();
-			
-			stage.quality = StageQuality.LOW;
 			
 			_initialized = true;
 		}

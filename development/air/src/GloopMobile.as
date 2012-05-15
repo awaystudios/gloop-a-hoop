@@ -1,5 +1,6 @@
 package
 {
+	import com.away3d.gloop.events.WrapperEvent;
 	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.utils.FileStateSaveManager;
 	
@@ -10,12 +11,15 @@ package
 	public class GloopMobile extends Main
 	{
 		private static const STATE_XML_PATH : String = 'savedstate.xml';
+		private var _wrapper:Wrapper;
 		
 		public function GloopMobile()
 		{
-			super();
+			autoInit = false;
 			
-			stage.quality = StageQuality.LOW;
+			_wrapper = new Wrapper();
+			_wrapper.addEventListener(WrapperEvent.WRAPPER_DONE, onWrapperDone);
+			addChild(_wrapper);
 			
 			_stateMgr = new FileStateSaveManager(STATE_XML_PATH);
 			
@@ -23,6 +27,10 @@ package
 			stage.addEventListener(Event.DEACTIVATE, onStageDeactivate);
 		}
 		
+		private function onWrapperDone(ev : WrapperEvent) : void
+		{
+			init();
+		}
 		
 		private function onStageActivate(ev : Event) : void
 		{

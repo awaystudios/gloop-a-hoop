@@ -48,8 +48,9 @@ package com.away3d.gloop.screens
 			logoBmp.y = -(logoBmp.height/2);
 			
 			_logo = new Sprite();
+			_logo.x = _w/2;
 			_logo.addChild(logoBmp);
-			_ctr.addChild(_logo);
+			addChild(_logo);
 			
 			_playBtn = new PlayButton();
 			_playBtn.x = - _playBtn.width/2;
@@ -77,7 +78,7 @@ package com.away3d.gloop.screens
 			var t:Number = getTimer();
 			_logo.rotation = Math.sin(t / 300) * 1.5;
 			_logo.scaleX = 1.0 + Math.cos(t / 150) * .025;
-			_logo.y = -(200 + Math.cos(t / 300) * 7)*_masterScaleY;
+			_logo.y = _h/2-(200 + Math.cos(t / 300) * 7)*_masterScaleY;
 		}
 		
 		private function onSettingsBtnClick(ev : MouseEvent) : void

@@ -9,7 +9,7 @@ package
 	import away3d.library.utils.AssetLibraryIterator;
 	import away3d.loaders.parsers.AWD2Parser;
 	import away3d.loaders.parsers.Max3DSParser;
-
+	
 	import com.away3d.gloop.Settings;
 	import com.away3d.gloop.events.GameEvent;
 	import com.away3d.gloop.gameobjects.hoops.RocketHoop;
@@ -48,11 +48,11 @@ package
 	import com.away3d.gloop.screens.ScreenStack;
 	import com.away3d.gloop.screens.Screens;
 	import com.away3d.gloop.screens.StartScreen;
-	import com.away3d.gloop.screens.win.GameWinScreen;
 	import com.away3d.gloop.screens.chapterselect.ChapterSelectScreen;
 	import com.away3d.gloop.screens.game.GameScreen;
 	import com.away3d.gloop.screens.levelselect.LevelSelectScreen;
 	import com.away3d.gloop.screens.settings.SettingsScreen;
+	import com.away3d.gloop.screens.win.GameWinScreen;
 	import com.away3d.gloop.screens.win.WinScreen;
 	import com.away3d.gloop.sound.MusicManager;
 	import com.away3d.gloop.sound.SoundManager;
@@ -62,7 +62,7 @@ package
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.SettingsLoader;
 	import com.away3d.gloop.utils.StateSaveManager;
-
+	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -86,18 +86,26 @@ package
 		private var _stackHolder:Sprite;
 		
 		private var _view : View3D;
+		private var _game:Sprite;
 		
 		protected var _stateMgr : StateSaveManager;
-
+		protected var autoInit:Boolean = true;
+		
 		public function Main()
 		{
+			_game = new Sprite();
+			addChild(_game);
+			
 			addEventListener( Event.ADDED_TO_STAGE, init );
 		}
 		
 		
-		private function init( event:Event ) : void
+		protected function init( event:Event = null ) : void
 		{
 			removeEventListener( Event.ADDED_TO_STAGE, init );
+			
+			if (!autoInit && event)
+				return;
 
 			var man : String;
 			var sim : Boolean;
@@ -124,7 +132,7 @@ package
 			_view.width = _w;
 			_view.height = _h;
 			_view.backgroundColor = 0x000000;
-			addChild(_view);
+			_game.addChild(_view);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			_stateMgr = new StateSaveManager();
@@ -137,7 +145,7 @@ package
 
 			if( Settings.DEV_MODE ) {
 				_stats = new AwayStats( _view );
-				addChild( _stats );
+				_game.addChild( _stats );
 			}
 
 			loadAssets();
@@ -160,7 +168,7 @@ package
 		private function initStack():void {
 			_stackHolder = new Sprite();
 			_stackHolder.mouseEnabled = false;
-			addChild( _stackHolder );
+			_game.addChild( _stackHolder );
 			_stack = new ScreenStack(_w, _h, _stackHolder );
 			_stack.addScreen( Screens.LOADING, new LoadingScreen() );
 			_stack.addScreen( Screens.START, new StartScreen(_stack) );

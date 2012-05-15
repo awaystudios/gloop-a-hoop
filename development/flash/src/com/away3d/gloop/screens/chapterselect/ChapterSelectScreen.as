@@ -10,6 +10,8 @@ package com.away3d.gloop.screens.chapterselect
 	import com.away3d.gloop.sound.Sounds;
 	
 	import flash.display.SimpleButton;
+	import flash.display.Stage;
+	import flash.display.StageQuality;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -45,7 +47,7 @@ package com.away3d.gloop.screens.chapterselect
 			var i : uint;
 			var len : uint;
 			
-			_centerX = 0;
+			_centerX = _w/2;
 			_targetX = _centerX;
 			
 			_posters = new Vector.<ChapterPoster>();
@@ -58,8 +60,9 @@ package com.away3d.gloop.screens.chapterselect
 				chapter = _db.chapters[i];
 				poster = new ChapterPoster(_w, _h, chapter);
 				poster.x = _centerX + _w * i/2;
+				poster.y = _h/2;
 				poster.addEventListener(MouseEvent.CLICK, onPosterClick);
-				_ctr.addChild(poster);
+				addChild(poster);
 				
 				_posters.push(poster);
 			}
@@ -75,6 +78,8 @@ package com.away3d.gloop.screens.chapterselect
 			super.activate();
 			updatePosters();
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			
+			stage.quality = StageQuality.LOW;
 		}
 		
 		
@@ -83,6 +88,8 @@ package com.away3d.gloop.screens.chapterselect
 			super.deactivate();
 			endDrag();
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			
+			stage.quality = StageQuality.HIGH;
 		}
 		
 		
@@ -119,10 +126,10 @@ package com.away3d.gloop.screens.chapterselect
 		{
 			endDrag();
 			
-			if (_targetX < -0.25*_w && _curPosterIdx < _posters.length-1) {
+			if (_targetX - _w/2 < -0.25*_w && _curPosterIdx < _posters.length-1) {
 				_curPosterIdx++;
 			}
-			else if (_targetX > 0.25*_w && _curPosterIdx > 0) {
+			else if (_targetX - _w/2 > 0.25*_w && _curPosterIdx > 0) {
 				_curPosterIdx--;
 			}
 			

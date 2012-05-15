@@ -1,5 +1,6 @@
 package {
 
+	import com.away3d.gloop.events.WrapperEvent;
 	import com.pixelbath.ui.Slice9Bitmap;
 	
 	import flash.display.Bitmap;
@@ -30,6 +31,7 @@ package {
 		private var LoadBarBitmap:Class;
 		
 		private var _loader:Loader;
+		private var _app:Sprite;
 		private var _awayMediaLogo:Sprite;
 		private var _freakishKidLogo:Sprite;
 		private var _loadingScreen:Sprite;
@@ -45,8 +47,13 @@ package {
 		private var _progress:Number = 0;
 		
 		public function Wrapper() {
-			super();
-
+			addEventListener( Event.ADDED_TO_STAGE, init );
+		}
+		
+		private function init( event : Event):void
+		{
+			removeEventListener( Event.ADDED_TO_STAGE, init );
+			
 			// init stage
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -91,17 +98,29 @@ package {
 			_phase = 2;
 		}
 
-		private function loadApp():void {
-
-			// initialize loader and trigger load
-			_loader = new Loader();
-			_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, onLoaderProgress );
-			_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onLoaderComplete );
-			_loader.load( new URLRequest( "Main.swf" ) );
+		private function loadApp():void
+		{
+			_screenTmr.removeEventListener( TimerEvent.TIMER, onScreenTimerTick );
+			_screenTmr = null;
+			
+			if (this == root) {
+				
+				// initialize loader and trigger load
+				_loader = new Loader();
+				_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, onLoaderProgress );
+				_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onLoaderComplete );
+				_loader.load( new URLRequest( "Main.swf" ) );
+			} else {
+				_app = root as Sprite;
+				_app.addEventListener( Event.COMPLETE, onAppInitialized );
+				dispatchEvent(new WrapperEvent(WrapperEvent.WRAPPER_DONE));
+			}
+				
 
 			// show loading screen
 			displayScreen( _loadingScreen );
 			_phase = 3;
+			
 		}
 
 		private function displayScreen( screen:Sprite ):void {
@@ -119,6 +138,8 @@ package {
 			if( _activeScreen ) {
 				_activeScreen.x = stage.stageWidth / 2;
 				_activeScreen.y = stage.stageHeight / 2;
+				_activeScreen.width = stage.stageWidth;
+				_activeScreen.height = stage.stageWidth*768/1024;
 			}
 		}
 
@@ -129,23 +150,24 @@ package {
 
 		private function startApp():void {
 			_phase = 4;
-			_loader.content.addEventListener( Event.COMPLETE, onAppInitialized );
-			_loader.alpha = 0;
-			_loader.mouseEnabled = _loader.mouseChildren = false;
-			addChild( _loader );
+			_app = _loader.content as Sprite
+			_app.addEventListener( Event.COMPLETE, onAppInitialized );
+			_app.alpha = 0;
+			_app.mouseEnabled = _app.mouseChildren = false;
+			addChild( _app );
 		}
 
 		private function onAppInitialized( event:Event ):void {
 			_phase = 5;
 			_loadingScreenLoadingText.visible = false;
-			_loader.content.removeEventListener( Event.COMPLETE, onAppInitialized );
+			_app.removeEventListener( Event.COMPLETE, onAppInitialized );
 		}
 
 		private function exposeApp():void {
 			// remove active screen from the background
 			_loadingScreenTapText.visible = true;
-			_loader.mouseEnabled = _loader.mouseChildren = true;
-			_loader.alpha = 1;
+			_app.mouseEnabled = _app.mouseChildren = true;
+			_app.alpha = 1;
 			removeChild( _activeScreen );
 			cleanUp();
 		}
@@ -159,8 +181,6 @@ package {
 			stage.removeEventListener( Event.ENTER_FRAME, onEnterFrame );
 			stage.removeEventListener( MouseEvent.MOUSE_DOWN, onStageMouseDown );
 			stage.removeEventListener( Event.RESIZE, onStageResize );
-			_screenTmr.removeEventListener( TimerEvent.TIMER, onScreenTimerTick );
-			_screenTmr = null;
 		}
 
 		private function onLoaderProgress( event:ProgressEvent ):void {
@@ -175,9 +195,6 @@ package {
 					break;
 				case 2:
 					loadApp();
-					break;
-				case 4:
-					startApp();
 					break;
 				case 5:
 					exposeApp();
