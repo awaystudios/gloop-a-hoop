@@ -2,7 +2,7 @@
     <chapter poster="assets/chapters/01.png">
         <title>Welcome to the lab</title>
 
-        <level id="1" name="From here to there" awd="assets/levels/001.awd"> <!-- introduce the cannon -->
+        <level id="1" name="From here to there" awd="assets/levels/001.awd" helpId="1"> <!-- introduce the cannon -->
         </level>
 
         <level id="2" name="Parkour 101" awd="assets/levels/019.awd"> <!-- introduce bouncing off walls -->
@@ -14,19 +14,19 @@
         <level id="6" name="High jump" awd="assets/levels/014.awd"> <!-- introduce accuracy of target bonus -->
         </level>
 
-        <level id="5" name="Lily pad hop" awd="assets/levels/009.awd"> <!-- introduce trampoline hoop -->
+        <level id="5" name="Lily pad hop" awd="assets/levels/009.awd" helpId="2"> <!-- introduce trampoline hoop -->
         </level>
 
         <level id="4" name="Sharp right" awd="assets/levels/002.awd"> 
         </level>
         
-        <level id="8" name="Going down" awd="assets/levels/015.awd"> <!-- introduce rocket hoop -->
+        <level id="8" name="Going down" awd="assets/levels/015.awd" helpId="3"> <!-- introduce rocket hoop -->
         </level>
 
         <level id="7" name="Firing line" awd="assets/levels/004.awd">
         </level>
 
-        <level id="18" name="Dropping in" awd="assets/levels/020.awd"> <!-- introduce rotation on hoop -->
+        <level id="18" name="Dropping in" awd="assets/levels/020.awd" helpId="4"> <!-- introduce rotation on hoop -->
         </level>
 
         <level id="14" name="Going down 2" awd="assets/levels/012.awd">
@@ -35,13 +35,13 @@
         <level id="16" name="Rubix clock" awd="assets/levels/017.awd">
         </level>
 
-        <level id="9" name="The winds of change" awd="assets/levels/016.awd"> <!-- introduce buttons -->
+        <level id="9" name="The winds of change" awd="assets/levels/016.awd" helpId="5"> <!-- introduce buttons -->
         </level>
 
         <level id="11" name="Floating in space" awd="assets/levels/006.awd">
         </level>
 
-        <level id="10" name="Z if for Zorro" awd="assets/levels/003.awd"> <!-- introduce movable hoops -->
+        <level id="10" name="Z if for Zorro" awd="assets/levels/003.awd" helpId="6"> <!-- introduce movable hoops -->
         </level>
 
         <level id="19" name="Criss cross" awd="assets/levels/021.awd">
@@ -50,7 +50,7 @@
         <level id="12" name="The bishop manouvere" awd="assets/levels/010.awd">
         </level>
 
-        <level id="15" name="Piledriver" awd="assets/levels/013.awd"> <!-- introduce movable but non-rotatable hoops -->
+        <level id="15" name="Piledriver" awd="assets/levels/013.awd" helpId="7"> <!-- introduce movable but non-rotatable hoops -->
         </level>
 
         <level id="24" name="The pendulum" awd="assets/levels/026.awd">

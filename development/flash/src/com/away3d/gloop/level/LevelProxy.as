@@ -10,6 +10,7 @@ package com.away3d.gloop.level
 	public class LevelProxy extends EventDispatcher
 	{
 		private var _id : int;
+		private var _helpId : int;
 		private var _idx : uint;
 		private var _awd_url : String;
 		private var _level : Level;
@@ -40,6 +41,11 @@ package com.away3d.gloop.level
 		public function get id() : int
 		{
 			return _id;
+		}
+		
+		public function get helpId() : int
+		{
+			return _helpId;
 		}
 		
 		public function get idx() : int
@@ -99,6 +105,7 @@ package com.away3d.gloop.level
 		public function parseXml(xml : XML) : void
 		{
 			_id = parseInt(xml.@id.toString());
+			_helpId = parseInt(xml.@helpId.toString());
 			_awd_url = xml.@awd.toString();
 			
 			_inventory.parseXml(xml.inventory[0]);

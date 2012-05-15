@@ -8,6 +8,7 @@ package com.away3d.gloop.hud
 	import com.away3d.gloop.hud.elements.StarIcon;
 	import com.away3d.gloop.level.LevelInventoryItem;
 	import com.away3d.gloop.level.LevelProxy;
+	import com.away3d.gloop.lib.HelpText;
 	import com.away3d.gloop.lib.hud.PauseButton;
 	import com.away3d.gloop.lib.hud.RestartButton;
 	
@@ -26,6 +27,8 @@ package com.away3d.gloop.hud
 		
 		private var _levelTitles:LevelTitles;
 		
+		private var _helpText:HelpText;
+		
 		//private var _inventory : InventoryDrawer;
 		
 		private var _restartBtn : RestartButton;
@@ -34,6 +37,11 @@ package com.away3d.gloop.hud
 		public function get levelTitles():LevelTitles
 		{
 			return _levelTitles;
+		}
+		
+		public function get helpText():HelpText
+		{
+			return _helpText;
 		}
 		
 		public function HUD(w : Number, h : Number)
@@ -90,6 +98,13 @@ package com.away3d.gloop.hud
 			_levelTitles.mouseChildren = false;
 			addChild(_levelTitles);
 			
+			_helpText = new HelpText();
+			_helpText.visible = false;
+			_helpText.helpTextButton.addEventListener(MouseEvent.CLICK, onHelpTextBtnClick);
+			_helpText.x = _w/2;
+			_helpText.y = _h/2 + 25;
+			_helpText.scaleX = _helpText.scaleY = _w/1024;
+			addChild(_helpText);
 		}
 		
 		
@@ -159,6 +174,11 @@ package com.away3d.gloop.hud
 		private function onPauseBtnClick(ev : MouseEvent) : void
 		{
 			_levelProxy.pause();
+		}
+		
+		private function onHelpTextBtnClick(ev : MouseEvent) : void
+		{
+			_helpText.visible = false;
 		}
 		
 		private function onRestartBtnClick(ev : MouseEvent) : void

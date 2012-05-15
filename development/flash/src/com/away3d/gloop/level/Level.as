@@ -15,7 +15,6 @@ package com.away3d.gloop.level
 	import com.away3d.gloop.gameobjects.DefaultGameObject;
 	import com.away3d.gloop.gameobjects.Gloop;
 	import com.away3d.gloop.gameobjects.GoalWall;
-	import com.away3d.gloop.gameobjects.HoopGrid;
 	import com.away3d.gloop.gameobjects.IButtonControllable;
 	import com.away3d.gloop.gameobjects.IMouseInteractive;
 	import com.away3d.gloop.gameobjects.events.GameObjectEvent;

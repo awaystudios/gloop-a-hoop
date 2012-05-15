@@ -15,7 +15,7 @@ package com.away3d.gloop.screens.win
 
 	public class GameWinScreen extends ScreenBase
 	{
-		private var _container:Sprite;
+		//private var _container:Sprite;
 		private var _video:MovieClip;
 		private var _active:Boolean;
 		private var _textStuff:Sprite;
@@ -29,20 +29,20 @@ package com.away3d.gloop.screens.win
 
 		override protected function initScreen():void {
 
-			_container = new Sprite();
-			addChild( _container );
+			//_container = new Sprite();
+			//_ctr.addChild( _container );
 
 			_videoContainer = new Sprite();
 			_video = new EndVideo();
 			_video.stop();
 			_videoContainer.addChild( _video );
-			_container.addChild( _videoContainer );
+			_ctr.addChild( _videoContainer );
 
 			stage.addEventListener( MouseEvent.MOUSE_UP, onStageMouseUp );
 
 			_textStuff = new GameEndScreen();
 			_textStuff.visible = false;
-			_container.addChild( _textStuff );
+			_ctr.addChild( _textStuff );
 
 			var facebook:Sprite = _textStuff.getChildByName( "facebook" ) as Sprite;
 			var twitter:Sprite = _textStuff.getChildByName( "twitter" ) as Sprite;
@@ -68,7 +68,6 @@ package com.away3d.gloop.screens.win
 			}
 
 			if( event.target is GameEndScreen ) {
-				_container.visible = false;
 				_stack.gotoScreen( Screens.START );
 			}
 		}
@@ -86,10 +85,6 @@ package com.away3d.gloop.screens.win
 		}
 
 		override public function activate():void {
-
-			_container.visible = true;
-			_container.x = stage.stageWidth / 2;
-			_container.y = stage.stageHeight / 2;
 
 			_active = true;
 

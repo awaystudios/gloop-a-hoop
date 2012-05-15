@@ -61,6 +61,7 @@ package com.away3d.gloop.screens.game
 		private var _firstReset : Boolean;
 		private var _panLevel:Boolean;
 		private var _panTimer:int;
+		private var _alphaTimer:int;
 		
 		private static var _instance:GameScreen;
 
@@ -240,6 +241,7 @@ package com.away3d.gloop.screens.game
 				
 				_panLevel = true;
 				_panTimer = 0;
+				_alphaTimer = 0;
 				_hud.levelTitles.gotoAndStop(_levelProxy.idx+1);
 			}
 			else {
@@ -359,8 +361,8 @@ package com.away3d.gloop.screens.game
 				
 				if (_panLevel) {
 					
-					if (_inputManager.mouseInteracted)
-						_hud.levelTitles.alpha -= 1/25;
+					if (_inputManager.mouseInteracted && _hud.levelTitles.visible && _alphaTimer)
+						_alphaTimer--;
 					
 					if (_inputManager.panInternallyChanged && _panTimer < 225) {
 						_panTimer = 225;
@@ -370,11 +372,10 @@ package com.away3d.gloop.screens.game
 					
 					if (_panTimer > 250) {
 						_panLevel = false;
-						_hud.levelTitles.visible = false;
 					} else if (_panTimer > 225) {
 						//fade out
-						if (_hud.levelTitles.alpha > 1 - (_panTimer - 225)/25)
-							_hud.levelTitles.alpha = 1 - (_panTimer - 225)/25;
+						if (_alphaTimer >  25 - (_panTimer - 225))
+							_alphaTimer =  25 - (_panTimer - 225)
 					} else if (_panTimer > 25) {
 						//pan
 						var fract:Number = (_panTimer - 25)/200;
@@ -383,10 +384,22 @@ package com.away3d.gloop.screens.game
 					} else {
 						//fade in
 						_hud.levelTitles.visible = true;
-						_hud.levelTitles.alpha = _panTimer/25;
+						_alphaTimer++;
 					}
 					
+					if (!_alphaTimer) {
+						if (_levelProxy.helpId && _hud.levelTitles.visible)
+						{
+							_hud.helpText.visible = true;
+							_hud.helpText.gotoAndStop(_levelProxy.helpId);
+						}
+						
+						_hud.levelTitles.visible = false;
+					}
+					
+					_hud.levelTitles.alpha = _alphaTimer/25;
 				}
+				
 			}
 		}
 
