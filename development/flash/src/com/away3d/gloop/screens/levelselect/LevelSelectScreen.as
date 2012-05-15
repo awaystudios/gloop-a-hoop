@@ -96,7 +96,7 @@ package com.away3d.gloop.screens.levelselect
 				col = i % cols;
 				
 				level = _db.selectedChapter.levels[i];
-
+				level.id = i+1;
 				if( level.completed ) {
 					level.locked = false;
 					lastIsCompleted = true;

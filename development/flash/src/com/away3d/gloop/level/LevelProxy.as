@@ -41,7 +41,10 @@ package com.away3d.gloop.level
 		{
 			return _id;
 		}
-		
+		public function set id(val:int) : void
+		{
+			_id = val;
+		}
 		
 		public function get indexInChapter() : uint
 		{

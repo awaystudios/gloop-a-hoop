@@ -274,6 +274,8 @@ package com.away3d.gloop.screens.game
 			_levelProxy.removeEventListener(GameEvent.GAME_RESUME, onLevelProxyResume);
 			
 			_view.scene = new Scene3D();
+			
+			_hud.levelTitles.visible = false;
 		}
 		
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
