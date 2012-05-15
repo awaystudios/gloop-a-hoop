@@ -68,11 +68,11 @@ package com.away3d.gloop.screens.win
 
 			// end screen on next btn click?
 //			if( _db.isSelectedChapterTheLastOne() ) { // are we on the last chapter?
-//				var idx:uint = _db.selectedLevelProxy.indexInChapter + 1;
-//				if( idx >= _db.selectedChapter.levels.length ) { // is there not another level
+				var idx:uint = _db.selectedLevelProxy.indexInChapter + 1;
+				if( idx >= _db.selectedChapter.levels.length ) { // is there not another level
 					_ui.nextButton.visible = true;
 					_onFinalWin = true;
-//				}
+				}
 //			}
 		}
 		
