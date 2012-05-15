@@ -36,6 +36,7 @@ package com.away3d.gloop.gameobjects {
 			_width = width;
 			_physics = new GoalWallPhysicsComponent(this, offsetX, offsetY, width, height);
 			_physics.enableReportBeginContact();
+			_physics.enableReportEndContact();
 			super(offsetX, offsetY, width, height, worldX, worldY);
 			
 			initVisual();
@@ -64,8 +65,9 @@ package com.away3d.gloop.gameobjects {
 			_splatDistance = 1;
 		}
 		
-		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null ):void {
-			super.onCollidingWithGloopStart(gloop);
+		override public function onCollidingWithGloopEnd( gloop:Gloop, event:ContactEvent = null ):void {
+
+			super.onCollidingWithGloopEnd(gloop);
 			
 			var gloopCenter:V2 = gloop.physics.b2body.GetWorldCenter();
 			var wallCenter:V2 = this.physics.b2body.GetWorldCenter();
