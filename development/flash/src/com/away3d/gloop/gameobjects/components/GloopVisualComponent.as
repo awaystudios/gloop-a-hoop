@@ -3,9 +3,15 @@ package com.away3d.gloop.gameobjects.components
 
 	import Box2DAS.Common.V2;
 
+	import away3d.debug.Trident;
+
 	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
 	import away3d.materials.TextureMaterial;
 	import away3d.materials.lightpickers.LightPickerBase;
+	import away3d.primitives.SphereGeometry;
+
+	import com.away3d.gloop.Settings;
 
 	import com.away3d.gloop.screens.AssetManager;
 
@@ -118,6 +124,12 @@ package com.away3d.gloop.gameobjects.components
 			_smileMat = AssetManager.instance.smileMat;
 			_ouchMat = AssetManager.instance.ouchMat;
 			_yippeeMat = AssetManager.instance.yippeeMat;
+
+			if( Settings.SHOW_GLOOP_AXIS ) {
+				var tracer:Trident = new Trident( 100 );
+				mesh.addChild( tracer );
+			}
+
 			mesh.addChild(_stdMesh);
 		}
 		
@@ -199,6 +211,14 @@ package com.away3d.gloop.gameobjects.components
 				mesh.scaleY = Math.max(.2, .5 + _bouncePosition) + speed * 0.05;
 				mesh.scaleX = 1 + (1 - mesh.scaleY)
 			}
+		}
+
+		public function get stdMesh():Mesh {
+			return _stdMesh;
+		}
+
+		public function get splatMesh():Mesh {
+			return _splatMesh;
 		}
 	}
 }

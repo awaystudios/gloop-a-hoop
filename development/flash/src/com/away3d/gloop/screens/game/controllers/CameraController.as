@@ -174,6 +174,8 @@ package com.away3d.gloop.screens.game.controllers
 					lookAtGloop = true;
 					targetPosition.x += -150 * Math.sin(_finishTargetRotation);
 					targetPosition.y += -150 * Math.cos(_finishTargetRotation);
+//					targetPosition.x = _gloop.physics.x; // use these instead to visually debug gloop's impact with target from the side
+//					targetPosition.y = -_gloop.physics.y;
 					targetPosition.z = _boundsMaxZ;
 					ease = 0.2;
 				}

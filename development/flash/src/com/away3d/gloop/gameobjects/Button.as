@@ -24,7 +24,7 @@ package com.away3d.gloop.gameobjects
 		private var _controllables : Vector.<IButtonControllable>;
 
 		override public function dispose():void {
-			_buttonMesh = null;
+//			_buttonMesh = null;
 		}
 		
 		public function Button(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup : uint = 0)

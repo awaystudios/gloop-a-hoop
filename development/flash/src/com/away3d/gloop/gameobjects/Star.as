@@ -92,7 +92,7 @@ package com.away3d.gloop.gameobjects
 		}
 
 		override public function dispose():void {
-			_animComponent = null;
+//			_animComponent = null;
 		}
 	}
 }

@@ -400,7 +400,7 @@ package com.away3d.gloop.level
 		}
 		
 		private function onWinDelayTimerComplete(e:TimerEvent):void {
-			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN));
+			dispatchEvent(new GameEvent(GameEvent.LEVEL_WIN)); // comment to stop game from automatically going to the win screen
 		}
 		
 		public function get camLightX() : Number

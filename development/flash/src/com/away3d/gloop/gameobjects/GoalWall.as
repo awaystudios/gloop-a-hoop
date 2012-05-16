@@ -6,7 +6,9 @@ package com.away3d.gloop.gameobjects {
 	import away3d.core.base.Geometry;
 	import away3d.entities.Mesh;
 	import away3d.library.AssetLibrary;
+	import away3d.materials.ColorMaterial;
 	import away3d.materials.TextureMaterial;
+	import away3d.primitives.SphereGeometry;
 	import away3d.textures.BitmapTexture;
 
 	import com.away3d.gloop.Settings;
@@ -16,6 +18,7 @@ package com.away3d.gloop.gameobjects {
 	import com.away3d.gloop.utils.EmbeddedResources;
 
 	import flash.display.Bitmap;
+	import flash.geom.Vector3D;
 
 	/**
 	 * ...
@@ -60,7 +63,7 @@ package com.away3d.gloop.gameobjects {
 			super.reset();
 			_splatDistance = 1;
 		}
-		
+
 		override public function onCollidingWithGloopEnd( gloop:Gloop, event:ContactEvent = null ):void {
 
 			super.onCollidingWithGloopEnd(gloop);
@@ -69,7 +72,15 @@ package com.away3d.gloop.gameobjects {
 			var wallCenter:V2 = this.physics.b2body.GetWorldCenter();
 			
 			_splatDistance = gloopCenter.subtract(wallCenter).length();
-			
+
+			// make sure gloop's mesh is touching the target
+			var gloopMeshPosition:Vector3D = gloop.meshComponent.mesh.position;
+			var targetMeshPosition:Vector3D = this.meshComponent.mesh.position;
+			var delta:Vector3D = gloopMeshPosition.subtract( targetMeshPosition );
+			var targetNormal:Vector3D = this.meshComponent.mesh.downVector;
+			var distance:Number = delta.dotProduct( targetNormal );
+			gloop.visualComponent.splatMesh.y = -distance;
+
 			// scale back up to world units
 			_splatDistance *= Settings.PHYSICS_SCALE;
 			
@@ -80,6 +91,10 @@ package com.away3d.gloop.gameobjects {
 			gloop.onHitGoalWall();
 
 			dispatchEvent(new GameObjectEvent(GameObjectEvent.GLOOP_HIT_GOAL_WALL, this));
+		}
+
+		override public function update( dt:Number ):void {
+			super.update( dt );
 		}
 
 		public function onGloopEnterSensor(gloop:Gloop):void {
