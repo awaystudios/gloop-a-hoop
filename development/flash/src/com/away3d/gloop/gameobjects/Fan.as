@@ -55,11 +55,6 @@ package com.away3d.gloop.gameobjects
 			_meshComponent = new MeshComponent();
 			_meshComponent.mesh = new Mesh(Geometry(AssetLibrary.getAsset('FanAxis_geom')), fanMaterial );
 			_meshComponent.mesh.rotationZ = rotation;
-			
-			var guard : Mesh;
-			
-			guard = new Mesh(Geometry(AssetLibrary.getAsset('FanGuard_geom')), fanMaterial);
-			_meshComponent.mesh.addChild(guard);
 
 			_blades = new Mesh(Geometry(AssetLibrary.getAsset('FanBlades_geom')), new TextureMaterial(new BitmapTexture( Bitmap( new EmbeddedResources.FanDiffusePNGAsset ).bitmapData)));
 			_meshComponent.mesh.addChild( _blades );

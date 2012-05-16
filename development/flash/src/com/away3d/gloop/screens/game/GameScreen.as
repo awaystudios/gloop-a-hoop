@@ -282,6 +282,7 @@ package com.away3d.gloop.screens.game
 			_view.scene = new Scene3D();
 			
 			_hud.levelTitles.visible = false;
+			_hud.helpText.visible = false;
 		}
 		
 		private function onGloopApproachGoalWall(ev : GameObjectEvent) : void
