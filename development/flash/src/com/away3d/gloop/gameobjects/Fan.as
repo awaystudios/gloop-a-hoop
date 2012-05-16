@@ -32,6 +32,10 @@ package com.away3d.gloop.gameobjects
 		private var _activeFanStrength:Object = { t:0 };
 		private var _gloop:Gloop;
 
+		override public function dispose():void {
+			_blades = null;
+		}
+
 		public function Fan( worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, btnGroup:uint = 0 ) {
 			super();
 

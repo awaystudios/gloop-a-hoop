@@ -90,6 +90,10 @@ package com.away3d.gloop.gameobjects
 		override public function get debugColor1():uint {
 			return 0x01e6f1;
 		}
+
+		override public function dispose():void {
+			_animComponent = null;
+		}
 	}
 }
 

@@ -315,8 +315,10 @@ package com.away3d.gloop.level
 		}
 		
 		public function disposeObject( obj : DefaultGameObject ):void {
-			if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent)
-				obj.meshComponent.mesh.parent.removeChild(obj.meshComponent.mesh);
+
+			if (obj.meshComponent && obj.meshComponent.mesh && obj.meshComponent.mesh.parent) {
+				obj.meshComponent.mesh.parent.removeChild( obj.meshComponent.mesh );
+			}
 
 			if (obj.physics && obj.physics.parent){
 				obj.physics.parent.removeChild(obj.physics);
