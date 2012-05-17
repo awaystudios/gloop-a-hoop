@@ -43,18 +43,6 @@ package com.away3d.gloop.screens
 		private var _tempLight:PointLight;
 		private var _tempLightPicker:StaticLightPicker;
 
-		public var gloopSplatAnimMesh:Mesh;
-		public var gloopStdAnimMesh:Mesh;
-		public var gloopSplatAnimation:VertexAnimationComponent;
-		public var gloopStdAnimation:VertexAnimationComponent;
-
-		public var cannonMesh:Mesh;
-		public var cannonBody:Mesh;
-		public var cannonFrame0:Geometry;
-		public var cannonFrame1:Geometry;
-		public var cannonAnimationState:VertexAnimationState;
-		public var cannonAnimation:VertexAnimationComponent;
-
 		public function AssetManager() {
 		}
 
@@ -76,9 +64,53 @@ package com.away3d.gloop.screens
 			initializeGloopSplat();
 			initializeCannonVisual();
 			initializeCannonAnimation();
+			initializeStarVisual();
+			initializeStarAnimation();
 			doComplete();
 
 		}
+
+		// ---------------------------------------------------------------------
+		// STARS
+		// ---------------------------------------------------------------------
+
+		public var starMesh:Mesh;
+		public var starAnimationComponent:VertexAnimationComponent;
+
+		private function initializeStarVisual():void {
+			var geom : Geometry;
+			var mat : ColorMaterial;
+
+			geom = Geometry( AssetLibrary.getAsset('StarFrame0_geom') ).clone();
+			mat = new ColorMaterial(0x3DF120);
+			mat.lightPicker = _tempLightPicker;
+
+			starMesh = new Mesh(geom, mat);
+			_scene.addChild( starMesh );
+		}
+
+		private function initializeStarAnimation():void {
+			starAnimationComponent = new VertexAnimationComponent( starMesh );
+			starAnimationComponent.addSequence('seq', [
+				Geometry(AssetLibrary.getAsset('StarFrame0_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame1_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame2_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame3_geom')),
+				Geometry(AssetLibrary.getAsset('StarFrame4_geom')),
+			], 600);
+			starAnimationComponent.play('seq');
+		}
+
+		// ---------------------------------------------------------------------
+		// CANNON
+		// ---------------------------------------------------------------------
+
+		public var cannonMesh:Mesh;
+		public var cannonBody:Mesh;
+		public var cannonFrame0:Geometry;
+		public var cannonFrame1:Geometry;
+		public var cannonAnimationState:VertexAnimationState;
+		public var cannonAnimation:VertexAnimationComponent;
 
 		private function initializeCannonVisual():void {
 			var tex : BitmapTexture;
@@ -127,10 +159,20 @@ package com.away3d.gloop.screens
 			cannonAnimation.play( 'fire' );
 		}
 
+		// ---------------------------------------------------------------------
+		// GLOOP
+		// ---------------------------------------------------------------------
+
 		public var smileMat:TextureMaterial;
 		public var sadMat:TextureMaterial;
 		public var ouchMat:TextureMaterial;
 		public var yippeeMat:TextureMaterial;
+
+		public var gloopSplatAnimMesh:Mesh;
+		public var gloopStdAnimMesh:Mesh;
+		public var gloopSplatAnimation:VertexAnimationComponent;
+		public var gloopStdAnimation:VertexAnimationComponent;
+
 		private function initializeGloopFly():void {
 			var smile_grin_tex : BitmapTexture;
 			var sad_tex : BitmapTexture;
@@ -211,6 +253,10 @@ package com.away3d.gloop.screens
 			_scene.addChild( gloopSplatAnimMesh );
 			gloopSplatAnimation.play( 'splat' );
 		}
+
+		// ---------------------------------------------------------------------
+		// UTILS
+		// ---------------------------------------------------------------------
 
 		public static function get instance():AssetManager {
 			if( !_instance ) {
