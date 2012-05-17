@@ -4,7 +4,9 @@ package com.away3d.gloop.utils
 	import away3d.events.AssetEvent;
 	import away3d.events.LoaderEvent;
 	import away3d.library.AssetLibrary;
-	
+
+	import com.junkbyte.console.Cc;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
@@ -39,7 +41,7 @@ package com.away3d.gloop.utils
 		}
 
 		private function onAssetComplete( event:AssetEvent ):void {
-			trace( "loaded resource: " + event.asset.name );
+			Cc.log( "loaded resource: " + event.asset.name );
 		}
 		
 		

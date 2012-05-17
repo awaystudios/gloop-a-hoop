@@ -1,6 +1,7 @@
 package com.away3d.gloop.utils {
 	import com.away3d.gloop.Settings;
-	
+	import com.junkbyte.console.Cc;
+
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -57,7 +58,7 @@ package com.away3d.gloop.utils {
 				_targetClass[result[1]] = result[2];
 			}
 			
-			trace("Settings loaded");
+			Cc.log("Settings loaded");
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
@@ -101,7 +102,7 @@ package com.away3d.gloop.utils {
 				if (group != lastGroup) trace("");
 				lastGroup = group;
 				
-				trace(output);
+				Cc.log(output);
 			}
 		}
 		

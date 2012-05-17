@@ -62,7 +62,10 @@ package
 	import com.away3d.gloop.utils.EmbeddedResources;
 	import com.away3d.gloop.utils.SettingsLoader;
 	import com.away3d.gloop.utils.StateSaveManager;
-	
+	import com.junkbyte.console.Cc;
+
+	import flash.display.LoaderInfo;
+
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -102,6 +105,8 @@ package
 		
 		protected function init( event:Event = null ) : void
 		{
+			Settings.GLOOP_VERSION = LoaderInfo( this.root.loaderInfo ).parameters["gloopVersion"] || "";
+
 			removeEventListener( Event.ADDED_TO_STAGE, init );
 			
 			if (!autoInit && event)
@@ -133,6 +138,7 @@ package
 			_view.height = _h;
 			_view.backgroundColor = 0x000000;
 			_game.addChild(_view);
+			stage.addEventListener( Event.RESIZE, onStageResize );
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			_stateMgr = new StateSaveManager();
@@ -144,11 +150,27 @@ package
 			initMusic();
 
 			if( Settings.DEV_MODE ) {
+				// AwayStats
 				_stats = new AwayStats( _view );
 				_game.addChild( _stats );
+				// FlashConsole
+				Cc.config.tracing = true;
+				Cc.config.style.backgroundAlpha = 0.45;
+				Cc.config.showLineNumber = true;
+				Cc.config.showTimestamp = true;
+				Cc.startOnStage( this, "`" );
+				Cc.visible = true;
+				Cc.log( Settings.GLOOP_VERSION + " - Press tilde ( just above the TAB key ) to hide/show the debugging console. " );
+				onStageResize( null );
 			}
 
 			loadAssets();
+		}
+
+		private function onStageResize( event:Event ):void {
+			Cc.width = stage.stageWidth;
+			Cc.height = 200;
+			Cc.y = stage.stageHeight - Cc.height;
 		}
 		
 		private function initSettings():void {
