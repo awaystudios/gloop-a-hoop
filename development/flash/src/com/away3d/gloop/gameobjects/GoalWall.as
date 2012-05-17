@@ -29,6 +29,8 @@ package com.away3d.gloop.gameobjects {
 		private var _width:Number;
 		private var _height:Number;
 		private var _splatDistance:Number = 1;
+		private var _texture:BitmapTexture;
+		private var _material:TextureMaterial;
 		
 		public function GoalWall(offsetX:Number, offsetY:Number, width:Number, height:Number, worldX:Number = 0, worldY:Number = 0) {
 			_height = height;
@@ -44,18 +46,16 @@ package com.away3d.gloop.gameobjects {
 		private function initVisual() : void
 		{
 			var geom : Geometry;
-			var tex : BitmapTexture;
-			var mat : TextureMaterial;
-			
-			tex = new BitmapTexture(Bitmap(new EmbeddedResources.TargetDiffusePNGAsset).bitmapData);
-			mat = new TextureMaterial(tex);
+
+			_texture = new BitmapTexture(Bitmap(new EmbeddedResources.TargetDiffusePNGAsset).bitmapData);
+			_material = new TextureMaterial(_texture);
 			
 			// Diameter of target asset is 100 units. Scale to fit wall
 			// size as defined in level.
 			geom = Geometry(AssetLibrary.getAsset('Target_geom'));
 			
 			_meshComponent = new MeshComponent();
-			_meshComponent.mesh = new Mesh(geom, mat);
+			_meshComponent.mesh = new Mesh(geom, _material);
 			_meshComponent.mesh.scale(_physics.width/100);
 		}
 		
@@ -117,6 +117,12 @@ package com.away3d.gloop.gameobjects {
 		 */
 		public function get splatDistance():Number {
 			return _splatDistance;
+		}
+
+		override public function dispose():void {
+//			_texture.dispose();
+//			_material.dispose();
+//			_meshComponent.mesh.dispose();
 		}
 		
 	}

@@ -1,21 +1,14 @@
 package com.away3d.gloop.gameobjects.components
 {
+
 	import away3d.animators.VertexAnimator;
 	import away3d.animators.data.VertexAnimation;
 	import away3d.animators.data.VertexAnimationMode;
 	import away3d.animators.data.VertexAnimationSequence;
 	import away3d.animators.data.VertexAnimationState;
 	import away3d.arcane;
-	import away3d.containers.View3D;
 	import away3d.core.base.Geometry;
-	import away3d.core.managers.Stage3DProxy;
 	import away3d.entities.Mesh;
-
-	import com.away3d.gloop.screens.game.GameScreen;
-
-	import flash.display3D.IndexBuffer3D;
-
-	import flash.display3D.VertexBuffer3D;
 
 	use namespace arcane;
 

@@ -159,7 +159,7 @@ package
 				Cc.config.showLineNumber = true;
 				Cc.config.showTimestamp = true;
 				Cc.startOnStage( this, "`" );
-				Cc.visible = true;
+//				Cc.visible = true;
 				Cc.log( Settings.GLOOP_VERSION + " - Press tilde ( just above the TAB key ) to hide/show the debugging console. " );
 				onStageResize( null );
 			}
