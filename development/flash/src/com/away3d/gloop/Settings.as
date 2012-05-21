@@ -11,7 +11,7 @@ package com.away3d.gloop
 		static public var GLOOP_VERSION:String = ""; // can be changed by html via flashvars
 
 		static public var STU_MODE:Boolean = false;
-		static public var DEV_MODE:Boolean = false;
+		static public var DEV_MODE:Boolean = true;
 		static public var SHOW_PHYSICS:Boolean = false;
 		static public var ROB_PATH:Boolean = false;
 		static public var SHOW_GLOOP_AXIS:Boolean = false;
