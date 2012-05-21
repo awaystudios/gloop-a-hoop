@@ -51,7 +51,8 @@ package com.away3d.gloop.gameobjects
 			_physics.applyGravity = true;
 			_physics.bullet = true;
 			_physics.reportPostSolve = true;
-			_physics.enableReportBeginContact();
+			_physics.enableReportPreSolveContact();
+//			_physics.enableReportBeginContact();
 			_physics.addEventListener( ContactEvent.POST_SOLVE, contactPostSolveHandler );
 			
 			// Create special mesh component and use it as
@@ -63,7 +64,7 @@ package com.away3d.gloop.gameobjects
 			_traceComponent = new PathTraceComponent( _physics );
 		}
 
-		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+		override public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
 
 			var fixture:b2Fixture = event.other;
 
@@ -101,7 +102,13 @@ package com.away3d.gloop.gameobjects
 					}
 				}
 			}
+
+			super.onCollidingWithSomethingPreSolve( event );
 		}
+
+		/*override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
+
+		}*/
 
 		private function ouch():void {
 			SoundManager.playRandom( [ Sounds.GLOOP_WALL_HIT_1, Sounds.GLOOP_WALL_HIT_2, Sounds.GLOOP_WALL_HIT_3, Sounds.GLOOP_WALL_HIT_4 ], SoundManager.CHANNEL_GLOOP );

@@ -35,19 +35,18 @@ package com.away3d.gloop.gameobjects
 			_physics.restitution = 0.5;
 			_physics.friction = 0.8;
 			_physics.inertiaScale = 2;
-			_physics.enableReportBeginContact();
+//			_physics.enableReportBeginContact();
+			_physics.enableReportPreSolveContact()
 			_physics.density = Settings.BOX_DENSITY;
 
 			initVisual();
 		}
 
-		override public function onCollidingWithSomethingStart( event:ContactEvent ):void {
-
+		override public function onCollidingWithSomethingPreSolve( event:ContactEvent ):void {
 			var speed:Number = _physics.b2body.GetLinearVelocity().length();
 			if( speed > 1 ) {
-				SoundManager.play( Sounds.GAME_BOING );
+				SoundManager.play( Sounds.GAME_BOING, SoundManager.CHANNEL_MAIN );
 			}
-
 		}
 
 		private function initVisual():void {

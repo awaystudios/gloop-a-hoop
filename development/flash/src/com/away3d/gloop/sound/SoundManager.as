@@ -2,8 +2,10 @@ package com.away3d.gloop.sound
 {
 
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
+	import flash.utils.Timer;
 	import flash.utils.setTimeout;
 
 	public class SoundManager
@@ -22,6 +24,11 @@ package com.away3d.gloop.sound
 
 		private static var _channels:Object;
 
+		private static var _lastId:String;
+		private static var _sameIdCounter:uint;
+
+		private static var _sndRepeatTmr:Timer;
+
 		private static function init():void {
 			if( !_initialized ) {
 				_mainSoundChannel = new SoundChannel();
@@ -33,7 +40,13 @@ package com.away3d.gloop.sound
 				_channels[ CHANNEL_FAN ] = _fanSoundChannel;
 				_initialized = true;
 				_sounds = {};
+				_sndRepeatTmr = new Timer( 500, 1 ); // Used to avoid too many of the same sound happening too quickly.
+				_sndRepeatTmr.addEventListener( TimerEvent.TIMER, onSndRepeatTimer );
 			}
+		}
+
+		private static function onSndRepeatTimer( event:TimerEvent ):void {
+			_sameIdCounter = 0;
 		}
 
 		public static function addSound( id:String, sound:Sound ):void {
@@ -62,12 +75,16 @@ package com.away3d.gloop.sound
 				_fanSoundChannel.stop();
 				_fanPlaying = false;
 			}
-
 		}
 
-		public static function play( id:String, channelId:String = CHANNEL_GLOOP ):void {
+		public static function play( id:String, channelId:String = CHANNEL_MAIN ):void {
 
 			if( !_enabled ) return;
+
+			// Do not allow too many sounds of the same type in a short period of time.
+			if( _sameIdCounter > 5 ) {
+				return;
+			}
 
 			var sound:Sound;
 			init();
@@ -76,8 +93,10 @@ package com.away3d.gloop.sound
 			}
 			sound = _sounds[id];
 
-			if( !_channels[ channelId ] ) {
+//			trace( "channel: " + _channels[ channelId ] );
+			if( _channels[ channelId ] == null ) {
 				throw new Error( "Channel id not identified in SoundManager.as: " + channelId );
+//				return;
 			}
 
 			// only has 1 voice
@@ -97,6 +116,17 @@ package com.away3d.gloop.sound
 
 //			trace( "playing sound: " + id );
 			_channels[ channelId ] = sound.play();
+
+			if( _lastId == id ) {
+				_sameIdCounter++;
+				_sndRepeatTmr.reset();
+				_sndRepeatTmr.start();
+			}
+			else {
+				_sameIdCounter = 0;
+			}
+
+			_lastId = id;
 		}
 
 		public static function playWithDelay( id:String, delay:Number, channelId:String = CHANNEL_GLOOP ):void {

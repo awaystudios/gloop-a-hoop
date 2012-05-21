@@ -23,21 +23,14 @@ package com.away3d.gloop.gameobjects.hoops {
 		public function RocketHoop(worldX:Number = 0, worldY:Number = 0, rotation:Number = 0, movable:Boolean = true, rotatable:Boolean = true) {
 			super(0x3f7fff, worldX, worldY, rotation, movable, rotatable);
 			_physics.enableReportPreSolveContact();
-			_physics.enableReportBeginContact();
+//			_physics.enableReportBeginContact();
 			_resolveGloopCollisions = true;
 			_physics.restitution = 0;
 		}
 
-		override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null):void {
+		/*override public function onCollidingWithGloopStart( gloop:Gloop, event:ContactEvent = null):void {
 
-			var fixture:b2Fixture = event.fixture;
-			if( fixture.IsSensor() ) return;
-
-			if( _onSideCollision ) return;
-
-			SoundManager.play( Sounds.GAME_ROCKET );
-
-		}
+		}*/
 
 		override public function onCollidingWithGloopPreSolve( gloop:Gloop, event:ContactEvent = null ):void {
 
@@ -65,6 +58,14 @@ package com.away3d.gloop.gameobjects.hoops {
 				gloop.physics.b2body.ApplyImpulse( normal, _physics.b2body.GetWorldCenter() );
 
 				event.contact.SetEnabled( false );
+			}
+
+			// play sound
+			var fixture:b2Fixture = event.fixture;
+			if( !fixture.IsSensor() ) {
+				if( !_onSideCollision ) {
+					SoundManager.play( Sounds.GAME_ROCKET );
+				}
 			}
 		}
 		
