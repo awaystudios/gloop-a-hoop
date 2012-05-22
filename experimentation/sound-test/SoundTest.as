@@ -6,11 +6,15 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
 	import flash.media.Sound;
+	import flash.media.SoundTransform;
 
 	public class SoundTest extends Sprite
 	{
 		[Embed(source="ouch.mp3")]
 		private var OuchSound:Class;
+
+		[Embed(source="sad.mp3")]
+		private var SadSound:Class;
 
 		private var _sound:Sound;
 
@@ -30,6 +34,13 @@ package
 			addChild( btn );
 
 			_sound = new OuchSound() as Sound;
+
+			playContinuousSound();
+		}
+
+		private function playContinuousSound():void {
+			var sound:Sound = new SadSound() as Sound;
+			sound.play( 0, 99999, new SoundTransform( 0.01 ) );
 		}
 
 		private function btnClickHandler( event:MouseEvent ):void {
